@@ -86,6 +86,7 @@ body {
   position: absolute; inset: 0;
   background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
   background-size: 60px 60px;
+  pointer-events: none;
 }
 .ph-glow { position: absolute; border-radius: 50%; pointer-events: none; }
 
@@ -137,4 +138,22 @@ body {
   .page-hero { padding: 120px 24px 48px; }
   .site-footer { flex-direction: column; gap: 20px; text-align: center; padding: 28px 24px; }
   .sf-right { align-items: center; }
+}
+
+/* 버튼 클릭 보장 */
+.page-hero, .section, main, header, footer { 
+  position: relative; 
+  z-index: 1; 
+  pointer-events: auto; 
+}
+.btn-main, .btn-outline, a, button { 
+  position: relative; 
+  z-index: 2; 
+  pointer-events: auto !important; 
+}
+
+/* 히어로 배경 요소 클릭 차단 해제 */
+.ph-grid, .ph-glow, .slide-overlay, .slide-bottom, .slide-bg,
+.ev-pattern, .lb-pat, .ms-glow, .hero-progress {
+  pointer-events: none !important;
 }

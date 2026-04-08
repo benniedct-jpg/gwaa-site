@@ -119,8 +119,8 @@ function injectNavCSS() {
 .nav-logo-bar{width:3px;height:24px;background:#16a34a;border-radius:2px}
 .nav-logo-text{font-family:'Space Mono',monospace;font-size:12px;color:#111;letter-spacing:0.08em}
 .nav-logo-sub{font-size:10px;color:#9ca3af;letter-spacing:0.06em}
-.nav-links{display:flex;align-items:center;gap:2px}
-.nav-item{position:relative;height:64px;display:flex;align-items:center}
+.nav-links{display:flex;align-items:center;gap:2px;height:64px}
+.nav-item{position:relative}
 .nav-link{display:flex;align-items:center;gap:4px;font-size:11px;letter-spacing:0.08em;color:#6b7280;text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:500;transition:color 0.2s,background 0.2s;white-space:nowrap}
 .nav-link:hover,.nav-item:hover .nav-link{color:#111;background:#f3f4f6}
 .nav-link.active{color:#16a34a;font-weight:700}
