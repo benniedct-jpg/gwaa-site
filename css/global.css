@@ -26,7 +26,9 @@ body {
   color: var(--text);
   overflow-x: hidden;
   line-height: 1.6;
+  padding-top: 64px;
 }
+.hero { margin-top: -64px; }
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: var(--gray-light); }
 ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 2px; }
@@ -76,7 +78,7 @@ body {
 /* ── PAGE HERO ── */
 .page-hero {
   min-height: 420px; display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 120px 60px 64px; position: relative; overflow: hidden;
+  padding: 140px 60px 64px; position: relative; overflow: hidden;
   background: var(--gray-light);
   border-bottom: 1px solid var(--border);
 }
@@ -132,7 +134,7 @@ body {
 /* ── MOBILE ── */
 @media (max-width: 900px) {
   .section { padding: 52px 24px; }
-  .page-hero { padding: 100px 24px 48px; }
+  .page-hero { padding: 120px 24px 48px; }
   .site-footer { flex-direction: column; gap: 20px; text-align: center; padding: 28px 24px; }
   .sf-right { align-items: center; }
 }
