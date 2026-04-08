@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="강원도반려동물협회 연락처 및 문의 — 전화, 이메일, 카카오채널, 오시는 길">
+<title>문의하기 | 강원도반려동물협회 GWAA</title>
+<link rel="stylesheet" href="css/global.css">
+<style>
+.ph-glow-a{bottom:0;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(74,222,128,.07) 0%,transparent 65%)}
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px}
+.contact-channels{display:flex;flex-direction:column;gap:12px;margin-bottom:32px}
+.ch-card{background:var(--dark2);border:1px solid var(--border);border-radius:12px;padding:18px 22px;display:flex;align-items:center;gap:16px;text-decoration:none;color:inherit;transition:border-color .2s,transform .2s}
+.ch-card:hover{border-color:rgba(74,222,128,.3);transform:translateX(4px)}
+.ch-icon{font-size:22px;width:44px;height:44px;background:var(--dark3);border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.ch-label{font-size:11px;color:var(--text-dim);letter-spacing:.06em;margin-bottom:3px}
+.ch-val{font-size:14px;font-weight:500;color:var(--text)}
+.ch-arrow{margin-left:auto;font-size:16px;color:var(--text-dim)}
+.map-area{background:var(--dark2);border:1px solid var(--border);border-radius:14px;overflow:hidden;min-height:360px;display:flex;flex-direction:column}
+.map-header{padding:16px 20px;border-bottom:1px solid var(--border)}
+.map-h-title{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--text-muted)}
+.map-h-addr{font-size:12px;color:var(--text-dim);margin-top:3px}
+.map-body{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.form-section{max-width:600px}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.form-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.form-label{font-size:11px;color:var(--text-muted);letter-spacing:.06em}
+.form-input{background:var(--dark3);border:1px solid var(--border2);border-radius:8px;padding:11px 14px;font-size:13px;color:var(--text);font-family:'Noto Sans KR',sans-serif;transition:border-color .2s;width:100%;outline:none}
+.form-input:focus{border-color:rgba(74,222,128,.4)}
+.form-textarea{min-height:120px;resize:vertical}
+@media(max-width:900px){.contact-grid{grid-template-columns:1fr}.form-row{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+<header class="page-hero">
+  <div class="ph-grid"></div><div class="ph-glow ph-glow-a"></div>
+  <nav class="breadcrumb"><a href="index.html">HOME</a><span class="breadcrumb-sep">/</span><span class="breadcrumb-cur">CONTACT</span></nav>
+  <div class="page-hero-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">CONTACT US</div></div>
+  <h1 class="page-hero-title">문의<span>하기</span></h1>
+  <p class="page-hero-desc">궁금한 점이 있으시면 언제든지 연락주세요. 카카오채널로 가장 빠르게 응답 드립니다.</p>
+</header>
+
+<section class="section" id="contact-info">
+  <div class="contact-grid">
+    <div>
+      <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">CONTACT CHANNELS</div></div>
+      <h2 class="sec-title" style="margin-bottom:24px">연락처</h2>
+      <div class="contact-channels">
+        <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="ch-card"><div class="ch-icon">💬</div><div><div class="ch-label">KAKAO CHANNEL</div><div class="ch-val">@강원도반려동물협회</div></div><div class="ch-arrow">→</div></a>
+        <a href="tel:033-813-0333" class="ch-card"><div class="ch-icon">📞</div><div><div class="ch-label">PHONE</div><div class="ch-val">033-813-0333</div></div><div class="ch-arrow">→</div></a>
+        <a href="mailto:ganimal1@naver.com" class="ch-card"><div class="ch-icon">✉️</div><div><div class="ch-label">EMAIL</div><div class="ch-val">ganimal1@naver.com</div></div><div class="ch-arrow">→</div></a>
+        <div class="ch-card" style="cursor:default"><div class="ch-icon">📍</div><div><div class="ch-label">ADDRESS</div><div class="ch-val">강원도 원주시 천매봉길 20-9</div></div></div>
+      </div>
+    </div>
+    <div class="map-area" id="map">
+      <div class="map-header"><div class="map-h-title">오시는 길</div><div class="map-h-addr">강원도 원주시 천매봉길 20-9</div></div>
+      <div class="map-body">
+        <div style="font-size:28px;opacity:.2">📍</div>
+        <div style="font-size:11px;color:var(--text-dim);letter-spacing:.06em">Google Maps 연동 예정</div>
+        <div style="font-size:10px;color:var(--green);opacity:.7;margin-top:4px">아래 iframe 코드로 교체하세요</div>
+        <!-- 실제 사용 시:
+        <iframe src="https://www.google.com/maps/embed?pb=..." width="100%" height="300" style="border:0" allowfullscreen loading="lazy"></iframe>
+        -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="form">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">INQUIRY FORM</div></div>
+  <h2 class="sec-title">문의 폼</h2>
+  <p class="sec-desc">아래 폼을 작성해 주시면 1~2 영업일 내 답변 드립니다.</p>
+  <div class="form-section">
+    <div class="form-row">
+      <div class="form-field"><label class="form-label">이름</label><input class="form-input" type="text" placeholder="홍길동"></div>
+      <div class="form-field"><label class="form-label">연락처</label><input class="form-input" type="tel" placeholder="010-0000-0000"></div>
+    </div>
+    <div class="form-field"><label class="form-label">이메일</label><input class="form-input" type="email" placeholder="example@email.com"></div>
+    <div class="form-field">
+      <label class="form-label">문의 유형</label>
+      <select class="form-input" style="cursor:pointer">
+        <option value="">선택해주세요</option>
+        <option>메이트쉽 가입 문의</option>
+        <option>교육 프로그램 문의</option>
+        <option>이벤트 예약 문의</option>
+        <option>제휴업체 문의</option>
+        <option>기타 문의</option>
+      </select>
+    </div>
+    <div class="form-field"><label class="form-label">문의 내용</label><textarea class="form-input form-textarea" placeholder="문의 내용을 자유롭게 작성해 주세요."></textarea></div>
+    <div style="display:flex;gap:12px;flex-wrap:wrap">
+      <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="btn-main">카카오채널로 빠르게 문의 →</a>
+      <button class="btn-outline" onclick="alert('카카오채널(033-813-0333)로 문의해 주세요.')">폼 전송</button>
+    </div>
+    <p style="margin-top:12px;font-size:11px;color:var(--text-dim)">💡 더 빠른 응답을 원하신다면 카카오채널을 이용해 주세요.</p>
+  </div>
+</section>
+
+<div id="site-footer"></div>
+<script src="js/site.js"></script>
+</body>
+</html>

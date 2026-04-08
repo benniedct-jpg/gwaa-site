@@ -1,0 +1,1481 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="강원도반려동물협회(GWAA) - 반려동물과 함께 강원도를 제한 없이 누리세요. 메이트쉽 멤버십, 독스포츠 교육, 오비디언스 교육, 반려동물행동지도사 자격증 과정 안내.">
+<meta name="keywords" content="강원도반려동물협회, 강원도반려동물, 반려동물협회, 메이트쉽, 독스포츠교육, 오비디언스교육, 반려동물행동지도사, 어질리티, 강원도반려견">
+<meta property="og:title" content="강원도반려동물협회 GWAA">
+<meta property="og:description" content="반려동물과 함께 강원도를 제한 없이 누리는 메이트쉽 멤버십">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://gwaa.or.kr">
+<title>강원도반려동물협회 GWAA | 반려동물과 함께하는 강원도</title>
+<link rel="canonical" href="https://gwaa.or.kr">
+
+<!-- Schema.org structured data for AEO -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  "name": "사단법인 강원도반려동물협회",
+  "alternateName": "GWAA",
+  "url": "https://gwaa.or.kr",
+  "telephone": "033-813-0333",
+  "email": "ganimal1@naver.com",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "천매봉길 20-9",
+    "addressLocality": "원주시",
+    "addressRegion": "강원도",
+    "addressCountry": "KR"
+  },
+  "description": "강원도 반려동물과 사람이 함께 살아가는 문화를 만드는 사단법인. 메이트쉽 멤버십, 독스포츠 교육, 오비디언스 교육 제공.",
+  "sameAs": ["https://gwaa.or.kr"]
+}
+</script>
+
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --green: #4ade80;
+    --green-dark: #16a34a;
+    --blue: #38bdf8;
+    --purple: #c084fc;
+    --amber: #f59e0b;
+    --red: #f87171;
+    --black: #080808;
+    --dark: #0f0f0f;
+    --dark2: #161616;
+    --dark3: #1e1e1e;
+    --border: rgba(255,255,255,0.07);
+    --text: #ffffff;
+    --text-muted: rgba(255,255,255,0.45);
+    --text-dim: rgba(255,255,255,0.25);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--black);
+    color: var(--text);
+    overflow-x: hidden;
+    line-height: 1.6;
+  }
+
+  /* ─── SCROLLBAR ─── */
+  ::-webkit-scrollbar { width: 4px; }
+  ::-webkit-scrollbar-track { background: var(--dark); }
+  ::-webkit-scrollbar-thumb { background: var(--green); border-radius: 2px; }
+
+  /* ─── NAVIGATION ─── */
+  .nav {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 40px;
+    height: 64px;
+    background: rgba(8,8,8,0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    transition: background 0.3s;
+  }
+
+  .nav-logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .nav-logo-bar {
+    width: 3px;
+    height: 24px;
+    background: var(--green);
+    border-radius: 2px;
+  }
+  .nav-logo-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 0.08em;
+  }
+  .nav-logo-sub {
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    font-family: 'Noto Sans KR', sans-serif;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 4px;
+  }
+  .nav-links a {
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    text-decoration: none;
+    padding: 6px 12px;
+    border-radius: 4px;
+    transition: color 0.2s, background 0.2s;
+    font-weight: 500;
+  }
+  .nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
+  .nav-links a.active { color: var(--green); }
+
+  .nav-cta {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 8px 18px;
+    background: var(--green);
+    color: var(--black);
+    border-radius: 22px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .nav-cta:hover { transform: scale(1.03); opacity: 0.92; }
+
+  .nav-mobile-btn {
+    display: none;
+    flex-direction: column;
+    gap: 5px;
+    cursor: pointer;
+    padding: 4px;
+  }
+  .nav-mobile-btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    background: var(--text);
+    border-radius: 1px;
+    transition: all 0.3s;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    position: relative;
+    height: 100vh;
+    min-height: 600px;
+    overflow: hidden;
+    background: var(--black);
+  }
+
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: flex-end;
+    padding: 80px 40px 80px 60px;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+  }
+  .slide.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+
+  .slide-bg {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+  }
+  /* Placeholder backgrounds — replace with real images via background-image: url('...') */
+  .slide-bg-1 {
+    background-color: #0a1f0e;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(74,222,128,0.12) 0%, transparent 60%),
+      repeating-linear-gradient(60deg, transparent, transparent 50px, rgba(74,222,128,0.015) 50px, rgba(74,222,128,0.015) 51px);
+  }
+  .slide-bg-2 {
+    background-color: #0a0e1f;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(56,189,248,0.12) 0%, transparent 60%),
+      repeating-linear-gradient(60deg, transparent, transparent 50px, rgba(56,189,248,0.015) 50px, rgba(56,189,248,0.015) 51px);
+  }
+  .slide-bg-3 {
+    background-color: #150a1f;
+    background-image:
+      radial-gradient(ellipse 60% 50% at 70% 40%, rgba(192,132,252,0.12) 0%, transparent 60%),
+      repeating-linear-gradient(60deg, transparent, transparent 50px, rgba(192,132,252,0.015) 50px, rgba(192,132,252,0.015) 51px);
+  }
+
+  .slide-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(8,8,8,0.75) 0%, rgba(8,8,8,0.3) 60%, transparent 100%);
+  }
+  .slide-bottom {
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 280px;
+    background: linear-gradient(transparent, rgba(8,8,8,0.9));
+  }
+
+  .slide-content {
+    position: relative;
+    z-index: 2;
+    max-width: 620px;
+  }
+
+  .slide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 18px;
+    padding: 5px 12px;
+    border: 1px solid rgba(255,255,255,0.12);
+    border-radius: 20px;
+  }
+  .slide-tag-dot {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    animation: pulse 2s ease infinite;
+  }
+  .slide-tag-dot-1 { background: var(--green); }
+  .slide-tag-dot-2 { background: var(--blue); }
+  .slide-tag-dot-3 { background: var(--purple); }
+  @keyframes pulse {
+    0%,100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.6; transform: scale(0.85); }
+  }
+  .slide-tag-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-muted);
+    letter-spacing: 0.1em;
+  }
+
+  .slide-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: clamp(52px, 7vw, 88px);
+    line-height: 0.95;
+    color: var(--text);
+    margin-bottom: 12px;
+    letter-spacing: 0.02em;
+  }
+  .slide-em-1 { color: var(--green); }
+  .slide-em-2 { color: var(--blue); }
+  .slide-em-3 { color: var(--purple); }
+
+  .slide-sub {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 28px;
+    max-width: 400px;
+    font-weight: 300;
+  }
+
+  .hero-btns {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+  }
+  .btn-primary {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    padding: 12px 24px;
+    border-radius: 26px;
+    cursor: pointer;
+    border: none;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: transform 0.15s, opacity 0.15s;
+  }
+  .btn-primary:hover { transform: translateY(-2px); opacity: 0.9; }
+  .btn-p-1 { background: var(--green); color: var(--black); }
+  .btn-p-2 { background: var(--blue); color: var(--black); }
+  .btn-p-3 { background: var(--purple); color: var(--black); }
+  .btn-ghost {
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.07em;
+    padding: 11px 24px;
+    border-radius: 26px;
+    border: 1px solid rgba(255,255,255,0.2);
+    color: var(--text);
+    background: transparent;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    transition: background 0.2s, border-color 0.2s;
+  }
+  .btn-ghost:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.35); }
+
+  /* Slide controls */
+  .slide-controls {
+    position: absolute;
+    bottom: 36px;
+    right: 48px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 10;
+  }
+  .sdot {
+    width: 6px; height: 6px;
+    border-radius: 3px;
+    background: rgba(255,255,255,0.25);
+    cursor: pointer;
+    transition: all 0.35s;
+  }
+  .sdot.active { width: 24px; }
+  .sdot-0.active { background: var(--green); }
+  .sdot-1.active { background: var(--blue); }
+  .sdot-2.active { background: var(--purple); }
+
+  .slide-counter {
+    position: absolute;
+    top: 80px;
+    right: 48px;
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    z-index: 10;
+  }
+
+  /* Progress bar */
+  .hero-progress {
+    position: absolute;
+    bottom: 0; left: 0;
+    height: 2px;
+    background: var(--green);
+    z-index: 10;
+    animation: progress 4s linear infinite;
+  }
+  @keyframes progress {
+    from { width: 0%; }
+    to { width: 100%; }
+  }
+
+  /* ─── TICKER ─── */
+  .ticker {
+    background: var(--green);
+    padding: 10px 0;
+    overflow: hidden;
+  }
+  .ticker-track {
+    display: flex;
+    gap: 0;
+    white-space: nowrap;
+    animation: ticker 20s linear infinite;
+  }
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    color: var(--black);
+  }
+  .ticker-sep { color: rgba(0,0,0,0.3); font-size: 14px; }
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  /* ─── STATS BAR ─── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    background: var(--dark2);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat-item {
+    padding: 28px 32px;
+    border-right: 1px solid var(--border);
+  }
+  .stat-item:last-child { border-right: none; }
+  .stat-num {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 36px;
+    color: var(--text);
+    line-height: 1;
+    display: flex;
+    align-items: baseline;
+    gap: 2px;
+  }
+  .stat-num span { font-size: 20px; color: var(--green); }
+  .stat-label {
+    font-size: 11px;
+    color: var(--text-muted);
+    letter-spacing: 0.06em;
+    margin-top: 6px;
+  }
+
+  /* ─── SECTIONS ─── */
+  .section {
+    padding: 80px 60px;
+    border-bottom: 1px solid var(--border);
+  }
+  .section-alt { background: var(--dark2); }
+
+  .eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+  .eyebrow-line {
+    width: 24px; height: 2px;
+    background: var(--green);
+    border-radius: 1px;
+  }
+  .eyebrow-text {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--text-muted);
+  }
+  .sec-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 42px;
+    color: var(--text);
+    letter-spacing: 0.03em;
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+  .sec-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    max-width: 560px;
+    font-weight: 300;
+  }
+  .sec-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    margin-bottom: 32px;
+  }
+  .more-link {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    color: var(--text-muted);
+    text-decoration: none;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    transition: color 0.2s;
+  }
+  .more-link:hover { color: var(--green); }
+
+  /* ─── BENEFITS GRID ─── */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  .benefit-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 22px;
+    transition: border-color 0.25s, transform 0.25s;
+    position: relative;
+    overflow: hidden;
+  }
+  .benefit-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .benefit-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+  .benefit-card:hover::before { opacity: 1; }
+  .bc-1::before { background: var(--green); }
+  .bc-2::before { background: var(--blue); }
+  .bc-3::before { background: var(--amber); }
+  .bc-4::before { background: var(--purple); }
+
+  .benefit-num {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    margin-bottom: 16px;
+  }
+  .benefit-icon {
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+  }
+  .bi-1 { background: rgba(74,222,128,0.12); }
+  .bi-2 { background: rgba(56,189,248,0.12); }
+  .bi-3 { background: rgba(245,158,11,0.12); }
+  .bi-4 { background: rgba(192,132,252,0.12); }
+  .benefit-title {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 8px;
+  }
+  .benefit-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+    line-height: 1.65;
+    font-weight: 300;
+  }
+
+  /* ─── EVENTS GRID ─── */
+  .events-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 14px;
+  }
+  .event-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+  }
+  .event-card:hover { border-color: rgba(255,255,255,0.15); transform: translateY(-3px); }
+  .ev-thumb {
+    height: 130px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  /* Replace these with real background-image: url('...') */
+  .ev-t1 { background: #0a1f0e; }
+  .ev-t2 { background: #0a0e1f; }
+  .ev-t3 { background: #1f140a; }
+  .ev-t4 { background: #14081f; }
+  .ev-pattern {
+    position: absolute; inset: 0;
+    background-image: radial-gradient(circle, rgba(255,255,255,0.08) 1px, transparent 1px);
+    background-size: 18px 18px;
+  }
+  .ev-badge {
+    position: absolute;
+    top: 12px; left: 12px;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.09em;
+    padding: 4px 9px;
+    border-radius: 11px;
+  }
+  .ev-live { background: var(--green); color: var(--black); }
+  .ev-soon { background: var(--blue); color: var(--black); }
+  .ev-end { background: rgba(255,255,255,0.1); color: var(--text-muted); }
+  .ev-label {
+    position: relative;
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.45);
+    letter-spacing: 0.06em;
+  }
+  .ev-body {
+    padding: 16px 18px;
+  }
+  .ev-date {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    margin-bottom: 5px;
+    letter-spacing: 0.05em;
+  }
+  .ev-title {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.4;
+  }
+
+  /* ─── LOOKBOOK ─── */
+  .lookbook {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 150px 150px;
+    gap: 10px;
+  }
+  .lb-item {
+    border-radius: 10px;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    display: flex;
+    align-items: flex-end;
+    padding: 12px 14px;
+  }
+  .lb-item:hover .lb-overlay { opacity: 1; }
+  .lb-main { grid-row: 1 / 3; }
+  /* Replace with real background-image: url('...') */
+  .lb-1 { background: #0a1f0e; }
+  .lb-2 { background: #0a0e1f; }
+  .lb-3 { background: #14081f; }
+  .lb-4 { background: #1f140a; }
+  .lb-5 { background: #081414; }
+  .lb-pattern {
+    position: absolute; inset: 0;
+    background-image: linear-gradient(45deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+      linear-gradient(-45deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+    background-size: 28px 28px;
+  }
+  .lb-overlay {
+    position: absolute; inset: 0;
+    background: rgba(74,222,128,0.08);
+    opacity: 0;
+    transition: opacity 0.25s;
+  }
+  .lb-label {
+    position: relative;
+    font-size: 10px;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0.1em;
+    font-weight: 500;
+  }
+  .lb-plus {
+    position: absolute;
+    top: 12px; right: 12px;
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.08);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; color: rgba(255,255,255,0.4);
+    line-height: 1;
+  }
+
+  /* ─── MATESHIP CTA ─── */
+  .mateship-cta {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    position: relative;
+  }
+  .ms-glow {
+    position: absolute;
+    top: -60px; right: 300px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(74,222,128,0.06);
+    filter: blur(40px);
+    pointer-events: none;
+  }
+  .ms-inner {
+    display: flex;
+  }
+  .ms-left {
+    flex: 1;
+    padding: 52px 48px;
+  }
+  .ms-eyebrow {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    letter-spacing: 0.14em;
+    color: var(--green);
+    margin-bottom: 14px;
+  }
+  .ms-title {
+    font-family: 'Bebas Neue', cursive;
+    font-size: 52px;
+    color: var(--text);
+    line-height: 0.95;
+    letter-spacing: 0.02em;
+    margin-bottom: 16px;
+  }
+  .ms-title span { color: var(--green); }
+  .ms-desc {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.75;
+    margin-bottom: 32px;
+    font-weight: 300;
+    max-width: 380px;
+  }
+  .ms-join {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    padding: 13px 28px;
+    background: var(--green);
+    color: var(--black);
+    border-radius: 28px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: transform 0.15s;
+  }
+  .ms-join:hover { transform: translateY(-2px); }
+  .ms-right {
+    width: 280px;
+    background: var(--dark3);
+    border-left: 1px solid var(--border);
+    padding: 36px 28px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ms-right-title {
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    letter-spacing: 0.14em;
+    color: var(--text-dim);
+    margin-bottom: 8px;
+  }
+  .ms-perk {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 11px 14px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.05);
+    transition: background 0.2s;
+  }
+  .ms-perk:hover { background: rgba(255,255,255,0.06); }
+  .ms-perk-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .ms-perk-text {
+    font-size: 12px;
+    color: rgba(255,255,255,0.65);
+  }
+
+  /* ─── EDUCATION ─── */
+  .edu-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+  }
+  .edu-card {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px 24px;
+    position: relative;
+    overflow: hidden;
+    transition: border-color 0.25s, transform 0.25s;
+  }
+  .edu-card:hover { transform: translateY(-3px); }
+  .edu-card:hover.ec-1 { border-color: rgba(74,222,128,0.3); }
+  .edu-card:hover.ec-2 { border-color: rgba(56,189,248,0.3); }
+  .edu-card:hover.ec-3 { border-color: rgba(245,158,11,0.3); }
+  .edu-top-bar {
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+  .etb-1 { background: var(--green); }
+  .etb-2 { background: var(--blue); }
+  .etb-3 { background: var(--amber); }
+  .edu-badge {
+    display: inline-block;
+    font-family: 'Space Mono', monospace;
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    padding: 4px 10px;
+    border-radius: 11px;
+    margin-bottom: 16px;
+  }
+  .eb-1 { background: rgba(74,222,128,0.12); color: var(--green); }
+  .eb-2 { background: rgba(56,189,248,0.12); color: var(--blue); }
+  .eb-3 { background: rgba(245,158,11,0.12); color: var(--amber); }
+  .edu-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 16px;
+    line-height: 1.3;
+  }
+  .edu-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+  .edu-list li {
+    font-size: 12px;
+    color: var(--text-muted);
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.55;
+    font-weight: 300;
+  }
+  .edu-bullet {
+    width: 4px; height: 4px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    margin-top: 6px;
+  }
+  .ebul-1 { background: var(--green); }
+  .ebul-2 { background: var(--blue); }
+  .ebul-3 { background: var(--amber); }
+  .edu-cta {
+    font-family: 'Space Mono', monospace;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    text-decoration: none;
+    transition: gap 0.2s;
+  }
+  .edu-cta:hover { gap: 10px; }
+  .ec-1 .edu-cta { color: var(--green); }
+  .ec-2 .edu-cta { color: var(--blue); }
+  .ec-3 .edu-cta { color: var(--amber); }
+
+  /* SEO Tags */
+  .seo-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 24px;
+  }
+  .seo-tag {
+    font-size: 11px;
+    color: var(--text-dim);
+    padding: 4px 12px;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    letter-spacing: 0.04em;
+  }
+
+  /* ─── CONTACT ─── */
+  .contact-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: start;
+  }
+  .contact-item {
+    display: flex;
+    gap: 14px;
+    margin-bottom: 16px;
+    align-items: flex-start;
+  }
+  .ci-label {
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: var(--text-dim);
+    letter-spacing: 0.08em;
+    min-width: 52px;
+    padding-top: 2px;
+  }
+  .ci-val {
+    font-size: 13px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+  .ci-val a { color: var(--green); text-decoration: none; }
+  .map-placeholder {
+    background: var(--dark2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    height: 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .map-placeholder span {
+    font-size: 11px;
+    color: var(--text-dim);
+    letter-spacing: 0.06em;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: var(--dark);
+    padding: 32px 60px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-top: 1px solid var(--border);
+  }
+  .footer-logo {
+    font-family: 'Space Mono', monospace;
+    font-size: 12px;
+    color: var(--text);
+    letter-spacing: 0.08em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .footer-logo-bar {
+    width: 2px; height: 14px;
+    background: var(--green);
+    border-radius: 1px;
+  }
+  .footer-info {
+    font-size: 11px;
+    color: var(--text-dim);
+    line-height: 1.75;
+  }
+  .footer-right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 12px;
+  }
+  .footer-links {
+    display: flex;
+    gap: 20px;
+  }
+  .footer-links a {
+    font-size: 11px;
+    color: var(--text-dim);
+    text-decoration: none;
+    transition: color 0.2s;
+  }
+  .footer-links a:hover { color: var(--text-muted); }
+  .footer-sns {
+    display: flex;
+    gap: 8px;
+  }
+  .sns-btn {
+    width: 30px; height: 30px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, color 0.2s;
+    font-family: 'Space Mono', monospace;
+  }
+  .sns-btn:hover { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: var(--green); }
+
+  /* ─── KAKAO FLOAT ─── */
+  .kakao-float {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    width: 52px; height: 52px;
+    background: #FEE500;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer;
+    z-index: 99;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+    text-decoration: none;
+  }
+  .kakao-float:hover { transform: scale(1.08); }
+  .kakao-float svg { width: 26px; height: 26px; }
+
+  /* ─── MOBILE ─── */
+  @media (max-width: 900px) {
+    .nav-links { display: none; }
+    .nav-mobile-btn { display: flex; }
+    .nav { padding: 0 24px; }
+    .hero .slide { padding: 80px 24px 60px; }
+    .slide-title { font-size: 48px; }
+    .stats-bar { grid-template-columns: repeat(2,1fr); }
+    .section { padding: 52px 24px; }
+    .benefits-grid { grid-template-columns: repeat(2,1fr); }
+    .events-grid { grid-template-columns: 1fr; }
+    .lookbook { grid-template-columns: 1fr 1fr; grid-template-rows: auto; }
+    .lb-main { grid-row: auto; }
+    .ms-inner { flex-direction: column; }
+    .ms-right { width: 100%; border-left: none; border-top: 1px solid var(--border); }
+    .edu-grid { grid-template-columns: 1fr; }
+    .contact-grid { grid-template-columns: 1fr; }
+    .footer { flex-direction: column; gap: 20px; text-align: center; padding: 28px 24px; }
+    .footer-right { align-items: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ─── NAV ─── -->
+<nav class="nav" id="mainNav" role="navigation" aria-label="메인 내비게이션">
+  <a href="/" class="nav-logo" aria-label="강원도반려동물협회 홈">
+    <div class="nav-logo-bar"></div>
+    <div>
+      <div class="nav-logo-text">GWAA</div>
+      <div class="nav-logo-sub">강원도반려동물협회</div>
+    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#about" class="nav-link">ABOUT</a>
+    <a href="#education" class="nav-link">EDUCATION</a>
+    <a href="#events" class="nav-link">EVENTS</a>
+    <a href="#mateship" class="nav-link">MATESHIP</a>
+    <a href="#people" class="nav-link">PEOPLE</a>
+    <a href="#contact" class="nav-link">CONTACT</a>
+  </div>
+  <a href="#mateship" class="nav-cta">메이트쉽 가입 →</a>
+  <div class="nav-mobile-btn" id="mobileMenuBtn" aria-label="메뉴 열기">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ─── HERO ─── -->
+<header class="hero" id="hero" aria-label="메인 히어로">
+  <!-- Slide 1 -->
+  <div class="slide active" id="slide-0" aria-hidden="false">
+    <div class="slide-bg slide-bg-1"
+      style="/* background-image: url('images/hero-1.jpg'); */"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-bottom"></div>
+    <div class="slide-content">
+      <div class="slide-tag">
+        <div class="slide-tag-dot slide-tag-dot-1"></div>
+        <div class="slide-tag-text">GWAA · 강원도반려동물협회</div>
+      </div>
+      <h1 class="slide-title">반려동물과 함께,<br><span class="slide-em-1">강원도를 누리다</span></h1>
+      <p class="slide-sub">문화가 바뀌어야 반려생활이 달라집니다.<br>우리는 그 변화를 만듭니다.</p>
+      <div class="hero-btns">
+        <a href="#mateship" class="btn-primary btn-p-1">메이트쉽 가입하기 →</a>
+        <a href="#about" class="btn-ghost">협회 소개</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 2 -->
+  <div class="slide" id="slide-1" aria-hidden="true">
+    <div class="slide-bg slide-bg-2"
+      style="/* background-image: url('images/hero-2.jpg'); */"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-bottom"></div>
+    <div class="slide-content">
+      <div class="slide-tag">
+        <div class="slide-tag-dot slide-tag-dot-2"></div>
+        <div class="slide-tag-text">EDUCATION · 교육 프로그램</div>
+      </div>
+      <h2 class="slide-title">독스포츠부터<br><span class="slide-em-2">국가자격증까지</span></h2>
+      <p class="slide-sub">어질리티, 오비디언스, 반려동물행동지도사<br>전문 트레이너와 체계적인 교육을 제공합니다.</p>
+      <div class="hero-btns">
+        <a href="#education" class="btn-primary btn-p-2">교육 신청하기 →</a>
+        <a href="#education" class="btn-ghost">커리큘럼 보기</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Slide 3 -->
+  <div class="slide" id="slide-2" aria-hidden="true">
+    <div class="slide-bg slide-bg-3"
+      style="/* background-image: url('images/hero-3.jpg'); */"></div>
+    <div class="slide-overlay"></div>
+    <div class="slide-bottom"></div>
+    <div class="slide-content">
+      <div class="slide-tag">
+        <div class="slide-tag-dot slide-tag-dot-3"></div>
+        <div class="slide-tag-text">EVENTS · 이벤트 & 혜택</div>
+      </div>
+      <h2 class="slide-title">강원도 전역에서<br><span class="slide-em-3">특별한 혜택</span></h2>
+      <p class="slide-sub">호텔, 리조트, 카페 등 강원도 제휴업체<br>멤버십 할인과 우선 예약 혜택을 누리세요.</p>
+      <div class="hero-btns">
+        <a href="#events" class="btn-primary btn-p-3">이벤트 보기 →</a>
+        <a href="#mateship" class="btn-ghost">제휴업체 목록</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="slide-counter" id="slideCounter" aria-live="polite">01 / 03</div>
+  <div class="slide-controls" role="tablist" aria-label="슬라이드 선택">
+    <div class="sdot sdot-0 active" onclick="goSlide(0)" role="tab" aria-selected="true" aria-label="슬라이드 1"></div>
+    <div class="sdot sdot-1" onclick="goSlide(1)" role="tab" aria-selected="false" aria-label="슬라이드 2"></div>
+    <div class="sdot sdot-2" onclick="goSlide(2)" role="tab" aria-selected="false" aria-label="슬라이드 3"></div>
+  </div>
+  <div class="hero-progress" id="heroProgress"></div>
+</header>
+
+<!-- ─── TICKER ─── -->
+<div class="ticker" aria-hidden="true">
+  <div class="ticker-track">
+    <div class="ticker-item">강원도반려동물협회 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">메이트쉽 가입 혜택 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">2026 반려동물 숲치유 in 양평 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">세인트존스호텔 멤버 할인 in 강릉 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">독스포츠 교육 모집중 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">오비디언스 · 반려동물행동지도사 자격증 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">강원도반려동물협회 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">메이트쉽 가입 혜택 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">2026 반려동물 숲치유 in 양평 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">세인트존스호텔 멤버 할인 in 강릉 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">독스포츠 교육 모집중 <span class="ticker-sep">·</span></div>
+    <div class="ticker-item">오비디언스 · 반려동물행동지도사 자격증 <span class="ticker-sep">·</span></div>
+  </div>
+</div>
+
+<!-- ─── STATS ─── -->
+<section class="stats-bar" aria-label="협회 현황">
+  <div class="stat-item">
+    <div class="stat-num">2,400<span>+</span></div>
+    <div class="stat-label">누적 회원수</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">18<span>+</span></div>
+    <div class="stat-label">강원도 제휴업체</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">36<span>+</span></div>
+    <div class="stat-label">연간 프로그램</div>
+  </div>
+  <div class="stat-item">
+    <div class="stat-num">4<span>년</span></div>
+    <div class="stat-label">협회 운영 기간</div>
+  </div>
+</section>
+
+<!-- ─── BENEFITS ─── -->
+<section class="section" id="about" aria-labelledby="benefits-title">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">MEMBERSHIP BENEFITS</div></div>
+  <h2 class="sec-title" id="benefits-title">메이트쉽 주요 혜택</h2>
+  <p class="sec-desc">가입 즉시 강원도 전역에서 반려동물과 더 많은 것을 누리세요.</p>
+  <div class="benefits-grid">
+    <div class="benefit-card bc-1">
+      <div class="benefit-num">01 —</div>
+      <div class="benefit-icon bi-1">🌿</div>
+      <div class="benefit-title">정책 제안 참여</div>
+      <p class="benefit-desc">반려동물과 사람이 함께하는 강원도를 만드는 데 직접 목소리를 낼 수 있습니다.</p>
+    </div>
+    <div class="benefit-card bc-2">
+      <div class="benefit-num">02 —</div>
+      <div class="benefit-icon bi-2">🏷️</div>
+      <div class="benefit-title">제휴업체 전용 할인</div>
+      <p class="benefit-desc">강원도 내 반려동물 관련 호텔, 카페, 리조트에서 멤버 전용 할인을 받습니다.</p>
+    </div>
+    <div class="benefit-card bc-3">
+      <div class="benefit-num">03 —</div>
+      <div class="benefit-icon bi-3">🎪</div>
+      <div class="benefit-title">행사 무료 & 우선 참여</div>
+      <p class="benefit-desc">캠핑, 트래킹, 요가 등 협회 프로그램을 무료 또는 우선 신청 기회로 이용합니다.</p>
+    </div>
+    <div class="benefit-card bc-4">
+      <div class="benefit-num">04 —</div>
+      <div class="benefit-icon bi-4">🤝</div>
+      <div class="benefit-title">지역 반려문화 형성</div>
+      <p class="benefit-desc">강원도 반려인 네트워크에 참여하고, 올바른 반려문화 확산에 기여합니다.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EVENTS ─── -->
+<section class="section section-alt" id="events" aria-labelledby="events-title">
+  <div class="sec-header">
+    <div>
+      <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">EVENTS & BENEFITS</div></div>
+      <h2 class="sec-title" id="events-title">진행 중인 이벤트</h2>
+    </div>
+    <a href="events.html" class="more-link">전체 보기 →</a>
+  </div>
+  <div class="events-grid">
+    <a href="#" class="event-card">
+      <div class="ev-thumb ev-t1">
+        <div class="ev-pattern"></div>
+        <!-- background-image: url('images/event-forest.jpg') -->
+        <div class="ev-badge ev-live">진행중</div>
+        <div class="ev-label">숲치유 · 양평</div>
+      </div>
+      <div class="ev-body">
+        <div class="ev-date">2026.04.04 — 2026.11.07</div>
+        <div class="ev-title">2026 반려동물 숲치유 in 양평</div>
+      </div>
+    </a>
+    <a href="#" class="event-card">
+      <div class="ev-thumb ev-t2">
+        <div class="ev-pattern"></div>
+        <div class="ev-badge ev-soon">사전예약</div>
+        <div class="ev-label">호텔 할인 · 강릉</div>
+      </div>
+      <div class="ev-body">
+        <div class="ev-date">2026.04.01 — 2026.06.30</div>
+        <div class="ev-title">세인트존스호텔 할인 in 강릉</div>
+      </div>
+    </a>
+    <a href="#" class="event-card">
+      <div class="ev-thumb ev-t3">
+        <div class="ev-pattern"></div>
+        <div class="ev-badge ev-live">진행중</div>
+        <div class="ev-label">애견카페 · 원주</div>
+      </div>
+      <div class="ev-body">
+        <div class="ev-date">2026.03.01 — 2026.12.31</div>
+        <div class="ev-title">2026 애견카페 할인 in 원주</div>
+      </div>
+    </a>
+    <a href="#" class="event-card">
+      <div class="ev-thumb ev-t4">
+        <div class="ev-pattern"></div>
+        <div class="ev-badge ev-end">종료</div>
+        <div class="ev-label">리조트 · 평창</div>
+      </div>
+      <div class="ev-body">
+        <div class="ev-date">2026.01.02 — 2026.03.08</div>
+        <div class="ev-title">피닉스파크 호텔 할인 in 평창</div>
+      </div>
+    </a>
+  </div>
+</section>
+
+<!-- ─── LOOKBOOK ─── -->
+<section class="section" id="people" aria-labelledby="lookbook-title">
+  <div class="sec-header">
+    <div>
+      <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">LOOKBOOK</div></div>
+      <h2 class="sec-title" id="lookbook-title">협회 활동 룩북</h2>
+    </div>
+    <a href="people.html" class="more-link">전체 보기 →</a>
+  </div>
+  <div class="lookbook">
+    <!-- background-image: url('images/lookbook-1.jpg') 식으로 교체 -->
+    <div class="lb-item lb-1 lb-main">
+      <div class="lb-pattern"></div>
+      <div class="lb-overlay"></div>
+      <div class="lb-plus">+</div>
+      <div class="lb-label">캠핑 · 아웃도어</div>
+    </div>
+    <div class="lb-item lb-2">
+      <div class="lb-pattern"></div>
+      <div class="lb-overlay"></div>
+      <div class="lb-label">트래킹</div>
+    </div>
+    <div class="lb-item lb-3">
+      <div class="lb-pattern"></div>
+      <div class="lb-overlay"></div>
+      <div class="lb-label">행사</div>
+    </div>
+    <div class="lb-item lb-4">
+      <div class="lb-pattern"></div>
+      <div class="lb-overlay"></div>
+      <div class="lb-label">교육</div>
+    </div>
+    <div class="lb-item lb-5">
+      <div class="lb-pattern"></div>
+      <div class="lb-overlay"></div>
+      <div class="lb-label">봉사활동</div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── MATESHIP CTA ─── -->
+<section class="section section-alt" id="mateship" aria-labelledby="ms-title">
+  <div class="mateship-cta">
+    <div class="ms-glow"></div>
+    <div class="ms-inner">
+      <div class="ms-left">
+        <div class="ms-eyebrow">MATESHIP MEMBERSHIP</div>
+        <h2 class="ms-title" id="ms-title">강원도 반려인의<br><span>특별한 멤버십</span></h2>
+        <p class="ms-desc">가입 즉시 강원도 전역 제휴업체 할인, 행사 우선 참여, 정책 제안 참여 혜택. 지금 바로 강원도 반려생활을 바꾸세요.</p>
+        <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="ms-join">메이트쉽 가입하기 →</a>
+      </div>
+      <div class="ms-right">
+        <div class="ms-right-title">멤버십 혜택 목록</div>
+        <div class="ms-perk"><div class="ms-perk-dot" style="background:var(--green)"></div><div class="ms-perk-text">제휴업체 전용 할인</div></div>
+        <div class="ms-perk"><div class="ms-perk-dot" style="background:var(--blue)"></div><div class="ms-perk-text">행사 무료 이용</div></div>
+        <div class="ms-perk"><div class="ms-perk-dot" style="background:var(--purple)"></div><div class="ms-perk-text">프로그램 우선 참여</div></div>
+        <div class="ms-perk"><div class="ms-perk-dot" style="background:var(--amber)"></div><div class="ms-perk-text">정책 제안 참여권</div></div>
+        <div class="ms-perk"><div class="ms-perk-dot" style="background:var(--red)"></div><div class="ms-perk-text">교육 과정 할인</div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── EDUCATION ─── -->
+<section class="section" id="education" aria-labelledby="edu-title">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">EDUCATION</div></div>
+  <h2 class="sec-title" id="edu-title">반려동물 교육 프로그램</h2>
+  <p class="sec-desc">전문 트레이너와 함께하는 체계적인 반려동물 교육. 독스포츠부터 국가자격증 취득까지 지원합니다.</p>
+  <div class="edu-grid">
+    <div class="edu-card ec-1">
+      <div class="edu-top-bar etb-1"></div>
+      <div class="edu-badge eb-1">DOGSPORTS</div>
+      <h3 class="edu-title">독스포츠 교육</h3>
+      <ul class="edu-list">
+        <li><div class="edu-bullet ebul-1"></div>어질리티 기초 & 심화 과정</li>
+        <li><div class="edu-bullet ebul-1"></div>장애물 훈련 · 스피드 훈련</li>
+        <li><div class="edu-bullet ebul-1"></div>경기 참가 준비 과정</li>
+      </ul>
+      <a href="education.html#dogsports" class="edu-cta">교육 신청 →</a>
+    </div>
+    <div class="edu-card ec-2">
+      <div class="edu-top-bar etb-2"></div>
+      <div class="edu-badge eb-2">OBEDIENCE</div>
+      <h3 class="edu-title">오비디언스 교육</h3>
+      <ul class="edu-list">
+        <li><div class="edu-bullet ebul-2"></div>기초 복종훈련 과정</li>
+        <li><div class="edu-bullet ebul-2"></div>고급 오비디언스 과정</li>
+        <li><div class="edu-bullet ebul-2"></div>반려동물행동지도사 (국가자격증)</li>
+      </ul>
+      <a href="education.html#obedience" class="edu-cta">교육 신청 →</a>
+    </div>
+    <div class="edu-card ec-3">
+      <div class="edu-top-bar etb-3"></div>
+      <div class="edu-badge eb-3">ETIQUETTE</div>
+      <h3 class="edu-title">반려동물 에티켓 교육</h3>
+      <ul class="edu-list">
+        <li><div class="edu-bullet ebul-3"></div>공공장소 에티켓 & 사회화</li>
+        <li><div class="edu-bullet ebul-3"></div>올바른 반려문화 교육</li>
+        <li><div class="edu-bullet ebul-3"></div>보호자 교육 프로그램</li>
+      </ul>
+      <a href="education.html#etiquette" class="edu-cta">교육 신청 →</a>
+    </div>
+  </div>
+  <!-- SEO 키워드 태그 (검색엔진 크롤링용) -->
+  <div class="seo-tags" aria-label="관련 키워드">
+    <span class="seo-tag">#강원도반려동물교육</span>
+    <span class="seo-tag">#어질리티교육</span>
+    <span class="seo-tag">#오비디언스훈련</span>
+    <span class="seo-tag">#반려동물행동지도사</span>
+    <span class="seo-tag">#강원도반려견훈련</span>
+    <span class="seo-tag">#독스포츠강원도</span>
+    <span class="seo-tag">#원주반려동물</span>
+  </div>
+</section>
+
+<!-- ─── CONTACT ─── -->
+<section class="section section-alt" id="contact" aria-labelledby="contact-title">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">CONTACT</div></div>
+  <h2 class="sec-title" id="contact-title">문의하기</h2>
+  <p class="sec-desc">궁금한 점이 있으시면 언제든지 연락주세요.</p>
+  <div class="contact-grid">
+    <div>
+      <div class="contact-item">
+        <div class="ci-label">주소</div>
+        <div class="ci-val">강원도 원주시 천매봉길 20-9</div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">전화</div>
+        <div class="ci-val"><a href="tel:033-813-0333">033-813-0333</a></div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">이메일</div>
+        <div class="ci-val"><a href="/cdn-cgi/l/email-protection#9bfcfaf5f2f6faf7aadbf5faedfee9b5f8f4f6"><span class="__cf_email__" data-cfemail="2a4d4b4443474b461b6a444b5c4f5804494547">[email&#160;protected]</span></a></div>
+      </div>
+      <div class="contact-item">
+        <div class="ci-label">카카오</div>
+        <div class="ci-val"><a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener">카카오채널 @강원도반려동물협회</a></div>
+      </div>
+      <div style="margin-top: 24px;">
+        <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="btn-primary btn-p-1" style="font-size:12px; padding:11px 22px;">카카오로 문의하기 →</a>
+      </div>
+    </div>
+    <div>
+      <!-- Google Maps embed 자리 — iframe으로 교체하세요 -->
+      <div class="map-placeholder">
+        <span style="font-size:24px; opacity:0.2">📍</span>
+        <span>강원도 원주시 천매봉길 20-9</span>
+        <span style="color:var(--green); font-size:10px; margin-top:4px; cursor:pointer;">Google Maps 연동 예정</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ─── FOOTER ─── -->
+<footer class="footer">
+  <div>
+    <div class="footer-logo">
+      <div class="footer-logo-bar"></div>
+      GWAA · 사단법인 강원도반려동물협회
+    </div>
+    <div class="footer-info">
+      대표 이지영 &nbsp;·&nbsp; 강원도 원주시 천매봉길 20-9<br>
+      033-813-0333 &nbsp;·&nbsp; <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="cfa8aea1a6a2aea3fe8fa1aeb9aabde1aca0a2">[email&#160;protected]</a><br>
+      Copyright © 2026 사단법인 강원도반려동물협회 All rights reserved.
+    </div>
+  </div>
+  <div class="footer-right">
+    <div class="footer-links">
+      <a href="#">이용약관</a>
+      <a href="#">개인정보처리방침</a>
+      <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener">카카오채널</a>
+    </div>
+    <div class="footer-sns">
+      <div class="sns-btn" title="카카오채널">K</div>
+      <div class="sns-btn" title="인스타그램">I</div>
+      <div class="sns-btn" title="네이버블로그">N</div>
+    </div>
+  </div>
+</footer>
+
+<!-- ─── KAKAO FLOAT BUTTON ─── -->
+<a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener"
+   class="kakao-float" aria-label="카카오채널 문의하기" title="카카오채널로 문의하기">
+  <svg viewBox="0 0 24 24" fill="#000000">
+    <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.618 1.574 4.917 3.963 6.294L5 21l4.576-2.452A11.2 11.2 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/>
+  </svg>
+</a>
+
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ─ SLIDESHOW ─ */
+let cur = 0;
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.sdot');
+const counter = document.getElementById('slideCounter');
+const progress = document.getElementById('heroProgress');
+let timer;
+
+function goSlide(n) {
+  slides[cur].classList.remove('active');
+  slides[cur].setAttribute('aria-hidden', 'true');
+  dots[cur].classList.remove('active');
+  dots[cur].setAttribute('aria-selected', 'false');
+  cur = n;
+  slides[cur].classList.add('active');
+  slides[cur].setAttribute('aria-hidden', 'false');
+  dots[cur].classList.add('active');
+  dots[cur].setAttribute('aria-selected', 'true');
+  counter.textContent = String(cur + 1).padStart(2,'0') + ' / 03';
+  progress.style.animation = 'none';
+  void progress.offsetWidth;
+  progress.style.animation = 'progress 4s linear';
+}
+
+function nextSlide() {
+  goSlide((cur + 1) % slides.length);
+}
+
+progress.style.animation = 'progress 4s linear';
+progress.addEventListener('animationend', nextSlide);
+
+/* ─ NAV SCROLL ─ */
+window.addEventListener('scroll', () => {
+  const nav = document.getElementById('mainNav');
+  nav.style.background = window.scrollY > 80
+    ? 'rgba(8,8,8,0.97)'
+    : 'rgba(8,8,8,0.92)';
+});
+
+/* ─ SMOOTH ACTIVE NAV ─ */
+const sections = document.querySelectorAll('section[id], header[id]');
+const navLinks = document.querySelectorAll('.nav-links a');
+const observer = new IntersectionObserver((entries) =>
