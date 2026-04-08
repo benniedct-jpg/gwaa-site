@@ -120,13 +120,13 @@ function injectNavCSS() {
 .nav-logo-text{font-family:'Space Mono',monospace;font-size:12px;color:#111;letter-spacing:0.08em}
 .nav-logo-sub{font-size:10px;color:#9ca3af;letter-spacing:0.06em}
 .nav-links{display:flex;align-items:center;gap:2px}
-.nav-item{position:relative}
+.nav-item{position:relative;height:64px;display:flex;align-items:center}
 .nav-link{display:flex;align-items:center;gap:4px;font-size:11px;letter-spacing:0.08em;color:#6b7280;text-decoration:none;padding:8px 12px;border-radius:6px;font-weight:500;transition:color 0.2s,background 0.2s;white-space:nowrap}
 .nav-link:hover,.nav-item:hover .nav-link{color:#111;background:#f3f4f6}
 .nav-link.active{color:#16a34a;font-weight:700}
 .nav-arrow{flex-shrink:0;color:#d1d5db;transition:transform 0.2s}
 .nav-item:hover .nav-arrow{transform:rotate(180deg);color:#6b7280}
-.nav-dropdown{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:220px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;opacity:0;pointer-events:none;transition:opacity 0.18s,transform 0.18s;box-shadow:0 8px 32px rgba(0,0,0,0.1)}
+.nav-dropdown{position:absolute;top:calc(100% + 6px);left:50%;transform:translateX(-50%) translateY(-4px);min-width:220px;background:#fff;border:1px solid #e5e7eb;border-radius:12px;padding:6px;opacity:0;pointer-events:none;transition:opacity 0.18s,transform 0.18s;box-shadow:0 8px 32px rgba(0,0,0,0.1);z-index:300}
 .nav-item:hover .nav-dropdown{opacity:1;pointer-events:auto;transform:translateX(-50%) translateY(0)}
 .dd-item{display:block;padding:9px 14px;font-size:12px;color:#6b7280;text-decoration:none;border-radius:8px;letter-spacing:0.03em;line-height:1.4;transition:background 0.15s,color 0.15s}
 .dd-item:hover{background:#f0fdf4;color:#16a34a}
