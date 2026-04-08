@@ -1,873 +1,192 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="강원도반려동물협회 메이트쉽 멤버십 - 강원도 전역 제휴업체 할인, 행사 우선 참여, 정책 제안 참여 혜택. 지금 가입하고 반려생활을 바꾸세요.">
-<meta name="keywords" content="강원도반려동물협회 멤버십, 메이트쉽, 강원도반려동물 혜택, 반려동물 제휴할인, 강원도반려동물행사">
-<meta property="og:title" content="메이트쉽 멤버십 | 강원도반려동물협회 GWAA">
-<meta property="og:description" content="강원도 반려인을 위한 특별한 멤버십. 제휴업체 할인, 행사 우선참여, 정책 제안 참여권.">
-<meta property="og:type" content="website">
-<title>메이트쉽 멤버십 | 강원도반려동물협회 GWAA</title>
+<title>메이트쉽 멤버십 | GWAA 강원도반려동물협회</title>
 <link rel="canonical" href="https://gwaa.or.kr/mateship">
-
-<script type="application/ld+json">
-{
-  "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "메이트쉽 멤버십",
-  "description": "강원도반려동물협회 메이트쉽 멤버십 안내 및 가입 페이지",
-  "url": "https://gwaa.or.kr/mateship",
-  "isPartOf": { "@type": "WebSite", "url": "https://gwaa.or.kr" },
-  "breadcrumb": {
-    "@type": "BreadcrumbList",
-    "itemListElement": [
-      { "@type": "ListItem", "position": 1, "name": "홈", "item": "https://gwaa.or.kr" },
-      { "@type": "ListItem", "position": 2, "name": "메이트쉽", "item": "https://gwaa.or.kr/mateship" }
-    ]
-  }
-}
-</script>
-
+<link rel="stylesheet" href="css/global.css">
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Noto+Sans+KR:wght@300;400;500;700&family=Space+Mono:wght@400;700&display=swap');
-
-:root {
-  --green: #4ade80;
-  --green-dim: rgba(74,222,128,0.12);
-  --blue: #38bdf8;
-  --purple: #c084fc;
-  --amber: #f59e0b;
-  --red: #f87171;
-  --black: #080808;
-  --dark: #0f0f0f;
-  --dark2: #141414;
-  --dark3: #1a1a1a;
-  --dark4: #202020;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.12);
-  --text: #ffffff;
-  --text-muted: rgba(255,255,255,0.5);
-  --text-dim: rgba(255,255,255,0.25);
+.mi-grid{display:grid;grid-template-columns:1fr 1fr;gap:72px;align-items:start}
+.big-q{font-family:'Bebas Neue',cursive;font-size:52px;color:var(--text);line-height:1.05;letter-spacing:.02em;margin-bottom:18px}
+.big-q span{color:var(--green)}
+.mi-body{font-size:14px;color:var(--text-muted);line-height:1.85;font-weight:300;margin-bottom:28px}
+.mi-cards{display:flex;flex-direction:column;gap:12px}
+.mic{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:20px 22px;display:flex;align-items:flex-start;gap:14px;transition:border-color .25s,transform .2s}
+.mic:hover{border-color:rgba(74,222,128,.25);transform:translateX(4px)}
+.mic-ico{width:38px;height:38px;border-radius:9px;background:var(--green-dim);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:17px}
+.mic-tit{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px}
+.mic-dsc{font-size:12px;color:var(--text-muted);line-height:1.6;font-weight:300}
+.bf6{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.bfc{background:var(--bg);border:1px solid var(--border);border-radius:14px;padding:30px 24px;position:relative;overflow:hidden;transition:transform .25s,border-color .25s}
+.bfc:hover{transform:translateY(-4px)}
+.bfc1:hover{border-color:rgba(74,222,128,.25)}.bfc2:hover{border-color:rgba(56,189,248,.25)}.bfc3:hover{border-color:rgba(245,158,11,.25)}.bfc4:hover{border-color:rgba(192,132,252,.25)}.bfc5:hover{border-color:rgba(248,113,113,.25)}.bfc6:hover{border-color:rgba(74,222,128,.2)}
+.bfc-bar{position:absolute;top:0;left:0;right:0;height:3px}
+.bfb1{background:var(--green)}.bfb2{background:var(--blue)}.bfb3{background:var(--amber)}.bfb4{background:var(--purple)}.bfb5{background:var(--red)}.bfb6{background:linear-gradient(90deg,var(--green),var(--blue))}
+.bfn{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.1em;margin-bottom:14px}
+.bfico{font-size:26px;margin-bottom:12px;display:block}
+.bftit{font-size:14px;font-weight:700;color:var(--text);margin-bottom:8px}
+.bfdsc{font-size:12px;color:var(--text-muted);line-height:1.7;font-weight:300}
+.pg{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+.pmap{background:var(--bg);border:1px solid var(--border);border-radius:14px;overflow:hidden;min-height:340px;display:flex;flex-direction:column}
+.pmh{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between}
+.pmht{font-family:'Space Mono',monospace;font-size:11px;letter-spacing:.08em;color:var(--text-muted)}
+.pmhc{font-size:11px;color:var(--green);padding:3px 9px;background:var(--green-dim);border-radius:10px;font-family:'Space Mono',monospace}
+.mapph{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px}
+.mapph-ico{font-size:30px;opacity:.2}
+.mapph-t{font-size:11px;color:var(--text-dim);letter-spacing:.06em}
+.mapph-s{font-size:10px;color:var(--green);cursor:pointer;opacity:.7}
+.plist{display:flex;flex-direction:column;gap:9px}
+.plt{font-family:'Space Mono',monospace;font-size:10px;letter-spacing:.12em;color:var(--text-dim);margin-bottom:4px}
+.pi{background:var(--bg);border:1px solid var(--border);border-radius:9px;padding:13px 16px;display:flex;align-items:center;gap:12px;transition:border-color .2s}
+.pi:hover{border-color:rgba(74,222,128,.2)}
+.pi-reg{font-family:'Space Mono',monospace;font-size:9px;letter-spacing:.08em;color:var(--green);min-width:34px;padding:3px 7px;border-radius:5px;background:var(--green-dim);text-align:center}
+.pi-nm{font-size:13px;font-weight:500;color:var(--text);flex:1}
+.pi-tp{font-size:11px;color:var(--text-dim)}
+.pi-bd{font-size:9px;font-weight:700;padding:3px 8px;border-radius:8px;letter-spacing:.07em}
+.pba{background:rgba(74,222,128,.12);color:var(--green)}.pbn{background:rgba(56,189,248,.12);color:var(--blue)}
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-top:40px}
+.steps::before{content:'';position:absolute;top:27px;left:12%;right:12%;height:1px;background:linear-gradient(90deg,transparent,var(--border2) 20%,var(--border2) 80%,transparent)}
+.step{display:flex;flex-direction:column;align-items:center;text-align:center;padding:0 14px;position:relative}
+.step-n{width:54px;height:54px;border-radius:50%;background:var(--bg2);border:1px solid var(--border2);display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',cursive;font-size:22px;color:var(--green);margin-bottom:16px;position:relative;z-index:1;transition:background .25s,border-color .25s}
+.step:hover .step-n{background:var(--green-dim);border-color:rgba(74,222,128,.4)}
+.step-t{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px}
+.step-d{font-size:12px;color:var(--text-muted);line-height:1.65;font-weight:300}
+.faq-list{display:flex;flex-direction:column;gap:8px;max-width:780px}
+.faq{background:var(--bg);border:1px solid var(--border);border-radius:9px;overflow:hidden}
+.faqq{display:flex;justify-content:space-between;align-items:center;padding:17px 20px;cursor:pointer;transition:background .2s}
+.faqq:hover{background:rgba(255,255,255,.02)}
+.faqqt{font-size:14px;font-weight:500;color:var(--text)}
+.faqtg{width:22px;height:22px;border-radius:50%;background:rgba(255,255,255,.05);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;color:var(--text-muted);flex-shrink:0;transition:background .2s,transform .2s}
+.faq.open .faqtg{background:var(--green-dim);color:var(--green);transform:rotate(45deg)}
+.faqa{display:none;padding:0 20px 16px;font-size:13px;color:var(--text-muted);line-height:1.8;font-weight:300}
+.faq.open .faqa{display:block}
+.fc{text-align:center;padding:96px 60px;background:var(--gray-light);position:relative;overflow:hidden}
+.fc-glow{position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:300px;border-radius:50%;background:radial-gradient(ellipse,rgba(74,222,128,.07) 0%,transparent 65%);pointer-events:none}
+.fc-title{font-family:'Bebas Neue',cursive;font-size:clamp(46px,6.5vw,80px);color:var(--text);line-height:.95;letter-spacing:.02em;margin-bottom:16px;position:relative}
+.fc-title span{color:var(--green)}
+.fc-desc{font-size:15px;color:var(--text-muted);line-height:1.75;font-weight:300;max-width:440px;margin:0 auto 32px;position:relative}
+.fc-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;position:relative}
+.fc-note{margin-top:18px;font-size:11px;color:var(--text-dim);letter-spacing:.06em;position:relative}
+@media(max-width:900px){
+  .mi-grid{grid-template-columns:1fr;gap:36px}
+  .bf6{grid-template-columns:1fr 1fr}
+  .pg{grid-template-columns:1fr}
+  .steps{grid-template-columns:1fr 1fr;gap:24px}.steps::before{display:none}
+  .fc{padding:60px 24px}
 }
-
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
-body {
-  font-family: 'Noto Sans KR', sans-serif;
-  background: var(--black);
-  color: var(--text);
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: var(--dark); }
-::-webkit-scrollbar-thumb { background: var(--green); border-radius: 2px; }
-
-/* ─── NAV ─── */
-.nav {
-  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-  display: flex; align-items: center; justify-content: space-between;
-  padding: 0 40px; height: 64px;
-  background: rgba(8,8,8,0.95);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--border);
-}
-.nav-logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.nav-logo-bar { width: 3px; height: 24px; background: var(--green); border-radius: 2px; }
-.nav-logo-text { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text); letter-spacing: 0.08em; }
-.nav-logo-sub { font-size: 10px; color: var(--text-muted); letter-spacing: 0.06em; }
-.nav-links { display: flex; gap: 4px; }
-.nav-links a {
-  font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted);
-  text-decoration: none; padding: 6px 12px; border-radius: 4px;
-  transition: color 0.2s, background 0.2s; font-weight: 500;
-}
-.nav-links a:hover { color: var(--text); background: rgba(255,255,255,0.05); }
-.nav-links a.active { color: var(--green); }
-.nav-cta {
-  font-size: 11px; font-weight: 700; letter-spacing: 0.08em;
-  padding: 8px 18px; background: var(--green); color: var(--black);
-  border-radius: 22px; cursor: pointer; text-decoration: none;
-  transition: transform 0.15s, opacity 0.15s;
-}
-.nav-cta:hover { transform: scale(1.03); opacity: 0.92; }
-
-/* ─── HERO / PAGE HEADER ─── */
-.page-hero {
-  min-height: 520px;
-  display: flex; flex-direction: column; justify-content: flex-end;
-  padding: 120px 60px 72px;
-  position: relative; overflow: hidden;
-  background: var(--dark);
-}
-.ph-grid {
-  position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 60px 60px;
-}
-.ph-glow-1 {
-  position: absolute; top: -80px; left: -80px;
-  width: 500px; height: 500px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(74,222,128,0.07) 0%, transparent 65%);
-  pointer-events: none;
-}
-.ph-glow-2 {
-  position: absolute; bottom: -100px; right: 10%;
-  width: 400px; height: 400px; border-radius: 50%;
-  background: radial-gradient(circle, rgba(56,189,248,0.05) 0%, transparent 65%);
-  pointer-events: none;
-}
-.breadcrumb {
-  display: flex; align-items: center; gap: 8px;
-  font-family: 'Space Mono', monospace;
-  font-size: 10px; color: var(--text-dim);
-  letter-spacing: 0.1em; margin-bottom: 24px; position: relative;
-}
-.breadcrumb a { color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
-.breadcrumb a:hover { color: var(--green); }
-.breadcrumb-sep { color: var(--text-dim); }
-.breadcrumb-cur { color: var(--green); }
-
-.page-hero-eyebrow {
-  display: flex; align-items: center; gap: 10px; margin-bottom: 14px; position: relative;
-}
-.eyebrow-line { width: 24px; height: 2px; background: var(--green); border-radius: 1px; }
-.eyebrow-text { font-family: 'Space Mono', monospace; font-size: 10px; letter-spacing: 0.14em; color: var(--text-muted); }
-
-.page-hero-title {
-  font-family: 'Bebas Neue', cursive;
-  font-size: clamp(56px, 8vw, 100px);
-  line-height: 0.9; letter-spacing: 0.02em; color: var(--text);
-  position: relative; margin-bottom: 20px;
-}
-.page-hero-title span { color: var(--green); }
-.page-hero-desc {
-  font-size: 15px; color: var(--text-muted); line-height: 1.75;
-  max-width: 520px; font-weight: 300; position: relative; margin-bottom: 36px;
-}
-.hero-cta-row { display: flex; gap: 12px; align-items: center; position: relative; flex-wrap: wrap; }
-.btn-main {
-  font-size: 13px; font-weight: 700; letter-spacing: 0.07em;
-  padding: 14px 30px; background: var(--green); color: var(--black);
-  border-radius: 28px; cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 8px;
-  transition: transform 0.15s; border: none;
-}
-.btn-main:hover { transform: translateY(-2px); }
-.btn-outline {
-  font-size: 13px; font-weight: 500; letter-spacing: 0.07em;
-  padding: 13px 28px; border: 1px solid var(--border2); color: var(--text);
-  border-radius: 28px; cursor: pointer; text-decoration: none;
-  display: inline-flex; align-items: center; gap: 8px; background: transparent;
-  transition: background 0.2s, border-color 0.2s;
-}
-.btn-outline:hover { background: rgba(255,255,255,0.05); border-color: rgba(255,255,255,0.25); }
-.hero-note {
-  font-size: 11px; color: var(--text-dim); letter-spacing: 0.05em;
-  display: flex; align-items: center; gap: 6px;
-}
-.hero-note-dot { width: 5px; height: 5px; border-radius: 50%; background: var(--green); }
-
-/* ─── HERO STATS STRIP ─── */
-.hero-stats {
-  display: flex; gap: 40px;
-  padding: 0 60px 0; margin-top: -1px;
-  background: var(--dark2);
-  border-bottom: 1px solid var(--border);
-}
-.hs-item {
-  padding: 24px 0; display: flex; align-items: center; gap: 14px;
-  border-right: 1px solid var(--border); padding-right: 40px;
-}
-.hs-item:last-child { border-right: none; }
-.hs-num {
-  font-family: 'Bebas Neue', cursive; font-size: 32px;
-  color: var(--text); line-height: 1; display: flex; align-items: baseline; gap: 2px;
-}
-.hs-num em { font-size: 18px; color: var(--green); font-style: normal; }
-.hs-label { font-size: 11px; color: var(--text-muted); letter-spacing: 0.05em; line-height: 1.4; }
-
-/* ─── SECTION COMMON ─── */
-.section { padding: 80px 60px; border-bottom: 1px solid var(--border); }
-.section-alt { background: var(--dark2); }
-.section-dark { background: var(--dark3); }
-.sec-eyebrow { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-.sec-title {
-  font-family: 'Bebas Neue', cursive; font-size: 44px;
-  color: var(--text); letter-spacing: 0.03em; line-height: 1; margin-bottom: 10px;
-}
-.sec-desc { font-size: 14px; color: var(--text-muted); line-height: 1.75; font-weight: 300; max-width: 560px; margin-bottom: 40px; }
-
-/* ─── WHAT IS MATESHIP ─── */
-.mateship-intro {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 80px; align-items: center;
-}
-.mi-left { }
-.mi-right {
-  display: flex; flex-direction: column; gap: 16px;
-}
-.mi-card {
-  background: var(--dark3); border: 1px solid var(--border);
-  border-radius: 12px; padding: 22px 24px;
-  display: flex; align-items: flex-start; gap: 16px;
-  transition: border-color 0.25s, transform 0.2s;
-}
-.mi-card:hover { border-color: rgba(74,222,128,0.25); transform: translateX(4px); }
-.mi-icon {
-  width: 40px; height: 40px; border-radius: 10px; background: var(--green-dim);
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0; font-size: 18px;
-}
-.mi-text-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-.mi-text-desc { font-size: 12px; color: var(--text-muted); line-height: 1.6; font-weight: 300; }
-
-.big-quote {
-  font-family: 'Bebas Neue', cursive; font-size: 56px;
-  color: var(--text); line-height: 1.05; letter-spacing: 0.02em; margin-bottom: 20px;
-}
-.big-quote span { color: var(--green); }
-.mi-body { font-size: 14px; color: var(--text-muted); line-height: 1.85; font-weight: 300; margin-bottom: 28px; }
-
-/* ─── BENEFITS FULL ─── */
-.benefits-full {
-  display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
-}
-.bf-card {
-  background: var(--dark3); border: 1px solid var(--border);
-  border-radius: 14px; padding: 32px 26px; position: relative; overflow: hidden;
-  transition: transform 0.25s, border-color 0.25s;
-}
-.bf-card:hover { transform: translateY(-4px); }
-.bf-card:hover.bfc-1 { border-color: rgba(74,222,128,0.25); }
-.bf-card:hover.bfc-2 { border-color: rgba(56,189,248,0.25); }
-.bf-card:hover.bfc-3 { border-color: rgba(245,158,11,0.25); }
-.bf-card:hover.bfc-4 { border-color: rgba(192,132,252,0.25); }
-.bf-card:hover.bfc-5 { border-color: rgba(248,113,113,0.25); }
-.bf-card:hover.bfc-6 { border-color: rgba(74,222,128,0.2); }
-.bf-top-accent {
-  position: absolute; top: 0; left: 0; right: 0; height: 3px;
-}
-.bta-1 { background: var(--green); }
-.bta-2 { background: var(--blue); }
-.bta-3 { background: var(--amber); }
-.bta-4 { background: var(--purple); }
-.bta-5 { background: var(--red); }
-.bta-6 { background: linear-gradient(90deg, var(--green), var(--blue)); }
-.bf-num {
-  font-family: 'Space Mono', monospace; font-size: 10px;
-  color: var(--text-dim); letter-spacing: 0.1em; margin-bottom: 16px;
-}
-.bf-icon {
-  font-size: 28px; margin-bottom: 14px; display: block; line-height: 1;
-}
-.bf-title { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 10px; }
-.bf-desc { font-size: 12px; color: var(--text-muted); line-height: 1.7; font-weight: 300; }
-
-/* ─── PARTNER MAP SECTION ─── */
-.partners-header { display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 36px; }
-.partners-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.partner-map-area {
-  background: var(--dark3); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden; min-height: 360px;
-  display: flex; flex-direction: column;
-}
-.pma-header {
-  padding: 18px 20px; border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-}
-.pma-title { font-family: 'Space Mono', monospace; font-size: 11px; letter-spacing: 0.08em; color: var(--text-muted); }
-.pma-count {
-  font-size: 11px; color: var(--green); padding: 3px 9px;
-  background: var(--green-dim); border-radius: 10px;
-  font-family: 'Space Mono', monospace;
-}
-.map-placeholder {
-  flex: 1; display: flex; flex-direction: column;
-  align-items: center; justify-content: center; gap: 8px;
-}
-.map-placeholder-icon { font-size: 32px; opacity: 0.2; }
-.map-placeholder-text { font-size: 11px; color: var(--text-dim); letter-spacing: 0.06em; }
-.map-placeholder-sub { font-size: 10px; color: var(--green); cursor: pointer; opacity: 0.7; }
-
-/* partner list */
-.partner-list-area { display: flex; flex-direction: column; gap: 10px; }
-.partner-list-title {
-  font-family: 'Space Mono', monospace; font-size: 10px;
-  letter-spacing: 0.12em; color: var(--text-dim); margin-bottom: 6px;
-}
-.partner-item {
-  background: var(--dark3); border: 1px solid var(--border);
-  border-radius: 10px; padding: 14px 18px;
-  display: flex; align-items: center; gap: 14px;
-  transition: border-color 0.2s;
-}
-.partner-item:hover { border-color: rgba(74,222,128,0.2); }
-.pi-region {
-  font-family: 'Space Mono', monospace; font-size: 9px;
-  letter-spacing: 0.08em; color: var(--green); min-width: 36px;
-  padding: 3px 7px; border-radius: 6px; background: var(--green-dim); text-align: center;
-}
-.pi-name { font-size: 13px; font-weight: 500; color: var(--text); flex: 1; }
-.pi-type { font-size: 11px; color: var(--text-dim); }
-.pi-badge {
-  font-size: 9px; font-weight: 700; padding: 3px 8px; border-radius: 8px;
-  letter-spacing: 0.07em;
-}
-.pib-active { background: rgba(74,222,128,0.12); color: var(--green); }
-.pib-new { background: rgba(56,189,248,0.12); color: var(--blue); }
-
-/* ─── HOW TO JOIN ─── */
-.join-steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; position: relative; margin-top: 40px; }
-.join-steps::before {
-  content: '';
-  position: absolute; top: 28px; left: 10%; right: 10%; height: 1px;
-  background: linear-gradient(90deg, transparent, var(--border2) 20%, var(--border2) 80%, transparent);
-}
-.step-item {
-  display: flex; flex-direction: column; align-items: center; text-align: center; padding: 0 16px; position: relative;
-}
-.step-num {
-  width: 56px; height: 56px; border-radius: 50%;
-  background: var(--dark3); border: 1px solid var(--border2);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Bebas Neue', cursive; font-size: 22px; color: var(--green);
-  margin-bottom: 18px; position: relative; z-index: 1;
-  transition: background 0.25s, border-color 0.25s;
-}
-.step-item:hover .step-num { background: var(--green-dim); border-color: rgba(74,222,128,0.4); }
-.step-title { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-.step-desc { font-size: 12px; color: var(--text-muted); line-height: 1.65; font-weight: 300; }
-.step-arrow {
-  position: absolute; top: 18px; right: -8px; z-index: 2;
-  font-size: 16px; color: var(--text-dim);
-}
-.step-item:last-child .step-arrow { display: none; }
-
-/* ─── FAQ ─── */
-.faq-list { display: flex; flex-direction: column; gap: 8px; max-width: 800px; }
-.faq-item {
-  background: var(--dark3); border: 1px solid var(--border);
-  border-radius: 10px; overflow: hidden;
-}
-.faq-q {
-  display: flex; justify-content: space-between; align-items: center;
-  padding: 18px 22px; cursor: pointer;
-  transition: background 0.2s;
-}
-.faq-q:hover { background: rgba(255,255,255,0.02); }
-.faq-q-text { font-size: 14px; font-weight: 500; color: var(--text); }
-.faq-toggle {
-  width: 22px; height: 22px; border-radius: 50%;
-  background: rgba(255,255,255,0.05); border: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 14px; color: var(--text-muted); flex-shrink: 0;
-  transition: background 0.2s, transform 0.2s;
-}
-.faq-item.open .faq-toggle { background: var(--green-dim); color: var(--green); transform: rotate(45deg); }
-.faq-a {
-  display: none; padding: 0 22px 18px;
-  font-size: 13px; color: var(--text-muted); line-height: 1.8; font-weight: 300;
-}
-.faq-item.open .faq-a { display: block; }
-
-/* ─── FINAL CTA ─── */
-.final-cta {
-  text-align: center; padding: 100px 60px;
-  background: var(--dark2); position: relative; overflow: hidden;
-}
-.fc-glow-1 {
-  position: absolute; top: -100px; left: 50%;
-  transform: translateX(-50%);
-  width: 600px; height: 300px; border-radius: 50%;
-  background: radial-gradient(ellipse, rgba(74,222,128,0.07) 0%, transparent 65%);
-  pointer-events: none;
-}
-.fc-title {
-  font-family: 'Bebas Neue', cursive; font-size: clamp(48px, 7vw, 84px);
-  color: var(--text); line-height: 0.95; letter-spacing: 0.02em; margin-bottom: 18px; position: relative;
-}
-.fc-title span { color: var(--green); }
-.fc-desc {
-  font-size: 15px; color: var(--text-muted); line-height: 1.75; font-weight: 300;
-  max-width: 460px; margin: 0 auto 36px; position: relative;
-}
-.fc-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; position: relative; }
-.fc-note {
-  margin-top: 20px; font-size: 11px; color: var(--text-dim);
-  letter-spacing: 0.06em; position: relative;
-}
-
-/* ─── FOOTER ─── */
-.footer {
-  background: var(--dark); padding: 32px 60px;
-  display: flex; justify-content: space-between; align-items: center;
-  border-top: 1px solid var(--border);
-}
-.footer-logo { font-family: 'Space Mono', monospace; font-size: 12px; color: var(--text); letter-spacing: 0.08em; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
-.footer-logo-bar { width: 2px; height: 14px; background: var(--green); border-radius: 1px; }
-.footer-info { font-size: 11px; color: var(--text-dim); line-height: 1.75; }
-.footer-links { display: flex; gap: 20px; }
-.footer-links a { font-size: 11px; color: var(--text-dim); text-decoration: none; transition: color 0.2s; }
-.footer-links a:hover { color: var(--text-muted); }
-.footer-right { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
-.footer-sns { display: flex; gap: 8px; }
-.sns-btn {
-  width: 30px; height: 30px; border-radius: 50%; background: rgba(255,255,255,0.05);
-  border: 1px solid var(--border); display: flex; align-items: center; justify-content: center;
-  font-size: 11px; color: var(--text-dim); cursor: pointer; font-family: 'Space Mono', monospace;
-  transition: background 0.2s, border-color 0.2s, color 0.2s;
-}
-.sns-btn:hover { background: rgba(74,222,128,0.1); border-color: rgba(74,222,128,0.3); color: var(--green); }
-
-/* ─── KAKAO FLOAT ─── */
-.kakao-float {
-  position: fixed; bottom: 28px; right: 28px;
-  width: 52px; height: 52px; background: #FEE500; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  cursor: pointer; z-index: 99;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
-  transition: transform 0.2s; text-decoration: none;
-}
-.kakao-float:hover { transform: scale(1.08); }
-.kakao-float svg { width: 26px; height: 26px; }
-
-/* ─── MOBILE ─── */
-@media (max-width: 900px) {
-  .nav-links { display: none; }
-  .nav { padding: 0 24px; }
-  .page-hero { padding: 100px 24px 52px; }
-  .page-hero-title { font-size: 52px; }
-  .hero-stats { padding: 0 24px; flex-wrap: wrap; gap: 0; }
-  .hs-item { flex: 1 1 50%; border-right: none; border-bottom: 1px solid var(--border); padding: 18px 12px; }
-  .section { padding: 52px 24px; }
-  .mateship-intro { grid-template-columns: 1fr; gap: 36px; }
-  .benefits-full { grid-template-columns: 1fr 1fr; }
-  .partners-grid { grid-template-columns: 1fr; }
-  .join-steps { grid-template-columns: 1fr 1fr; gap: 28px; }
-  .join-steps::before { display: none; }
-  .step-arrow { display: none; }
-  .final-cta { padding: 64px 24px; }
-  .footer { flex-direction: column; gap: 20px; text-align: center; padding: 28px 24px; }
-  .footer-right { align-items: center; }
-}
-@media (max-width: 540px) {
-  .benefits-full { grid-template-columns: 1fr; }
-  .join-steps { grid-template-columns: 1fr; }
-}
+@media(max-width:540px){.bf6{grid-template-columns:1fr}.steps{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
+<script src="js/site.js"></script>
 
-<!-- ─── NAV ─── -->
-<nav class="nav" role="navigation" aria-label="메인 내비게이션">
-  <a href="index.html" class="nav-logo" aria-label="강원도반려동물협회 홈">
-    <div class="nav-logo-bar"></div>
-    <div>
-      <div class="nav-logo-text">GWAA</div>
-      <div class="nav-logo-sub">강원도반려동물협회</div>
-    </div>
-  </a>
-  <div class="nav-links">
-    <a href="index.html#about">ABOUT</a>
-    <a href="education.html">EDUCATION</a>
-    <a href="events.html">EVENTS</a>
-    <a href="mateship.html" class="active">MATESHIP</a>
-    <a href="people.html">PEOPLE</a>
-    <a href="index.html#contact">CONTACT</a>
-  </div>
-  <a href="#join" class="nav-cta">메이트쉽 가입 →</a>
-</nav>
-
-<!-- ─── PAGE HERO ─── -->
-<header class="page-hero" aria-label="메이트쉽 소개">
+<header class="page-hero">
   <div class="ph-grid"></div>
-  <div class="ph-glow-1"></div>
-  <div class="ph-glow-2"></div>
-
-  <nav class="breadcrumb" aria-label="경로">
-    <a href="index.html">HOME</a>
-    <span class="breadcrumb-sep">/</span>
-    <span class="breadcrumb-cur">MATESHIP</span>
-  </nav>
-
-  <div class="page-hero-eyebrow">
-    <div class="eyebrow-line"></div>
-    <div class="eyebrow-text">MEMBERSHIP PROGRAM</div>
-  </div>
-
+  <div class="ph-glow" style="top:-80px;left:-80px;width:500px;height:500px;background:radial-gradient(circle,rgba(74,222,128,.07) 0%,transparent 65%)"></div>
+  <div class="ph-glow" style="bottom:-100px;right:10%;width:400px;height:400px;background:radial-gradient(circle,rgba(56,189,248,.05) 0%,transparent 65%)"></div>
+  <nav class="breadcrumb"><a href="index.html">HOME</a><span class="breadcrumb-sep">/</span><span class="breadcrumb-cur">MATESHIP</span></nav>
+  <div class="eyebrow" style="position:relative"><div class="eyebrow-line"></div><div class="eyebrow-text">MEMBERSHIP PROGRAM</div></div>
   <h1 class="page-hero-title">메이트<span>쉽</span><br>멤버십</h1>
   <p class="page-hero-desc">강원도 반려인을 위한 특별한 멤버십. 제휴업체 할인부터 행사 우선참여, 정책 제안까지 — 강원도 반려생활의 모든 것을 함께합니다.</p>
-
-  <div class="hero-cta-row">
-    <a href="#join" class="btn-main">지금 가입하기 →</a>
-    <a href="#benefits" class="btn-outline">혜택 자세히 보기</a>
-    <div class="hero-note">
-      <div class="hero-note-dot"></div>
-      현재 가입 모집 중
-    </div>
-  </div>
+  <div class="hero-cta-row"><a href="#join" class="btn-main">지금 가입하기 →</a><a href="#benefits" class="btn-outline">혜택 자세히 보기</a><div class="hero-note"><div class="hero-note-dot"></div>현재 가입 모집 중</div></div>
 </header>
 
-<!-- ─── STATS STRIP ─── -->
-<div class="hero-stats" aria-label="메이트쉽 현황">
-  <div class="hs-item">
-    <div>
-      <div class="hs-num">2,400<em>+</em></div>
-      <div class="hs-label">현재 회원수</div>
-    </div>
-  </div>
-  <div class="hs-item">
-    <div>
-      <div class="hs-num">18<em>+</em></div>
-      <div class="hs-label">강원도 제휴업체</div>
-    </div>
-  </div>
-  <div class="hs-item">
-    <div>
-      <div class="hs-num">36<em>+</em></div>
-      <div class="hs-label">연간 혜택 프로그램</div>
-    </div>
-  </div>
-  <div class="hs-item">
-    <div>
-      <div class="hs-num">4<em>년</em></div>
-      <div class="hs-label">운영 연혁</div>
-    </div>
-  </div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);background:var(--gray-light);border-bottom:1px solid var(--border)">
+  <div style="padding:24px 32px;border-right:1px solid var(--border)"><div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text);display:flex;align-items:baseline;gap:2px">2,400<em style="font-size:16px;color:var(--green);font-style:normal">+</em></div><div style="font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px">현재 회원수</div></div>
+  <div style="padding:24px 32px;border-right:1px solid var(--border)"><div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text);display:flex;align-items:baseline;gap:2px">18<em style="font-size:16px;color:var(--green);font-style:normal">+</em></div><div style="font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px">강원도 제휴업체</div></div>
+  <div style="padding:24px 32px;border-right:1px solid var(--border)"><div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text);display:flex;align-items:baseline;gap:2px">36<em style="font-size:16px;color:var(--green);font-style:normal">+</em></div><div style="font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px">연간 혜택 프로그램</div></div>
+  <div style="padding:24px 32px"><div style="font-family:'Bebas Neue',cursive;font-size:32px;color:var(--text);display:flex;align-items:baseline;gap:2px">4<em style="font-size:16px;color:var(--green);font-style:normal">년</em></div><div style="font-size:11px;color:var(--text-muted);letter-spacing:.06em;margin-top:4px">운영 연혁</div></div>
 </div>
 
-<!-- ─── WHAT IS MATESHIP ─── -->
-<section class="section" aria-labelledby="intro-title">
-  <div class="mateship-intro">
-    <div class="mi-left">
-      <div class="sec-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">WHAT IS MATESHIP</div></div>
-      <blockquote class="big-quote">강원도 반려인이<br>하나로 <span>연결되는</span><br>방식</blockquote>
-      <p class="mi-body">메이트쉽은 단순한 할인 카드가 아닙니다. 강원도에서 반려동물과 살아가는 사람들이 서로 연결되고, 지역 문화를 함께 만들어나가는 멤버십 공동체입니다.<br><br>강원도 전역의 반려동물 친화 업체들과 파트너십을 맺고, 회원들에게 실질적인 혜택과 참여 기회를 제공합니다.</p>
-      <a href="#join" class="btn-main" style="font-size:12px; padding:11px 24px;">가입 신청하기 →</a>
-    </div>
-    <div class="mi-right">
-      <div class="mi-card">
-        <div class="mi-icon">🌿</div>
-        <div>
-          <div class="mi-text-title">지역 문화 형성</div>
-          <div class="mi-text-desc">반려동물과 사람이 공존하는 강원도 문화를 만들어가는 데 직접 참여합니다.</div>
-        </div>
-      </div>
-      <div class="mi-card">
-        <div class="mi-icon">🤝</div>
-        <div>
-          <div class="mi-text-title">반려인 커뮤니티</div>
-          <div class="mi-text-desc">강원도 반려인 네트워크에 연결되고, 함께하는 활동에 참여하세요.</div>
-        </div>
-      </div>
-      <div class="mi-card">
-        <div class="mi-icon">📣</div>
-        <div>
-          <div class="mi-text-title">정책 제안 참여</div>
-          <div class="mi-text-desc">강원도 반려동물 정책에 회원으로서 목소리를 낼 수 있습니다.</div>
-        </div>
-      </div>
-      <div class="mi-card">
-        <div class="mi-icon">🎯</div>
-        <div>
-          <div class="mi-text-title">실질적인 혜택</div>
-          <div class="mi-text-desc">제휴업체 할인, 행사 무료 이용 등 즉시 체감되는 혜택을 누립니다.</div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── BENEFITS ─── -->
-<section class="section section-alt" id="benefits" aria-labelledby="benefits-title">
-  <div class="sec-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">MEMBERSHIP BENEFITS</div></div>
-  <h2 class="sec-title" id="benefits-title">메이트쉽 전체 혜택</h2>
-  <p class="sec-desc">가입 즉시 아래 모든 혜택이 적용됩니다.</p>
-  <div class="benefits-full">
-    <div class="bf-card bfc-1">
-      <div class="bf-top-accent bta-1"></div>
-      <div class="bf-num">BENEFIT 01</div>
-      <span class="bf-icon">🏷️</span>
-      <h3 class="bf-title">제휴업체 전용 할인</h3>
-      <p class="bf-desc">강원도 내 반려동물 관련 호텔, 카페, 리조트, 동물병원 등 18개 이상 제휴업체에서 멤버 전용 할인 혜택을 받습니다. 강릉 세인트존스호텔, 평창 피닉스파크, 원주 애견카페 등.</p>
-    </div>
-    <div class="bf-card bfc-2">
-      <div class="bf-top-accent bta-2"></div>
-      <div class="bf-num">BENEFIT 02</div>
-      <span class="bf-icon">🎪</span>
-      <h3 class="bf-title">관련 행사 무료 이용</h3>
-      <p class="bf-desc">반려동물과 함께할 수 있는 다양한 협회 프로그램을 무료로 이용합니다. 캠핑, 트래킹, 요가, 숲치유 등 연 36개 이상의 프로그램이 제공됩니다.</p>
-    </div>
-    <div class="bf-card bfc-3">
-      <div class="bf-top-accent bta-3"></div>
-      <div class="bf-num">BENEFIT 03</div>
-      <span class="bf-icon">⚡</span>
-      <h3 class="bf-title">행사 공고 & 우선 참여</h3>
-      <p class="bf-desc">협회에서 운영하는 모든 프로그램에 대해 일반 공개 전 회원 우선 공고를 받고, 사전 신청 기회를 얻습니다. 인기 행사도 놓치지 않습니다.</p>
-    </div>
-    <div class="bf-card bfc-4">
-      <div class="bf-top-accent bta-4"></div>
-      <div class="bf-num">BENEFIT 04</div>
-      <span class="bf-icon">📣</span>
-      <h3 class="bf-title">정책 제안 참여권</h3>
-      <p class="bf-desc">반려동물과 사람이 함께 살아가는 강원도를 만드는 정책 제안 과정에 직접 참여할 수 있습니다. 지역 정치에 반려인의 목소리를 냅니다.</p>
-    </div>
-    <div class="bf-card bfc-5">
-      <div class="bf-top-accent bta-5"></div>
-      <div class="bf-num">BENEFIT 05</div>
-      <span class="bf-icon">🎓</span>
-      <h3 class="bf-title">교육 과정 할인</h3>
-      <p class="bf-desc">독스포츠(어질리티), 오비디언스, 반려동물행동지도사 국가자격증 교육 과정에 멤버 전용 할인 적용. 전문적인 반려동물 교육을 더 합리적인 비용으로.</p>
-    </div>
-    <div class="bf-card bfc-6">
-      <div class="bf-top-accent bta-6"></div>
-      <div class="bf-num">BENEFIT 06</div>
-      <span class="bf-icon">🌐</span>
-      <h3 class="bf-title">반려인 네트워크</h3>
-      <p class="bf-desc">강원도 전역의 반려인 커뮤니티에 연결됩니다. 같은 관심사를 가진 반려인들과 교류하고, 지역 봉사활동에도 함께 참여하세요.</p>
-    </div>
-  </div>
-</section>
-
-<!-- ─── PARTNER BUSINESSES ─── -->
-<section class="section" id="partners" aria-labelledby="partners-title">
-  <div class="partners-header">
+<section class="section">
+  <div class="mi-grid">
     <div>
-      <div class="sec-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">PARTNER BUSINESSES</div></div>
-      <h2 class="sec-title" id="partners-title">강원도 제휴업체</h2>
-      <p class="sec-desc" style="margin-bottom:0">멤버십 회원이면 아래 업체에서 즉시 할인 혜택이 적용됩니다.</p>
+      <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">WHAT IS MATESHIP</div></div>
+      <div class="big-q">강원도 반려인이<br>하나로 <span>연결되는</span><br>방식</div>
+      <p class="mi-body">메이트쉽은 단순한 할인 카드가 아닙니다. 강원도에서 반려동물과 살아가는 사람들이 서로 연결되고, 지역 문화를 함께 만들어나가는 멤버십 공동체입니다.<br><br>강원도 전역의 반려동물 친화 업체들과 파트너십을 맺고, 회원들에게 실질적인 혜택과 참여 기회를 제공합니다.</p>
+      <a href="#join" class="btn-main" style="font-size:12px;padding:11px 22px">가입 신청하기 →</a>
     </div>
-  </div>
-  <div class="partners-grid">
-    <div class="partner-map-area">
-      <div class="pma-header">
-        <div class="pma-title">강원도 제휴업체 지도</div>
-        <div class="pma-count">18+ 업체</div>
-      </div>
-      <div class="map-placeholder">
-        <div class="map-placeholder-icon">📍</div>
-        <div class="map-placeholder-text">Google Maps 제휴업체 지도</div>
-        <div class="map-placeholder-sub">지도 연동 예정 — iframe으로 교체하세요</div>
-      </div>
-    </div>
-    <div class="partner-list-area">
-      <div class="partner-list-title">제휴업체 목록</div>
-
-      <div class="partner-item">
-        <div class="pi-region">강릉</div>
-        <div class="pi-name">세인트존스호텔</div>
-        <div class="pi-type">호텔</div>
-        <div class="pi-badge pib-active">진행중</div>
-      </div>
-      <div class="partner-item">
-        <div class="pi-region">평창</div>
-        <div class="pi-name">피닉스파크 호텔</div>
-        <div class="pi-type">리조트</div>
-        <div class="pi-badge pib-active">진행중</div>
-      </div>
-      <div class="partner-item">
-        <div class="pi-region">원주</div>
-        <div class="pi-name">애견카페 원주점</div>
-        <div class="pi-type">카페</div>
-        <div class="pi-badge pib-active">진행중</div>
-      </div>
-      <div class="partner-item">
-        <div class="pi-region">양평</div>
-        <div class="pi-name">반려동물 숲치유센터</div>
-        <div class="pi-type">힐링·교육</div>
-        <div class="pi-badge pib-new">신규</div>
-      </div>
-      <div class="partner-item">
-        <div class="pi-region">춘천</div>
-        <div class="pi-name">춘천 반려동물 병원</div>
-        <div class="pi-type">동물병원</div>
-        <div class="pi-badge pib-active">진행중</div>
-      </div>
-      <div class="partner-item" style="border-style: dashed; opacity: 0.5; justify-content: center; cursor: pointer;">
-        <div style="font-size:12px; color:var(--text-dim); letter-spacing:0.06em;">+ 13개 업체 더 보기</div>
-      </div>
+    <div class="mi-cards">
+      <div class="mic fi"><div class="mic-ico">🌿</div><div><div class="mic-tit">지역 문화 형성</div><div class="mic-dsc">반려동물과 사람이 공존하는 강원도 문화를 만들어가는 데 직접 참여합니다.</div></div></div>
+      <div class="mic fi" style="transition-delay:.07s"><div class="mic-ico">🤝</div><div><div class="mic-tit">반려인 커뮤니티</div><div class="mic-dsc">강원도 반려인 네트워크에 연결되고, 함께하는 활동에 참여하세요.</div></div></div>
+      <div class="mic fi" style="transition-delay:.14s"><div class="mic-ico">📣</div><div><div class="mic-tit">정책 제안 참여</div><div class="mic-dsc">강원도 반려동물 정책에 회원으로서 목소리를 낼 수 있습니다.</div></div></div>
+      <div class="mic fi" style="transition-delay:.21s"><div class="mic-ico">🎯</div><div><div class="mic-tit">실질적인 혜택</div><div class="mic-dsc">제휴업체 할인, 행사 무료 이용 등 즉시 체감되는 혜택을 누립니다.</div></div></div>
     </div>
   </div>
 </section>
 
-<!-- ─── HOW TO JOIN ─── -->
-<section class="section section-alt" id="join" aria-labelledby="join-title">
-  <div class="sec-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">HOW TO JOIN</div></div>
-  <h2 class="sec-title" id="join-title">가입 방법</h2>
+<section class="section section-alt" id="benefits">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">MEMBERSHIP BENEFITS</div></div>
+  <h2 class="sec-title">메이트쉽 전체 혜택</h2>
+  <p class="sec-desc">가입 즉시 아래 모든 혜택이 적용됩니다.</p>
+  <div class="bf6">
+    <div class="bfc bfc1 fi"><div class="bfc-bar bfb1"></div><div class="bfn">BENEFIT 01</div><span class="bfico">🏷️</span><h3 class="bftit">제휴업체 전용 할인</h3><p class="bfdsc">강원도 내 반려동물 관련 호텔, 카페, 리조트, 동물병원 등 18개 이상 제휴업체에서 멤버 전용 할인 혜택을 받습니다.</p></div>
+    <div class="bfc bfc2 fi" style="transition-delay:.06s"><div class="bfc-bar bfb2"></div><div class="bfn">BENEFIT 02</div><span class="bfico">🎪</span><h3 class="bftit">관련 행사 무료 이용</h3><p class="bfdsc">반려동물과 함께할 수 있는 다양한 협회 프로그램을 무료로 이용합니다. 캠핑, 트래킹, 요가, 숲치유 등 연 36개 이상.</p></div>
+    <div class="bfc bfc3 fi" style="transition-delay:.12s"><div class="bfc-bar bfb3"></div><div class="bfn">BENEFIT 03</div><span class="bfico">⚡</span><h3 class="bftit">행사 공고 & 우선 참여</h3><p class="bfdsc">협회 모든 프로그램에 대해 일반 공개 전 회원 우선 공고를 받고, 사전 신청 기회를 얻습니다.</p></div>
+    <div class="bfc bfc4 fi" style="transition-delay:.18s"><div class="bfc-bar bfb4"></div><div class="bfn">BENEFIT 04</div><span class="bfico">📣</span><h3 class="bftit">정책 제안 참여권</h3><p class="bfdsc">반려동물과 사람이 함께 살아가는 강원도를 만드는 정책 제안 과정에 직접 참여할 수 있습니다.</p></div>
+    <div class="bfc bfc5 fi" style="transition-delay:.24s"><div class="bfc-bar bfb5"></div><div class="bfn">BENEFIT 05</div><span class="bfico">🎓</span><h3 class="bftit">교육 과정 할인</h3><p class="bfdsc">독스포츠, 오비디언스, 반려동물행동지도사 국가자격증 교육 과정에 멤버 전용 할인 적용.</p></div>
+    <div class="bfc bfc6 fi" style="transition-delay:.30s"><div class="bfc-bar bfb6"></div><div class="bfn">BENEFIT 06</div><span class="bfico">🌐</span><h3 class="bftit">반려인 네트워크</h3><p class="bfdsc">강원도 전역의 반려인 커뮤니티에 연결됩니다. 같은 관심사를 가진 반려인들과 교류하고 봉사활동에도 참여하세요.</p></div>
+  </div>
+</section>
+
+<section class="section" id="partners">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">PARTNER BUSINESSES</div></div>
+  <h2 class="sec-title">강원도 제휴업체</h2>
+  <p class="sec-desc">멤버십 회원이면 아래 업체에서 즉시 할인 혜택이 적용됩니다.</p>
+  <div class="pg">
+    <div class="pmap"><div class="pmh"><div class="pmht">강원도 제휴업체 지도</div><div class="pmhc">18+ 업체</div></div><div class="mapph"><div class="mapph-ico">📍</div><div class="mapph-t">Google Maps 제휴업체 지도</div><div class="mapph-s">지도 연동 예정 — iframe으로 교체하세요</div></div></div>
+    <div class="plist">
+      <div class="plt">제휴업체 목록</div>
+      <div class="pi fi"><div class="pi-reg">강릉</div><div class="pi-nm">세인트존스호텔</div><div class="pi-tp">호텔</div><div class="pi-bd pba">진행중</div></div>
+      <div class="pi fi" style="transition-delay:.06s"><div class="pi-reg">평창</div><div class="pi-nm">피닉스파크 호텔</div><div class="pi-tp">리조트</div><div class="pi-bd pba">진행중</div></div>
+      <div class="pi fi" style="transition-delay:.12s"><div class="pi-reg">원주</div><div class="pi-nm">애견카페 원주점</div><div class="pi-tp">카페</div><div class="pi-bd pba">진행중</div></div>
+      <div class="pi fi" style="transition-delay:.18s"><div class="pi-reg">양평</div><div class="pi-nm">반려동물 숲치유센터</div><div class="pi-tp">힐링·교육</div><div class="pi-bd pbn">신규</div></div>
+      <div class="pi fi" style="transition-delay:.24s"><div class="pi-reg">춘천</div><div class="pi-nm">춘천 반려동물 병원</div><div class="pi-tp">동물병원</div><div class="pi-bd pba">진행중</div></div>
+      <div class="pi" style="border-style:dashed;opacity:.45;justify-content:center;cursor:pointer"><div style="font-size:12px;color:var(--text-dim);letter-spacing:.06em">+ 13개 업체 더 보기</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="section section-alt" id="join">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">HOW TO JOIN</div></div>
+  <h2 class="sec-title">가입 방법</h2>
   <p class="sec-desc">간단한 절차로 메이트쉽 멤버가 되세요.</p>
-
-  <div class="join-steps" role="list">
-    <div class="step-item" role="listitem">
-      <div class="step-num">01</div>
-      <div class="step-title">카카오채널 추가</div>
-      <p class="step-desc">@강원도반려동물협회 카카오채널을 친구 추가합니다.</p>
-      <div class="step-arrow">›</div>
-    </div>
-    <div class="step-item" role="listitem">
-      <div class="step-num">02</div>
-      <div class="step-title">가입 신청 전송</div>
-      <p class="step-desc">채널에 가입 신청 메시지를 보내거나 아래 폼을 작성합니다.</p>
-      <div class="step-arrow">›</div>
-    </div>
-    <div class="step-item" role="listitem">
-      <div class="step-num">03</div>
-      <div class="step-title">안내 수령</div>
-      <p class="step-desc">협회 담당자가 확인 후 멤버십 안내 및 혜택 정보를 전달합니다.</p>
-      <div class="step-arrow">›</div>
-    </div>
-    <div class="step-item" role="listitem">
-      <div class="step-num">04</div>
-      <div class="step-title">즉시 혜택 이용</div>
-      <p class="step-desc">가입 즉시 강원도 전역 제휴업체 할인 및 모든 혜택을 이용합니다.</p>
-    </div>
+  <div class="steps">
+    <div class="step fi"><div class="step-n">01</div><div class="step-t">카카오채널 추가</div><p class="step-d">@강원도반려동물협회 카카오채널을 친구 추가합니다.</p></div>
+    <div class="step fi" style="transition-delay:.08s"><div class="step-n">02</div><div class="step-t">가입 신청 전송</div><p class="step-d">채널에 가입 신청 메시지를 보내거나 아래 버튼으로 문의합니다.</p></div>
+    <div class="step fi" style="transition-delay:.16s"><div class="step-n">03</div><div class="step-t">안내 수령</div><p class="step-d">협회 담당자가 확인 후 멤버십 안내 및 혜택 정보를 전달합니다.</p></div>
+    <div class="step fi" style="transition-delay:.24s"><div class="step-n">04</div><div class="step-t">즉시 혜택 이용</div><p class="step-d">가입 즉시 강원도 전역 제휴업체 할인 및 모든 혜택을 이용합니다.</p></div>
   </div>
-
-  <div style="margin-top: 56px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 700px;">
-    <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="btn-main" style="justify-content:center;">
-      카카오로 가입하기 →
-    </a>
-    <a href="tel:033-813-0333" class="btn-outline" style="justify-content:center;">
-      전화 문의 033-813-0333
-    </a>
-  </div>
-</section>
-
-<!-- ─── FAQ ─── -->
-<section class="section" aria-labelledby="faq-title">
-  <div class="sec-eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">FAQ</div></div>
-  <h2 class="sec-title" id="faq-title">자주 묻는 질문</h2>
-  <p class="sec-desc">메이트쉽 가입 전 궁금한 점들을 정리했습니다.</p>
-
-  <div class="faq-list" role="list">
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">메이트쉽 가입비는 얼마인가요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a" id="">가입비 및 연회비에 대한 자세한 내용은 카카오채널(@강원도반려동물협회) 또는 전화(033-813-0333)로 문의해 주시면 안내드립니다.</div>
-    </div>
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">강원도에 살지 않아도 가입할 수 있나요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a">강원도 외 지역에 거주하시더라도 가입은 가능합니다. 다만 제휴업체 혜택은 강원도 내 업체 방문 시 적용됩니다. 강원도를 자주 방문하시는 분들께도 추천드립니다.</div>
-    </div>
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">반려동물 종류에 제한이 있나요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a">강아지뿐 아니라 다양한 반려동물을 키우시는 분 모두 가입 가능합니다. 다만 일부 행사나 제휴업체 혜택은 반려견 동반에 한정될 수 있으며, 각 행사 안내 시 상세 조건을 확인해 주세요.</div>
-    </div>
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">제휴업체 할인은 어떻게 받나요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a">가입 후 발급되는 회원 인증 방법(카카오채널 인증 등)을 제휴업체 방문 시 제시하면 할인이 적용됩니다. 정확한 인증 방법은 가입 완료 후 안내드립니다.</div>
-    </div>
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">교육 과정 할인은 어떤 과정에 적용되나요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a">독스포츠(어질리티), 오비디언스 기초/고급 과정, 반려동물행동지도사 국가자격증 준비 과정 등 협회에서 운영하는 모든 교육 프로그램에 멤버 할인이 적용됩니다. 교육 상세 안내는 EDUCATION 페이지를 참고해 주세요.</div>
-    </div>
-    <div class="faq-item" role="listitem">
-      <div class="faq-q" onclick="toggleFaq(this)" aria-expanded="false">
-        <span class="faq-q-text">탈퇴나 해지는 어떻게 하나요?</span>
-        <div class="faq-toggle">+</div>
-      </div>
-      <div class="faq-a">카카오채널 또는 이메일(ganimal1@naver.com)로 탈퇴 의사를 전달해 주시면 처리해 드립니다. 탈퇴 시 잔여 혜택에 대한 상세 안내는 담당자가 개별 안내드립니다.</div>
-    </div>
-  </div>
-</section>
-
-<!-- ─── FINAL CTA ─── -->
-<section class="final-cta" id="cta-bottom" aria-labelledby="final-cta-title">
-  <div class="fc-glow-1"></div>
-  <h2 class="fc-title" id="final-cta-title">지금 바로<br><span>강원도 반려생활</span>을<br>바꾸세요</h2>
-  <p class="fc-desc">메이트쉽 멤버가 되어 강원도 전역의 혜택을 누리고, 더 나은 반려문화를 함께 만들어나가세요.</p>
-  <div class="fc-btns">
+  <div style="margin-top:48px;display:flex;gap:14px;flex-wrap:wrap">
     <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="btn-main">카카오로 가입하기 →</a>
-    <a href="tel:033-813-0333" class="btn-outline">전화 문의하기</a>
+    <a href="tel:033-813-0333" class="btn-outline">전화 문의 033-813-0333</a>
   </div>
-  <div class="fc-note">033-813-0333 · ganimal1@naver.com · 강원도 원주시 천매봉길 20-9</div>
 </section>
 
-<!-- ─── FOOTER ─── -->
-<footer class="footer">
-  <div>
-    <div class="footer-logo">
-      <div class="footer-logo-bar"></div>
-      GWAA · 사단법인 강원도반려동물협회
-    </div>
-    <div class="footer-info">
-      대표 이지영 &nbsp;·&nbsp; 강원도 원주시 천매봉길 20-9<br>
-      033-813-0333 &nbsp;·&nbsp; ganimal1@naver.com<br>
-      Copyright © 2026 사단법인 강원도반려동물협회 All rights reserved.
-    </div>
+<section class="section" id="faq">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">FAQ</div></div>
+  <h2 class="sec-title">자주 묻는 질문</h2>
+  <p class="sec-desc">메이트쉽 가입 전 궁금한 점들을 정리했습니다.</p>
+  <div class="faq-list">
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">메이트쉽 가입비는 얼마인가요?</span><div class="faqtg">+</div></div><div class="faqa">가입비 및 연회비에 대한 자세한 내용은 카카오채널(@강원도반려동물협회) 또는 전화(033-813-0333)로 문의해 주시면 안내드립니다.</div></div>
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">강원도에 살지 않아도 가입할 수 있나요?</span><div class="faqtg">+</div></div><div class="faqa">강원도 외 지역에 거주하시더라도 가입은 가능합니다. 다만 제휴업체 혜택은 강원도 내 업체 방문 시 적용됩니다. 강원도를 자주 방문하시는 분들께도 추천드립니다.</div></div>
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">반려동물 종류에 제한이 있나요?</span><div class="faqtg">+</div></div><div class="faqa">강아지뿐 아니라 다양한 반려동물을 키우시는 분 모두 가입 가능합니다. 다만 일부 행사나 제휴업체 혜택은 반려견 동반에 한정될 수 있으며, 각 행사 안내 시 상세 조건을 확인해 주세요.</div></div>
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">제휴업체 할인은 어떻게 받나요?</span><div class="faqtg">+</div></div><div class="faqa">가입 후 발급되는 회원 인증 방법(카카오채널 인증 등)을 제휴업체 방문 시 제시하면 할인이 적용됩니다. 정확한 인증 방법은 가입 완료 후 안내드립니다.</div></div>
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">교육 과정 할인은 어떤 과정에 적용되나요?</span><div class="faqtg">+</div></div><div class="faqa">독스포츠(어질리티), 오비디언스 기초/고급 과정, 반려동물행동지도사 국가자격증 준비 과정 등 협회에서 운영하는 모든 교육 프로그램에 멤버 할인이 적용됩니다.</div></div>
+    <div class="faq"><div class="faqq" onclick="toggleFaq(this)"><span class="faqqt">탈퇴나 해지는 어떻게 하나요?</span><div class="faqtg">+</div></div><div class="faqa">카카오채널 또는 이메일(ganimal1@naver.com)로 탈퇴 의사를 전달해 주시면 처리해 드립니다.</div></div>
   </div>
-  <div class="footer-right">
-    <div class="footer-links">
-      <a href="#">이용약관</a>
-      <a href="#">개인정보처리방침</a>
-      <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener">카카오채널</a>
-    </div>
-    <div class="footer-sns">
-      <div class="sns-btn" title="카카오채널">K</div>
-      <div class="sns-btn" title="인스타그램">I</div>
-      <div class="sns-btn" title="네이버블로그">N</div>
-    </div>
-  </div>
-</footer>
+</section>
 
-<!-- ─── KAKAO FLOAT ─── -->
-<a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener"
-   class="kakao-float" aria-label="카카오채널 문의하기">
-  <svg viewBox="0 0 24 24" fill="#000000">
-    <path d="M12 3C6.477 3 2 6.477 2 10.5c0 2.618 1.574 4.917 3.963 6.294L5 21l4.576-2.452A11.2 11.2 0 0012 18c5.523 0 10-3.477 10-7.5S17.523 3 12 3z"/>
-  </svg>
-</a>
+<div class="fc">
+  <div class="fc-glow"></div>
+  <h2 class="fc-title">지금 바로<br><span>강원도 반려생활</span>을<br>바꾸세요</h2>
+  <p class="fc-desc">메이트쉽 멤버가 되어 강원도 전역의 혜택을 누리고, 더 나은 반려문화를 함께 만들어나가세요.</p>
+  <div class="fc-btns"><a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener" class="btn-main">카카오로 가입하기 →</a><a href="tel:033-813-0333" class="btn-outline">전화 문의하기</a></div>
+  <div class="fc-note">033-813-0333 · ganimal1@naver.com · 강원도 원주시 천매봉길 20-9</div>
+</div>
 
 <script>
-/* FAQ 토글 */
-function toggleFaq(el) {
-  const item = el.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item.open').forEach(i => {
-    i.classList.remove('open');
-    i.querySelector('.faq-q').setAttribute('aria-expanded', 'false');
-  });
-  if (!isOpen) {
-    item.classList.add('open');
-    el.setAttribute('aria-expanded', 'true');
-  }
-}
-
-/* 스크롤 시 입장 애니메이션 (가볍게) */
-const style = document.createElement('style');
-style.textContent = `
-  .fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.55s ease, transform 0.55s ease; }
-  .fade-in.visible { opacity: 1; transform: none; }
-`;
-document.head.appendChild(style);
-
-document.querySelectorAll('.bf-card, .mi-card, .step-item, .partner-item').forEach((el, i) => {
-  el.classList.add('fade-in');
-  el.style.transitionDelay = (i % 6 * 0.07) + 's';
-});
-
-const io = new IntersectionObserver((entries) => {
-  entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
-}, { threshold: 0.1 });
-
-document.querySelectorAll('.fade-in').forEach(el => io.observe(el));
+function toggleFaq(el){const item=el.closest('.faq'),isOpen=item.classList.contains('open');document.querySelectorAll('.faq.open').forEach(i=>i.classList.remove('open'));if(!isOpen)item.classList.add('open');}
 </script>
-
-</body>
-</html>
+</body></html>
