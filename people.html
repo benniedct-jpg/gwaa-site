@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="강원도반려동물협회 PEOPLE - 회원 활동 스토리와 룩북. 강원도 반려인들의 이야기.">
+<title>People | GWAA 강원도반려동물협회</title>
+<link rel="canonical" href="https://gwaa.or.kr/people">
+<link rel="stylesheet" href="css/global.css">
+<style>
+.lookbook-full{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.lbf{border-radius:var(--radius-sm);position:relative;overflow:hidden;cursor:pointer;display:flex;align-items:flex-end;padding:14px;transition:transform .25s}
+.lbf:hover{transform:scale(1.02)}.lbf:hover .lbfov{opacity:1}
+.lbf-lg{grid-column:span 2;grid-row:span 2}
+.lbf1{background:#0a1f0e;height:200px}.lbf2{background:#0a0e1f;height:200px}.lbf3{background:#14081f;height:200px}
+.lbf4{background:#1f140a;height:200px}.lbf5{background:#081414;height:200px}.lbf6{background:#1a0a1a;height:200px}
+.lbf7{background:#0d1a0d;height:200px}
+.lbfp{position:absolute;inset:0;background-image:linear-gradient(45deg,rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(-45deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:28px 28px}
+.lbfov{position:absolute;inset:0;background:rgba(74,222,128,.07);opacity:0;transition:opacity .25s}
+.lbflbl{position:relative;font-size:10px;color:#6b7280;letter-spacing:.1em;font-weight:500}
+.stories-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.story-card{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .25s,border-color .25s}
+.story-card:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.12)}
+.story-thumb{height:120px;display:flex;align-items:flex-end;padding:12px;position:relative}
+.st1{background:#0a1f0e}.st2{background:#0a0e1f}.st3{background:#1f140a}
+.story-body{padding:16px 18px}
+.story-tag{font-size:10px;color:var(--green);font-family:'Space Mono',monospace;letter-spacing:.08em;margin-bottom:6px}
+.story-title{font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;line-height:1.4}
+.story-desc{font-size:12px;color:var(--text-muted);line-height:1.6;font-weight:300}
+@media(max-width:900px){.lookbook-full{grid-template-columns:repeat(2,1fr)}.lbf-lg{grid-column:span 1;grid-row:span 1}.stories-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+<script src="js/site.js"></script>
+<header class="page-hero">
+  <div class="ph-grid"></div>
+  <div class="ph-glow" style="top:-60px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(74,222,128,.07) 0%,transparent 65%)"></div>
+  <nav class="breadcrumb"><a href="index.html">HOME</a><span class="breadcrumb-sep">/</span><span class="breadcrumb-cur">PEOPLE</span></nav>
+  <div class="eyebrow" style="position:relative"><div class="eyebrow-line"></div><div class="eyebrow-text">PEOPLE & LOOKBOOK</div></div>
+  <h1 class="page-hero-title">강원도<br><span>반려인들의</span><br>이야기</h1>
+  <p class="page-hero-desc">강원도반려동물협회 회원들의 활동 스토리와 룩북을 담았습니다.</p>
+</header>
+
+<section class="section">
+  <div class="sec-header"><div><div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">LOOKBOOK</div></div><h2 class="sec-title">활동 룩북</h2></div></div>
+  <div class="lookbook-full">
+    <div class="lbf lbf1 lbf-lg"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">캠핑 · 아웃도어</div></div>
+    <div class="lbf lbf2"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">트래킹</div></div>
+    <div class="lbf lbf3"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">행사</div></div>
+    <div class="lbf lbf4"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">독스포츠</div></div>
+    <div class="lbf lbf5"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">교육</div></div>
+    <div class="lbf lbf6"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">봉사활동</div></div>
+    <div class="lbf lbf7"><div class="lbfp"></div><div class="lbfov"></div><div class="lbflbl">숲치유</div></div>
+  </div>
+  <p style="font-size:12px;color:var(--text-dim);margin-top:16px;letter-spacing:.04em">* 이미지 업로드 시 실제 활동 사진으로 교체됩니다.</p>
+</section>
+
+<section class="section section-alt">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">MEMBER STORIES</div></div>
+  <h2 class="sec-title">회원 활동 스토리</h2>
+  <p class="sec-desc">강원도 반려인들의 생생한 활동 이야기를 담았습니다.</p>
+  <div class="stories-grid">
+    <div class="story-card fi"><div class="story-thumb st1"><div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.08em;position:relative">캠핑 · 2026.03</div></div><div class="story-body"><div class="story-tag">CAMPING</div><div class="story-title">막둥이와 함께한 첫 겨울 캠핑</div><div class="story-desc">강원도 평창에서 반려견 막둥이와 함께한 첫 겨울 캠핑. 협회 덕분에 반려견 동반 캠핑장을 쉽게 찾았어요.</div></div></div>
+    <div class="story-card fi" style="transition-delay:.07s"><div class="story-thumb st2"><div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.08em;position:relative">독스포츠 · 2026.02</div></div><div class="story-body"><div class="story-tag">DOGSPORTS</div><div class="story-title">어질리티 교육 3개월 후기</div><div class="story-desc">처음엔 장애물도 무서워하던 우리 강아지가 이제 코스를 달립니다. 전문 트레이너 선생님 덕분이에요.</div></div></div>
+    <div class="story-card fi" style="transition-delay:.14s"><div class="story-thumb st3"><div style="font-size:10px;color:rgba(255,255,255,.4);letter-spacing:.08em;position:relative">숲치유 · 2026.04</div></div><div class="story-body"><div class="story-tag">HEALING</div><div class="story-title">양평 숲치유 프로그램 후기</div><div class="story-desc">반려견과 함께 숲을 걷고 명상하는 특별한 경험. 멤버십 덕에 무료로 참여할 수 있었습니다.</div></div></div>
+  </div>
+</section>
+<div id="site-footer"></div>
+</body></html>

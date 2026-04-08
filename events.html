@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="강원도반려동물협회 이벤트 & 혜택 - 강릉 호텔 할인, 양평 숲치유, 원주 애견카페, 평창 리조트 등 강원도 전역 반려동물 이벤트.">
+<title>이벤트 & 혜택 | GWAA 강원도반려동물협회</title>
+<link rel="canonical" href="https://gwaa.or.kr/events">
+<link rel="stylesheet" href="css/global.css">
+<style>
+.filter-bar{display:flex;gap:8px;margin-bottom:32px;flex-wrap:wrap}
+.fbtn{font-size:11px;font-weight:700;letter-spacing:.07em;padding:7px 16px;border-radius:18px;border:1px solid var(--border2);color:var(--text-muted);cursor:pointer;transition:all .2s}
+.fbtn.active,.fbtn:hover{background:var(--green-dim);border-color:rgba(74,222,128,.4);color:var(--green)}
+.ev-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ecard{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:border-color .25s,transform .25s;display:block}
+.ecard:hover{border-color:rgba(255,255,255,.15);transform:translateY(-4px)}
+.ect{height:160px;position:relative;display:flex;align-items:center;justify-content:center;overflow:hidden}
+.ect-pat{position:absolute;inset:0;background-image:radial-gradient(circle,rgba(255,255,255,.08) 1px,transparent 1px);background-size:18px 18px}
+.ec-t1{background:#0a1f0e}.ec-t2{background:#0a0e1f}.ec-t3{background:#1f140a}.ec-t4{background:#14081f}
+.ec-badge{position:absolute;top:12px;left:12px;font-size:9px;font-weight:700;letter-spacing:.09em;padding:4px 9px;border-radius:11px}
+.ec-live{background:var(--green);color:var(--black)}.ec-soon{background:var(--blue);color:var(--black)}.ec-end{background:rgba(255,255,255,.1);color:var(--text-muted)}
+.ec-region{position:absolute;bottom:12px;right:12px;font-size:10px;color:rgba(255,255,255,.4);font-family:'Space Mono',monospace;letter-spacing:.06em}
+.ec-lbl{position:relative;font-size:13px;font-weight:500;color:rgba(255,255,255,.45);letter-spacing:.06em}
+.ebody{padding:16px 18px}
+.edate{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);margin-bottom:5px;letter-spacing:.04em}
+.etitle{font-size:14px;font-weight:500;color:var(--text);line-height:1.4;margin-bottom:8px}
+.etags{display:flex;gap:6px;flex-wrap:wrap}
+.etag{font-size:10px;padding:2px 8px;border-radius:8px;background:rgba(255,255,255,.05);color:var(--text-dim);border:1px solid var(--border)}
+.archive-section{background:var(--gray-light)}
+.archive-list{display:flex;flex-direction:column;gap:10px}
+.arch{background:var(--bg);border:1px solid var(--border);border-radius:var(--radius);padding:16px 20px;display:flex;align-items:center;gap:16px;transition:border-color .2s}
+.arch:hover{border-color:rgba(255,255,255,.12)}
+.arch-date{font-family:'Space Mono',monospace;font-size:10px;color:var(--text-dim);letter-spacing:.06em;min-width:80px}
+.arch-title{font-size:13px;font-weight:500;color:var(--text);flex:1}
+.arch-region{font-size:11px;color:var(--text-dim)}
+.arch-end{font-size:10px;padding:3px 8px;border-radius:8px;background:rgba(255,255,255,.06);color:var(--text-dim)}
+@media(max-width:900px){.ev-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:540px){.ev-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div id="site-nav"></div>
+<script src="js/site.js"></script>
+<header class="page-hero">
+  <div class="ph-grid"></div>
+  <div class="ph-glow" style="top:-60px;left:-60px;width:400px;height:400px;background:radial-gradient(circle,rgba(74,222,128,.07) 0%,transparent 65%)"></div>
+  <nav class="breadcrumb"><a href="index.html">HOME</a><span class="breadcrumb-sep">/</span><span class="breadcrumb-cur">EVENTS</span></nav>
+  <div class="eyebrow" style="position:relative"><div class="eyebrow-line"></div><div class="eyebrow-text">EVENTS & BENEFITS</div></div>
+  <h1 class="page-hero-title">이벤트 &<br><span>혜택</span></h1>
+  <p class="page-hero-desc">강원도 전역에서 반려동물과 함께 누릴 수 있는 이벤트와 메이트쉽 멤버 전용 혜택을 모아뒀습니다.</p>
+  <div class="hero-cta-row"><a href="mateship.html#join" class="btn-main">메이트쉽 가입으로 혜택 받기 →</a></div>
+</header>
+
+<section class="section" id="ongoing">
+  <div class="sec-header"><div><div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">ONGOING EVENTS</div></div><h2 class="sec-title">진행 중인 이벤트</h2></div></div>
+  <div class="filter-bar">
+    <div class="fbtn active">전체</div>
+    <div class="fbtn">호텔·리조트</div>
+    <div class="fbtn">카페·레저</div>
+    <div class="fbtn">힐링·교육</div>
+    <div class="fbtn">사전예약</div>
+  </div>
+  <div class="ev-grid">
+    <a href="#ev1" class="ecard fi" id="ev1"><div class="ect ec-t1"><div class="ect-pat"></div><div class="ec-badge ec-live">진행중</div><div class="ec-region">양평</div><div class="ec-lbl">숲치유</div></div><div class="ebody"><div class="edate">2026.04.04 — 2026.11.07</div><div class="etitle">2026 반려동물 숲치유 in 양평</div><div class="etags"><span class="etag">힐링</span><span class="etag">멤버 무료</span></div></div></a>
+    <a href="#ev2" class="ecard fi" style="transition-delay:.07s" id="ev2"><div class="ect ec-t2"><div class="ect-pat"></div><div class="ec-badge ec-soon">사전예약</div><div class="ec-region">강릉</div><div class="ec-lbl">호텔 할인</div></div><div class="ebody"><div class="edate">2026.04.01 — 2026.06.30</div><div class="etitle">2026 세인트존스호텔 할인 in 강릉</div><div class="etags"><span class="etag">호텔</span><span class="etag">멤버 할인</span></div></div></a>
+    <a href="#ev3" class="ecard fi" style="transition-delay:.14s" id="ev3"><div class="ect ec-t3"><div class="ect-pat"></div><div class="ec-badge ec-live">진행중</div><div class="ec-region">원주</div><div class="ec-lbl">애견카페</div></div><div class="ebody"><div class="edate">2026.03.01 — 2026.12.31</div><div class="etitle">2026 애견카페 할인 in 원주</div><div class="etags"><span class="etag">카페</span><span class="etag">멤버 할인</span></div></div></a>
+  </div>
+</section>
+
+<section class="section archive-section" id="archive">
+  <div class="eyebrow"><div class="eyebrow-line"></div><div class="eyebrow-text">ARCHIVE</div></div>
+  <h2 class="sec-title">지난 행사</h2>
+  <p class="sec-desc">종료된 이벤트 아카이브입니다.</p>
+  <div class="archive-list">
+    <div class="arch fi"><div class="arch-date">2026.01 — 03</div><div class="arch-title">2026 피닉스파크 호텔 할인 in 평창</div><div class="arch-region">평창</div><div class="arch-end">종료</div></div>
+    <div class="arch fi" style="transition-delay:.06s"><div class="arch-date">2025.10 — 12</div><div class="arch-title">2025 강원도 반려견 캠핑 페스티벌</div><div class="arch-region">춘천</div><div class="arch-end">종료</div></div>
+    <div class="arch fi" style="transition-delay:.12s"><div class="arch-date">2025.08 — 09</div><div class="arch-title">2025 반려동물 트래킹 프로그램 in 설악산</div><div class="arch-region">속초</div><div class="arch-end">종료</div></div>
+    <div class="arch fi" style="transition-delay:.18s"><div class="arch-date">2025.05 — 06</div><div class="arch-title">2025 반려견 요가 클래스 in 춘천</div><div class="arch-region">춘천</div><div class="arch-end">종료</div></div>
+  </div>
+</section>
+
+<div style="text-align:center;padding:60px 24px;background:var(--bg2);border-top:1px solid var(--border)">
+  <div style="font-family:'Bebas Neue',cursive;font-size:42px;color:var(--text);line-height:1;margin-bottom:12px">더 많은 혜택을 원하신다면<br><span style="color:var(--green)">메이트쉽에 가입하세요</span></div>
+  <p style="font-size:14px;color:var(--text-muted);margin-bottom:24px;font-weight:300">멤버십 가입 시 이벤트 사전예약 우선권, 무료 참여 혜택이 주어집니다.</p>
+  <a href="mateship.html#join" class="btn-main">메이트쉽 가입하기 →</a>
+</div>
+<div id="site-footer"></div>
+</body></html>
