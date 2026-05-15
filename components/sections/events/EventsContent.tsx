@@ -1,0 +1,214 @@
+'use client';
+
+import { useState } from 'react';
+import Link from 'next/link';
+import { motion, AnimatePresence } from 'framer-motion';
+import { useGWAADB } from '@/hooks/useGWAADB';
+import { STORES } from '@/lib/db/gwaaDB';
+import { EventCard, ArchiveEvent, EventStatus } from '@/types';
+import Badge from '@/components/ui/Badge';
+import Eyebrow from '@/components/ui/Eyebrow';
+import CountUp from '@/components/shared/CountUp';
+import { staggerContainer, fadeUp } from '@/lib/animations';
+import { PhotoGallery } from '@/components/ui/gallery';
+
+const STATUS_LABELS: Record<EventStatus, string> = {
+  live: 'LIVE', soon: 'SOON', upcoming: 'UPCOMING', ended: 'ENDED',
+};
+
+const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
+
+export default function EventsContent() {
+  const { data: events, loading: evLoading } = useGWAADB<EventCard>(STORES.EVENT);
+  const { data: archives, loading: archLoading } = useGWAADB<ArchiveEvent>(STORES.ARCHIVE);
+  const [filter, setFilter] = useState<'all' | EventStatus>('all');
+
+  const filtered = filter === 'all' ? events : events.filter((e) => e.status === filter);
+
+  return (
+    <>
+      {/* Photo Gallery */}
+      <PhotoGallery animationDelay={0.3} />
+
+      {/* Upcoming Events */}
+      <section id="upcoming" style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
+            <Eyebrow text="UPCOMING EVENTS" />
+            <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 'clamp(26px, 5.5vw, 52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 10 }}>
+              다가오는 행사
+            </h2>
+          </motion.div>
+
+          {/* Filter */}
+          <motion.div variants={fadeUp} style={{ display: 'flex', gap: 8, marginBottom: 32, flexWrap: 'wrap' }}>
+            {(['all', 'live', 'soon', 'upcoming', 'ended'] as const).map((s) => (
+              <button
+                key={s}
+                onClick={() => setFilter(s)}
+                style={{
+                  padding: '8px 18px', borderRadius: 9999, fontSize: 11,
+                  fontWeight: 700, letterSpacing: '0.06em', cursor: 'pointer',
+                  border: '1.5px solid',
+                  background: filter === s ? '#16a34a' : 'transparent',
+                  color: filter === s ? '#fff' : '#6b7280',
+                  borderColor: filter === s ? '#16a34a' : '#d1d5db',
+                  transition: 'all 0.2s',
+                }}
+              >
+                {s === 'all' ? '전체' : STATUS_LABELS[s]}
+              </button>
+            ))}
+          </motion.div>
+
+          {evLoading ? <div style={{ height: 300 }} /> : (
+            <motion.div
+              layout
+              style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}
+            >
+              <AnimatePresence mode="popLayout">
+                {filtered.map((ev) => (
+                  <motion.div
+                    key={ev.id ?? ev.order}
+                    layout
+                    initial={{ opacity: 0, scale: 0.92 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 0.92 }}
+                    whileHover={{ y: -5, boxShadow: '0 12px 36px rgba(0,0,0,0.1)' }}
+                    style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}
+                  >
+                    <div style={{
+                      height: 180,
+                      background: ev.imageData ? `url(${ev.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
+                      display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 12,
+                    }}>
+                      <Badge variant={ev.status} />
+                    </div>
+                    <div style={{ padding: '18px 20px 22px' }}>
+                      <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.1 }}>
+                        {ev.title}
+                      </h3>
+                      <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>📅 {ev.date}</p>
+                      <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>📍 {ev.loc}</p>
+                      <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.6, marginBottom: 16 }}>{ev.desc}</p>
+                      {ev.benefit && <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700, marginBottom: 14 }}>{ev.benefit}</p>}
+                      {ev.link ? (
+                        <Link href={ev.link} style={{ display: 'inline-flex', padding: '9px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 11, fontWeight: 700 }}>
+                          {ev.ctaText}
+                        </Link>
+                      ) : (
+                        <span style={{ display: 'inline-flex', padding: '9px 18px', borderRadius: 9999, background: '#f3f4f6', color: '#6b7280', fontSize: 11, fontWeight: 700 }}>
+                          {ev.ctaText}
+                        </span>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </AnimatePresence>
+            </motion.div>
+          )}
+        </motion.div>
+      </section>
+
+      {/* Archive — Bento Grid */}
+      <section id="archive" style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+        <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
+          <motion.div variants={fadeUp} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
+            <div>
+              <Eyebrow text="EVENT ARCHIVE" />
+              <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 'clamp(26px, 5.5vw, 52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 0 }}>
+                지난 행사 아카이브
+              </h2>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 20px', background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.2)', borderRadius: 12, flexShrink: 0 }}>
+              <span style={{ fontSize: 26, fontFamily: "'Bebas Neue', cursive", color: '#16a34a', lineHeight: 1 }}>
+                <CountUp value={40000} suffix="+" />
+              </span>
+              <span style={{ fontSize: 12, color: '#374151', lineHeight: 1.4 }}>2021년부터<br />누적 참가자</span>
+            </div>
+          </motion.div>
+
+          {archLoading ? <div style={{ height: 400 }} /> : (
+            <motion.div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
+              {archives.map((arc, i) => {
+                const thumb = arc.imageData || (arc.images && arc.images[0]) || null;
+                const gradients = [
+                  'linear-gradient(135deg,#e8f5e9,#a5d6a7)',
+                  'linear-gradient(135deg,#dbeafe,#93c5fd)',
+                  'linear-gradient(135deg,#fef3c7,#fcd34d)',
+                  'linear-gradient(135deg,#fce7f3,#f9a8d4)',
+                  'linear-gradient(135deg,#ede9fe,#c4b5fd)',
+                  'linear-gradient(135deg,#fff7ed,#fed7aa)',
+                  'linear-gradient(135deg,#f0fdf4,#bbf7d0)',
+                  'linear-gradient(135deg,#ecfeff,#a5f3fc)',
+                  'linear-gradient(135deg,#fdf4ff,#e879f9)',
+                ];
+                const imageCount = arc.images?.length ?? (arc.imageData ? 1 : 0) + (arc.imageData2 ? 1 : 0);
+                return (
+                  <motion.div
+                    key={arc.id ?? i}
+                    variants={fadeUp}
+                    custom={i * 0.04}
+                  >
+                    <Link
+                      href={`/events/archive/${arc.id}`}
+                      style={{ textDecoration: 'none', display: 'block' }}
+                    >
+                      <motion.div
+                        whileHover={{ backgroundColor: '#f0fdf4' }}
+                        transition={{ duration: 0.15 }}
+                        style={{
+                          display: 'flex', alignItems: 'center', gap: 24,
+                          padding: '20px 0',
+                          borderBottom: '1px solid #e5e7eb',
+                          cursor: 'pointer',
+                        }}
+                      >
+                        {/* Thumbnail */}
+                        <div style={{
+                          flexShrink: 0, width: 100, height: 76, borderRadius: 10, overflow: 'hidden',
+                          background: thumb ? `url(${thumb}) center/cover no-repeat` : gradients[i % gradients.length],
+                        }} />
+
+                        {/* Info */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
+                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#fff', fontWeight: 700, letterSpacing: '0.08em', background: '#16a34a', padding: '2px 8px', borderRadius: 9999 }}>
+                              {arc.year}
+                            </span>
+                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', letterSpacing: '0.06em' }}>
+                              {arc.loc}
+                            </span>
+                            {arc.feat && (
+                              <span style={{ fontFamily: MONO, fontSize: 9, color: '#92400e', background: '#fef3c7', border: '1px solid #fde68a', padding: '2px 7px', borderRadius: 9999, letterSpacing: '0.08em', fontWeight: 700 }}>
+                                FEATURED
+                              </span>
+                            )}
+                          </div>
+                          <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 22, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                            {arc.title}
+                          </h3>
+                          <div style={{ display: 'flex', gap: 14, fontSize: 12, color: '#6b7280' }}>
+                            {arc.date && <span>📅 {arc.date}</span>}
+                            {arc.ppl && <span>👥 {arc.ppl}명</span>}
+                            {imageCount > 0 && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.04em' }}>📷 {imageCount}장</span>}
+                          </div>
+                        </div>
+
+                        {/* Arrow */}
+                        <div style={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: '#9ca3af' }}>
+                          →
+                        </div>
+                      </motion.div>
+                    </Link>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          )}
+        </motion.div>
+      </section>
+
+    </>
+  );
+}
