@@ -1,14 +1,13 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { gwaaDB, STORES } from '@/lib/db/gwaaDB';
 import {
   EventCard, EventStatus, MateshipPartner, GalleryItem,
   ArchiveEvent, ActivityCard, LookbookItem, TravelPlace, PageHashtags,
 } from '@/types';
-
-const ADMIN_PW = 'gwaa2026!';
 
 type Tab = 'dashboard' | 'applications' | 'events' | 'archive' | 'partners' | 'images' | 'content' | 'travel' | 'settings';
 
@@ -69,9 +68,7 @@ function ImageUploadBox({ imageData, onPick, onRemove, ratio = '16/9', placehold
 }
 
 export default function AdminPage() {
-  const [authed, setAuthed] = useState(false);
-  const [pw, setPw] = useState('');
-  const [loginErr, setLoginErr] = useState(false);
+  const router = useRouter();
   const [tab, setTab] = useState<Tab>('dashboard');
   const [toast, setToast] = useState<{ msg: string; err?: boolean } | null>(null);
 
@@ -102,28 +99,17 @@ export default function AdminPage() {
   const [editTravel, setEditTravel] = useState<Partial<TravelPlace> & { _key?: number }>({});
   const [hashtagDraft, setHashtagDraft] = useState<Record<string, string>>({});
 
-  useEffect(() => {
-    if (sessionStorage.getItem('gwaa_admin') === '1') setAuthed(true);
-  }, []);
+  useEffect(() => { loadAll(); }, []);
 
   const showToast = (msg: string, err?: boolean) => {
     setToast({ msg, err });
     setTimeout(() => setToast(null), 3000);
   };
 
-  const doLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (pw === ADMIN_PW) {
-      sessionStorage.setItem('gwaa_admin', '1');
-      setAuthed(true);
-      loadAll();
-    } else {
-      setLoginErr(true);
-      setTimeout(() => setLoginErr(false), 2500);
-    }
+  const doLogout = async () => {
+    await fetch('/api/admin/auth', { method: 'DELETE' });
+    router.replace('/admin/login');
   };
-
-  const doLogout = () => { sessionStorage.removeItem('gwaa_admin'); setAuthed(false); setPw(''); };
 
   const loadAll = async () => {
     try {
@@ -149,7 +135,6 @@ export default function AdminPage() {
     } catch { showToast('데이터 로딩 실패', true); }
   };
 
-  useEffect(() => { if (authed) loadAll(); }, [authed]);
 
   const switchTab = (t: Tab) => {
     setTab(t);
@@ -343,27 +328,6 @@ export default function AdminPage() {
     background: active ? 'rgba(74,222,128,.08)' : 'none',
     border: 'none', padding: '8px 14px', borderRadius: 6, cursor: 'pointer', transition: 'all .2s',
   });
-
-  // ─── Login screen ───
-  if (!authed) {
-    return (
-      <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: '#0a0a0a', padding: 24 }}>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} style={{ background: '#1a1a1a', border: '1px solid rgba(255,255,255,.08)', borderRadius: 20, padding: '44px 48px', width: 'min(420px, 100%)' }}>
-          <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 13, letterSpacing: '0.12em', color: '#4ade80', marginBottom: 8 }}>GWAA — ADMIN</div>
-          <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 32, color: '#fff', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 32 }}>관리자<br />로그인</div>
-          <form onSubmit={doLogin}>
-            <div style={fieldStyle}>
-              <label style={{ ...labelStyle, color: 'rgba(255,255,255,0.5)' }}>비밀번호</label>
-              <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} placeholder="비밀번호 입력" autoComplete="current-password" style={{ ...inputStyle, background: 'rgba(255,255,255,.04)', borderColor: 'rgba(255,255,255,.1)', color: '#fff' }} />
-              {loginErr && <p style={{ fontSize: 12, color: '#f87171', marginTop: 8 }}>비밀번호가 올바르지 않습니다.</p>}
-            </div>
-            <button type="submit" style={{ width: '100%', padding: '12px 18px', borderRadius: 9999, background: '#4ade80', color: '#0a0a0a', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer', marginTop: 8 }}>로그인</button>
-          </form>
-          <p style={{ fontSize: 11, color: 'rgba(255,255,255,.2)', marginTop: 20, textAlign: 'center' }}>강원도반려동물협회 내부 관리 시스템</p>
-        </motion.div>
-      </div>
-    );
-  }
 
   const tabs: [Tab, string][] = [
     ['dashboard', '대시보드'], ['applications', '신청내역'], ['events', '행사관리'],
