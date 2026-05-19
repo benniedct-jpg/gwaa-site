@@ -17,11 +17,11 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
   return (
     <section
       style={{
-        height: 540,
+        minHeight: 400,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: '80px 60px 64px',
+        padding: 'max(60px, 10vw) max(20px, 5vw) 48px',
         position: 'relative',
         overflow: 'hidden',
         background: '#f8fafb',

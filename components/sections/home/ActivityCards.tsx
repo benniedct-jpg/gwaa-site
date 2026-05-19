@@ -9,12 +9,13 @@ import { ActivityCard } from '@/types';
 import Eyebrow from '@/components/ui/Eyebrow';
 import Badge from '@/components/ui/Badge';
 import { staggerContainer, fadeUp } from '@/lib/animations';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const TAG_COLORS: Record<string, 'green' | 'blue' | 'amber'> = {
   green: 'green', blue: 'blue', amber: 'amber',
 };
 
-function TiltCard({ card }: { card: ActivityCard }) {
+function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
@@ -22,7 +23,7 @@ function TiltCard({ card }: { card: ActivityCard }) {
   const rotateY = useTransform(x, [-0.5, 0.5], [-6, 6]);
 
   const onMouseMove = (e: React.MouseEvent) => {
-    if (!ref.current) return;
+    if (!ref.current || isMobile) return;
     const rect = ref.current.getBoundingClientRect();
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
@@ -34,9 +35,11 @@ function TiltCard({ card }: { card: ActivityCard }) {
       variants={fadeUp}
       onMouseMove={onMouseMove}
       onMouseLeave={() => { x.set(0); y.set(0); }}
-      whileHover={{ y: -6, boxShadow: '0 12px 40px rgba(0,0,0,0.12)', borderColor: 'rgba(22,163,74,0.3)' }}
+      whileHover={!isMobile ? { y: -6, boxShadow: '0 12px 40px rgba(0,0,0,0.12)', borderColor: 'rgba(22,163,74,0.3)' } : undefined}
       style={{
-        rotateX, rotateY, transformStyle: 'preserve-3d',
+        rotateX: isMobile ? undefined : rotateX,
+        rotateY: isMobile ? undefined : rotateY,
+        transformStyle: 'preserve-3d',
         background: '#fff',
         border: '1.5px solid #e5e7eb',
         borderRadius: 14,
@@ -46,7 +49,7 @@ function TiltCard({ card }: { card: ActivityCard }) {
     >
       {/* Image */}
       <div style={{
-        height: 220,
+        height: isMobile ? 160 : 220,
         background: card.imageData
           ? `url(${card.imageData}) center/cover no-repeat`
           : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
@@ -57,21 +60,21 @@ function TiltCard({ card }: { card: ActivityCard }) {
       </div>
 
       {/* Body */}
-      <div style={{ padding: '22px 24px 26px' }}>
-        <div style={{ marginBottom: 14 }}>
+      <div style={{ padding: isMobile ? '16px 18px 20px' : '22px 24px 26px' }}>
+        <div style={{ marginBottom: 10 }}>
           <Badge variant={TAG_COLORS[card.tagColor] ?? 'gray'}>{card.tag}</Badge>
         </div>
         <h3 style={{
           fontFamily: "'Bebas Neue', cursive",
-          fontSize: 26,
+          fontSize: isMobile ? 22 : 26,
           letterSpacing: '0.02em',
           color: '#111',
-          marginBottom: 10,
+          marginBottom: 8,
           lineHeight: 1.1,
         }}>
           {card.title}
         </h3>
-        <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.75, fontWeight: 300, marginBottom: 20 }}>
+        <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.75, fontWeight: 300, marginBottom: 16 }}>
           {card.desc}
         </p>
         <Link
@@ -93,15 +96,17 @@ function TiltCard({ card }: { card: ActivityCard }) {
 
 export default function ActivityCards() {
   const { data: cards, loading } = useGWAADB<ActivityCard>(STORES.ACTIVITY);
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
 
   if (loading) return (
-    <section style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+    <section style={{ padding: `88px ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
       <div style={{ height: 300 }} />
     </section>
   );
 
   return (
-    <section style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+    <section style={{ padding: `${isMobile ? '56px' : '88px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
       <motion.div
         variants={staggerContainer}
         initial="hidden"
@@ -112,23 +117,27 @@ export default function ActivityCards() {
           <Eyebrow text="CORE ACTIVITIES" />
           <h2 style={{
             fontFamily: "'Bebas Neue', cursive",
-            fontSize: 'clamp(26px, 5.5vw, 52px)',
+            fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
             color: '#111', letterSpacing: '0.02em', lineHeight: 1,
-            marginBottom: 10,
+            marginBottom: 8,
           }}>
             GWAA가 하는 일
           </h2>
           <p style={{
-            fontSize: 15, color: '#6b7280', lineHeight: 1.75,
-            fontWeight: 300, maxWidth: 560, marginBottom: 40,
+            fontSize: 14, color: '#6b7280', lineHeight: 1.75,
+            fontWeight: 300, maxWidth: 560, marginBottom: 32,
           }}>
             교육부터 행사, 멤버십까지. 강원도 반려동물 문화를 만드는 세 가지 핵심 활동을 소개합니다.
           </p>
         </motion.div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)',
+          gap: isMobile ? 14 : 20,
+        }}>
           {cards.map((card) => (
-            <TiltCard key={card.id ?? card.order} card={card} />
+            <TiltCard key={card.id ?? card.order} card={card} isMobile={isMobile} />
           ))}
         </div>
       </motion.div>

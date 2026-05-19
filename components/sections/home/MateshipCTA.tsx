@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { staggerContainer, fadeUp } from '@/lib/animations';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const PERKS = [
   '🏨 강원도 파트너 호텔·리조트 할인',
@@ -14,26 +15,20 @@ const PERKS = [
 ];
 
 export default function MateshipCTA() {
+  const isMobile = useIsMobile();
+
   return (
-    <section style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f0fdf4', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ padding: isMobile ? '56px 20px' : '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f0fdf4', position: 'relative', overflow: 'hidden' }}>
       {/* Glow blobs */}
       <motion.div
         animate={{ scale: [1, 1.2, 1], opacity: [0.06, 0.12, 0.06] }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        style={{
-          position: 'absolute', top: '-20%', right: '-10%',
-          width: 500, height: 500, borderRadius: '50%',
-          background: '#16a34a', filter: 'blur(100px)', pointerEvents: 'none',
-        }}
+        style={{ position: 'absolute', top: '-20%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: '#16a34a', filter: 'blur(100px)', pointerEvents: 'none' }}
       />
       <motion.div
         animate={{ scale: [1.1, 1, 1.1], opacity: [0.04, 0.08, 0.04] }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-        style={{
-          position: 'absolute', bottom: '-10%', left: '-5%',
-          width: 400, height: 400, borderRadius: '50%',
-          background: '#2563eb', filter: 'blur(100px)', pointerEvents: 'none',
-        }}
+        style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: '#2563eb', filter: 'blur(100px)', pointerEvents: 'none' }}
       />
 
       <motion.div
@@ -41,7 +36,12 @@ export default function MateshipCTA() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
-        style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 60, position: 'relative' }}
+        style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
+          gap: isMobile ? 32 : 60,
+          position: 'relative',
+        }}
       >
         {/* Left */}
         <div>
@@ -57,7 +57,7 @@ export default function MateshipCTA() {
             custom={0.08}
             style={{
               fontFamily: "'Bebas Neue', cursive",
-              fontSize: 'clamp(36px, 5vw, 64px)',
+              fontSize: isMobile ? 40 : 'clamp(36px, 5vw, 64px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 0.95,
               marginBottom: 10,
             }}
@@ -66,18 +66,19 @@ export default function MateshipCTA() {
             <span style={{ color: '#16a34a' }}>메이트쉽</span>으로
           </motion.h2>
 
-          <motion.p variants={fadeUp} custom={0.14} style={{ fontSize: 15, color: '#6b7280', lineHeight: 1.8, fontWeight: 300, marginBottom: 32 }}>
+          <motion.p variants={fadeUp} custom={0.14} style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.8, fontWeight: 300, marginBottom: 28 }}>
             연간 40만원 이상 절약하는 스마트한 반려생활. 강원도 전역 제휴업체 혜택과 GWAA의 모든 프로그램을 회원 가격으로 누리세요.
           </motion.p>
 
-          <motion.div variants={fadeUp} custom={0.2} style={{ display: 'flex', gap: 10 }}>
+          <motion.div variants={fadeUp} custom={0.2} style={{ display: 'flex', gap: 10, flexWrap: 'nowrap' }}>
             <Link
               href="/mateship#join"
               style={{
-                display: 'inline-flex', alignItems: 'center', padding: '14px 30px',
+                display: 'inline-flex', alignItems: 'center', padding: '13px 24px',
                 borderRadius: 9999, background: '#16a34a', color: '#fff',
                 fontSize: 13, fontWeight: 700, letterSpacing: '0.04em',
                 boxShadow: '0 4px 20px rgba(22,163,74,0.35)',
+                whiteSpace: 'nowrap', flexShrink: 0,
               }}
             >
               지금 가입하기 →
@@ -85,11 +86,12 @@ export default function MateshipCTA() {
             <Link
               href="/mateship#calculator"
               style={{
-                display: 'inline-flex', alignItems: 'center', padding: '14px 24px',
+                display: 'inline-flex', alignItems: 'center', padding: '13px 20px',
                 borderRadius: 9999,
                 background: '#fff', color: '#374151',
                 border: '1.5px solid #d1d5db',
                 fontSize: 13, fontWeight: 700, letterSpacing: '0.04em',
+                whiteSpace: 'nowrap', flexShrink: 0,
               }}
             >
               절약 계산기
@@ -106,12 +108,12 @@ export default function MateshipCTA() {
               custom={i * 0.05}
               style={{
                 display: 'flex', alignItems: 'center', gap: 14,
-                padding: '14px 0',
+                padding: '12px 0',
                 borderBottom: i < PERKS.length - 1 ? '1px solid #e5e7eb' : 'none',
               }}
             >
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#16a34a', flexShrink: 0 }} />
-              <span style={{ fontSize: 14, color: '#374151', fontWeight: 400 }}>{perk}</span>
+              <span style={{ fontSize: 13, color: '#374151', fontWeight: 400 }}>{perk}</span>
             </motion.div>
           ))}
         </motion.div>

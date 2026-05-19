@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useGWAADB } from '@/hooks/useGWAADB';
@@ -33,7 +33,7 @@ const REGION_COLOR: Record<string, string> = {
   인제: '#8b5cf6', 삼척: '#3b82f6', 정선: '#eab308', 영월: '#f97316',
 };
 
-// ── 추천 코스 (정적 데이터) ──
+// ── 추천 코스 ──
 const COURSES = [
   {
     id: 'gangneung',
@@ -75,7 +75,7 @@ const COURSES = [
       {
         label: '코스',
         stops: [
-          { time: '09:00', place: '영랑호 수변공원 반려견 놀이터', icon: '🐾', tip: '소·대형 분리 운동장, 어질리티 시설. 무료 주차.' },
+          { time: '09:00', place: '영랑호 반려견 놀이터', icon: '🐾', tip: '소·대형 분리 운동장, 어질리티 시설. 무료 주차.' },
           { time: '11:00', place: '설악해맞이공원', icon: '🌊', tip: '모래사장에서 자유롭게 뛰어놀기. 비성수기 비교적 한적.' },
           { time: '13:00', place: '청초호 수변공원', icon: '🍱', tip: '도시락 피크닉 또는 근처 반려견 동반 식당 이용.' },
           { time: '15:00', place: '인구해변 (양양)', icon: '🏄', tip: '서퍼와 강아지가 공존하는 이국적 분위기. 주변 반려견 카페 다수.' },
@@ -145,7 +145,7 @@ const COURSES = [
       {
         label: 'DAY 1 · 고성',
         stops: [
-          { time: '오전', place: '고성 반려견 해수욕장', icon: '🌊', tip: '동해 북단 청정 해변. 비성수기 자유로운 입수 가능.' },
+          { time: '오전', place: '화진포 해수욕장', icon: '🌊', tip: '국내 최북단 청정 해변. 반려견 동반 산책 가능.' },
           { time: '오후', place: '건봉사 주변 산책', icon: '🏔️', tip: '천년 고찰 주변 청정 산림. 목줄 필수.' },
           { time: '저녁', place: '속초 숙박', icon: '🏨', tip: '속초 반려동물 동반 숙소 이용.' },
         ],
@@ -189,6 +189,18 @@ export default function TravelContent() {
   const [category,    setCategory]    = useState('전체');
   const [partnerOnly, setPartnerOnly] = useState(false);
   const [openCourse,  setOpenCourse]  = useState<string | null>(null);
+  const [isMobile,    setIsMobile]    = useState(false);
+
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 768);
+    check();
+    window.addEventListener('resize', check);
+    return () => window.removeEventListener('resize', check);
+  }, []);
+
+  // ── shorthand padding ──
+  const px = isMobile ? '16px' : '60px';
+  const py = isMobile ? '40px' : '72px';
 
   const filtered = useMemo(() => {
     return places.filter((p) => {
@@ -218,19 +230,24 @@ export default function TravelContent() {
   return (
     <>
       {/* ─── STATS ─── */}
-      <section style={{ padding: '28px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
-        <div style={{ display: 'flex', gap: 48, flexWrap: 'wrap' }}>
+      <section style={{ padding: `20px ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, auto)',
+          gap: isMobile ? '16px' : '48px',
+          justifyContent: isMobile ? undefined : 'start',
+        }}>
           {[
-            { n: `${places.length || 20}+`, label: '등록 장소', icon: '📍' },
-            { n: '12',  label: '강원도 지역',  icon: '🗺️' },
+            { n: `${places.length || 50}+`, label: '등록 장소', icon: '📍' },
+            { n: '16',  label: '강원도 지역',  icon: '🗺️' },
             { n: '5',   label: '추천 코스',    icon: '🧭' },
             { n: '100%', label: '반려동물 동반 가능', icon: '🐾' },
           ].map(({ n, label, icon }) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-              <span style={{ fontSize: 20 }}>{icon}</span>
+            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+              <span style={{ fontSize: isMobile ? 18 : 20 }}>{icon}</span>
               <div>
-                <div style={{ fontFamily: BEBAS, fontSize: 22, color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em' }}>{n}</div>
-                <div style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.1em' }}>{label.toUpperCase()}</div>
+                <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 18 : 22, color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em' }}>{n}</div>
+                <div style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.08em' }}>{label.toUpperCase()}</div>
               </div>
             </div>
           ))}
@@ -238,39 +255,42 @@ export default function TravelContent() {
       </section>
 
       {/* ─── COURSES ─── */}
-      <section style={{ padding: '72px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+      <section style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
-          <motion.div variants={fadeUp} style={{ marginBottom: 36 }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 28 }}>
             <Eyebrow text="CURATED COURSES" />
-            <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
+            <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
               추천 반려동물 여행 코스
             </h2>
-            <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
               강원도 현지 데이터를 기반으로 엄선한 코스. 반려동물 동반 조건을 모두 검증했습니다.
             </p>
           </motion.div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 16 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(300px, 1fr))', gap: 14 }}>
             {COURSES.map((course, i) => {
               const isOpen = openCourse === course.id;
               return (
                 <motion.div key={course.id} variants={fadeUp} custom={i * 0.05}>
-                  <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 16, overflow: 'hidden', cursor: 'pointer' }} onClick={() => setOpenCourse(isOpen ? null : course.id)}>
+                  <div
+                    style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 16, overflow: 'hidden', cursor: 'pointer' }}
+                    onClick={() => setOpenCourse(isOpen ? null : course.id)}
+                  >
                     {/* Cover */}
-                    <div style={{ position: 'relative', height: 160, background: `url(${course.cover}) center/cover`, overflow: 'hidden' }}>
+                    <div style={{ position: 'relative', height: 150, background: `url(${course.cover}) center/cover`, overflow: 'hidden' }}>
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.65))' }} />
-                      <div style={{ position: 'absolute', top: 12, left: 14, display: 'flex', gap: 6 }}>
+                      <div style={{ position: 'absolute', top: 10, left: 12, display: 'flex', gap: 6 }}>
                         <span style={{ fontFamily: MONO, fontSize: 9, background: course.color, color: '#fff', padding: '3px 8px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.08em' }}>{course.duration.toUpperCase()}</span>
                         <span style={{ fontFamily: MONO, fontSize: 9, background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '3px 8px', borderRadius: 9999, letterSpacing: '0.08em', backdropFilter: 'blur(4px)' }}>{course.theme}</span>
                       </div>
-                      <div style={{ position: 'absolute', bottom: 14, left: 14, right: 14 }}>
-                        <h3 style={{ fontFamily: BEBAS, fontSize: 22, color: '#fff', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 3 }}>{course.title}</h3>
+                      <div style={{ position: 'absolute', bottom: 12, left: 12, right: 12 }}>
+                        <h3 style={{ fontFamily: BEBAS, fontSize: 20, color: '#fff', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 2 }}>{course.title}</h3>
                         <p style={{ fontFamily: MONO, fontSize: 10, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.06em' }}>{course.subtitle}</p>
                       </div>
                     </div>
 
                     {/* Tags + toggle */}
-                    <div style={{ padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         {course.tags.slice(0, 3).map((t) => (
                           <span key={t} style={{ fontFamily: MONO, fontSize: 9, padding: '2px 7px', borderRadius: 9999, background: '#f3f4f6', color: '#6b7280', letterSpacing: '0.06em' }}>{t}</span>
@@ -290,22 +310,21 @@ export default function TravelContent() {
                           style={{ overflow: 'hidden' }}
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <div style={{ padding: '0 18px 18px', borderTop: '1px solid #f0f0f0' }}>
+                          <div style={{ padding: '0 16px 16px', borderTop: '1px solid #f0f0f0' }}>
                             {course.days.map((day) => (
-                              <div key={day.label} style={{ marginTop: 16 }}>
+                              <div key={day.label} style={{ marginTop: 14 }}>
                                 <div style={{ fontFamily: MONO, fontSize: 9, color: course.color, fontWeight: 700, letterSpacing: '0.14em', marginBottom: 10 }}>{day.label}</div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                                   {day.stops.map((stop, si) => (
-                                    <div key={si} style={{ display: 'flex', gap: 12, paddingBottom: si < day.stops.length - 1 ? 12 : 0, position: 'relative' }}>
-                                      {/* Timeline line */}
+                                    <div key={si} style={{ display: 'flex', gap: 10, paddingBottom: si < day.stops.length - 1 ? 10 : 0, position: 'relative' }}>
                                       {si < day.stops.length - 1 && (
-                                        <div style={{ position: 'absolute', left: 17, top: 26, bottom: 0, width: 1, background: '#e5e7eb' }} />
+                                        <div style={{ position: 'absolute', left: 15, top: 24, bottom: 0, width: 1, background: '#e5e7eb' }} />
                                       )}
-                                      <div style={{ flexShrink: 0, width: 34, height: 34, borderRadius: '50%', background: '#f8fafb', border: '1.5px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, zIndex: 1 }}>{stop.icon}</div>
-                                      <div style={{ flex: 1, paddingTop: 4 }}>
-                                        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 2 }}>
+                                      <div style={{ flexShrink: 0, width: 30, height: 30, borderRadius: '50%', background: '#f8fafb', border: '1.5px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, zIndex: 1 }}>{stop.icon}</div>
+                                      <div style={{ flex: 1, paddingTop: 3 }}>
+                                        <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2, flexWrap: 'wrap' }}>
                                           <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em' }}>{stop.time}</span>
-                                          <span style={{ fontSize: 13, fontWeight: 700, color: '#111' }}>{stop.place}</span>
+                                          <span style={{ fontSize: 12, fontWeight: 700, color: '#111' }}>{stop.place}</span>
                                         </div>
                                         <p style={{ fontSize: 11, color: '#6b7280', lineHeight: 1.6, margin: 0 }}>{stop.tip}</p>
                                       </div>
@@ -327,25 +346,25 @@ export default function TravelContent() {
       </section>
 
       {/* ─── PLACES DATABASE ─── */}
-      <section style={{ padding: '72px 60px 88px', background: '#fff' }}>
+      <section style={{ padding: `${py} ${px} 88px`, background: '#fff' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
-          <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
             <Eyebrow text="PET TRAVEL DATABASE" />
-            <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
+            <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6 }}>
               강원도 반려동물 여행지
             </h2>
-            <p style={{ fontSize: 14, color: '#6b7280' }}>운영시간 · 입장료 · 반려동물 조건을 모두 확인할 수 있습니다.</p>
+            <p style={{ fontSize: 13, color: '#6b7280' }}>운영시간 · 입장료 · 반려동물 조건을 모두 확인할 수 있습니다.</p>
           </motion.div>
 
           {/* Search */}
-          <motion.div variants={fadeUp} style={{ marginBottom: 20 }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 16 }}>
             <div style={{ position: 'relative', maxWidth: 480 }}>
-              <span style={{ position: 'absolute', left: 14, top: '50%', transform: 'translateY(-50%)', fontSize: 15, pointerEvents: 'none' }}>🔍</span>
+              <span style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', fontSize: 14, pointerEvents: 'none' }}>🔍</span>
               <input
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="장소명, 지역, 특징으로 검색..."
-                style={{ width: '100%', padding: '12px 16px 12px 42px', borderRadius: 12, border: '1.5px solid #e5e7eb', fontSize: 14, color: '#111', background: '#fafafa', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+                style={{ width: '100%', padding: '11px 14px 11px 38px', borderRadius: 12, border: '1.5px solid #e5e7eb', fontSize: 14, color: '#111', background: '#fafafa', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
               />
               {search && (
                 <button onClick={() => setSearch('')} style={{ position: 'absolute', right: 12, top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: '#9ca3af', fontSize: 16 }}>✕</button>
@@ -354,20 +373,26 @@ export default function TravelContent() {
           </motion.div>
 
           {/* Filters */}
-          <motion.div variants={fadeUp} style={{ marginBottom: 28, display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {/* Region chips */}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 24, display: 'flex', flexDirection: 'column', gap: 8 }}>
+            {/* Region chips — horizontal scroll on mobile */}
+            <div style={{
+              display: 'flex', gap: 6, flexWrap: isMobile ? 'nowrap' : 'wrap',
+              overflowX: isMobile ? 'auto' : 'visible',
+              paddingBottom: isMobile ? 4 : 0,
+              WebkitOverflowScrolling: 'touch' as any,
+              msOverflowStyle: 'none' as any,
+            }}>
               {REGIONS.map((r) => (
                 <button
                   key={r}
                   onClick={() => setRegion(r)}
                   style={{
-                    padding: '6px 14px', borderRadius: 9999, fontSize: 12, fontWeight: 700,
-                    cursor: 'pointer', border: '1.5px solid',
+                    padding: '6px 12px', borderRadius: 9999, fontSize: 12, fontWeight: 700,
+                    cursor: 'pointer', border: '1.5px solid', flexShrink: 0,
                     background: region === r ? (REGION_COLOR[r] || '#16a34a') : 'transparent',
                     color: region === r ? '#fff' : '#6b7280',
                     borderColor: region === r ? (REGION_COLOR[r] || '#16a34a') : '#d1d5db',
-                    transition: 'all 0.18s',
+                    transition: 'all 0.18s', whiteSpace: 'nowrap',
                   }}
                 >
                   {r}
@@ -375,19 +400,25 @@ export default function TravelContent() {
               ))}
             </div>
 
-            {/* Category + Partner */}
-            <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+            {/* Category + Partner — horizontal scroll on mobile */}
+            <div style={{
+              display: 'flex', gap: 6, flexWrap: isMobile ? 'nowrap' : 'wrap', alignItems: 'center',
+              overflowX: isMobile ? 'auto' : 'visible',
+              paddingBottom: isMobile ? 4 : 0,
+              WebkitOverflowScrolling: 'touch' as any,
+              msOverflowStyle: 'none' as any,
+            }}>
               {CATEGORIES.map(({ key, icon }) => (
                 <button
                   key={key}
                   onClick={() => setCategory(key)}
                   style={{
-                    padding: '6px 14px', borderRadius: 9999, fontSize: 12, fontWeight: 600,
-                    cursor: 'pointer', border: '1.5px solid',
+                    padding: '6px 12px', borderRadius: 9999, fontSize: 12, fontWeight: 600,
+                    cursor: 'pointer', border: '1.5px solid', flexShrink: 0,
                     background: category === key ? '#111' : 'transparent',
                     color: category === key ? '#fff' : '#6b7280',
                     borderColor: category === key ? '#111' : '#d1d5db',
-                    transition: 'all 0.18s',
+                    transition: 'all 0.18s', whiteSpace: 'nowrap',
                   }}
                 >
                   {icon} {key}
@@ -396,26 +427,29 @@ export default function TravelContent() {
               <button
                 onClick={() => setPartnerOnly(!partnerOnly)}
                 style={{
-                  padding: '6px 14px', borderRadius: 9999, fontSize: 12, fontWeight: 700,
-                  cursor: 'pointer', border: '1.5px solid',
+                  padding: '6px 12px', borderRadius: 9999, fontSize: 12, fontWeight: 700,
+                  cursor: 'pointer', border: '1.5px solid', flexShrink: 0,
                   background: partnerOnly ? '#fef3c7' : 'transparent',
                   color: partnerOnly ? '#92400e' : '#6b7280',
                   borderColor: partnerOnly ? '#fde68a' : '#d1d5db',
-                  transition: 'all 0.18s',
+                  transition: 'all 0.18s', whiteSpace: 'nowrap',
                 }}
               >
-                ⭐ GWAA 파트너만
+                ⭐ 파트너만
               </button>
             </div>
           </motion.div>
 
           {/* Result count */}
-          <motion.div variants={fadeUp} style={{ marginBottom: 20, display: 'flex', alignItems: 'center', gap: 10 }}>
+          <motion.div variants={fadeUp} style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
             <span style={{ fontFamily: MONO, fontSize: 11, color: '#9ca3af', letterSpacing: '0.06em' }}>
               {filtered.length}곳의 장소
             </span>
             {(region !== '전체' || category !== '전체' || partnerOnly || search) && (
-              <button onClick={() => { setRegion('전체'); setCategory('전체'); setPartnerOnly(false); setSearch(''); }} style={{ fontFamily: MONO, fontSize: 10, color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.04em' }}>
+              <button
+                onClick={() => { setRegion('전체'); setCategory('전체'); setPartnerOnly(false); setSearch(''); }}
+                style={{ fontFamily: MONO, fontSize: 10, color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.04em' }}
+              >
                 필터 초기화
               </button>
             )}
@@ -423,26 +457,41 @@ export default function TravelContent() {
 
           {/* Cards */}
           {loading ? (
-            <div style={{ height: 320, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+            <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               <span style={{ fontFamily: MONO, fontSize: 12, color: '#9ca3af', letterSpacing: '0.12em' }}>LOADING...</span>
             </div>
           ) : (
-            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 20 }}>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: isMobile ? '1fr' : 'repeat(auto-fill, minmax(280px, 1fr))',
+              gap: isMobile ? 14 : 18,
+            }}>
               <AnimatePresence mode="popLayout">
                 {filtered.map((place, i) => (
                   <motion.div
                     key={place.id ?? i}
                     layout
-                    initial={{ opacity: 0, scale: 0.95 }}
+                    initial={{ opacity: 0, scale: 0.97 }}
                     animate={{ opacity: 1, scale: 1 }}
-                    exit={{ opacity: 0, scale: 0.95 }}
-                    transition={{ duration: 0.25 }}
-                    whileHover={{ y: -4, boxShadow: '0 12px 36px rgba(0,0,0,0.09)' }}
-                    style={{ background: '#fff', border: `1.5px solid ${place.isPartner ? '#fde68a' : '#e5e7eb'}`, borderRadius: 16, overflow: 'hidden', transition: 'box-shadow 0.2s' }}
+                    exit={{ opacity: 0, scale: 0.97 }}
+                    transition={{ duration: 0.22 }}
+                    whileHover={!isMobile ? { y: -4, boxShadow: '0 12px 36px rgba(0,0,0,0.09)' } : undefined}
+                    style={{
+                      background: '#fff',
+                      border: `1.5px solid ${place.isPartner ? '#fde68a' : '#e5e7eb'}`,
+                      borderRadius: 16,
+                      overflow: 'hidden',
+                      transition: 'box-shadow 0.2s',
+                    }}
                   >
-                    {/* Image 1:1 */}
-                    <div style={{ position: 'relative', aspectRatio: '1/1', background: place.imageData ? `url(${place.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' }}>
-                      {/* Badges */}
+                    {/* Image */}
+                    <div style={{
+                      position: 'relative',
+                      aspectRatio: isMobile ? '16/9' : '4/3',
+                      background: place.imageData
+                        ? `url(${place.imageData}) center/cover no-repeat`
+                        : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
+                    }}>
                       <div style={{ position: 'absolute', top: 10, left: 10, display: 'flex', gap: 5 }}>
                         <span style={{ fontFamily: MONO, fontSize: 9, background: REGION_COLOR[place.region] || '#16a34a', color: '#fff', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.06em' }}>{place.region}</span>
                         <span style={{ fontFamily: MONO, fontSize: 9, background: 'rgba(0,0,0,0.5)', color: '#fff', padding: '3px 7px', borderRadius: 9999, letterSpacing: '0.04em', backdropFilter: 'blur(4px)' }}>{place.typeLabel || place.type}</span>
@@ -452,56 +501,74 @@ export default function TravelContent() {
                           <span style={{ fontFamily: MONO, fontSize: 8, background: '#fef3c7', color: '#92400e', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, border: '1px solid #fde68a' }}>⭐ PARTNER</span>
                         </div>
                       )}
+                      {/* No-image fallback label */}
+                      {!place.imageData && (
+                        <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                          <span style={{ fontSize: 36 }}>{place.icon}</span>
+                        </div>
+                      )}
                     </div>
 
                     {/* Info */}
-                    <div style={{ padding: '16px 18px 18px' }}>
-                      <h3 style={{ fontFamily: BEBAS, fontSize: 18, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 4 }}>
+                    <div style={{ padding: '14px 16px 16px' }}>
+                      <h3 style={{ fontSize: 15, fontWeight: 800, color: '#111', lineHeight: 1.2, marginBottom: 4 }}>
                         {place.icon} {place.name}
                       </h3>
                       <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>{place.feature}</p>
 
                       {/* Pet conditions */}
-                      <div style={{ marginBottom: 10 }}>
+                      <div style={{ marginBottom: 8 }}>
                         <PetBadge petInfo={place.petInfo || ''} />
                         {place.petInfo && (
-                          <p style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', marginTop: 5, lineHeight: 1.5 }}>{place.petInfo}</p>
+                          <p style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.5 }}>{place.petInfo}</p>
                         )}
                       </div>
 
-                      {/* Hours + Price */}
-                      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 12, paddingTop: 8, borderTop: '1px solid #f3f4f6' }}>
+                      {/* Hours + Price + Address */}
+                      <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 10, paddingTop: 8, borderTop: '1px solid #f3f4f6' }}>
                         {place.hours && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em', minWidth: 40, paddingTop: 1 }}>⏰ 시간</span>
-                            <span style={{ fontSize: 11, color: '#374151' }}>{place.hours}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>⏰</span>
+                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.hours}</span>
                           </div>
                         )}
                         {place.price && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em', minWidth: 40, paddingTop: 1 }}>💰 요금</span>
-                            <span style={{ fontSize: 11, color: '#374151' }}>{place.price}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>💰</span>
+                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.price}</span>
                           </div>
                         )}
                         {place.address && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em', minWidth: 40, paddingTop: 1 }}>📍 위치</span>
-                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.5 }}>{place.address}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>📍</span>
+                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.address}</span>
                           </div>
                         )}
                       </div>
 
                       {/* Description */}
-                      <p style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.65, marginBottom: 12, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any }}>
+                      <p style={{
+                        fontSize: 12, color: '#6b7280', lineHeight: 1.65, marginBottom: 12,
+                        overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any,
+                      }}>
                         {place.desc}
                       </p>
 
                       {/* Map link */}
                       {place.mapUrl && (
-                        <a href={place.mapUrl} target="_blank" rel="noopener noreferrer"
+                        <a
+                          href={place.mapUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontFamily: MONO, fontSize: 10, color: '#16a34a', fontWeight: 700, letterSpacing: '0.06em', textDecoration: 'none' }}>
-                          지도 열기 →
+                          style={{
+                            display: 'inline-flex', alignItems: 'center', gap: 5,
+                            fontFamily: MONO, fontSize: 10, color: '#fff',
+                            fontWeight: 700, letterSpacing: '0.06em', textDecoration: 'none',
+                            background: '#16a34a', padding: '6px 12px', borderRadius: 8,
+                          }}
+                        >
+                          🗺️ 지도 보기
                         </a>
                       )}
                     </div>
