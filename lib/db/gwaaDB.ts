@@ -1,23 +1,13 @@
 'use client';
 
+import { STORES, type StoreName } from './stores';
+export { STORES } from './stores';
+export type { StoreName } from './stores';
+
 const DB_NAME = 'gwaaImages';
 const DB_VER = 4;
 const MAX_SIZE = 2 * 1024 * 1024;
 const ALLOWED = new Set(['image/jpeg', 'image/png', 'image/webp']);
-
-export const STORES = {
-  HERO:     'heroImages',
-  ACTIVITY: 'activityCards',
-  EVENT:    'eventCards',
-  LOOKBOOK: 'lookbookItems',
-  ARCHIVE:  'archiveEvents',
-  PLACES:   'travelPlaces',
-  HASHTAGS: 'pageHashtags',
-  MATESHIP: 'mateshipPartners',
-  GALLERY:  'galleryItems',
-} as const;
-
-export type StoreName = typeof STORES[keyof typeof STORES];
 
 let _db: IDBDatabase | null = null;
 

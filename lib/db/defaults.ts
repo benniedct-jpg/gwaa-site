@@ -1,4 +1,4 @@
-import { STORES } from './gwaaDB';
+import { STORES } from './stores';
 
 export const DEFAULTS: Record<string, object[]> = {
   [STORES.ACTIVITY]: [
