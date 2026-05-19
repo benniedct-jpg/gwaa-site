@@ -183,7 +183,7 @@ function PetBadge({ petInfo }: { petInfo: string }) {
 }
 
 export default function TravelContent() {
-  const { data: places, loading } = useGWAADB<TravelPlace>('travelPlaces' as any);
+  const { data: places, loading } = useGWAADB<TravelPlace>('travelPlaces');
   const [search,      setSearch]      = useState('');
   const [region,      setRegion]      = useState('전체');
   const [category,    setCategory]    = useState('전체');
@@ -471,16 +471,16 @@ export default function TravelContent() {
 
                       {/* Hours + Price */}
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 12, paddingTop: 8, borderTop: '1px solid #f3f4f6' }}>
-                        {(place as any).hours && (
+                        {place.hours && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
                             <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em', minWidth: 40, paddingTop: 1 }}>⏰ 시간</span>
-                            <span style={{ fontSize: 11, color: '#374151' }}>{(place as any).hours}</span>
+                            <span style={{ fontSize: 11, color: '#374151' }}>{place.hours}</span>
                           </div>
                         )}
-                        {(place as any).price && (
+                        {place.price && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
                             <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em', minWidth: 40, paddingTop: 1 }}>💰 요금</span>
-                            <span style={{ fontSize: 11, color: '#374151' }}>{(place as any).price}</span>
+                            <span style={{ fontSize: 11, color: '#374151' }}>{place.price}</span>
                           </div>
                         )}
                         {place.address && (
