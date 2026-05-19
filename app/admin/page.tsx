@@ -255,7 +255,7 @@ export default function AdminPage() {
   const saveTravel = async () => {
     if (!editTravel.name?.trim()) { showToast('장소명을 입력해 주세요', true); return; }
     try {
-      const base = { order: editTravel.order || Date.now(), region: editTravel.region || '', type: editTravel.type || 'cafe', typeLabel: editTravel.typeLabel || '', name: editTravel.name || '', icon: editTravel.icon || '📍', address: editTravel.address || '', feature: editTravel.feature || '', desc: editTravel.desc || '', petInfo: editTravel.petInfo || '', isPartner: editTravel.isPartner ?? false, imageData: editTravel.imageData ?? null, mapUrl: editTravel.mapUrl || '' };
+      const base = { order: editTravel.order || Date.now(), region: editTravel.region || '', type: editTravel.type || 'cafe', typeLabel: editTravel.typeLabel || '', name: editTravel.name || '', icon: editTravel.icon || '📍', address: editTravel.address || '', feature: editTravel.feature || '', desc: editTravel.desc || '', petInfo: editTravel.petInfo || '', isPartner: editTravel.isPartner ?? false, imageData: editTravel.imageData ?? null, mapUrl: editTravel.mapUrl || '', hours: editTravel.hours || '', price: editTravel.price || '' };
       editTravel._key ? await clientDB.put(STORES.PLACES, { ...base, id: editTravel._key }) : await clientDB.add(STORES.PLACES, base);
       setTravelModal(false); setEditTravel({});
       setTravelPlaces(await clientDB.getAll<TravelPlace>(STORES.PLACES));
@@ -887,6 +887,8 @@ export default function AdminPage() {
               <div style={fieldStyle}><label style={labelStyle}>특징 (한 줄)</label><input value={editTravel.feature || ''} onChange={(e) => setEditTravel((p) => ({ ...p, feature: e.target.value }))} placeholder="반려견 전용 해변 바로 앞" style={inputStyle} /></div>
               <div style={fieldStyle}><label style={labelStyle}>설명</label><textarea value={editTravel.desc || ''} onChange={(e) => setEditTravel((p) => ({ ...p, desc: e.target.value }))} rows={3} style={{ ...inputStyle, resize: 'vertical' }} /></div>
               <div style={fieldStyle}><label style={labelStyle}>반려동물 안내</label><input value={editTravel.petInfo || ''} onChange={(e) => setEditTravel((p) => ({ ...p, petInfo: e.target.value }))} placeholder="소형견 동반 가능 · 목줄 착용 필수" style={inputStyle} /></div>
+              <div style={fieldStyle}><label style={labelStyle}>운영시간</label><input value={editTravel.hours || ''} onChange={(e) => setEditTravel((p) => ({ ...p, hours: e.target.value }))} placeholder="09:00–18:00 (월요일 휴무)" style={inputStyle} /></div>
+              <div style={fieldStyle}><label style={labelStyle}>요금 안내</label><input value={editTravel.price || ''} onChange={(e) => setEditTravel((p) => ({ ...p, price: e.target.value }))} placeholder="성인 10,000원 / 반려동물 무료" style={inputStyle} /></div>
               <div style={fieldStyle}><label style={labelStyle}>지도 링크 URL</label><input value={editTravel.mapUrl || ''} onChange={(e) => setEditTravel((p) => ({ ...p, mapUrl: e.target.value }))} placeholder="https://naver.me/..." style={inputStyle} /></div>
               <div style={fieldStyle}>
                 <label style={{ display: 'flex', alignItems: 'center', gap: 8, cursor: 'pointer', fontSize: 13, fontWeight: 600, color: '#374151' }}>
