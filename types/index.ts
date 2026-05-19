@@ -76,6 +76,8 @@ export interface TravelPlace {
   isPartner: boolean;
   imageData: string | null;
   mapUrl: string;
+  hours?: string;
+  price?: string;
 }
 
 export interface PageHashtags {

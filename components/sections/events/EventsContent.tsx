@@ -18,12 +18,30 @@ const STATUS_LABELS: Record<EventStatus, string> = {
 
 const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
 
+function sortByDate<T extends { date?: string; order?: number }>(arr: T[]): T[] {
+  return [...arr].sort((a, b) => {
+    const da = (a.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    const db = (b.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    if (db !== da) return db > da ? 1 : -1;
+    return (b.order || 0) - (a.order || 0);
+  });
+}
+
 export default function EventsContent() {
   const { data: events, loading: evLoading } = useGWAADB<EventCard>(STORES.EVENT);
   const { data: archives, loading: archLoading } = useGWAADB<ArchiveEvent>(STORES.ARCHIVE);
   const [filter, setFilter] = useState<'all' | EventStatus>('all');
 
-  const filtered = filter === 'all' ? events : events.filter((e) => e.status === filter);
+  const filtered = sortByDate(
+    filter === 'all' ? events : events.filter((e) => e.status === filter)
+  );
+
+  const sortedArchives = [...archives].sort((a, b) => {
+    if (b.year !== a.year) return b.year - a.year;
+    const da = (a.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    const db = (b.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    return db > da ? 1 : -1;
+  });
 
   return (
     <>
@@ -62,10 +80,7 @@ export default function EventsContent() {
           </motion.div>
 
           {evLoading ? <div style={{ height: 300 }} /> : (
-            <motion.div
-              layout
-              style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}
-            >
+            <motion.div layout style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
               <AnimatePresence mode="popLayout">
                 {filtered.map((ev) => (
                   <motion.div
@@ -75,33 +90,27 @@ export default function EventsContent() {
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
                     whileHover={{ y: -5, boxShadow: '0 12px 36px rgba(0,0,0,0.1)' }}
-                    style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}
+                    style={{ borderRadius: 14, overflow: 'hidden' }}
                   >
-                    <div style={{
-                      height: 180,
-                      background: ev.imageData ? `url(${ev.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
-                      display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 12,
-                    }}>
-                      <Badge variant={ev.status} />
-                    </div>
-                    <div style={{ padding: '18px 20px 22px' }}>
-                      <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.1 }}>
-                        {ev.title}
-                      </h3>
-                      <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>📅 {ev.date}</p>
-                      <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>📍 {ev.loc}</p>
-                      <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.6, marginBottom: 16 }}>{ev.desc}</p>
-                      {ev.benefit && <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700, marginBottom: 14 }}>{ev.benefit}</p>}
-                      {ev.link ? (
-                        <Link href={ev.link} style={{ display: 'inline-flex', padding: '9px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 11, fontWeight: 700 }}>
-                          {ev.ctaText}
-                        </Link>
-                      ) : (
-                        <span style={{ display: 'inline-flex', padding: '9px 18px', borderRadius: 9999, background: '#f3f4f6', color: '#6b7280', fontSize: 11, fontWeight: 700 }}>
-                          {ev.ctaText}
-                        </span>
-                      )}
-                    </div>
+                    <Link href={`/events/${ev.id}`} style={{ textDecoration: 'none', display: 'block', background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}>
+                      {/* 1:1 Image */}
+                      <div style={{
+                        aspectRatio: '1/1',
+                        background: ev.imageData ? `url(${ev.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
+                        display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 12,
+                      }}>
+                        <Badge variant={ev.status} />
+                      </div>
+                      <div style={{ padding: '18px 20px 22px' }}>
+                        <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.1 }}>
+                          {ev.title}
+                        </h3>
+                        <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: MONO }}>📅 {ev.date}</p>
+                        <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 10, fontFamily: MONO }}>📍 {ev.loc}</p>
+                        <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.6, marginBottom: ev.benefit ? 12 : 0, overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any }}>{ev.desc}</p>
+                        {ev.benefit && <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700 }}>{ev.benefit}</p>}
+                      </div>
+                    </Link>
                   </motion.div>
                 ))}
               </AnimatePresence>
@@ -110,7 +119,7 @@ export default function EventsContent() {
         </motion.div>
       </section>
 
-      {/* Archive — Bento Grid */}
+      {/* Archive — List */}
       <section id="archive" style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
           <motion.div variants={fadeUp} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
@@ -130,7 +139,7 @@ export default function EventsContent() {
 
           {archLoading ? <div style={{ height: 400 }} /> : (
             <motion.div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-              {archives.map((arc, i) => {
+              {sortedArchives.map((arc, i) => {
                 const thumb = arc.imageData || (arc.images && arc.images[0]) || null;
                 const gradients = [
                   'linear-gradient(135deg,#e8f5e9,#a5d6a7)',
@@ -141,64 +150,33 @@ export default function EventsContent() {
                   'linear-gradient(135deg,#fff7ed,#fed7aa)',
                   'linear-gradient(135deg,#f0fdf4,#bbf7d0)',
                   'linear-gradient(135deg,#ecfeff,#a5f3fc)',
-                  'linear-gradient(135deg,#fdf4ff,#e879f9)',
                 ];
                 const imageCount = arc.images?.length ?? (arc.imageData ? 1 : 0) + (arc.imageData2 ? 1 : 0);
                 return (
-                  <motion.div
-                    key={arc.id ?? i}
-                    variants={fadeUp}
-                    custom={i * 0.04}
-                  >
-                    <Link
-                      href={`/events/archive/${arc.id}`}
-                      style={{ textDecoration: 'none', display: 'block' }}
-                    >
+                  <motion.div key={arc.id ?? i} variants={fadeUp} custom={i * 0.04}>
+                    <Link href={`/events/archive/${arc.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                       <motion.div
                         whileHover={{ backgroundColor: '#f0fdf4' }}
                         transition={{ duration: 0.15 }}
-                        style={{
-                          display: 'flex', alignItems: 'center', gap: 24,
-                          padding: '20px 0',
-                          borderBottom: '1px solid #e5e7eb',
-                          cursor: 'pointer',
-                        }}
+                        style={{ display: 'flex', alignItems: 'center', gap: 24, padding: '20px 0', borderBottom: '1px solid #e5e7eb', cursor: 'pointer' }}
                       >
-                        {/* Thumbnail */}
-                        <div style={{
-                          flexShrink: 0, width: 100, height: 76, borderRadius: 10, overflow: 'hidden',
-                          background: thumb ? `url(${thumb}) center/cover no-repeat` : gradients[i % gradients.length],
-                        }} />
-
-                        {/* Info */}
+                        <div style={{ flexShrink: 0, width: 100, height: 76, borderRadius: 10, overflow: 'hidden', background: thumb ? `url(${thumb}) center/cover no-repeat` : gradients[i % gradients.length] }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#fff', fontWeight: 700, letterSpacing: '0.08em', background: '#16a34a', padding: '2px 8px', borderRadius: 9999 }}>
-                              {arc.year}
-                            </span>
-                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', letterSpacing: '0.06em' }}>
-                              {arc.loc}
-                            </span>
+                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#fff', fontWeight: 700, letterSpacing: '0.08em', background: '#16a34a', padding: '2px 8px', borderRadius: 9999 }}>{arc.year}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', letterSpacing: '0.06em' }}>{arc.loc}</span>
                             {arc.feat && (
-                              <span style={{ fontFamily: MONO, fontSize: 9, color: '#92400e', background: '#fef3c7', border: '1px solid #fde68a', padding: '2px 7px', borderRadius: 9999, letterSpacing: '0.08em', fontWeight: 700 }}>
-                                FEATURED
-                              </span>
+                              <span style={{ fontFamily: MONO, fontSize: 9, color: '#92400e', background: '#fef3c7', border: '1px solid #fde68a', padding: '2px 7px', borderRadius: 9999, letterSpacing: '0.08em', fontWeight: 700 }}>FEATURED</span>
                             )}
                           </div>
-                          <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 22, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                            {arc.title}
-                          </h3>
+                          <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 22, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 6, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{arc.title}</h3>
                           <div style={{ display: 'flex', gap: 14, fontSize: 12, color: '#6b7280' }}>
                             {arc.date && <span>📅 {arc.date}</span>}
                             {arc.ppl && <span>👥 {arc.ppl}명</span>}
                             {imageCount > 0 && <span style={{ fontFamily: MONO, fontSize: 10, letterSpacing: '0.04em' }}>📷 {imageCount}장</span>}
                           </div>
                         </div>
-
-                        {/* Arrow */}
-                        <div style={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: '#9ca3af' }}>
-                          →
-                        </div>
+                        <div style={{ flexShrink: 0, width: 32, height: 32, borderRadius: '50%', background: '#f3f4f6', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 14, color: '#9ca3af' }}>→</div>
                       </motion.div>
                     </Link>
                   </motion.div>
@@ -208,7 +186,6 @@ export default function EventsContent() {
           )}
         </motion.div>
       </section>
-
     </>
   );
 }

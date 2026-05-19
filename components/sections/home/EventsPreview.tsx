@@ -9,8 +9,17 @@ import Badge from '@/components/ui/Badge';
 import Eyebrow from '@/components/ui/Eyebrow';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 
+const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
+
 export default function EventsPreview() {
   const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT);
+
+  const sorted = [...events].sort((a, b) => {
+    const da = (a.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    const db = (b.date || '').replace(/[^0-9]/g, '').padEnd(8, '0');
+    if (db !== da) return db > da ? 1 : -1;
+    return (b.order || 0) - (a.order || 0);
+  });
 
   return (
     <section style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
@@ -38,7 +47,7 @@ export default function EventsPreview() {
           <Link
             href="/events"
             style={{
-              fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 11,
+              fontFamily: MONO, fontSize: 11,
               color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0,
             }}
           >
@@ -47,75 +56,50 @@ export default function EventsPreview() {
         </div>
 
         {loading ? (
-          <div style={{ height: 280 }} />
+          <div style={{ height: 340 }} />
         ) : (
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
-            {events.slice(0, 3).map((ev, i) => (
+            {sorted.slice(0, 3).map((ev, i) => (
               <motion.div
                 key={ev.id ?? i}
                 variants={fadeUp}
                 custom={i * 0.06}
                 whileHover={{ y: -5, boxShadow: '0 12px 36px rgba(0,0,0,0.1)' }}
-                style={{
-                  background: '#fff',
-                  border: '1.5px solid #e5e7eb',
-                  borderRadius: 14,
-                  overflow: 'hidden',
-                  transition: 'border-color 0.25s',
-                }}
+                style={{ borderRadius: 14, overflow: 'hidden', transition: 'box-shadow 0.25s' }}
               >
-                <div style={{
-                  height: 180,
-                  background: ev.imageData
-                    ? `url(${ev.imageData}) center/cover no-repeat`
-                    : 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
-                  display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end',
-                  padding: 12,
-                }}>
-                  <Badge variant={ev.status as any} />
-                </div>
-                <div style={{ padding: '18px 20px 22px' }}>
-                  <h3 style={{
-                    fontFamily: "'Bebas Neue', cursive",
-                    fontSize: 20, letterSpacing: '0.02em',
-                    color: '#111', marginBottom: 8, lineHeight: 1.1,
+                <Link href={`/events/${ev.id}`} style={{ textDecoration: 'none', display: 'block', background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}>
+                  {/* 1:1 Image */}
+                  <div style={{
+                    aspectRatio: '1/1',
+                    background: ev.imageData
+                      ? `url(${ev.imageData}) center/cover no-repeat`
+                      : 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                    display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end',
+                    padding: 12,
                   }}>
-                    {ev.title}
-                  </h3>
-                  <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>
-                    📅 {ev.date}
-                  </p>
-                  <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace" }}>
-                    📍 {ev.loc}
-                  </p>
-                  {ev.benefit && (
-                    <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700, marginBottom: 12 }}>
-                      {ev.benefit}
-                    </p>
-                  )}
-                  {ev.link ? (
-                    <Link
-                      href={ev.link}
-                      style={{
-                        display: 'inline-flex', alignItems: 'center',
-                        padding: '9px 18px', borderRadius: 9999,
-                        background: '#16a34a', color: '#fff',
-                        fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
-                      }}
-                    >
-                      {ev.ctaText}
-                    </Link>
-                  ) : (
-                    <span style={{
-                      display: 'inline-flex', alignItems: 'center',
-                      padding: '9px 18px', borderRadius: 9999,
-                      background: '#f3f4f6', color: '#6b7280',
-                      fontSize: 11, fontWeight: 700, letterSpacing: '0.04em',
+                    <Badge variant={ev.status as any} />
+                  </div>
+                  <div style={{ padding: '18px 20px 22px' }}>
+                    <h3 style={{
+                      fontFamily: "'Bebas Neue', cursive",
+                      fontSize: 20, letterSpacing: '0.02em',
+                      color: '#111', marginBottom: 8, lineHeight: 1.1,
                     }}>
-                      {ev.ctaText}
-                    </span>
-                  )}
-                </div>
+                      {ev.title}
+                    </h3>
+                    <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: MONO }}>
+                      📅 {ev.date}
+                    </p>
+                    <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 10, fontFamily: MONO }}>
+                      📍 {ev.loc}
+                    </p>
+                    {ev.benefit && (
+                      <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700 }}>
+                        {ev.benefit}
+                      </p>
+                    )}
+                  </div>
+                </Link>
               </motion.div>
             ))}
           </div>

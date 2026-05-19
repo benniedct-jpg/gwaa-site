@@ -1,68 +1,84 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
-import { gwaaDB, StoreName } from '@/lib/db/gwaaDB';
 
-let _initDone = false;
-let _initPromise: Promise<void> | null = null;
+export type StoreName =
+  | 'heroImages'
+  | 'activityCards'
+  | 'eventCards'
+  | 'archiveEvents'
+  | 'travelPlaces'
+  | 'mateshipPartners'
+  | 'lookbookItems'
+  | 'galleryItems'
+  | 'pageHashtags';
 
-function ensureInit(): Promise<void> {
-  if (_initDone) return Promise.resolve();
-  if (!_initPromise) {
-    _initPromise = gwaaDB.initDefaults().then(() => { _initDone = true; });
-  }
-  return _initPromise;
+// Frontend store name → API table name
+const TABLE: Record<StoreName, string> = {
+  heroImages:        'hero_images',
+  activityCards:     'activity_cards',
+  eventCards:        'event_cards',
+  archiveEvents:     'archive_events',
+  travelPlaces:      'travel_places',
+  mateshipPartners:  'mateship_partners',
+  lookbookItems:     'lookbook_items',
+  galleryItems:      'gallery_items',
+  pageHashtags:      'page_hashtags',
+};
+
+function url(store: StoreName) {
+  return `/api/data/${TABLE[store]}`;
 }
 
-export function useGWAADB<T>(storeName: StoreName) {
-  const [data, setData] = useState<T[]>([]);
+export function useGWAADB<T>(store: StoreName) {
+  const [data, setData]       = useState<T[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<Error | null>(null);
+  const [error, setError]     = useState<Error | null>(null);
 
   const load = useCallback(async () => {
     try {
       setLoading(true);
-      await ensureInit();
-      const result = await gwaaDB.getAll<T>(storeName);
-      setData(result);
+      const res = await fetch(url(store));
+      if (!res.ok) throw new Error(await res.text());
+      setData(await res.json());
     } catch (e) {
       setError(e instanceof Error ? e : new Error(String(e)));
     } finally {
       setLoading(false);
     }
-  }, [storeName]);
+  }, [store]);
 
   useEffect(() => { load(); }, [load]);
 
   const put = useCallback(async (item: T) => {
-    await gwaaDB.put<T>(storeName, item);
+    const method = (item as any).id ? 'PUT' : 'POST';
+    await fetch(url(store), { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(item) });
     await load();
-  }, [storeName, load]);
+  }, [store, load]);
 
   const remove = useCallback(async (id: number | string) => {
-    await gwaaDB.remove(storeName, id);
+    await fetch(`${url(store)}?id=${id}`, { method: 'DELETE' });
     await load();
-  }, [storeName, load]);
+  }, [store, load]);
 
   return { data, loading, error, refresh: load, put, remove };
 }
 
-export function useGWAADBItem<T>(storeName: StoreName, id: number | string | null) {
-  const [data, setData] = useState<T | null>(null);
+export function useGWAADBItem<T>(store: StoreName, id: number | string | null) {
+  const [data, setData]       = useState<T | null>(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (id === null) { setLoading(false); return; }
     (async () => {
       try {
-        await ensureInit();
-        const result = await gwaaDB.get<T>(storeName, id);
-        setData(result ?? null);
+        const res = await fetch(`${url(store)}?id=${id}`);
+        setData(res.ok ? await res.json() : null);
       } finally {
         setLoading(false);
       }
     })();
-  }, [storeName, id]);
+  }, [store, id]);
 
   return { data, loading };
 }

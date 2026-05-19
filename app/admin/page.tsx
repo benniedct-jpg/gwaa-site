@@ -3,7 +3,20 @@
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
-import { gwaaDB, STORES } from '@/lib/db/gwaaDB';
+import { clientDB } from '@/lib/db/clientDB';
+
+// Store name constants (maps to API table names)
+const STORES = {
+  EVENT:    'eventCards',
+  ARCHIVE:  'archiveEvents',
+  MATESHIP: 'mateshipPartners',
+  ACTIVITY: 'activityCards',
+  LOOKBOOK: 'lookbookItems',
+  PLACES:   'travelPlaces',
+  HASHTAGS: 'pageHashtags',
+  HERO:     'heroImages',
+  GALLERY:  'galleryItems',
+} as const;
 import {
   EventCard, EventStatus, MateshipPartner, GalleryItem,
   ArchiveEvent, ActivityCard, LookbookItem, TravelPlace, PageHashtags,
@@ -114,25 +127,23 @@ export default function AdminPage() {
   const loadAll = async () => {
     try {
       setApps(JSON.parse(localStorage.getItem('gwaa_applications') || '[]'));
-      setEvents(await gwaaDB.getAll<EventCard>(STORES.EVENT));
-      setPartners(await gwaaDB.getAll<MateshipPartner>(STORES.MATESHIP));
-      setArchives(await gwaaDB.getAll<ArchiveEvent>(STORES.ARCHIVE));
-      setActivityCards(await gwaaDB.getAll<ActivityCard>(STORES.ACTIVITY));
-      setLookbookItems(await gwaaDB.getAll<LookbookItem>(STORES.LOOKBOOK));
-      setTravelPlaces(await gwaaDB.getAll<TravelPlace>(STORES.PLACES));
-      const hts = await gwaaDB.getAll<PageHashtags>(STORES.HASHTAGS);
+      setEvents(await clientDB.getAll<EventCard>(STORES.EVENT));
+      setPartners(await clientDB.getAll<MateshipPartner>(STORES.MATESHIP));
+      setArchives(await clientDB.getAll<ArchiveEvent>(STORES.ARCHIVE));
+      setActivityCards(await clientDB.getAll<ActivityCard>(STORES.ACTIVITY));
+      setLookbookItems(await clientDB.getAll<LookbookItem>(STORES.LOOKBOOK));
+      setTravelPlaces(await clientDB.getAll<TravelPlace>(STORES.PLACES));
+      const hts = await clientDB.getAll<PageHashtags>(STORES.HASHTAGS);
       setHashtags(hts);
       const draft: Record<string, string> = {};
       hts.forEach((h) => { draft[h.page] = h.tags.join(', '); });
       setHashtagDraft(draft);
-      const heroes: HeroImage[] = [];
-      for (let i = 1; i <= 3; i++) {
-        const h = await gwaaDB.get<HeroImage>(STORES.HERO, i);
-        heroes.push(h || { id: i });
-      }
-      setHeroImages(heroes);
-      setGalleryItems(await gwaaDB.getAll<GalleryItem>(STORES.GALLERY));
-    } catch { showToast('데이터 로딩 실패', true); }
+      const heroes = await clientDB.getAll<HeroImage>(STORES.HERO);
+      const heroMap: Record<number, HeroImage> = {};
+      heroes.forEach((h) => { heroMap[h.id!] = h; });
+      setHeroImages([1,2,3].map((i) => heroMap[i] || { id: i }));
+      setGalleryItems(await clientDB.getAll<GalleryItem>(STORES.GALLERY));
+    } catch (err) { console.error('로딩 오류:', err); showToast(`로딩 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
 
 
@@ -163,17 +174,17 @@ export default function AdminPage() {
   const saveEvent = async () => {
     if (!editEvent.title?.trim()) { showToast('행사명을 입력해 주세요', true); return; }
     try {
-      const data: EventCard = { id: editEvent._key, title: editEvent.title || '', date: editEvent.date || '', loc: editEvent.loc || '', desc: editEvent.desc || '', content: editEvent.content || '', status: (editEvent.status || 'upcoming') as EventStatus, link: editEvent.link || '', benefit: editEvent.benefit || '', ctaText: editEvent.ctaText || '신청하기 →', imageData: editEvent.imageData ?? null, images: editEvent.images || [], order: editEvent.order || Date.now() };
-      editEvent._key ? await gwaaDB.put(STORES.EVENT, data) : await gwaaDB.add(STORES.EVENT, data);
+      const base = { title: editEvent.title || '', date: editEvent.date || '', loc: editEvent.loc || '', desc: editEvent.desc || '', content: editEvent.content || '', status: (editEvent.status || 'upcoming') as EventStatus, link: editEvent.link || '', benefit: editEvent.benefit || '', ctaText: editEvent.ctaText || '신청하기 →', imageData: editEvent.imageData ?? null, images: editEvent.images || [], order: editEvent.order || Date.now() };
+      editEvent._key ? await clientDB.put(STORES.EVENT, { ...base, id: editEvent._key }) : await clientDB.add(STORES.EVENT, base);
       setEventModal(false); setEditEvent({});
-      setEvents(await gwaaDB.getAll<EventCard>(STORES.EVENT));
+      setEvents(await clientDB.getAll<EventCard>(STORES.EVENT));
       showToast('행사 저장 완료');
-    } catch { showToast('저장 실패', true); }
+    } catch (err) { console.error('행사 저장 오류:', err); showToast(`저장 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const deleteEvent = async (key: number) => {
     if (!confirm('이 행사를 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.EVENT, key);
-    setEvents(await gwaaDB.getAll<EventCard>(STORES.EVENT)); showToast('삭제 완료');
+    await clientDB.remove(STORES.EVENT, key);
+    setEvents(await clientDB.getAll<EventCard>(STORES.EVENT)); showToast('삭제 완료');
   };
 
   // ─── Archive CRUD ───
@@ -181,144 +192,144 @@ export default function AdminPage() {
     if (!editArchive.title?.trim()) { showToast('행사명을 입력해 주세요', true); return; }
     try {
       const imgs = editArchive.images || [];
-      const data: ArchiveEvent = { id: editArchive._key, order: editArchive.order || Date.now(), feat: editArchive.feat ?? false, year: Number(editArchive.year) || new Date().getFullYear(), title: editArchive.title || '', loc: editArchive.loc || '', ppl: editArchive.ppl || '', date: editArchive.date || '', place: editArchive.place || '', part: editArchive.part || '', organizer: editArchive.organizer || '', desc: editArchive.desc || '', imageData: imgs[0] ?? null, imageData2: imgs[1] ?? null, images: imgs };
-      editArchive._key ? await gwaaDB.put(STORES.ARCHIVE, data) : await gwaaDB.add(STORES.ARCHIVE, data);
+      const base = { order: editArchive.order || Date.now(), feat: editArchive.feat ?? false, year: Number(editArchive.year) || new Date().getFullYear(), title: editArchive.title || '', loc: editArchive.loc || '', ppl: editArchive.ppl || '', date: editArchive.date || '', place: editArchive.place || '', part: editArchive.part || '', organizer: editArchive.organizer || '', desc: editArchive.desc || '', imageData: imgs[0] ?? null, imageData2: imgs[1] ?? null, images: imgs };
+      editArchive._key ? await clientDB.put(STORES.ARCHIVE, { ...base, id: editArchive._key }) : await clientDB.add(STORES.ARCHIVE, base);
       setArchiveModal(false); setEditArchive({});
-      setArchives(await gwaaDB.getAll<ArchiveEvent>(STORES.ARCHIVE));
+      setArchives(await clientDB.getAll<ArchiveEvent>(STORES.ARCHIVE));
       showToast('아카이브 저장 완료');
-    } catch { showToast('저장 실패', true); }
+    } catch (err) { console.error('아카이브 저장 오류:', err); showToast(`저장 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const deleteArchive = async (key: number) => {
     if (!confirm('이 아카이브 행사를 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.ARCHIVE, key);
-    setArchives(await gwaaDB.getAll<ArchiveEvent>(STORES.ARCHIVE)); showToast('삭제 완료');
+    await clientDB.remove(STORES.ARCHIVE, key);
+    setArchives(await clientDB.getAll<ArchiveEvent>(STORES.ARCHIVE)); showToast('삭제 완료');
   };
 
   // ─── Partner CRUD ───
   const savePartner = async () => {
     if (!editPartner.name?.trim()) { showToast('업체명을 입력해 주세요', true); return; }
     try {
-      const data: MateshipPartner = { id: editPartner._key, name: editPartner.name || '', region: editPartner.region || '', type: editPartner.type || 'cafe', discount: editPartner.discount || '', icon: editPartner.icon || '🏢', gradient: editPartner.gradient || 'linear-gradient(135deg,#e8f5e9,#c8e6c9)', link: editPartner.link || '', imageData: editPartner.imageData ?? null, order: editPartner.order || Date.now() };
-      editPartner._key ? await gwaaDB.put(STORES.MATESHIP, data) : await gwaaDB.add(STORES.MATESHIP, data);
+      const base = { name: editPartner.name || '', region: editPartner.region || '', type: editPartner.type || 'cafe', discount: editPartner.discount || '', icon: editPartner.icon || '🏢', gradient: editPartner.gradient || 'linear-gradient(135deg,#e8f5e9,#c8e6c9)', link: editPartner.link || '', imageData: editPartner.imageData ?? null, order: editPartner.order || Date.now() };
+      editPartner._key ? await clientDB.put(STORES.MATESHIP, { ...base, id: editPartner._key }) : await clientDB.add(STORES.MATESHIP, base);
       setPartnerModal(false); setEditPartner({});
-      setPartners(await gwaaDB.getAll<MateshipPartner>(STORES.MATESHIP));
+      setPartners(await clientDB.getAll<MateshipPartner>(STORES.MATESHIP));
       showToast('업체 저장 완료');
-    } catch { showToast('저장 실패', true); }
+    } catch (err) { console.error('업체 저장 오류:', err); showToast(`저장 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const deletePartner = async (key: number) => {
     if (!confirm('이 업체를 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.MATESHIP, key);
-    setPartners(await gwaaDB.getAll<MateshipPartner>(STORES.MATESHIP)); showToast('삭제 완료');
+    await clientDB.remove(STORES.MATESHIP, key);
+    setPartners(await clientDB.getAll<MateshipPartner>(STORES.MATESHIP)); showToast('삭제 완료');
   };
 
   // ─── Activity Card CRUD ───
   const saveActivity = async () => {
     if (!editActivity.title?.trim()) { showToast('카드 제목을 입력해 주세요', true); return; }
     try {
-      const data: ActivityCard = { id: editActivity._key, order: editActivity.order || Date.now(), imageData: editActivity.imageData ?? null, tag: editActivity.tag || '', tagColor: (editActivity.tagColor || 'green') as ActivityCard['tagColor'], icon: editActivity.icon || '🐾', title: editActivity.title || '', desc: editActivity.desc || '', link: editActivity.link || '', linkText: editActivity.linkText || '자세히 보기' };
-      editActivity._key ? await gwaaDB.put(STORES.ACTIVITY, data) : await gwaaDB.add(STORES.ACTIVITY, data);
+      const base = { order: editActivity.order || Date.now(), imageData: editActivity.imageData ?? null, tag: editActivity.tag || '', tagColor: (editActivity.tagColor || 'green') as ActivityCard['tagColor'], icon: editActivity.icon || '🐾', title: editActivity.title || '', desc: editActivity.desc || '', link: editActivity.link || '', linkText: editActivity.linkText || '자세히 보기' };
+      editActivity._key ? await clientDB.put(STORES.ACTIVITY, { ...base, id: editActivity._key }) : await clientDB.add(STORES.ACTIVITY, base);
       setActivityModal(false); setEditActivity({});
-      setActivityCards(await gwaaDB.getAll<ActivityCard>(STORES.ACTIVITY));
+      setActivityCards(await clientDB.getAll<ActivityCard>(STORES.ACTIVITY));
       showToast('활동카드 저장 완료');
-    } catch { showToast('저장 실패', true); }
+    } catch (err) { console.error('활동카드 저장 오류:', err); showToast(`저장 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const deleteActivity = async (key: number) => {
     if (!confirm('이 활동카드를 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.ACTIVITY, key);
-    setActivityCards(await gwaaDB.getAll<ActivityCard>(STORES.ACTIVITY)); showToast('삭제 완료');
+    await clientDB.remove(STORES.ACTIVITY, key);
+    setActivityCards(await clientDB.getAll<ActivityCard>(STORES.ACTIVITY)); showToast('삭제 완료');
   };
 
   // ─── Lookbook CRUD ───
   const saveLookbook = async (item: LookbookItem) => {
-    await gwaaDB.put(STORES.LOOKBOOK, item);
-    setLookbookItems(await gwaaDB.getAll<LookbookItem>(STORES.LOOKBOOK));
+    await clientDB.put(STORES.LOOKBOOK, item);
+    setLookbookItems(await clientDB.getAll<LookbookItem>(STORES.LOOKBOOK));
     showToast('룩북 저장 완료');
   };
   const deleteLookbook = async (key: number) => {
     if (!confirm('이 룩북 항목을 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.LOOKBOOK, key);
-    setLookbookItems(await gwaaDB.getAll<LookbookItem>(STORES.LOOKBOOK)); showToast('삭제 완료');
+    await clientDB.remove(STORES.LOOKBOOK, key);
+    setLookbookItems(await clientDB.getAll<LookbookItem>(STORES.LOOKBOOK)); showToast('삭제 완료');
   };
 
   // ─── Travel CRUD ───
   const saveTravel = async () => {
     if (!editTravel.name?.trim()) { showToast('장소명을 입력해 주세요', true); return; }
     try {
-      const data: TravelPlace = { id: editTravel._key, order: editTravel.order || Date.now(), region: editTravel.region || '', type: editTravel.type || 'cafe', typeLabel: editTravel.typeLabel || '', name: editTravel.name || '', icon: editTravel.icon || '📍', address: editTravel.address || '', feature: editTravel.feature || '', desc: editTravel.desc || '', petInfo: editTravel.petInfo || '', isPartner: editTravel.isPartner ?? false, imageData: editTravel.imageData ?? null, mapUrl: editTravel.mapUrl || '' };
-      editTravel._key ? await gwaaDB.put(STORES.PLACES, data) : await gwaaDB.add(STORES.PLACES, data);
+      const base = { order: editTravel.order || Date.now(), region: editTravel.region || '', type: editTravel.type || 'cafe', typeLabel: editTravel.typeLabel || '', name: editTravel.name || '', icon: editTravel.icon || '📍', address: editTravel.address || '', feature: editTravel.feature || '', desc: editTravel.desc || '', petInfo: editTravel.petInfo || '', isPartner: editTravel.isPartner ?? false, imageData: editTravel.imageData ?? null, mapUrl: editTravel.mapUrl || '' };
+      editTravel._key ? await clientDB.put(STORES.PLACES, { ...base, id: editTravel._key }) : await clientDB.add(STORES.PLACES, base);
       setTravelModal(false); setEditTravel({});
-      setTravelPlaces(await gwaaDB.getAll<TravelPlace>(STORES.PLACES));
+      setTravelPlaces(await clientDB.getAll<TravelPlace>(STORES.PLACES));
       showToast('여행지 저장 완료');
-    } catch { showToast('저장 실패', true); }
+    } catch (err) { console.error('여행지 저장 오류:', err); showToast(`저장 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const deleteTravel = async (key: number) => {
     if (!confirm('이 여행지를 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.PLACES, key);
-    setTravelPlaces(await gwaaDB.getAll<TravelPlace>(STORES.PLACES)); showToast('삭제 완료');
+    await clientDB.remove(STORES.PLACES, key);
+    setTravelPlaces(await clientDB.getAll<TravelPlace>(STORES.PLACES)); showToast('삭제 완료');
   };
 
   // ─── Hero images ───
   const pickHeroImage = async (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; if (!file) return;
     try {
-      const b64 = await gwaaDB.toBase64(file);
-      await gwaaDB.put(STORES.HERO, { id, imageData: b64 });
+      const b64 = await clientDB.toBase64(file);
+      await clientDB.put(STORES.HERO, { id, imageData: b64 });
       setHeroImages((prev) => prev.map((h) => h.id === id ? { ...h, imageData: b64 } : h));
       showToast(`슬라이드 ${id} 업로드 완료`);
-    } catch { showToast('업로드 실패', true); }
+    } catch (err) { console.error('히어로 업로드 오류:', err); showToast(`업로드 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const removeHeroImage = async (id: number) => {
-    await gwaaDB.put(STORES.HERO, { id });
+    await clientDB.put(STORES.HERO, { id });
     setHeroImages((prev) => prev.map((h) => h.id === id ? { id } : h));
     showToast(`슬라이드 ${id} 삭제`);
   };
 
   // ─── Gallery ───
   const addGalleryItem = async () => {
-    await gwaaDB.add<GalleryItem>(STORES.GALLERY, { order: Date.now(), imageData: null, caption: '새 갤러리 사진', active: true });
-    setGalleryItems(await gwaaDB.getAll<GalleryItem>(STORES.GALLERY));
+    await clientDB.add<GalleryItem>(STORES.GALLERY, { order: Date.now(), imageData: null, caption: '새 갤러리 사진', active: true });
+    setGalleryItems(await clientDB.getAll<GalleryItem>(STORES.GALLERY));
     showToast('갤러리 항목 추가됨');
   };
   const pickGalleryImage = async (id: number, e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]; if (!file) return;
-    const { ok, error } = gwaaDB.validateImage(file);
+    const { ok, error } = clientDB.validateImage(file);
     if (!ok) { showToast(error!, true); return; }
     try {
-      const b64 = await gwaaDB.toBase64(file);
+      const b64 = await clientDB.toBase64(file);
       const existing = galleryItems.find((g) => g.id === id);
       if (!existing) return;
-      await gwaaDB.put<GalleryItem>(STORES.GALLERY, { ...existing, imageData: b64 });
-      setGalleryItems(await gwaaDB.getAll<GalleryItem>(STORES.GALLERY));
+      await clientDB.put<GalleryItem>(STORES.GALLERY, { ...existing, imageData: b64 });
+      setGalleryItems(await clientDB.getAll<GalleryItem>(STORES.GALLERY));
       showToast('갤러리 이미지 업로드 완료');
-    } catch { showToast('업로드 실패', true); }
+    } catch (err) { console.error('갤러리 업로드 오류:', err); showToast(`업로드 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
   const updateGalleryCaption = async (id: number, caption: string) => {
     const existing = galleryItems.find((g) => g.id === id); if (!existing) return;
-    await gwaaDB.put<GalleryItem>(STORES.GALLERY, { ...existing, caption });
+    await clientDB.put<GalleryItem>(STORES.GALLERY, { ...existing, caption });
     setGalleryItems((prev) => prev.map((g) => g.id === id ? { ...g, caption } : g));
   };
   const toggleGalleryActive = async (id: number) => {
     const existing = galleryItems.find((g) => g.id === id); if (!existing) return;
-    await gwaaDB.put<GalleryItem>(STORES.GALLERY, { ...existing, active: !existing.active });
+    await clientDB.put<GalleryItem>(STORES.GALLERY, { ...existing, active: !existing.active });
     setGalleryItems((prev) => prev.map((g) => g.id === id ? { ...g, active: !g.active } : g));
   };
   const removeGalleryImage = async (id: number) => {
     const existing = galleryItems.find((g) => g.id === id); if (!existing) return;
-    await gwaaDB.put<GalleryItem>(STORES.GALLERY, { ...existing, imageData: null });
+    await clientDB.put<GalleryItem>(STORES.GALLERY, { ...existing, imageData: null });
     setGalleryItems((prev) => prev.map((g) => g.id === id ? { ...g, imageData: null } : g));
     showToast('이미지 삭제');
   };
   const deleteGalleryItem = async (id: number) => {
     if (!confirm('이 갤러리 항목을 삭제하시겠습니까?')) return;
-    await gwaaDB.remove(STORES.GALLERY, id);
-    setGalleryItems(await gwaaDB.getAll<GalleryItem>(STORES.GALLERY)); showToast('삭제 완료');
+    await clientDB.remove(STORES.GALLERY, id);
+    setGalleryItems(await clientDB.getAll<GalleryItem>(STORES.GALLERY)); showToast('삭제 완료');
   };
 
   // ─── Hashtags ───
   const saveHashtag = async (page: PageHashtags['page']) => {
     const raw = hashtagDraft[page] || '';
     const tags = raw.split(',').map((t) => t.trim()).filter(Boolean);
-    await gwaaDB.put<PageHashtags>(STORES.HASHTAGS, { page, tags });
+    await clientDB.put<PageHashtags>(STORES.HASHTAGS, { page, tags });
     showToast(`${page} 해시태그 저장 완료`);
   };
 
@@ -395,13 +406,14 @@ export default function AdminPage() {
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
               {events.map((ev) => (
                 <div key={ev.id} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
-                  {ev.imageData && <div style={{ height: 100, background: `url(${ev.imageData}) center/cover` }} />}
+                  <div style={{ aspectRatio: '1/1', background: ev.imageData ? `url(${ev.imageData}) center/cover` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' }} />
                   <div style={{ padding: '16px 18px' }}>
                     <div style={{ fontSize: 14, fontWeight: 700, color: '#111', marginBottom: 4 }}>{ev.title}</div>
                     <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 10 }}>{ev.date} · {ev.loc}</div>
-                    <div style={{ display: 'flex', gap: 6 }}>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
                       <button onClick={() => { setEditEvent({ ...ev, _key: ev.id }); setEventModal(true); }} style={btnEdit}>수정</button>
                       <button onClick={() => deleteEvent(ev.id!)} style={btnDel}>삭제</button>
+                      <a href={`/events/${ev.id}`} target="_blank" rel="noopener noreferrer" style={{ ...btnEdit, textDecoration: 'none', display: 'inline-flex', alignItems: 'center' }}>미리보기</a>
                     </div>
                   </div>
                 </div>
@@ -577,7 +589,7 @@ export default function AdminPage() {
                       <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 8, wordBreak: 'break-all' }}>{lb.link}</div>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         <label style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', border: '1.5px solid #16a34a', background: '#f0fdf4', color: '#16a34a' }}>
-                          이미지 <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await gwaaDB.toBase64(f); saveLookbook({ ...lb, imageData: b64 }); }} />
+                          이미지 <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); saveLookbook({ ...lb, imageData: b64 }); }} />
                         </label>
                         <button onClick={async () => { const newLabel = prompt('레이블 입력:', lb.label); if (newLabel !== null) saveLookbook({ ...lb, label: newLabel }); }} style={btnEdit}>레이블</button>
                         <button onClick={async () => { const newLink = prompt('링크 URL 입력:', lb.link); if (newLink !== null) saveLookbook({ ...lb, link: newLink }); }} style={btnEdit}>링크</button>
@@ -669,7 +681,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setEventModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editEvent._key ? '행사 수정' : '행사 추가'}</h2>
-              <ImageUploadBox imageData={editEvent.imageData} placeholder="🎪" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; setEditEvent((p) => ({ ...p, imageData: undefined })); const b64 = await gwaaDB.toBase64(f); setEditEvent((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditEvent((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editEvent.imageData} placeholder="🎪" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; setEditEvent((p) => ({ ...p, imageData: undefined })); const b64 = await clientDB.toBase64(f); setEditEvent((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditEvent((p) => ({ ...p, imageData: undefined }))} />
               <div style={fieldStyle}><label style={labelStyle}>행사명 *</label><input value={editEvent.title || ''} onChange={(e) => setEditEvent((p) => ({ ...p, title: e.target.value }))} placeholder="2026 반려동물 축제" style={inputStyle} /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>날짜</label><input value={editEvent.date || ''} onChange={(e) => setEditEvent((p) => ({ ...p, date: e.target.value }))} placeholder="2026.05.01" style={inputStyle} /></div>
@@ -753,7 +765,12 @@ export default function AdminPage() {
                           const files = Array.from(e.target.files || []);
                           const current = editArchive.images || [];
                           const toProcess = files.slice(0, 20 - current.length);
-                          const b64s = await Promise.all(toProcess.map((f) => gwaaDB.toBase64(f)));
+                          const b64s: string[] = [];
+                          for (const f of toProcess) {
+                            const { ok, error } = clientDB.validateImage(f);
+                            if (!ok) { showToast(error!, true); e.target.value = ''; return; }
+                            b64s.push(await clientDB.toBase64(f));
+                          }
                           setEditArchive((p) => ({ ...p, images: [...(p.images || []), ...b64s] }));
                           e.target.value = '';
                         }}
@@ -796,7 +813,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setPartnerModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editPartner._key ? '업체 수정' : '업체 추가'}</h2>
-              <ImageUploadBox imageData={editPartner.imageData} placeholder="🏢" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await gwaaDB.toBase64(f); setEditPartner((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditPartner((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editPartner.imageData} placeholder="🏢" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditPartner((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditPartner((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>업체명 *</label><input value={editPartner.name || ''} onChange={(e) => setEditPartner((p) => ({ ...p, name: e.target.value }))} placeholder="퍼피파크 애견카페" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>지역</label><input value={editPartner.region || ''} onChange={(e) => setEditPartner((p) => ({ ...p, region: e.target.value }))} placeholder="원주" style={inputStyle} /></div>
@@ -823,7 +840,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setActivityModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editActivity._key ? '활동카드 수정' : '활동카드 추가'}</h2>
-              <ImageUploadBox imageData={editActivity.imageData} placeholder="🐾" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await gwaaDB.toBase64(f); setEditActivity((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditActivity((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editActivity.imageData} placeholder="🐾" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditActivity((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditActivity((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>아이콘 이모지</label><input value={editActivity.icon || ''} onChange={(e) => setEditActivity((p) => ({ ...p, icon: e.target.value }))} placeholder="🎪" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>태그</label><input value={editActivity.tag || ''} onChange={(e) => setEditActivity((p) => ({ ...p, tag: e.target.value }))} placeholder="반려동물 행사" style={inputStyle} /></div>
@@ -853,7 +870,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setTravelModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editTravel._key ? '여행지 수정' : '여행지 추가'}</h2>
-              <ImageUploadBox imageData={editTravel.imageData} placeholder="📍" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await gwaaDB.toBase64(f); setEditTravel((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditTravel((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editTravel.imageData} placeholder="📍" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditTravel((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditTravel((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>장소명 *</label><input value={editTravel.name || ''} onChange={(e) => setEditTravel((p) => ({ ...p, name: e.target.value }))} placeholder="솔비치 호텔" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>지역</label><input value={editTravel.region || ''} onChange={(e) => setEditTravel((p) => ({ ...p, region: e.target.value }))} placeholder="양양" style={inputStyle} /></div>
