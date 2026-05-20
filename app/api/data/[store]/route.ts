@@ -94,9 +94,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stor
   }
 }
 
+const NO_DB_MSG = 'Supabase 미설정 — Vercel 환경변수에 NEXT_PUBLIC_SUPABASE_URL과 SUPABASE_SERVICE_ROLE_KEY를 추가해 주세요.';
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
+  if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });
   try {
     const body = await req.json();
     const row = toDb(body);
@@ -110,6 +113,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sto
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
+  if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });
   try {
     const body = await req.json();
     const row = toDb(body);
@@ -123,6 +127,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ stor
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
+  if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });
   try {
     const id = req.nextUrl.searchParams.get('id')!;
     await dbDelete(store, isNaN(Number(id)) ? id : Number(id));
