@@ -11,6 +11,7 @@ import Eyebrow from '@/components/ui/Eyebrow';
 import CountUp from '@/components/shared/CountUp';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { PhotoGallery } from '@/components/ui/gallery';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const STATUS_LABELS: Record<EventStatus, string> = {
   live: 'LIVE', soon: 'SOON', upcoming: 'UPCOMING', ended: 'ENDED',
@@ -31,6 +32,9 @@ export default function EventsContent() {
   const { data: events, loading: evLoading } = useGWAADB<EventCard>(STORES.EVENT);
   const { data: archives, loading: archLoading } = useGWAADB<ArchiveEvent>(STORES.ARCHIVE);
   const [filter, setFilter] = useState<'all' | EventStatus>('all');
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
+  const py = isMobile ? '56px' : '88px';
 
   const filtered = sortByDate(
     filter === 'all' ? events : events.filter((e) => e.status === filter)
@@ -49,7 +53,7 @@ export default function EventsContent() {
       <PhotoGallery animationDelay={0.3} />
 
       {/* Upcoming Events */}
-      <section id="upcoming" style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+      <section id="upcoming" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
           <motion.div variants={fadeUp} style={{ marginBottom: 32 }}>
             <Eyebrow text="UPCOMING EVENTS" />
@@ -80,7 +84,7 @@ export default function EventsContent() {
           </motion.div>
 
           {evLoading ? <div style={{ height: 300 }} /> : (
-            <motion.div layout style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20 }}>
+            <motion.div layout style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3, 1fr)', gap: isMobile ? 14 : 20 }}>
               <AnimatePresence mode="popLayout">
                 {filtered.map((ev) => (
                   <motion.div
@@ -89,19 +93,19 @@ export default function EventsContent() {
                     initial={{ opacity: 0, scale: 0.92 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.92 }}
-                    whileHover={{ y: -5, boxShadow: '0 12px 36px rgba(0,0,0,0.1)' }}
+                    whileHover={!isMobile ? { y: -5, boxShadow: '0 12px 36px rgba(0,0,0,0.1)' } : undefined}
                     style={{ borderRadius: 14, overflow: 'hidden' }}
                   >
                     <Link href={`/events/${ev.id}`} style={{ textDecoration: 'none', display: 'block', background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}>
-                      {/* 1:1 Image */}
+                      {/* Image */}
                       <div style={{
-                        aspectRatio: '1/1',
+                        aspectRatio: isMobile ? '16/9' : '1/1',
                         background: ev.imageData ? `url(${ev.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
                         display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end', padding: 12,
                       }}>
                         <Badge variant={ev.status} />
                       </div>
-                      <div style={{ padding: '18px 20px 22px' }}>
+                      <div style={{ padding: isMobile ? '14px 16px 18px' : '18px 20px 22px' }}>
                         <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 8, lineHeight: 1.1 }}>
                           {ev.title}
                         </h3>
@@ -120,9 +124,9 @@ export default function EventsContent() {
       </section>
 
       {/* Archive — List */}
-      <section id="archive" style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+      <section id="archive" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
-          <motion.div variants={fadeUp} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
+          <motion.div variants={fadeUp} style={{ display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', alignItems: isMobile ? 'flex-start' : 'flex-end', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
             <div>
               <Eyebrow text="EVENT ARCHIVE" />
               <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 'clamp(26px, 5.5vw, 52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 0 }}>
@@ -156,11 +160,11 @@ export default function EventsContent() {
                   <motion.div key={arc.id ?? i} variants={fadeUp} custom={i * 0.04}>
                     <Link href={`/events/archive/${arc.id}`} style={{ textDecoration: 'none', display: 'block' }}>
                       <motion.div
-                        whileHover={{ backgroundColor: '#f0fdf4' }}
+                        whileHover={!isMobile ? { backgroundColor: '#f0fdf4' } : undefined}
                         transition={{ duration: 0.15 }}
-                        style={{ display: 'flex', alignItems: 'center', gap: 24, padding: '20px 0', borderBottom: '1px solid #e5e7eb', cursor: 'pointer' }}
+                        style={{ display: 'flex', alignItems: 'center', gap: isMobile ? 12 : 24, padding: '16px 0', borderBottom: '1px solid #e5e7eb', cursor: 'pointer' }}
                       >
-                        <div style={{ flexShrink: 0, width: 100, height: 76, borderRadius: 10, overflow: 'hidden', background: thumb ? `url(${thumb}) center/cover no-repeat` : gradients[i % gradients.length] }} />
+                        <div style={{ flexShrink: 0, width: isMobile ? 72 : 100, height: isMobile ? 56 : 76, borderRadius: 10, overflow: 'hidden', background: thumb ? `url(${thumb}) center/cover no-repeat` : gradients[i % gradients.length] }} />
                         <div style={{ flex: 1, minWidth: 0 }}>
                           <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' }}>
                             <span style={{ fontFamily: MONO, fontSize: 10, color: '#fff', fontWeight: 700, letterSpacing: '0.08em', background: '#16a34a', padding: '2px 8px', borderRadius: 9999 }}>{arc.year}</span>

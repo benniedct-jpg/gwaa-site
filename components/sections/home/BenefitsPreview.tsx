@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { motion } from 'framer-motion';
 import Eyebrow from '@/components/ui/Eyebrow';
 import { staggerContainer, fadeUp } from '@/lib/animations';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const BENEFITS = [
   { icon: '🏨', title: '숙박 할인', desc: '강원도 파트너 호텔·리조트·캠핑장에서 회원 전용 특가 및 우선 예약 혜택을 누리세요.' },
@@ -13,47 +14,65 @@ const BENEFITS = [
 ];
 
 export default function BenefitsPreview() {
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
+
   return (
-    <section style={{ padding: '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+    <section style={{ padding: `${isMobile ? '56px' : '88px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
       <motion.div
         variants={staggerContainer}
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: '-40px' }}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 36 }}>
+        <div style={{
+          display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
+          justifyContent: 'space-between',
+          alignItems: isMobile ? 'flex-start' : 'flex-end',
+          marginBottom: 28,
+          gap: 10,
+        }}>
           <motion.div variants={fadeUp}>
             <Eyebrow text="MATESHIP BENEFITS" />
             <h2 style={{
               fontFamily: "'Bebas Neue', cursive",
-              fontSize: 'clamp(26px, 5.5vw, 52px)',
+              fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6,
             }}>
               메이트쉽 혜택 미리보기
             </h2>
           </motion.div>
-          <Link href="/mateship#benefits" style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 11, color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0 }}>
+          <Link href="/mateship#benefits" style={{
+            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+            fontSize: 11, color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0,
+            whiteSpace: 'nowrap',
+          }}>
             전체 혜택 보기 →
           </Link>
         </div>
 
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16 }}>
+        <div style={{
+          display: 'grid',
+          gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)',
+          gap: isMobile ? 12 : 16,
+        }}>
           {BENEFITS.map((b, i) => (
             <motion.div
               key={b.title}
               variants={fadeUp}
               custom={i * 0.06}
-              whileHover={{ y: -4, boxShadow: '0 8px 32px rgba(0,0,0,0.08)' }}
+              whileHover={!isMobile ? { y: -4, boxShadow: '0 8px 32px rgba(0,0,0,0.08)' } : undefined}
               style={{
                 background: '#f8fafb', border: '1.5px solid #e5e7eb',
-                borderRadius: 14, padding: '24px 26px',
+                borderRadius: 14, padding: isMobile ? '18px 20px' : '24px 26px',
                 transition: 'border-color 0.25s',
               }}
             >
-              <div style={{ fontSize: 32, marginBottom: 14 }}>{b.icon}</div>
+              <div style={{ fontSize: 28, marginBottom: 10 }}>{b.icon}</div>
               <h3 style={{
-                fontFamily: "'Bebas Neue', cursive", fontSize: 22,
-                color: '#111', letterSpacing: '0.02em', marginBottom: 8,
+                fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 18 : 22,
+                color: '#111', letterSpacing: '0.02em', marginBottom: 6,
               }}>
                 {b.title}
               </h3>

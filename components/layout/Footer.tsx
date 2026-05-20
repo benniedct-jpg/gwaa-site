@@ -4,6 +4,7 @@ import { useState } from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Input } from '@/components/ui/Input';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const NAV_COLS = [
   {
@@ -29,6 +30,8 @@ const NAV_COLS = [
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subbed, setSubbed] = useState(false);
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
 
   const handleSub = (e: React.FormEvent) => {
     e.preventDefault();
@@ -45,7 +48,13 @@ export default function Footer() {
   return (
     <footer style={{ background: '#f8fafb', borderTop: '1px solid #e5e7eb' }} role="contentinfo">
       {/* Main grid */}
-      <div style={{ padding: '56px 60px 40px', display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1.4fr', gap: 48, borderBottom: '1px solid #e5e7eb' }}>
+      <div style={{
+        padding: `${isMobile ? '40px' : '56px'} ${px} ${isMobile ? '32px' : '40px'}`,
+        display: 'grid',
+        gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr 1fr 1.4fr',
+        gap: isMobile ? 32 : 48,
+        borderBottom: '1px solid #e5e7eb',
+      }}>
 
         {/* Brand */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
@@ -66,8 +75,7 @@ export default function Footer() {
               style={{
                 width: 36, height: 36, borderRadius: '50%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: '#fff',
-                border: '1px solid #e5e7eb',
+                background: '#fff', border: '1px solid #e5e7eb',
                 fontSize: 13, fontWeight: 700, color: '#6b7280',
                 fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
                 textDecoration: 'none',
@@ -82,10 +90,8 @@ export default function Footer() {
               style={{
                 width: 36, height: 36, borderRadius: '50%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                background: '#fff',
-                border: '1px solid #e5e7eb',
-                fontSize: 13, color: '#6b7280',
-                textDecoration: 'none',
+                background: '#fff', border: '1px solid #e5e7eb',
+                fontSize: 13, color: '#6b7280', textDecoration: 'none',
               }}
               aria-label="전화"
             >
@@ -94,26 +100,40 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Nav cols */}
-        {NAV_COLS.map((col) => (
-          <div key={col.heading}>
-            <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 16, fontWeight: 700 }}>
-              {col.heading.toUpperCase()}
-            </h4>
-            <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-              {col.links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }}
-                  className="hover:text-gray-700"
-                >
-                  {l.label}
-                </Link>
-              ))}
-            </nav>
+        {/* Nav cols — on mobile, show as 2-col row */}
+        {isMobile ? (
+          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
+            {NAV_COLS.map((col) => (
+              <div key={col.heading}>
+                <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 14, fontWeight: 700 }}>
+                  {col.heading.toUpperCase()}
+                </h4>
+                <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                  {col.links.map((l) => (
+                    <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'none' }}>
+                      {l.label}
+                    </Link>
+                  ))}
+                </nav>
+              </div>
+            ))}
           </div>
-        ))}
+        ) : (
+          NAV_COLS.map((col) => (
+            <div key={col.heading}>
+              <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 16, fontWeight: 700 }}>
+                {col.heading.toUpperCase()}
+              </h4>
+              <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+                {col.links.map((l) => (
+                  <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }} className="hover:text-gray-700">
+                    {l.label}
+                  </Link>
+                ))}
+              </nav>
+            </div>
+          ))
+        )}
 
         {/* Newsletter */}
         <div>
@@ -130,12 +150,7 @@ export default function Footer() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                style={{
-                  padding: '12px 16px', borderRadius: 10,
-                  background: '#f0fdf4',
-                  border: '1px solid #bbf7d0',
-                  fontSize: 13, color: '#16a34a', fontWeight: 600,
-                }}
+                style={{ padding: '12px 16px', borderRadius: 10, background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: 13, color: '#16a34a', fontWeight: 600 }}
               >
                 ✓ 구독 완료! 감사합니다 🐾
               </motion.div>
@@ -147,12 +162,7 @@ export default function Footer() {
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="이메일 주소 입력"
                   required
-                  style={{
-                    background: '#fff',
-                    border: '1px solid #e5e7eb',
-                    color: '#111',
-                    borderRadius: 10,
-                  }}
+                  style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', borderRadius: 10 }}
                 />
                 <motion.button
                   type="submit"
@@ -175,22 +185,24 @@ export default function Footer() {
       </div>
 
       {/* Bottom bar */}
-      <div style={{ padding: '20px 60px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 8 }}>
-        <p style={{ fontSize: 11, color: '#9ca3af' }}>
-          대표 이지영 · 033-813-0333 · ganimal1@naver.com &nbsp;·&nbsp; © 2026 사단법인 강원도반려동물협회 All rights reserved.
+      <div style={{
+        padding: `16px ${px}`,
+        display: 'flex',
+        flexDirection: isMobile ? 'column' : 'row',
+        justifyContent: 'space-between',
+        alignItems: isMobile ? 'flex-start' : 'center',
+        gap: 8,
+      }}>
+        <p style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.7 }}>
+          대표 이지영 · 033-813-0333 · ganimal1@naver.com{isMobile ? <br /> : ' · '}© 2026 사단법인 강원도반려동물협회 All rights reserved.
         </p>
-        <div style={{ display: 'flex', gap: 20 }}>
+        <div style={{ display: 'flex', gap: 16 }}>
           {[
             { label: '카카오채널', href: 'https://pf.kakao.com/_wipZX' },
             { label: '교육 신청', href: '/education' },
             { label: '메이트쉽', href: '/mateship' },
           ].map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }}
-              className="hover:text-gray-600"
-            >
+            <Link key={l.href} href={l.href} style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }} className="hover:text-gray-600">
               {l.label}
             </Link>
           ))}
