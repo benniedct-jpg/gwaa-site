@@ -22,7 +22,19 @@ export default function SeoTags({ page }: SeoTagsProps) {
   if (!tags.length) return null;
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 28 }}>
+    <>
+    <style>{`.gwaa-tags::-webkit-scrollbar{display:none}`}</style>
+    <div className="gwaa-tags" style={{
+      display: 'flex',
+      flexWrap: 'nowrap',
+      overflowX: 'auto',
+      gap: 8,
+      marginTop: 28,
+      paddingBottom: 4,
+      /* hide scrollbar */
+      scrollbarWidth: 'none',
+      msOverflowStyle: 'none',
+    } as React.CSSProperties}>
       {tags.map((tag) => (
         <span
           key={tag}
@@ -33,11 +45,13 @@ export default function SeoTags({ page }: SeoTagsProps) {
             border: '1px solid #e5e7eb',
             borderRadius: 9999,
             letterSpacing: '0.03em',
+            flexShrink: 0,
           }}
         >
           {tag}
         </span>
       ))}
     </div>
+    </>
   );
 }
