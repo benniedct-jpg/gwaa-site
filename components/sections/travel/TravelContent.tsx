@@ -182,8 +182,8 @@ function PetBadge({ petInfo }: { petInfo: string }) {
   );
 }
 
-export default function TravelContent() {
-  const { data: places, loading } = useGWAADB<TravelPlace>('travelPlaces');
+export default function TravelContent({ initialData }: { initialData?: TravelPlace[] }) {
+  const { data: places, loading } = useGWAADB<TravelPlace>('travelPlaces', initialData);
   const [search,      setSearch]      = useState('');
   const [region,      setRegion]      = useState('전체');
   const [category,    setCategory]    = useState('전체');

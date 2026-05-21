@@ -4,16 +4,25 @@
  * gwaaDB 인터페이스와 동일하게 사용 가능
  */
 
-const MAX_SIZE = 2 * 1024 * 1024;
-const ALLOWED  = new Set(['image/jpeg', 'image/png', 'image/webp']);
+const MAX_SIZE = 15 * 1024 * 1024;
+const ALLOWED  = new Set(['image/jpeg', 'image/png', 'image/webp', 'image/gif']);
 
-// Util (image) — unchanged
 export function validateImage(file: File): { ok: boolean; error?: string } {
   if (!ALLOWED.has(file.type)) return { ok: false, error: 'JPG, PNG, WebP 형식만 가능합니다.' };
-  if (file.size > MAX_SIZE)    return { ok: false, error: `2MB 이하만 가능합니다. (현재 ${(file.size / 1024 / 1024).toFixed(1)}MB)` };
+  if (file.size > MAX_SIZE)    return { ok: false, error: `15MB 이하만 가능합니다. (현재 ${(file.size / 1024 / 1024).toFixed(1)}MB)` };
   return { ok: true };
 }
 
+export async function toStorageUrl(file: File): Promise<string> {
+  const form = new FormData();
+  form.append('file', file);
+  const res = await fetch('/api/upload', { method: 'POST', body: form });
+  const json = await res.json();
+  if (!res.ok) throw new Error(json.error ?? '업로드 실패');
+  return json.url as string;
+}
+
+// kept for any legacy callers
 export function toBase64(file: File): Promise<string> {
   return new Promise((res, rej) => {
     const r = new FileReader();
@@ -55,6 +64,7 @@ async function req<T>(method: string, store: string, body?: unknown, qs?: string
 
 export const clientDB = {
   validateImage,
+  toStorageUrl,
   toBase64,
   getAll: <T>(store: string) => req<T[]>('GET', store),
   get:    <T>(store: string, id: number | string) => req<T>('GET', store, undefined, `?id=${id}`),

@@ -12,8 +12,8 @@ import { useIsMobile } from '@/hooks/useIsMobile';
 
 const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
 
-export default function EventsPreview() {
-  const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT);
+export default function EventsPreview({ initialData }: { initialData?: EventCard[] }) {
+  const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT, initialData);
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';
 

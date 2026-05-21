@@ -28,9 +28,9 @@ function sortByDate<T extends { date?: string; order?: number }>(arr: T[]): T[] 
   });
 }
 
-export default function EventsContent() {
-  const { data: events, loading: evLoading } = useGWAADB<EventCard>(STORES.EVENT);
-  const { data: archives, loading: archLoading } = useGWAADB<ArchiveEvent>(STORES.ARCHIVE);
+export default function EventsContent({ initialEvents, initialArchives }: { initialEvents?: EventCard[]; initialArchives?: ArchiveEvent[] }) {
+  const { data: events, loading: evLoading } = useGWAADB<EventCard>(STORES.EVENT, initialEvents);
+  const { data: archives, loading: archLoading } = useGWAADB<ArchiveEvent>(STORES.ARCHIVE, initialArchives);
   const [filter, setFilter] = useState<'all' | EventStatus>('all');
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';

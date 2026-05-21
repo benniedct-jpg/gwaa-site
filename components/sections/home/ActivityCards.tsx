@@ -94,8 +94,8 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
   );
 }
 
-export default function ActivityCards() {
-  const { data: cards, loading } = useGWAADB<ActivityCard>(STORES.ACTIVITY);
+export default function ActivityCards({ initialData }: { initialData?: ActivityCard[] }) {
+  const { data: cards, loading } = useGWAADB<ActivityCard>(STORES.ACTIVITY, initialData);
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';
 

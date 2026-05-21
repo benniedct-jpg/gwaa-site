@@ -589,7 +589,7 @@ export default function AdminPage() {
                       <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 8, wordBreak: 'break-all' }}>{lb.link}</div>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         <label style={{ fontSize: 10, fontWeight: 600, padding: '4px 10px', borderRadius: 6, cursor: 'pointer', border: '1.5px solid #16a34a', background: '#f0fdf4', color: '#16a34a' }}>
-                          이미지 <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); saveLookbook({ ...lb, imageData: b64 }); }} />
+                          이미지 <input type="file" accept="image/jpeg,image/png,image/webp" style={{ display: 'none' }} onChange={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toStorageUrl(f); saveLookbook({ ...lb, imageData: b64 }); }} />
                         </label>
                         <button onClick={async () => { const newLabel = prompt('레이블 입력:', lb.label); if (newLabel !== null) saveLookbook({ ...lb, label: newLabel }); }} style={btnEdit}>레이블</button>
                         <button onClick={async () => { const newLink = prompt('링크 URL 입력:', lb.link); if (newLink !== null) saveLookbook({ ...lb, link: newLink }); }} style={btnEdit}>링크</button>
@@ -681,7 +681,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setEventModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editEvent._key ? '행사 수정' : '행사 추가'}</h2>
-              <ImageUploadBox imageData={editEvent.imageData} placeholder="🎪" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; setEditEvent((p) => ({ ...p, imageData: undefined })); const b64 = await clientDB.toBase64(f); setEditEvent((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditEvent((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editEvent.imageData} placeholder="🎪" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; setEditEvent((p) => ({ ...p, imageData: undefined })); const b64 = await clientDB.toStorageUrl(f); setEditEvent((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditEvent((p) => ({ ...p, imageData: undefined }))} />
               <div style={fieldStyle}><label style={labelStyle}>행사명 *</label><input value={editEvent.title || ''} onChange={(e) => setEditEvent((p) => ({ ...p, title: e.target.value }))} placeholder="2026 반려동물 축제" style={inputStyle} /></div>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>날짜</label><input value={editEvent.date || ''} onChange={(e) => setEditEvent((p) => ({ ...p, date: e.target.value }))} placeholder="2026.05.01" style={inputStyle} /></div>
@@ -769,7 +769,7 @@ export default function AdminPage() {
                           for (const f of toProcess) {
                             const { ok, error } = clientDB.validateImage(f);
                             if (!ok) { showToast(error!, true); e.target.value = ''; return; }
-                            b64s.push(await clientDB.toBase64(f));
+                            b64s.push(await clientDB.toStorageUrl(f));
                           }
                           setEditArchive((p) => ({ ...p, images: [...(p.images || []), ...b64s] }));
                           e.target.value = '';
@@ -813,7 +813,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setPartnerModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editPartner._key ? '업체 수정' : '업체 추가'}</h2>
-              <ImageUploadBox imageData={editPartner.imageData} placeholder="🏢" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditPartner((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditPartner((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editPartner.imageData} placeholder="🏢" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toStorageUrl(f); setEditPartner((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditPartner((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>업체명 *</label><input value={editPartner.name || ''} onChange={(e) => setEditPartner((p) => ({ ...p, name: e.target.value }))} placeholder="퍼피파크 애견카페" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>지역</label><input value={editPartner.region || ''} onChange={(e) => setEditPartner((p) => ({ ...p, region: e.target.value }))} placeholder="원주" style={inputStyle} /></div>
@@ -840,7 +840,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setActivityModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editActivity._key ? '활동카드 수정' : '활동카드 추가'}</h2>
-              <ImageUploadBox imageData={editActivity.imageData} placeholder="🐾" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditActivity((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditActivity((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editActivity.imageData} placeholder="🐾" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toStorageUrl(f); setEditActivity((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditActivity((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>아이콘 이모지</label><input value={editActivity.icon || ''} onChange={(e) => setEditActivity((p) => ({ ...p, icon: e.target.value }))} placeholder="🎪" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>태그</label><input value={editActivity.tag || ''} onChange={(e) => setEditActivity((p) => ({ ...p, tag: e.target.value }))} placeholder="반려동물 행사" style={inputStyle} /></div>
@@ -870,7 +870,7 @@ export default function AdminPage() {
           <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={(e) => e.target === e.currentTarget && setTravelModal(false)} style={modalOverlayStyle}>
             <motion.div initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }} onClick={(e) => e.stopPropagation()} style={modalBoxStyle}>
               <h2 style={{ fontSize: 18, fontWeight: 700, color: '#111', marginBottom: 20 }}>{editTravel._key ? '여행지 수정' : '여행지 추가'}</h2>
-              <ImageUploadBox imageData={editTravel.imageData} placeholder="📍" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toBase64(f); setEditTravel((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditTravel((p) => ({ ...p, imageData: undefined }))} />
+              <ImageUploadBox imageData={editTravel.imageData} placeholder="📍" ratio="16/9" onPick={async (e) => { const f = e.target.files?.[0]; if (!f) return; const b64 = await clientDB.toStorageUrl(f); setEditTravel((p) => ({ ...p, imageData: b64 })); }} onRemove={() => setEditTravel((p) => ({ ...p, imageData: undefined }))} />
               <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
                 <div style={fieldStyle}><label style={labelStyle}>장소명 *</label><input value={editTravel.name || ''} onChange={(e) => setEditTravel((p) => ({ ...p, name: e.target.value }))} placeholder="솔비치 호텔" style={inputStyle} /></div>
                 <div style={fieldStyle}><label style={labelStyle}>지역</label><input value={editTravel.region || ''} onChange={(e) => setEditTravel((p) => ({ ...p, region: e.target.value }))} placeholder="양양" style={inputStyle} /></div>

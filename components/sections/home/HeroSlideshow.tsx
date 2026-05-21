@@ -52,12 +52,12 @@ const DOT_COLORS: Record<string, string> = {
   amber: '#d97706',
 };
 
-export default function HeroSlideshow() {
+export default function HeroSlideshow({ initialData }: { initialData?: HeroImage[] }) {
   const [current, setCurrent] = useState(0);
   const [progKey, setProgKey] = useState(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number>(0);
-  const { data: heroImages } = useGWAADB<HeroImage>(STORES.HERO);
+  const { data: heroImages } = useGWAADB<HeroImage>(STORES.HERO, initialData);
   const INTERVAL = 4500;
 
   const goTo = useCallback((idx: number) => {

@@ -30,9 +30,9 @@ function url(store: StoreName) {
   return `/api/data/${TABLE[store]}`;
 }
 
-export function useGWAADB<T>(store: StoreName) {
-  const [data, setData]       = useState<T[]>([]);
-  const [loading, setLoading] = useState(true);
+export function useGWAADB<T>(store: StoreName, initialData?: T[]) {
+  const [data, setData]       = useState<T[]>(initialData ?? []);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError]     = useState<Error | null>(null);
 
   const load = useCallback(async () => {
@@ -48,7 +48,10 @@ export function useGWAADB<T>(store: StoreName) {
     }
   }, [store]);
 
-  useEffect(() => { load(); }, [load]);
+  useEffect(() => {
+    if (!initialData) load();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const put = useCallback(async (item: T) => {
     const method = (item as any).id ? 'PUT' : 'POST';
