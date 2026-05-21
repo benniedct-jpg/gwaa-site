@@ -15,7 +15,8 @@ const STORE_TO_DEFAULT: Record<TableName, string> = {
 };
 
 function isSupabaseConfigured() {
-  return !!(process.env.NEXT_PUBLIC_SUPABASE_URL && process.env.SUPABASE_SERVICE_ROLE_KEY);
+  const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
+  return !!(url && process.env.SUPABASE_SERVICE_ROLE_KEY);
 }
 
 function getDefaultData(store: TableName): object[] {
@@ -47,6 +48,7 @@ const MAP: Record<string, string> = {
   isPartner:  'is_partner',
   isMain:     'is_main',
   ctaText:    'cta_text',
+  mapUrl:     'map_url',
 };
 
 function toDb(obj: Record<string, unknown>): Record<string, unknown> {
@@ -82,13 +84,18 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stor
     return NextResponse.json(defaults.map((d, i) => ({ id: i + 1, ...d })));
   }
 
+  const CACHE = id ? 'no-store' : 'public, s-maxage=60, stale-while-revalidate=300';
+
   try {
     if (id) {
       const row = await dbGet(store, isNaN(Number(id)) ? id : Number(id));
       return NextResponse.json(row ? fromDb(row as Record<string, unknown>) : null);
     }
     const rows = await dbGetAll(store);
-    return NextResponse.json((rows as Record<string, unknown>[]).map(fromDb));
+    return NextResponse.json(
+      (rows as Record<string, unknown>[]).map(fromDb),
+      { headers: { 'Cache-Control': CACHE } },
+    );
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
   }
