@@ -158,7 +158,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               src={allImages[lightboxIdx]}
               onClick={(e) => e.stopPropagation()}
               style={{ maxWidth: '88vw', maxHeight: '85vh', objectFit: 'contain', borderRadius: 6, display: 'block' }}
-              alt=""
+              alt={event.title}
             />
             {allImages.length > 1 && (
               <>

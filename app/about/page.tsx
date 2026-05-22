@@ -5,6 +5,16 @@ import AboutContent from '@/components/sections/about/AboutContent';
 export const metadata = {
   title: '협회 소개 | GWAA 강원도반려동물협회',
   description: '2021년부터 강원도 반려동물 문화를 이끌어온 사단법인 강원도반려동물협회 GWAA를 소개합니다.',
+  openGraph: {
+    title: '협회 소개 | GWAA 강원도반려동물협회',
+    description: '2021년부터 강원도 반려동물 문화를 이끌어온 사단법인 강원도반려동물협회 GWAA를 소개합니다.',
+    url: 'https://gwaa-next.vercel.app/about',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default function AboutPage() {

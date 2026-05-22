@@ -20,7 +20,9 @@ export type TableName =
   | 'mateship_partners'
   | 'lookbook_items'
   | 'gallery_items'
-  | 'page_hashtags';
+  | 'page_hashtags'
+  | 'subscribers'
+  | 'applications';
 
 export async function dbGetAll(table: TableName) {
   const db = getDB();

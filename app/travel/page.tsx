@@ -9,6 +9,16 @@ export const revalidate = 60;
 export const metadata = {
   title: '반려동물 여행 | GWAA 강원도반려동물협회',
   description: '강원도 반려동물 동반 여행 가이드. 18개 지역별 카페, 호텔, 캠핑, 공원 정보를 제공합니다.',
+  openGraph: {
+    title: '반려동물 여행 | GWAA 강원도반려동물협회',
+    description: '강원도 반려동물 동반 여행 가이드. 18개 지역별 카페, 호텔, 캠핑, 공원 정보를 제공합니다.',
+    url: 'https://gwaa-next.vercel.app/travel',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default async function TravelPage() {

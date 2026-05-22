@@ -33,13 +33,16 @@ export default function Footer() {
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';
 
-  const handleSub = (e: React.FormEvent) => {
+  const handleSub = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
-    const prev = JSON.parse(localStorage.getItem('gwaa_newsletter') || '[]');
-    if (!prev.includes(email)) {
-      localStorage.setItem('gwaa_newsletter', JSON.stringify([...prev, email]));
-    }
+    try {
+      await fetch('/api/data/subscribers', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim(), created_at: new Date().toISOString() }),
+      });
+    } catch {}
     setEmail('');
     setSubbed(true);
     setTimeout(() => setSubbed(false), 4000);

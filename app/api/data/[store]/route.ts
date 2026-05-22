@@ -12,6 +12,8 @@ const STORE_TO_DEFAULT: Record<TableName, string> = {
   lookbook_items:    'lookbookItems',
   gallery_items:     'galleryItems',
   page_hashtags:     'pageHashtags',
+  subscribers:       'subscribers',
+  applications:      'applications',
 };
 
 function isSupabaseConfigured() {
@@ -28,6 +30,7 @@ function getDefaultData(store: TableName): object[] {
 const VALID: TableName[] = [
   'hero_images','activity_cards','event_cards','archive_events',
   'travel_places','mateship_partners','lookbook_items','gallery_items','page_hashtags',
+  'subscribers','applications',
 ];
 
 function ok(table: string): table is TableName {

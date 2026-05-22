@@ -11,6 +11,8 @@ const STORE_TO_DEFAULT: Record<TableName, string> = {
   lookbook_items:    'lookbookItems',
   gallery_items:     'galleryItems',
   page_hashtags:     'pageHashtags',
+  subscribers:       'subscribers',
+  applications:      'applications',
 };
 
 const MAP: Record<string, string> = {

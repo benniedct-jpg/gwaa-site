@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import HeroSlideshow from '@/components/sections/home/HeroSlideshow';
 import Ticker from '@/components/sections/home/Ticker';
 import StatsBar from '@/components/sections/home/StatsBar';
@@ -10,6 +11,21 @@ import MateshipCTA from '@/components/sections/home/MateshipCTA';
 import SeoTags from '@/components/ui/SeoTags';
 import { fetchStore } from '@/lib/db/serverFetch';
 import { ActivityCard, EventCard, LookbookItem, HeroImage } from '@/types';
+
+export const metadata: Metadata = {
+  title: 'GWAA 강원도반려동물협회',
+  description: '강원도 반려동물 문화를 이끄는 사단법인. 행사·교육·메이트쉽·반려동물 여행 가이드.',
+  openGraph: {
+    title: 'GWAA 강원도반려동물협회',
+    description: '강원도 반려동물 문화를 이끄는 사단법인. 행사·교육·메이트쉽·반려동물 여행 가이드.',
+    url: 'https://gwaa-next.vercel.app/',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
+};
 
 export const revalidate = 60;
 

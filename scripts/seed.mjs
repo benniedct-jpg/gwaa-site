@@ -53,11 +53,11 @@ await seed('archive_events', [
 
 // ── lookbook_items ──────────────────────────────────────
 await seed('lookbook_items', [
-  { order: 1, label: '캠핑 · 아웃도어', link: '/travel', isMain: true  },
-  { order: 2, label: '트레킹',          link: '/travel', isMain: false },
-  { order: 3, label: '문화축제',        link: '/travel', isMain: false },
-  { order: 4, label: '교육',            link: '/education', isMain: false },
-  { order: 5, label: '봉사활동',        link: '/about',  isMain: false },
+  { order: 1, label: '캠핑 · 아웃도어', link: '/travel',    isMain: true,  imageData: 'https://images.unsplash.com/photo-1533575770077-052fa2c609fc?w=800&q=80' },
+  { order: 2, label: '트레킹',          link: '/travel',    isMain: false, imageData: 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80' },
+  { order: 3, label: '문화축제',        link: '/travel',    isMain: false, imageData: 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80' },
+  { order: 4, label: '교육',            link: '/education', isMain: false, imageData: 'https://images.unsplash.com/photo-1450778869180-41d0601e046e?w=800&q=80' },
+  { order: 5, label: '봉사활동',        link: '/about',     isMain: false, imageData: 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80' },
 ]);
 
 // ── mateship_partners ───────────────────────────────────

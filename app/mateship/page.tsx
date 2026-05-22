@@ -5,6 +5,16 @@ import MateshipContent from '@/components/sections/mateship/MateshipContent';
 export const metadata = {
   title: '메이트쉽 | GWAA 강원도반려동물협회',
   description: '강원도반려동물협회 메이트쉽 멤버십. 연간 40만원 이상 절약하는 스마트한 반려생활.',
+  openGraph: {
+    title: '메이트쉽 | GWAA 강원도반려동물협회',
+    description: '강원도반려동물협회 메이트쉽 멤버십. 연간 40만원 이상 절약하는 스마트한 반려생활.',
+    url: 'https://gwaa-next.vercel.app/mateship',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default function MateshipPage() {

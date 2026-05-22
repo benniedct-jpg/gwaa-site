@@ -5,6 +5,16 @@ import EducationContent from '@/components/sections/education/EducationContent';
 export const metadata = {
   title: '교육 프로그램 | GWAA 강원도반려동물협회',
   description: '강원도반려동물협회 교육 프로그램 — 어질리티 훈련 클럽(4단계 등급), OB 오비디언스, 반려동물행동지도사 국가자격증, 에티켓 교육.',
+  openGraph: {
+    title: '교육 프로그램 | GWAA 강원도반려동물협회',
+    description: '강원도반려동물협회 교육 프로그램 — 어질리티 훈련 클럽(4단계 등급), OB 오비디언스, 반려동물행동지도사 국가자격증, 에티켓 교육.',
+    url: 'https://gwaa-next.vercel.app/education',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default function EducationPage() {

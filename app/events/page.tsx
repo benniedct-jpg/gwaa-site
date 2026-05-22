@@ -9,6 +9,16 @@ export const revalidate = 60;
 export const metadata = {
   title: '행사 | GWAA 강원도반려동물협회',
   description: '강원도 전역에서 펼쳐지는 반려동물 행사와 지난 행사 아카이브를 확인하세요.',
+  openGraph: {
+    title: '행사 | GWAA 강원도반려동물협회',
+    description: '강원도 전역에서 펼쳐지는 반려동물 행사와 지난 행사 아카이브를 확인하세요.',
+    url: 'https://gwaa-next.vercel.app/events',
+    siteName: 'GWAA 강원도반려동물협회',
+    images: [{ url: '/og-image.png', width: 1200, height: 630 }],
+    locale: 'ko_KR',
+    type: 'website',
+  },
+  twitter: { card: 'summary_large_image' },
 };
 
 export default async function EventsPage() {

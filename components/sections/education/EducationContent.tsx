@@ -112,14 +112,24 @@ export default function EducationContent() {
     return Object.keys(e).length === 0;
   };
 
-  const nextStep = () => {
+  const nextStep = async () => {
     if (step === 1 && !validate1()) return;
     if (step === 2) {
       if (!validate2()) return;
       try {
-        const apps = JSON.parse(localStorage.getItem('gwaa_applications') || '[]');
-        apps.push({ at: new Date().toISOString(), type: 'education', course, count, note, ownerName: name, ownerPhone: phone, ownerRegion: region });
-        localStorage.setItem('gwaa_applications', JSON.stringify(apps));
+        await fetch('/api/data/applications', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name,
+            phone,
+            email: '',
+            course,
+            message: `인원: ${count}${note ? ' / 문의: ' + note : ''}`,
+            region,
+            created_at: new Date().toISOString(),
+          }),
+        });
       } catch {}
     }
     setStep((s) => (s + 1) as FormStep);

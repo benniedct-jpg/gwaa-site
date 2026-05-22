@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGWAADBItem } from '@/hooks/useGWAADB';
 import { STORES } from '@/lib/db/gwaaDB';
 import { ArchiveEvent } from '@/types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
 const BEBAS = "'Bebas Neue', cursive";
@@ -16,6 +17,8 @@ export default function ArchiveDetailPage() {
   const id = Number(params.id);
   const { data: event, loading } = useGWAADBItem<ArchiveEvent>(STORES.ARCHIVE, id);
   const [lightboxIdx, setLightboxIdx] = useState<number | null>(null);
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
 
   const allImages = event
     ? event.images && event.images.length > 0
@@ -76,7 +79,7 @@ export default function ArchiveDetailPage() {
         {/* Back */}
         <Link
           href="/events#archive"
-          style={{ position: 'absolute', top: 80, left: 60, fontFamily: MONO, fontSize: 10, color: 'rgba(255,255,255,0.45)', textDecoration: 'none', letterSpacing: '0.14em', zIndex: 10 }}
+          style={{ position: 'absolute', top: isMobile ? 20 : 80, left: isMobile ? 16 : 60, fontFamily: MONO, fontSize: 10, color: 'rgba(255,255,255,0.45)', textDecoration: 'none', letterSpacing: '0.14em', zIndex: 10 }}
           onMouseEnter={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.9)')}
           onMouseLeave={e => (e.currentTarget.style.color = 'rgba(255,255,255,0.45)')}
         >
@@ -117,7 +120,7 @@ export default function ArchiveDetailPage() {
       </div>
 
       {/* ── [2] Caption bar ── */}
-      <div style={{ background: '#fff', padding: '40px 60px 36px', borderBottom: '1px solid #f0f0f0' }}>
+      <div style={{ background: '#fff', padding: `40px ${px} 36px`, borderBottom: '1px solid #f0f0f0' }}>
         <div style={{ display: 'flex', alignItems: 'baseline', gap: 20, flexWrap: 'wrap' }}>
           <span style={{ fontFamily: BEBAS, fontSize: 'clamp(28px, 4vw, 48px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
             {event.title}
@@ -137,9 +140,9 @@ export default function ArchiveDetailPage() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: '-40px' }}
           transition={{ duration: 0.6 }}
-          style={{ background: '#fff', padding: '56px 60px 64px' }}
+          style={{ background: '#fff', padding: `56px ${px} 64px` }}
         >
-          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: '1fr 340px', gap: 72, alignItems: 'start' }}>
+          <div style={{ maxWidth: 1200, margin: '0 auto', display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 340px', gap: isMobile ? 40 : 72, alignItems: 'start' }}>
 
             {/* OVERVIEW */}
             <div>
@@ -168,7 +171,7 @@ export default function ArchiveDetailPage() {
             </div>
 
             {/* META sidebar */}
-            <div style={{ borderLeft: '2px solid #e5e7eb', paddingLeft: 40, paddingTop: 6 }}>
+            <div style={{ borderLeft: isMobile ? 'none' : '2px solid #e5e7eb', borderTop: isMobile ? '2px solid #e5e7eb' : 'none', paddingLeft: isMobile ? 0 : 40, paddingTop: isMobile ? 32 : 6 }}>
               {[
                 { key: 'PART', value: event.part },
                 { key: 'DATE', value: event.date },
@@ -188,7 +191,7 @@ export default function ArchiveDetailPage() {
 
       {/* ── [4] Photo spread ── */}
       {allImages.length >= 2 && (
-        <div style={{ background: '#fff', padding: '0 60px 12px', display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+        <div style={{ background: '#fff', padding: `0 ${px} 12px`, display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
           {allImages.slice(0, 2).map((img, i) => (
             <motion.div
               key={i}
@@ -208,7 +211,7 @@ export default function ArchiveDetailPage() {
         </div>
       )}
       {allImages.length === 1 && (
-        <div style={{ background: '#fff', padding: '0 60px 12px' }}>
+        <div style={{ background: '#fff', padding: `0 ${px} 12px` }}>
           <motion.div
             initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -228,13 +231,13 @@ export default function ArchiveDetailPage() {
 
       {/* ── [5] Gallery grid ── */}
       {allImages.length > 2 && (
-        <div style={{ background: '#fff', padding: '0 60px 80px' }}>
+        <div style={{ background: '#fff', padding: `0 ${px} 80px` }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '28px 0 14px' }}>
             <span style={{ fontFamily: MONO, fontSize: 10, color: '#c4c9d0', letterSpacing: '0.18em' }}>
               {allImages.length} PHOTOS
             </span>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap: 10 }}>
             {allImages.map((img, i) => (
               <motion.div
                 key={i}
@@ -257,7 +260,7 @@ export default function ArchiveDetailPage() {
       )}
 
       {/* ── [6] Back ── */}
-      <div style={{ background: '#fff', padding: '48px 60px 72px', borderTop: '1px solid #f0f0f0' }}>
+      <div style={{ background: '#fff', padding: `48px ${px} 72px`, borderTop: '1px solid #f0f0f0' }}>
         <Link
           href="/events#archive"
           style={{ display: 'inline-flex', alignItems: 'center', gap: 12, textDecoration: 'none' }}
@@ -283,7 +286,7 @@ export default function ArchiveDetailPage() {
             <motion.img
               key={lightboxIdx}
               src={allImages[lightboxIdx]}
-              alt=""
+              alt={event.title}
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ duration: 0.18 }}
