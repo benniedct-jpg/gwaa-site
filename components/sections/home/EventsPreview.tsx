@@ -9,6 +9,7 @@ import Badge from '@/components/ui/Badge';
 import Eyebrow from '@/components/ui/Eyebrow';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { CardSkeleton } from '@/components/ui/Skeleton';
 
 const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
 
@@ -66,7 +67,11 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
         </div>
 
         {loading ? (
-          <div style={{ height: 280 }} />
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: isMobile ? 14 : 20 }}>
+            {Array.from({ length: isMobile ? 2 : 3 }).map((_, i) => (
+              <CardSkeleton key={i} aspectRatio={isMobile ? '16/9' : '1/1'} />
+            ))}
+          </div>
         ) : (
           <div style={{
             display: 'grid',

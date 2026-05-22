@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { useGWAADB } from '@/hooks/useGWAADB';
 import { STORES } from '@/lib/db/gwaaDB';
 import { HeroImage } from '@/types';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const SLIDES = [
   {
@@ -58,6 +59,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const animFrameRef = useRef<number>(0);
   const { data: heroImages } = useGWAADB<HeroImage>(STORES.HERO, initialData);
+  const isMobile = useIsMobile();
   const INTERVAL = 4500;
 
   const goTo = useCallback((idx: number) => {
@@ -176,7 +178,9 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
           style={{
             position: 'absolute', inset: 0,
             display: 'flex', alignItems: 'flex-end',
-            padding: 'calc(64px + 40px) 60px 80px',
+            padding: isMobile
+              ? 'calc(64px + 24px) 20px 56px'
+              : 'calc(64px + 40px) 60px 80px',
           }}
         >
           <div style={{ maxWidth: 640, position: 'relative', zIndex: 2 }}>
@@ -317,7 +321,10 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
 
       {/* Controls */}
       <div style={{
-        position: 'absolute', bottom: 28, right: 60,
+        position: 'absolute',
+        bottom: 28,
+        right: isMobile ? '50%' : 60,
+        transform: isMobile ? 'translateX(50%)' : 'none',
         display: 'flex', alignItems: 'center', gap: 10, zIndex: 10,
       }}>
         {SLIDES.map((_, i) => (

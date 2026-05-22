@@ -10,6 +10,7 @@ import Eyebrow from '@/components/ui/Eyebrow';
 import Badge from '@/components/ui/Badge';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { CardSkeleton } from '@/components/ui/Skeleton';
 
 const TAG_COLORS: Record<string, 'green' | 'blue' | 'amber'> = {
   green: 'green', blue: 'blue', amber: 'amber',
@@ -100,8 +101,12 @@ export default function ActivityCards({ initialData }: { initialData?: ActivityC
   const px = isMobile ? '20px' : '60px';
 
   if (loading) return (
-    <section style={{ padding: `88px ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
-      <div style={{ height: 300 }} />
+    <section style={{ padding: `${isMobile ? '56px' : '88px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(3,1fr)', gap: isMobile ? 14 : 20 }}>
+        {Array.from({ length: 3 }).map((_, i) => (
+          <CardSkeleton key={i} aspectRatio={isMobile ? '16/9' : '220/220'} />
+        ))}
+      </div>
     </section>
   );
 

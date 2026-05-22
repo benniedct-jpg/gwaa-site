@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
+import { useIsMobile } from '@/hooks/useIsMobile';
 
 const TIPS = [
   { icon: '💧', title: '수분 보충', text: '반려동물에게 신선한 물을 항상 제공하세요. 하루 체중 1kg당 50ml의 수분이 필요합니다.' },
@@ -22,6 +23,7 @@ const TIPS = [
 
 export default function DailyTip() {
   const [tip, setTip] = useState(TIPS[0]);
+  const isMobile = useIsMobile();
 
   useEffect(() => {
     const day = new Date().getDate() % TIPS.length;
@@ -35,10 +37,11 @@ export default function DailyTip() {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5 }}
       style={{
-        padding: '32px 60px',
+        padding: isMobile ? '20px 20px' : '32px 60px',
         borderBottom: '1px solid #e5e7eb',
         background: '#f0fdf4',
-        display: 'flex', alignItems: 'center', gap: 20,
+        display: 'flex', alignItems: 'center', gap: 16,
+        flexWrap: isMobile ? 'wrap' : 'nowrap',
       }}
     >
       <div style={{
@@ -52,8 +55,8 @@ export default function DailyTip() {
         <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 9, color: '#16a34a', letterSpacing: '0.12em', marginBottom: 4 }}>
           TODAY&apos;S PET TIP
         </div>
-        <strong style={{ fontSize: 14, color: '#111', fontWeight: 700 }}>{tip.title}</strong>
-        <span style={{ fontSize: 13, color: '#374151', marginLeft: 12 }}>{tip.text}</span>
+        <div style={{ fontSize: isMobile ? 13 : 14, color: '#111', fontWeight: 700, marginBottom: 2 }}>{tip.title}</div>
+        <p style={{ fontSize: isMobile ? 12 : 13, color: '#374151', lineHeight: 1.7, margin: 0 }}>{tip.text}</p>
       </div>
     </motion.section>
   );

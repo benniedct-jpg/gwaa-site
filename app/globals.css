@@ -49,6 +49,8 @@
 html {
   scroll-behavior: smooth;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
 }
 
 body {
@@ -58,12 +60,32 @@ body {
   line-height: 1.65;
   overflow-x: hidden;
   padding-top: 64px;
+  -webkit-tap-highlight-color: transparent;
 }
 
 img { max-width: 100%; height: auto; display: block; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: none; background: none; }
 ul, ol { list-style: none; }
+
+/* Better text selection */
+::selection {
+  background: rgba(22, 163, 74, 0.15);
+  color: #111;
+}
+
+/* Smooth placeholder */
+::placeholder { color: #b0b8c1; transition: opacity 0.18s; }
+:focus::placeholder { opacity: 0.5; }
+
+/* Image quality */
+img { image-rendering: -webkit-optimize-contrast; }
+
+/* Better link transitions */
+a { transition: opacity 0.15s; }
+a:hover { opacity: 0.8; }
+/* But exclude styled links */
+a[style]:hover, a[class]:hover { opacity: 1; }
 
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 4px; }
@@ -89,6 +111,12 @@ ul, ol { list-style: none; }
 /* ── Ping ── */
 @keyframes ping {
   75%, 100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── Skeleton shimmer ── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 
 /* ── Scroll-locked state ── */
