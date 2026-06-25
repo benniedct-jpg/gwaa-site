@@ -610,6 +610,11 @@ export const DEFAULTS: Record<string, object[]> = {
     { order: 3, imageData: '/images/events/beach-gosung-2025/02.webp',  caption: '고성 해변 반려견 축제 — 썬베드비치', active: true },
     { order: 4, imageData: '/images/events/wonju-2025/01.webp',        caption: '제3회 원주시 반려동물문화축제 — 애니멀대학교', active: true },
     { order: 5, imageData: '/images/events/wonju-2024/01.webp',        caption: '제2회 원주시 반려동물문화행사', active: true },
+    { order: 6, imageData: '/images/gallery/ig_04.webp',               caption: '원주 반려동물 문화행사 현장', active: true },
+    { order: 7, imageData: '/images/gallery/ig_06.webp',               caption: '고성 반려견 힐링 트레킹', active: true },
+    { order: 8, imageData: '/images/gallery/ig_01.webp',               caption: '산책교육 현장 — 햅삐크루', active: true },
+    { order: 9, imageData: '/images/gallery/ig_02.webp',               caption: '2026 청주시 반려동물 문화행사 — 학교종이 댕댕댕', active: true },
+    { order: 10, imageData: '/images/gallery/ig_03.webp',              caption: '강원특별자치도 동물복지 정책 발표회', active: true },
   ],
   [STORES.MATESHIP]: [
     { order: 1, name: '세인트존스호텔',         region: '강릉', type: '호텔',     discount: '인터넷 최저가 이하', icon: '🏨',  gradient: 'linear-gradient(135deg,#dbeafe 0%,#93c5fd 100%)', link: '#', imageData: null },
