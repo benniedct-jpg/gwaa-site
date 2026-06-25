@@ -23,11 +23,11 @@ const SLIDES = [
   },
   {
     tag: 'EDUCATION · 전문 교육 프로그램',
-    dotClass: 'blue',
+    dotClass: 'green',
     title: '체계적인\n반려동물',
     titleAccent: '교육',
     sub: '독스포츠(어질리티), 오비디언스 교육, 반려동물행동지도사 국가자격증 취득까지. 전문 트레이너가 함께합니다.',
-    bg1: 'linear-gradient(135deg, #e3f2fd 0%, #bbdefb 40%, #90caf9 100%)',
+    bg1: 'linear-gradient(135deg, #e0f0e8 0%, #b8d9c4 40%, #7fb89a 100%)',
     actions: [
       { label: '교육 신청하기 →', href: '/education#apply', primary: true },
       { label: '프로그램 보기', href: '/education', primary: false },
