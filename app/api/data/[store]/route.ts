@@ -81,7 +81,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stor
   if (!isSupabaseConfigured()) {
     const defaults = getDefaultData(store);
     if (id) {
-      const item = defaults.find((d: any) => String(d.id ?? d.page) === id) ?? null;
+      const idx = Number(id) - 1;
+      const item = (idx >= 0 && idx < defaults.length) ? { id: Number(id), ...defaults[idx] } : null;
       return NextResponse.json(item);
     }
     return NextResponse.json(defaults.map((d, i) => ({ id: i + 1, ...d })));
@@ -106,7 +107,12 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stor
 
 const NO_DB_MSG = 'Supabase 미설정 — Vercel 환경변수에 NEXT_PUBLIC_SUPABASE_URL과 SUPABASE_SERVICE_ROLE_KEY를 추가해 주세요.';
 
+function isAuthorized(req: NextRequest): boolean {
+  return req.cookies.get('gwaa_admin_auth')?.value === 'granted';
+}
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
+  if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
   if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });
@@ -121,6 +127,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sto
 }
 
 export async function PUT(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
+  if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
   if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });
@@ -135,6 +142,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ stor
 }
 
 export async function DELETE(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
+  if (!isAuthorized(req)) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
   if (!isSupabaseConfigured()) return NextResponse.json({ error: NO_DB_MSG }, { status: 503 });

@@ -1,8 +1,23 @@
 import type { Metadata } from 'next';
+import { Bebas_Neue, Noto_Sans_KR } from 'next/font/google';
 import './globals.css';
 import Nav from '@/components/layout/Nav';
 import Footer from '@/components/layout/Footer';
 import KakaoFloat from '@/components/layout/KakaoFloat';
+
+const bebasNeue = Bebas_Neue({
+  weight: '400',
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-bebas',
+});
+
+const notoSansKR = Noto_Sans_KR({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-noto',
+});
 
 export const metadata: Metadata = {
   title: '강원도반려동물협회 GWAA | 반려동물과 함께, 강원도를 제한 없이',
@@ -22,7 +37,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="ko">
+    <html lang="ko" className={`${bebasNeue.variable} ${notoSansKR.variable}`}>
       <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <Nav />
         <main style={{ flex: 1 }}>
