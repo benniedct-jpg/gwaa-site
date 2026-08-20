@@ -293,7 +293,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
   const selectSite = (s: string) => setSite(s);
 
   // ── 제출 ──
-  const submit = async () => {
+  const submit = async (viaTransfer = false) => {
     setErrorMsg('');
     if (!form.name || !form.phone || !form.email) { setErrorMsg('예약자 정보를 모두 입력해 주세요.'); return; }
     if (!EMAIL_RE.test(form.email.trim())) { setErrorMsg('이메일 형식을 확인해 주세요. (예: example@naver.com)'); return; }
@@ -335,10 +335,10 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
       setDoneData(dd);
       loadAvailability(); // 방금 잡은 자리를 잔여석에 즉시 반영
       setStep(4);
-      if (CARD_ENABLED) {
-        payCard(dd); // 접수 즉시 결제창 호출 · 취소 시 step4의 카드 재시도/계좌이체로 폴백
+      if (CARD_ENABLED && !viaTransfer) {
+        payCard(dd); // 카드 선택 시 접수 즉시 결제창 호출 · 취소 시 step4의 카드 재시도/계좌이체로 폴백
       } else {
-        setSubmitting(false);
+        setSubmitting(false); // 계좌이체 선택(또는 카드 비활성) → step4에서 입금 계좌 안내
       }
     } catch (err: unknown) {
       const e = err as { message?: string };
@@ -824,9 +824,21 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
 
             {errorMsg && <div style={{ color: '#dc2626', fontSize: 13, textAlign: 'center', marginTop: 14 }}>{errorMsg}</div>}
 
-            <button disabled={submitting} onClick={submit} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
-              {submitting ? '예약 접수 중...' : `예약 접수하기 (${total.toLocaleString()}원)`}
-            </button>
+            {CARD_ENABLED ? (
+              <>
+                <button disabled={submitting} onClick={() => submit()} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
+                  {submitting ? '예약 접수 중...' : `💳 카드로 결제하고 예약 확정 (${total.toLocaleString()}원)`}
+                </button>
+                <button type="button" disabled={submitting} onClick={() => submit(true)} style={{ display: 'block', width: '100%', maxWidth: '100%', margin: '10px 0 0', padding: '15px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 15, cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.5 : 1 }}>
+                  🏦 계좌이체로 예약하기
+                </button>
+                <div style={{ fontSize: 12, color: MUTED, textAlign: 'center', marginTop: 8, lineHeight: 1.5 }}>계좌이체를 선택하면 다음 화면에서 입금 계좌를 안내해 드려요.</div>
+              </>
+            ) : (
+              <button disabled={submitting} onClick={() => submit()} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
+                {submitting ? '예약 접수 중...' : `예약 접수하기 (${total.toLocaleString()}원)`}
+              </button>
+            )}
             {!rgMode && <button onClick={() => goStep(type === 'day' ? 1 : 2)} style={backText}>← {type === 'day' ? '일정' : '사이트'} 선택으로 돌아가기</button>}
           </div>
         )}
