@@ -48,6 +48,7 @@ export interface ArchiveEvent {
   order: number;
   feat: boolean;
   year: number;
+  subtitle: string;
   title: string;
   loc: string;
   ppl: string;
@@ -59,6 +60,7 @@ export interface ArchiveEvent {
   imageData: string | null;
   imageData2: string | null;
   images?: string[];
+  posters?: string[];
 }
 
 export interface TravelPlace {
@@ -85,6 +87,38 @@ export interface PageHashtags {
   tags: string[];
 }
 
+export type PartnerTemplateType = 'stay' | 'brand' | 'service';
+
+export interface PartnerPriceRow {
+  label: string;
+  sublabel?: string;
+  memberPrice: string;
+  badge?: string;
+}
+
+export interface PartnerFacility {
+  icon: string;
+  name: string;
+  rows: { label: string; price: string }[];
+}
+
+export interface PartnerDetail {
+  templateType: PartnerTemplateType;
+  tagline: string;
+  description: string;
+  validPeriod?: string;
+  originalPrice?: string;
+  memberPrice?: string;
+  discountRate?: string;
+  priceRows?: PartnerPriceRow[];
+  petInfo?: { amenities: string[]; rules: string[] };
+  facilities?: PartnerFacility[];
+  products?: { name: string; desc: string; price?: string }[];
+  howToUse?: string[];
+  infoSections?: { title: string; items: string[] }[];
+  cta?: { label: string; url: string };
+}
+
 export interface MateshipPartner {
   id?: number;
   order: number;
@@ -96,6 +130,7 @@ export interface MateshipPartner {
   gradient: string;
   link: string;
   imageData: string | null;
+  detail?: PartnerDetail;
 }
 
 export interface NavChild {

@@ -1,5 +1,18 @@
 import { dbGetAll, TableName } from './serverDB';
 import { DEFAULTS, DEFAULT_HASHTAGS } from './defaults';
+import fs from 'fs';
+import path from 'path';
+
+// Supabase 미설정 시: 어드민 API와 동일하게 .local-data/ 를 우선 사용 (단일 소스)
+function readLocal<T>(table: TableName): T[] | null {
+  try {
+    const fp = path.join(process.cwd(), '.local-data', `${table}.json`);
+    if (!fs.existsSync(fp)) return null;
+    return JSON.parse(fs.readFileSync(fp, 'utf-8')) as T[];
+  } catch {
+    return null;
+  }
+}
 
 const STORE_TO_DEFAULT: Record<TableName, string> = {
   hero_images:       'heroImages',
@@ -13,6 +26,8 @@ const STORE_TO_DEFAULT: Record<TableName, string> = {
   page_hashtags:     'pageHashtags',
   subscribers:       'subscribers',
   applications:      'applications',
+  proposals:         'proposals',
+  members:           'members',
 };
 
 const MAP: Record<string, string> = {
@@ -46,6 +61,10 @@ function isConfigured() {
 
 export async function fetchStore<T>(table: TableName): Promise<T[]> {
   if (!isConfigured()) {
+    // 1순위: .local-data (어드민이 쓰는 곳과 동일) → 목록·상세·어드민 통일
+    const local = readLocal<T>(table);
+    if (local) return local;
+    // 2순위: 시드 기본값
     const key = STORE_TO_DEFAULT[table];
     const raw = table === 'page_hashtags'
       ? DEFAULT_HASHTAGS

@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: '반려동물 여행 | GWAA 강원도반려동물협회',
     description: '강원도 반려동물 동반 여행 가이드. 18개 지역별 카페, 호텔, 캠핑, 공원 정보를 제공합니다.',
-    url: 'https://gwaa-next.vercel.app/travel',
+    url: 'https://gwaa.or.kr/travel',
     siteName: 'GWAA 강원도반려동물협회',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'ko_KR',

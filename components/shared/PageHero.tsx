@@ -69,10 +69,10 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
 
         <h1
           style={{
-            fontFamily: "'Bebas Neue', cursive",
-            fontSize: 'clamp(40px, 8vw, 88px)',
-            lineHeight: 0.92,
-            letterSpacing: '0.02em',
+            fontFamily: "'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif",
+            fontSize: 'clamp(38px, 7vw, 74px)',
+            lineHeight: 1.05,
+            letterSpacing: '-0.01em',
             color: '#111',
             marginBottom: 18,
           }}
@@ -105,7 +105,7 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
             initial={{ opacity: 0, y: 16 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4, duration: 0.5 }}
-            style={{ fontSize: 15, color: '#6b7280', lineHeight: 1.8, maxWidth: 520, fontWeight: 300, marginBottom: 32 }}
+            style={{ fontSize: 16, color: '#374151', lineHeight: 1.6, maxWidth: 520, fontWeight: 400, marginBottom: 32, wordBreak: 'keep-all', overflowWrap: 'break-word' }}
           >
             {desc}
           </motion.p>

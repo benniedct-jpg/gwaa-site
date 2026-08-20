@@ -1,0 +1,9 @@
+# 배포 제외 대상 (런타임 불필요 / 대용량)
+_source_files_not_public/
+.local-data/
+*.bak
+*.bak[0-9]
+.next/
+supabase/
+scripts/
+supabase_setup.sql

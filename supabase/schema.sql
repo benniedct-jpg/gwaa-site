@@ -117,6 +117,59 @@ create table if not exists page_hashtags (
   tags        text[] default '{}'
 );
 
+-- Newsletter Subscribers (개인정보 — 공개 읽기 없음)
+create table if not exists subscribers (
+  id          bigserial primary key,
+  email       text,
+  created_at  text
+);
+
+-- Applications (메이트쉽·교육 신청 · 개인정보 — 공개 읽기 없음)
+create table if not exists applications (
+  id          bigserial primary key,
+  name        text,
+  phone       text,
+  email       text,
+  course      text,
+  region      text,
+  message     text,
+  created_at  text
+);
+
+-- Bookings (행사 예약 · 개인정보 — 공개 읽기 없음, 잔여석은 전용 API가 site/dates만 노출)
+create table if not exists bookings (
+  id            bigserial primary key,
+  event_id      integer,
+  booking_type  text,
+  booking_label text,
+  date_label    text,
+  booking_dates text[] default '{}',
+  zone          text,
+  site          text,
+  headcount     integer,
+  tshirt_sizes  text[] default '{}',
+  name          text,
+  phone         text,
+  email         text,
+  pet_name      text,
+  pet_breed     text,
+  pet_age       text,
+  pet_vaccine   text,
+  request       text,
+  amount        integer,
+  status        text default 'pending',
+  created_at    text,
+  order_id      text,
+  ticket_token  text,
+  payment_key   text,
+  paid_at       text,
+  checked_in_at text,
+  checkin_count integer default 0
+);
+create index if not exists bookings_event_site_idx on bookings (event_id, site);
+create unique index if not exists bookings_ticket_token_idx on bookings (ticket_token) where ticket_token is not null;
+create index if not exists bookings_order_id_idx on bookings (order_id);
+
 -- Enable Row Level Security (public read, authenticated write)
 alter table hero_images      enable row level security;
 alter table activity_cards   enable row level security;
@@ -127,6 +180,10 @@ alter table mateship_partners enable row level security;
 alter table lookbook_items   enable row level security;
 alter table gallery_items    enable row level security;
 alter table page_hashtags    enable row level security;
+-- 개인정보 테이블: RLS 켜되 공개 정책 없음 → anon 접근 차단, 서버 API의 service_role만 접근
+alter table subscribers      enable row level security;
+alter table applications     enable row level security;
+alter table bookings         enable row level security;
 
 -- Public read policies
 create policy "public read hero"        on hero_images         for select using (true);

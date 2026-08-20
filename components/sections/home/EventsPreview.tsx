@@ -11,7 +11,7 @@ import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { CardSkeleton } from '@/components/ui/Skeleton';
 
-const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
 export default function EventsPreview({ initialData }: { initialData?: EventCard[] }) {
   const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT, initialData);
@@ -43,22 +43,22 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
           <motion.div variants={fadeUp}>
             <Eyebrow text="UPCOMING EVENTS" />
             <h2 style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
               fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 1,
               marginBottom: 4,
             }}>
               다가오는 행사
             </h2>
-            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7, fontWeight: 300 }}>
+            <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>
               강원도 곳곳에서 펼쳐지는 반려동물 행사를 만나보세요.
             </p>
           </motion.div>
           <Link
             href="/events"
             style={{
-              fontFamily: MONO, fontSize: 11,
-              color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0,
+              fontFamily: MONO, fontSize: 13,
+              color: '#4b5563', letterSpacing: '0.02em', flexShrink: 0,
               whiteSpace: 'nowrap', paddingTop: isMobile ? 4 : 0,
             }}
           >
@@ -100,20 +100,20 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                   </div>
                   <div style={{ padding: '16px 18px 20px' }}>
                     <h3 style={{
-                      fontFamily: "'Bebas Neue', cursive",
+                      fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                       fontSize: 18, letterSpacing: '0.02em',
                       color: '#111', marginBottom: 8, lineHeight: 1.1,
                     }}>
                       {ev.title}
                     </h3>
-                    <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 4, fontFamily: MONO }}>
+                    <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 4, fontFamily: MONO }}>
                       📅 {ev.date}
                     </p>
-                    <p style={{ fontSize: 11, color: '#6b7280', marginBottom: 10, fontFamily: MONO }}>
+                    <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 10, fontFamily: MONO }}>
                       📍 {ev.loc}
                     </p>
                     {ev.benefit && (
-                      <p style={{ fontSize: 11, color: '#16a34a', fontWeight: 700 }}>
+                      <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700 }}>
                         ⭐ {ev.benefit}
                       </p>
                     )}

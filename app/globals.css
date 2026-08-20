@@ -18,10 +18,10 @@
 
   --color-text:         #111111;
   --color-text-muted:   #6b7280;
-  --color-text-dim:     #9ca3af;
+  --color-text-dim:     #6b7280;
 
   --font-sans:    var(--font-noto, -apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif);
-  --font-display: var(--font-bebas, 'Bebas Neue', cursive);
+  --font-display: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif;
   --font-mono:    'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace;
 
   --radius-sm:   6px;
@@ -59,10 +59,12 @@ body {
   font-family: var(--font-sans);
   background: #ffffff;
   color: #111111;
-  line-height: 1.65;
+  line-height: 1.6;
   overflow-x: hidden;
   padding-top: 64px;
   -webkit-tap-highlight-color: transparent;
+  word-break: keep-all;
+  overflow-wrap: break-word;
 }
 
 img { max-width: 100%; height: auto; display: block; }

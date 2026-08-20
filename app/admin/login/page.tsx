@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -59,7 +59,7 @@ export default function AdminLoginPage() {
             <span style={{ color: '#fff', fontSize: 16 }}>🐾</span>
           </div>
           <div>
-            <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 18, color: '#111', letterSpacing: '0.04em', lineHeight: 1 }}>GWAA</div>
+            <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 18, color: '#111', letterSpacing: '0.04em', lineHeight: 1 }}>GWAA</div>
             <div style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.12em' }}>ADMIN</div>
           </div>
         </div>

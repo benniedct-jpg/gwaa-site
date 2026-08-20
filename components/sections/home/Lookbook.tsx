@@ -44,19 +44,19 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
           <div>
             <Eyebrow text="LOOKBOOK" />
             <h2 style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
               fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6,
             }}>
               GWAA 룩북
             </h2>
-            <p style={{ fontSize: isMobile ? 13 : 15, color: '#6b7280', lineHeight: 1.75, fontWeight: 300 }}>
+            <p style={{ fontSize: isMobile ? 14 : 15, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>
               강원도에서 함께한 순간들을 담았습니다.
             </p>
           </div>
           <Link href="/travel" style={{
-            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
-            fontSize: 11, color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0,
+            fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+            fontSize: 13, color: '#4b5563', letterSpacing: '0.02em', flexShrink: 0,
           }}>
             여행 가이드 보기 →
           </Link>
@@ -83,8 +83,8 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
               >
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 50%, rgba(0,0,0,0.5))' }} />
                 <div style={{ position: 'relative', padding: '16px 20px' }}>
-                  <p style={{ fontSize: 10, color: 'rgba(255,255,255,0.7)', fontFamily: "'SF Mono', monospace", letterSpacing: '0.08em', marginBottom: 4 }}>FEATURED</p>
-                  <p style={{ fontSize: 18, fontFamily: "'Bebas Neue', cursive", color: '#fff', letterSpacing: '0.04em' }}>{main.label}</p>
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", letterSpacing: '0.04em', marginBottom: 4 }}>FEATURED</p>
+                  <p style={{ fontSize: 18, fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", color: '#fff', letterSpacing: '0.04em' }}>{main.label}</p>
                 </div>
               </motion.a>
             )}
@@ -108,7 +108,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
                   <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 40%, rgba(0,0,0,0.45))' }} />
                   <p style={{
                     position: 'relative', padding: '10px 12px',
-                    fontSize: 13, fontFamily: "'Bebas Neue', cursive",
+                    fontSize: 13, fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                     color: '#fff', letterSpacing: '0.04em',
                   }}>
                     {item.label}
@@ -142,8 +142,8 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
               >
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 50%, rgba(0,0,0,0.45))' }} />
                 <div style={{ position: 'relative', padding: 24 }}>
-                  <p style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", letterSpacing: '0.08em', marginBottom: 6 }}>FEATURED</p>
-                  <p style={{ fontSize: 20, fontFamily: "'Bebas Neue', cursive", color: '#fff', letterSpacing: '0.04em' }}>{main.label}</p>
+                  <p style={{ fontSize: 12, color: 'rgba(255,255,255,0.85)', fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", letterSpacing: '0.04em', marginBottom: 6 }}>FEATURED</p>
+                  <p style={{ fontSize: 20, fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", color: '#fff', letterSpacing: '0.04em' }}>{main.label}</p>
                 </div>
               </motion.a>
             )}
@@ -164,7 +164,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
                 }}
               >
                 <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(transparent 40%, rgba(0,0,0,0.4))' }} />
-                <p style={{ position: 'relative', padding: '12px 16px', fontSize: 14, fontFamily: "'Bebas Neue', cursive", color: '#fff', letterSpacing: '0.04em' }}>
+                <p style={{ position: 'relative', padding: '12px 16px', fontSize: 14, fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", color: '#fff', letterSpacing: '0.04em' }}>
                   {item.label}
                 </p>
               </motion.a>

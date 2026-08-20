@@ -9,7 +9,7 @@ import { Textarea } from '@/components/ui/Textarea';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
-const MONO = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const SYS  = "-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue','Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
 const CHANNELS = [
@@ -136,13 +136,13 @@ export default function ContactContent() {
             <motion.div variants={fadeUp}>
               <Eyebrow text="CONTACT" />
               <h2 style={{
-                fontFamily: "'Bebas Neue', cursive",
+                fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                 fontSize: isMobile ? 'clamp(32px,9vw,48px)' : 'clamp(28px,4vw,52px)',
                 color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 10,
               }}>
                 함께 시작해볼까요
               </h2>
-              <p style={{ fontSize: isMobile ? 14 : 15, color: '#6b7280', lineHeight: 1.85, marginBottom: 28 }}>
+              <p style={{ fontSize: isMobile ? 14 : 15, color: '#374151', lineHeight: 1.6, marginBottom: 28 }}>
                 메이트쉽 가입, 교육 신청, 행사 문의 등 무엇이든 편하게 연락해 주세요.
               </p>
             </motion.div>
@@ -175,13 +175,13 @@ export default function ContactContent() {
                     {ch.icon}
                   </div>
                   <div style={{ flex: 1, minWidth: 0 }}>
-                    <div style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.12em', marginBottom: 2 }}>
+                    <div style={{ fontFamily: MONO, fontSize: 11, color: '#6b7280', letterSpacing: '0.06em', marginBottom: 2 }}>
                       {ch.label}
                     </div>
                     <div style={{ fontSize: 14, fontWeight: 700, color: '#111', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
                       {ch.value}
                     </div>
-                    <div style={{ fontSize: 11, color: '#9ca3af', marginTop: 1 }}>{ch.desc}</div>
+                    <div style={{ fontSize: 13, color: '#6b7280', marginTop: 1 }}>{ch.desc}</div>
                   </div>
                   <span style={{ fontSize: 14, color: '#c4c9d0', flexShrink: 0 }}>›</span>
                 </motion.a>
@@ -205,10 +205,10 @@ export default function ContactContent() {
               }}
             >
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 9, color: '#4ade80', letterSpacing: '0.14em', marginBottom: 5 }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, color: '#4ade80', letterSpacing: '0.06em', marginBottom: 5 }}>
                   FASTEST RESPONSE
                 </div>
-                <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 20 : 22, color: '#fff', letterSpacing: '0.02em' }}>
+                <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 20 : 22, color: '#fff', letterSpacing: '0.02em' }}>
                   카카오채널로 빠르게 문의하기
                 </div>
               </div>
@@ -234,10 +234,10 @@ export default function ContactContent() {
               top: 88,
             }}
           >
-            <h3 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 28, color: '#111', letterSpacing: '0.02em', marginBottom: 4 }}>
+            <h3 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 28, color: '#111', letterSpacing: '0.02em', marginBottom: 4 }}>
               문의하기
             </h3>
-            <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 24, lineHeight: 1.6 }}>
+            <p style={{ fontSize: 13, color: '#6b7280', marginBottom: 24, lineHeight: 1.6 }}>
               내용을 남겨주시면 1~2 영업일 내 답변 드립니다.
             </p>
 
@@ -268,10 +268,10 @@ export default function ContactContent() {
                   >
                     ✓
                   </motion.div>
-                  <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 22, color: '#111', marginBottom: 8, letterSpacing: '0.02em' }}>
+                  <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 22, color: '#111', marginBottom: 8, letterSpacing: '0.02em' }}>
                     문의가 접수되었습니다
                   </div>
-                  <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
+                  <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
                     빠른 시일 내에 답변 드리겠습니다.<br />
                     급하신 경우 카카오채널을 이용해 주세요.
                   </p>
@@ -390,7 +390,7 @@ export default function ContactContent() {
         >
           <motion.div variants={fadeUp} style={{ marginBottom: 20 }}>
             <Eyebrow text="LOCATION" />
-            <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 'clamp(24px,7vw,36px)' : 'clamp(24px,3.5vw,40px)', color: '#111', letterSpacing: '0.02em' }}>
+            <h2 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(24px,7vw,36px)' : 'clamp(24px,3.5vw,40px)', color: '#111', letterSpacing: '0.02em' }}>
               오시는 길
             </h2>
           </motion.div>
@@ -412,7 +412,7 @@ export default function ContactContent() {
                 { label: '업무시간', value: '평일 09:00 ~ 18:00' },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <div style={{ fontFamily: MONO, fontSize: 9, letterSpacing: '0.1em', color: '#16a34a', marginBottom: 6, fontWeight: 700 }}>
+                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#16a34a', marginBottom: 6, fontWeight: 700 }}>
                     {label}
                   </div>
                   <div style={{ fontSize: isMobile ? 12 : 13, fontWeight: 600, color: '#111', lineHeight: 1.6, wordBreak: 'keep-all' }}>

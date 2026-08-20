@@ -12,14 +12,17 @@ const STATS = [
   { value: 5,     suffix: '년+', label: '운영 연혁' },
 ];
 
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
+const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
+
 export default function StatsBar() {
   const isMobile = useIsMobile();
 
   return (
     <section style={{
-      padding: `0 ${isMobile ? '20px' : '60px'}`,
+      background: '#f9fafb',
+      borderTop: '1px solid #e5e7eb',
       borderBottom: '1px solid #e5e7eb',
-      background: '#fff',
     }}>
       <motion.div
         variants={staggerContainer}
@@ -41,27 +44,27 @@ export default function StatsBar() {
               variants={fadeUp}
               custom={i * 0.05}
               style={{
-                padding: isMobile ? '28px 0' : '40px 0',
+                padding: isMobile ? '36px 20px' : '52px 0',
                 textAlign: 'center',
                 borderRight: isLastInRow ? 'none' : '1px solid #e5e7eb',
                 borderBottom: isMobile && !isBottomRow ? '1px solid #e5e7eb' : 'none',
               }}
             >
               <div style={{
-                fontFamily: "'Bebas Neue', cursive",
-                fontSize: isMobile ? 'clamp(28px, 7vw, 36px)' : 'clamp(36px, 5vw, 52px)',
+                fontFamily: BEBAS,
+                fontSize: isMobile ? 'clamp(36px, 9vw, 52px)' : 'clamp(48px, 5.5vw, 64px)',
                 color: '#16a34a',
                 letterSpacing: '0.02em',
                 lineHeight: 1,
-                marginBottom: 6,
+                marginBottom: 10,
               }}>
                 <CountUp value={stat.value} suffix={stat.suffix} />
               </div>
               <div style={{
-                fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
-                fontSize: 10,
+                fontFamily: MONO,
+                fontSize: 12,
                 color: '#6b7280',
-                letterSpacing: '0.1em',
+                letterSpacing: '0.02em',
               }}>
                 {stat.label}
               </div>

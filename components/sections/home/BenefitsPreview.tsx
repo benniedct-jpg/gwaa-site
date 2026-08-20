@@ -62,7 +62,7 @@ export default function BenefitsPreview() {
           <motion.div variants={fadeUp}>
             <Eyebrow text="MATESHIP BENEFITS" />
             <h2 style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
               fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6,
             }}>
@@ -70,8 +70,8 @@ export default function BenefitsPreview() {
             </h2>
           </motion.div>
           <Link href="/mateship#benefits" style={{
-            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
-            fontSize: 11, color: '#6b7280', letterSpacing: '0.06em', flexShrink: 0,
+            fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+            fontSize: 13, color: '#4b5563', letterSpacing: '0.02em', flexShrink: 0,
             whiteSpace: 'nowrap',
           }}>
             전체 혜택 보기 →
@@ -97,12 +97,12 @@ export default function BenefitsPreview() {
             >
               <div style={{ marginBottom: 12, lineHeight: 0 }}>{b.icon}</div>
               <h3 style={{
-                fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 18 : 22,
+                fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 18 : 22,
                 color: '#111', letterSpacing: '0.02em', marginBottom: 6,
               }}>
                 {b.title}
               </h3>
-              <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7, fontWeight: 300 }}>
+              <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>
                 {b.desc}
               </p>
             </motion.div>

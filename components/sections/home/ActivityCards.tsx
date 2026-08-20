@@ -66,7 +66,7 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
           <Badge variant={TAG_COLORS[card.tagColor] ?? 'gray'}>{card.tag}</Badge>
         </div>
         <h3 style={{
-          fontFamily: "'Bebas Neue', cursive",
+          fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
           fontSize: isMobile ? 22 : 26,
           letterSpacing: '0.02em',
           color: '#111',
@@ -75,16 +75,16 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
         }}>
           {card.title}
         </h3>
-        <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.75, fontWeight: 300, marginBottom: 16 }}>
+        <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 16 }}>
           {card.desc}
         </p>
         <Link
           href={card.link}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
-            fontSize: 11, fontWeight: 700, color: '#16a34a',
-            letterSpacing: '0.06em', textDecoration: 'none',
+            fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+            fontSize: 12, fontWeight: 700, color: '#16a34a',
+            letterSpacing: '0.04em', textDecoration: 'none',
             transition: 'gap 0.2s',
           }}
         >
@@ -121,7 +121,7 @@ export default function ActivityCards({ initialData }: { initialData?: ActivityC
         <motion.div variants={fadeUp}>
           <Eyebrow text="CORE ACTIVITIES" />
           <h2 style={{
-            fontFamily: "'Bebas Neue', cursive",
+            fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
             fontSize: isMobile ? 32 : 'clamp(26px, 5.5vw, 52px)',
             color: '#111', letterSpacing: '0.02em', lineHeight: 1,
             marginBottom: 8,
@@ -129,8 +129,8 @@ export default function ActivityCards({ initialData }: { initialData?: ActivityC
             GWAA가 하는 일
           </h2>
           <p style={{
-            fontSize: 14, color: '#6b7280', lineHeight: 1.75,
-            fontWeight: 300, maxWidth: 560, marginBottom: 32,
+            fontSize: 15, color: '#374151', lineHeight: 1.6,
+            fontWeight: 400, maxWidth: 560, marginBottom: 32,
           }}>
             교육부터 행사, 멤버십까지. 강원도 반려동물 문화를 만드는 세 가지 핵심 활동을 소개합니다.
           </p>

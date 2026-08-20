@@ -47,7 +47,7 @@ export default function MateshipCTA() {
         <div>
           <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
             <div style={{ width: 24, height: 2, background: '#16a34a', borderRadius: 1, flexShrink: 0 }} />
-            <span style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, color: '#16a34a', letterSpacing: '0.14em' }}>
+            <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, color: '#16a34a', letterSpacing: '0.06em' }}>
               GWAA MATESHIP
             </span>
           </motion.div>
@@ -56,7 +56,7 @@ export default function MateshipCTA() {
             variants={fadeUp}
             custom={0.08}
             style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
               fontSize: isMobile ? 40 : 'clamp(36px, 5vw, 64px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 0.95,
               marginBottom: 10,
@@ -66,7 +66,7 @@ export default function MateshipCTA() {
             <span style={{ color: '#16a34a' }}>메이트쉽</span>으로
           </motion.h2>
 
-          <motion.p variants={fadeUp} custom={0.14} style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.8, fontWeight: 300, marginBottom: 28 }}>
+          <motion.p variants={fadeUp} custom={0.14} style={{ fontSize: 15, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}>
             연간 40만원 이상 절약하는 스마트한 반려생활. 강원도 전역 제휴업체 혜택과 GWAA의 모든 프로그램을 회원 가격으로 누리세요.
           </motion.p>
 

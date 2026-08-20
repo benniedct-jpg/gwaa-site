@@ -12,7 +12,7 @@ export const metadata = {
   openGraph: {
     title: '행사 | GWAA 강원도반려동물협회',
     description: '강원도 전역에서 펼쳐지는 반려동물 행사와 지난 행사 아카이브를 확인하세요.',
-    url: 'https://gwaa-next.vercel.app/events',
+    url: 'https://gwaa.or.kr/events',
     siteName: 'GWAA 강원도반려동물협회',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'ko_KR',
@@ -31,9 +31,9 @@ export default async function EventsPage() {
     <>
       <PageHero
         eyebrow="EVENTS"
-        title="반려동물과 함께하는"
-        titleAccent="행사"
-        desc="강원도 전역에서 펼쳐지는 다양한 반려동물 행사를 만나보세요. 트레킹, 캠핑, 문화축제, 교육 행사까지."
+        title="우리 애랑 뭐 하고 놀지,"
+        titleAccent="여기 다 있어요"
+        desc="5년째, 강원 11곳에서 4만 명이 함께 만들어온 반려생활. 다음 이야기엔 당신 자리도 있어요."
       />
       <EventsContent initialEvents={events} initialArchives={archives} />
       <section style={{ padding: '40px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>

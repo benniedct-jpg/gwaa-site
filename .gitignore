@@ -42,3 +42,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 로컬 개발용 데이터 (Supabase 미설정 시 임시 저장)
+.local-data/
+
+# 비공개 원본 파일 (대용량, 배포/커밋 제외)
+_source_files_not_public/

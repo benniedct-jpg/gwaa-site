@@ -13,6 +13,7 @@ const HISTORY: {
   {
     year: 2026,
     events: [
+      { month: '', title: '제1회 청주시 반려동물 문화행사 — 학교종이댕댕댕', loc: '청주', tag: '문화행사', tagColor: '#16a34a', desc: '청주시에서 처음 열린 반려동물 문화행사. 학교를 콘셉트로 한 체험형 프로그램으로, 반려동물과 보호자가 함께 배우고 참여했다. 강원도를 넘어 충청권으로 확장된 GWAA의 첫 발걸음이다.' },
       { month: '06월', title: '원주시 반려견 산책교육 — 햅삐 산책크루 3기', loc: '원주', tag: '교육', tagColor: '#2563eb', desc: '2025년 1·2기에 이어 세 번째로 이어진 원주시 공식 반려견 산책 교육 프로그램. 문제행동이 있는 반려견과 보호자가 함께 성장하는 6주 과정.' },
     ],
   },
@@ -47,7 +48,7 @@ const HISTORY: {
       { month: '10월', title: '제1회 강릉시반려동물문화축제 — 올림펫', loc: '강릉', ppl: '3,000', tag: '문화축제', tagColor: '#16a34a', desc: '올림픽의 도시 강릉에서 처음으로 열린 반려동물 문화 축제. 강릉이 반려동물과 보호자 모두를 위한 생활문화 공간으로 진화하는 첫 걸음.' },
       { month: '06월', title: '반려동물 재난위기 대비 가이드북 배포', loc: '전국', tag: '출판', tagColor: '#6b7280', desc: '반려동물과 보호자가 재난 상황에서 함께 살아남는 방법. GWAA가 직접 제작·배포한 실용 가이드.' },
       { month: '06월', title: '반려동물 취창업 특강', loc: '원주', tag: '교육', tagColor: '#2563eb', desc: '강원도 반려동물 산업 취창업 희망자를 대상으로 한 특강. 지역 반려동물 산업의 성장을 지원하는 GWAA의 교육 사업.' },
-      { month: '05월', title: '강릉 산불 피해 반려동물 재난구호 기부', loc: '강릉', tag: '사회공헌', tagColor: '#dc2626', desc: '강릉 산불 피해지역에 반려동물 재난구호키트와 위치추적 인식표를 기부. 강릉시와 MOU 체결 후 동물사랑센터 현장 전달. 재난 속에서도 반려동물을 지킨 GWAA의 손길.' },
+      { month: '05월', title: '강릉 반려동물 재난구호 키트 기부', loc: '강릉', tag: '사회공헌', tagColor: '#dc2626', desc: '강릉 지역에 반려동물 재난구호키트와 위치추적 인식표를 기부. 강릉시와 MOU 체결 후 동물사랑센터 현장 전달. 재난 상황에서도 반려동물을 지키기 위한 GWAA의 손길.' },
       { month: '03~05월', title: '댕댕플로깅 유니브 서포터즈 1기', loc: '원주', tag: '캠페인', tagColor: '#d97706', desc: '상지대·한라대 학생들과 함께한 3개월간의 플로깅 캠페인. 대학과 협력한 첫 시민 참여형 인식개선 프로젝트.' },
       { month: '01월', title: '인제에코페스티벌 반려동물사진전', loc: '인제', tag: '전시', tagColor: '#6b7280', desc: '인제에코페스티벌 내 반려동물 사진전 기획·운영. 강원도 생태 가치와 반려동물 문화를 하나의 시선으로 담아낸 전시.' },
     ],
@@ -77,7 +78,7 @@ const VALUES = [
 ];
 
 const ACTIVITIES = [
-  { icon: '🎪', title: '행사 기획 · 운영', desc: '강원도 전역에서 트레킹, 캠핑, 문화축제 등 반려동물 행사를 직접 기획하고 운영합니다. 2021년부터 4만명+가 함께했습니다.', href: '/events', color: '#16a34a' },
+  { icon: '🎪', title: '행사 기획 · 운영', desc: '강원도 전역에서 트레킹, 캠핑, 문화축제 등 반려동물 행사를 직접 기획하고 운영합니다. 2021년부터 4만 명 이상이 함께했습니다.', href: '/events', color: '#16a34a' },
   { icon: '🎓', title: '반려동물 교육', desc: '독스포츠 어질리티·오비디언스 정규 교육과 반려동물행동지도사 국가자격증 취득 과정을 운영합니다.', href: '/education', color: '#2563eb' },
   { icon: '🤝', title: '메이트쉽 멤버십', desc: '강원도 전역 18개 이상 제휴업체 혜택과 GWAA 프로그램 할인으로 연간 40만원 이상 절약하는 멤버십입니다.', href: '/mateship', color: '#d97706' },
   { icon: '🌿', title: '반려동물 여행', desc: '강원도 반려동물 동반 여행 코스, 호텔·리조트·카페·캠핑장 정보를 큐레이션합니다.', href: '/travel', color: '#0891b2' },
@@ -108,7 +109,7 @@ export default function AboutContent() {
           <motion.div variants={fadeUp}>
             <Eyebrow text="VISION" />
             <blockquote style={{
-              fontFamily: "'Bebas Neue', cursive",
+              fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
               fontSize: isMobile ? 32 : 'clamp(28px, 4vw, 48px)',
               color: '#111', letterSpacing: '0.02em', lineHeight: 1.1,
               marginBottom: 20,
@@ -128,7 +129,7 @@ export default function AboutContent() {
                 custom={i * 0.06}
                 style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, padding: isMobile ? '16px 18px' : '20px 22px' }}
               >
-                <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 11, color: '#16a34a', letterSpacing: '0.06em', marginBottom: 8 }}>
+                <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 11, color: '#16a34a', letterSpacing: '0.06em', marginBottom: 8 }}>
                   {v.label}
                 </div>
                 <p style={{ fontSize: isMobile ? 12 : 13, color: '#111', fontWeight: 500, lineHeight: 1.6 }}>{v.text}</p>
@@ -148,7 +149,7 @@ export default function AboutContent() {
         >
           <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: isMobile ? 32 : 48 }}>
             <Eyebrow text="WHAT WE DO" />
-            <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 32 : 'clamp(26px,5.5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
+            <h2 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 32 : 'clamp(26px,5.5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
               주요 사업
             </h2>
           </motion.div>
@@ -190,7 +191,7 @@ export default function AboutContent() {
                     {item.icon}
                   </div>
                   <h3 style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                     fontSize: isMobile ? 17 : 22,
                     color: '#111', letterSpacing: '0.02em',
                     marginBottom: isMobile ? 6 : 10, lineHeight: 1.15,
@@ -222,7 +223,7 @@ export default function AboutContent() {
         >
           <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: isMobile ? 40 : 64 }}>
             <Eyebrow text="HISTORY" />
-            <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 32 : 'clamp(26px,5.5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
+            <h2 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 32 : 'clamp(26px,5.5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
               협회 연혁
             </h2>
             <p style={{ fontSize: 15, color: '#6b7280', lineHeight: 1.6, marginTop: 12, fontWeight: 400 }}>
@@ -244,7 +245,7 @@ export default function AboutContent() {
                   marginBottom: isMobile ? 16 : 24,
                 }}>
                   <div style={{
-                    fontFamily: "'Bebas Neue', cursive",
+                    fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                     fontSize: isMobile ? 28 : 36,
                     color: '#16a34a',
                     letterSpacing: '0.02em',
@@ -272,7 +273,7 @@ export default function AboutContent() {
                     >
                       {/* Month */}
                       <div style={{
-                        fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                        fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
                         fontSize: 11,
                         color: '#9ca3af',
                         letterSpacing: '0.06em',
@@ -285,7 +286,7 @@ export default function AboutContent() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 6 }}>
                           <span style={{
                             display: 'inline-block',
-                            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                            fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
                             fontSize: 10,
                             letterSpacing: '0.06em',
                             color: ev.tagColor,
@@ -297,14 +298,14 @@ export default function AboutContent() {
                           }}>{ev.tag}</span>
                           {ev.ppl && (
                             <span style={{
-                              fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                              fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
                               fontSize: 10,
                               color: '#6b7280',
                               letterSpacing: '0.04em',
                             }}>{ev.ppl}명 참여</span>
                           )}
                           <span style={{
-                            fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                            fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
                             fontSize: 10,
                             color: '#9ca3af',
                             letterSpacing: '0.04em',
@@ -345,7 +346,7 @@ export default function AboutContent() {
           {[
             { val: 40000, suf: '+', label: '누적 참가자' },
             { val: 90,    suf: '회+', label: '진행 행사' },
-            { val: 4,     suf: '년+', label: '운영 연혁' },
+            { val: 5,     suf: '년+', label: '운영 연혁' },
           ].map((s, i) => (
             <motion.div
               key={s.label}
@@ -353,10 +354,10 @@ export default function AboutContent() {
               custom={i * 0.06}
               style={{ padding: `${isMobile ? '28px' : '40px'} 0`, borderRight: i < 2 ? '1px solid #e5e7eb' : 'none' }}
             >
-              <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: isMobile ? 'clamp(28px,8vw,40px)' : 'clamp(36px, 5vw, 56px)', color: '#16a34a', lineHeight: 1, marginBottom: 8 }}>
+              <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(28px,8vw,40px)' : 'clamp(36px, 5vw, 56px)', color: '#16a34a', lineHeight: 1, marginBottom: 8 }}>
                 <CountUp value={s.val} suffix={s.suf} />
               </div>
-              <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: isMobile ? 9 : 10, color: '#6b7280', letterSpacing: '0.1em' }}>{s.label}</div>
+              <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, color: '#6b7280', letterSpacing: '0.02em' }}>{s.label}</div>
             </motion.div>
           ))}
         </motion.div>

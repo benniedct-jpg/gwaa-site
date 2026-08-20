@@ -27,13 +27,14 @@ export const SlideTabsNav = ({ items, pathname = "" }: SlideTabsNavProps) => {
     <ul
       onMouseLeave={() => setPosition((pv) => ({ ...pv, opacity: 0 }))}
       className="relative flex w-fit items-center gap-0"
+      style={{ height: 64 }}
     >
       {items.map((item) => (
         <Tab
           key={item.label}
           setPosition={setPosition}
           href={item.href}
-          isActive={pathname.startsWith(item.href)}
+          isActive={pathname === item.href || (item.href !== '/' && pathname.startsWith(item.href))}
         >
           {item.label}
         </Tab>
@@ -62,21 +63,38 @@ const Tab = ({ children, setPosition, href, isActive }: TabProps) => {
         setPosition({ left: ref.current.offsetLeft, width, opacity: 1 });
       }}
       className="relative z-10 block cursor-pointer"
+      style={{ height: 64, display: 'flex', alignItems: 'center' }}
     >
       <Link
         href={href}
-        className="flex items-center rounded-full transition-colors duration-150"
         style={{
-          padding: '10px 40px',
-          fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', monospace",
-          fontSize: 12,
-          fontWeight: 800,
+          display: 'flex',
+          alignItems: 'center',
+          padding: '0 16px',
+          height: 64,
+          fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
+          fontSize: 11,
+          fontWeight: 700,
           letterSpacing: "0.1em",
           whiteSpace: "nowrap",
           color: isActive ? "#16a34a" : "#374151",
+          textDecoration: 'none',
+          position: 'relative',
         }}
       >
         {children}
+        {/* Active 언더라인 */}
+        {isActive && (
+          <span style={{
+            position: 'absolute',
+            bottom: 0,
+            left: 16,
+            right: 16,
+            height: 2,
+            background: '#16a34a',
+            borderRadius: '2px 2px 0 0',
+          }} />
+        )}
       </Link>
     </li>
   );
@@ -90,8 +108,15 @@ const Cursor = ({ position }: CursorProps) => {
   return (
     <motion.li
       animate={{ ...position }}
-      className="absolute z-0 rounded-full bg-[#f3f4f6]"
-      style={{ top: "50%", transform: "translateY(-50%)", height: 30, pointerEvents: "none" }}
+      className="absolute z-0"
+      style={{
+        bottom: 0,
+        height: 2,
+        background: '#16a34a',
+        borderRadius: '2px 2px 0 0',
+        pointerEvents: "none",
+        opacity: position.opacity,
+      }}
     />
   );
 };

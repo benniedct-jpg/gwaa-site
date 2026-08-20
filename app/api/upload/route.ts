@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { createClient } from '@supabase/supabase-js';
+import { verifyAdmin } from '@/lib/adminAuth';
 
 const BUCKET = 'gwaa-images';
 
@@ -10,6 +11,11 @@ function getDB() {
 }
 
 export async function POST(req: NextRequest) {
+  // 인증된 관리자만 업로드 가능
+  if (!verifyAdmin(req.cookies.get('gwaa_admin_auth')?.value)) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   const url = process.env.SUPABASE_URL ?? process.env.NEXT_PUBLIC_SUPABASE_URL;
   if (!url || !process.env.SUPABASE_SERVICE_ROLE_KEY) {
     return NextResponse.json({ error: 'Supabase 미설정' }, { status: 503 });

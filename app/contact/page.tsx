@@ -7,7 +7,7 @@ export const metadata = {
   openGraph: {
     title: '문의하기 | GWAA 강원도반려동물협회',
     description: '강원도반려동물협회 문의 — 카카오채널, 전화, 이메일로 문의하세요. 033-813-0333',
-    url: 'https://gwaa-next.vercel.app/contact',
+    url: 'https://gwaa.or.kr/contact',
     siteName: 'GWAA 강원도반려동물협회',
     images: [{ url: '/og-image.png', width: 1200, height: 630 }],
     locale: 'ko_KR',

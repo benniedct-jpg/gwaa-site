@@ -43,7 +43,7 @@ export default function Badge({ variant = 'gray', children, className }: BadgePr
         color: s.color,
         border: s.border,
         backdropFilter: variant === 'dark' ? 'blur(8px)' : undefined,
-        fontFamily: "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace",
+        fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
       }}
     >
       {isLive && (

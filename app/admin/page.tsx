@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clientDB } from '@/lib/db/clientDB';
@@ -22,7 +22,28 @@ import {
   ArchiveEvent, ActivityCard, LookbookItem, TravelPlace, PageHashtags,
 } from '@/types';
 
-type Tab = 'dashboard' | 'applications' | 'events' | 'archive' | 'partners' | 'images' | 'content' | 'travel' | 'settings';
+type Tab = 'dashboard' | 'applications' | 'proposals' | 'members' | 'payments' | 'bookings' | 'events' | 'archive' | 'partners' | 'images' | 'content' | 'travel' | 'settings';
+
+interface Payment { id?: number; payment_id?: string; kind?: string; amount?: number; name?: string; phone?: string; email?: string; status?: string; paid_at?: string; created_at?: string; }
+
+interface Proposal {
+  id?: number; kind?: string; name?: string; region?: string; category?: string;
+  contact?: string; email?: string; link?: string; message?: string; created_at?: string;
+}
+
+interface Member {
+  id?: number; member_no?: string; name?: string; phone?: string; email?: string;
+  region?: string; status?: string; plan?: string; joined_at?: string; expires_at?: string;
+  note?: string; created_at?: string;
+}
+
+type Booking = {
+  id?: number; event_id?: number; booking_type?: string; booking_label?: string; date_label?: string;
+  zone?: string; site?: string; headcount?: number; tshirt_sizes?: string[];
+  name?: string; phone?: string; email?: string; pet_name?: string; pet_breed?: string;
+  pet_age?: string; pet_vaccine?: string; request?: string; amount?: number;
+  status?: string; created_at?: string; ticket_token?: string; checked_in_at?: string;
+};
 
 type Application = {
   at: string; type: 'mateship' | 'education';
@@ -56,7 +77,7 @@ function SectionHeader({ title, sub, onAdd, addLabel = '+ 추가' }: { title: st
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
       <div>
-        <h1 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 32, color: '#111', marginBottom: 4 }}>{title}</h1>
+        <h1 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 32, color: '#111', marginBottom: 4 }}>{title}</h1>
         {sub && <p style={{ fontSize: 13, color: '#9ca3af' }}>{sub}</p>}
       </div>
       {onAdd && <button onClick={onAdd} style={{ padding: '8px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>{addLabel}</button>}
@@ -87,6 +108,13 @@ export default function AdminPage() {
 
   // Data states
   const [apps, setApps] = useState<Application[]>([]);
+  const [proposals, setProposals] = useState<Proposal[]>([]);
+  const [members, setMembers] = useState<Member[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
+  const [newMember, setNewMember] = useState<Partial<Member>>({ status: 'active' });
+  const [memberSearch, setMemberSearch] = useState('');
+  const [bookings, setBookings] = useState<Booking[]>([]);
+  const [noShowOnly, setNoShowOnly] = useState(false);
   const [events, setEvents] = useState<EventCard[]>([]);
   const [partners, setPartners] = useState<MateshipPartner[]>([]);
   const [heroImages, setHeroImages] = useState<HeroImage[]>([{ id: 1 }, { id: 2 }, { id: 3 }]);
@@ -111,6 +139,10 @@ export default function AdminPage() {
   const [editActivity, setEditActivity] = useState<Partial<ActivityCard> & { _key?: number }>({});
   const [editTravel, setEditTravel] = useState<Partial<TravelPlace> & { _key?: number }>({});
   const [hashtagDraft, setHashtagDraft] = useState<Record<string, string>>({});
+  const [imagePickerArc, setImagePickerArc] = useState<ArchiveEvent | null>(null);
+  const arcDragSrcRef = useRef<number | null>(null);   // ref로 stale closure 방지
+  const [arcDragSrcIdx, setArcDragSrcIdx] = useState<number | null>(null); // 시각 효과용
+  const [arcDragOverIdx, setArcDragOverIdx] = useState<number | null>(null);
 
   useEffect(() => { loadAll(); }, []);
 
@@ -124,9 +156,92 @@ export default function AdminPage() {
     router.replace('/admin/login');
   };
 
+  const fetchApps = async (): Promise<Application[]> =>
+    fetch('/api/data/applications').then((r) => (r.ok ? r.json() : [])).catch(() => []);
+
+  // ── 회원관리 ──
+  const genMemberNo = () => {
+    const yr = new Date().getFullYear();
+    const n = members.filter((m) => (m.member_no || '').includes(`GW-${yr}`)).length + 1;
+    return `GW-${yr}-${String(n).padStart(4, '0')}`;
+  };
+  const reloadMembers = async () =>
+    setMembers(await fetch('/api/data/members').then((r) => (r.ok ? r.json() : [])).catch(() => []));
+  const saveMember = async () => {
+    if (!newMember.name?.trim() || !newMember.phone?.trim()) { showToast('이름과 전화번호는 필수입니다', true); return; }
+    const body = {
+      member_no: newMember.member_no?.trim() || genMemberNo(),
+      name: newMember.name.trim(), phone: newMember.phone.trim(),
+      email: newMember.email?.trim() || null, region: newMember.region?.trim() || null,
+      status: newMember.status || 'active',
+      joined_at: newMember.joined_at || new Date().toISOString().slice(0, 10),
+      expires_at: newMember.expires_at || null, note: newMember.note?.trim() || null,
+    };
+    try {
+      const res = await fetch('/api/data/members', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (!res.ok) throw new Error(await res.text());
+      showToast('회원이 등록되었습니다');
+      setNewMember({ status: 'active' });
+      await reloadMembers();
+    } catch (e) { showToast(`등록 실패: ${e instanceof Error ? e.message : String(e)}`, true); }
+  };
+  const updateMemberStatus = async (m: Member, status: string) => {
+    try {
+      const res = await fetch('/api/data/members', { method: 'PUT', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ ...m, status }) });
+      if (!res.ok) throw new Error(await res.text());
+      setMembers((prev) => prev.map((x) => (x.id === m.id ? { ...x, status } : x)));
+    } catch (e) { showToast(`변경 실패: ${e instanceof Error ? e.message : String(e)}`, true); }
+  };
+  const deleteMember = async (m: Member) => {
+    if (!confirm(`${m.name} 회원을 삭제하시겠습니까?`)) return;
+    try {
+      await fetch(`/api/data/members?id=${m.id}`, { method: 'DELETE' });
+      setMembers((prev) => prev.filter((x) => x.id !== m.id));
+      showToast('삭제되었습니다');
+    } catch (e) { showToast(`삭제 실패: ${e instanceof Error ? e.message : String(e)}`, true); }
+  };
+
+  const fetchBookings = async (): Promise<Booking[]> =>
+    fetch('/api/bookings').then((r) => (r.ok ? r.json() : [])).catch(() => []);
+
+  const updateBookingStatus = async (b: Booking, action: 'cancel' | 'confirm') => {
+    const label = action === 'cancel' ? '취소' : '입금확정';
+    const seat = b.site ? `${b.zone || ''} ${b.site}` : (b.booking_type === 'day' ? '관람권' : (b.zone || '관람권'));
+    const confirmMsg = action === 'cancel'
+      ? `${b.name || ''}님의 예약(${seat})을(를) 취소 처리할까요?\n취소하면 해당 자리가 즉시 다시 열립니다.`
+      : `${b.name || ''}님의 예약(${seat})을(를) 입금확정하고 입장권(QR) 메일을 발송할까요?\n(${b.email || '이메일 없음'})`;
+    if (!confirm(confirmMsg)) return;
+    try {
+      const res = await fetch('/api/bookings', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: b.id, action }) });
+      const j = await res.json();
+      if (!res.ok || !j.ok) throw new Error(j.error || '처리 실패');
+      setBookings((prev) => prev.map((x) => (x.id === b.id ? { ...x, status: j.status } : x)));
+      if (action === 'confirm' && j.mail) {
+        if (j.mail.sent) showToast(`입금확정 완료 · 입장권 메일 발송됨 → ${b.email || ''}`);
+        else showToast(`입금확정됨. 단, 메일 발송 실패: ${j.mail.reason || ''} — [✉ 메일발송]으로 재시도하세요`, true);
+      } else {
+        showToast(`예약을 ${label} 처리했습니다.`);
+      }
+    } catch (e) { showToast(`${label} 실패: ${e instanceof Error ? e.message : String(e)}`, true); }
+  };
+
+  const sendTicketMail = async (b: Booking) => {
+    if (b.status !== 'paid') { showToast('입금확정 후 발송할 수 있습니다.', true); return; }
+    if (!confirm(`${b.name || ''}님(${b.email || '이메일 없음'})에게 입장권(QR) 메일을 발송할까요?`)) return;
+    try {
+      const res = await fetch('/api/tickets/send', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id: b.id }) });
+      const j = await res.json();
+      if (!res.ok || !j.ok) throw new Error(j.error || '발송 실패');
+      showToast(`입장권 메일을 보냈습니다 → ${j.to}`);
+    } catch (e) { showToast(`메일 발송 실패: ${e instanceof Error ? e.message : String(e)}`, true); }
+  };
+
   const loadAll = async () => {
     try {
-      setApps(JSON.parse(localStorage.getItem('gwaa_applications') || '[]'));
+      setApps(await fetchApps());
+      setProposals(await fetch('/api/data/proposals').then((r) => (r.ok ? r.json() : [])).catch(() => []));
+      setMembers(await fetch('/api/data/members').then((r) => (r.ok ? r.json() : [])).catch(() => []));
+      setBookings(await fetchBookings());
       setEvents(await clientDB.getAll<EventCard>(STORES.EVENT));
       setPartners(await clientDB.getAll<MateshipPartner>(STORES.MATESHIP));
       setArchives(await clientDB.getAll<ArchiveEvent>(STORES.ARCHIVE));
@@ -147,10 +262,16 @@ export default function AdminPage() {
   };
 
 
-  const switchTab = (t: Tab) => {
+  const switchTab = async (t: Tab) => {
     setTab(t);
     if (t === 'dashboard' || t === 'applications') {
-      setApps(JSON.parse(localStorage.getItem('gwaa_applications') || '[]'));
+      setApps(await fetchApps());
+    }
+    if (t === 'dashboard' || t === 'bookings') {
+      setBookings(await fetchBookings());
+    }
+    if (t === 'payments') {
+      setPayments(await fetch('/api/admin/payments').then((r) => (r.ok ? r.json() : [])).catch(() => []));
     }
   };
 
@@ -165,9 +286,14 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
   };
 
-  const clearApplications = () => {
+  const clearApplications = async () => {
     if (!confirm('전체 신청 내역을 삭제하시겠습니까?')) return;
-    localStorage.removeItem('gwaa_applications'); setApps([]); showToast('전체 삭제 완료');
+    await Promise.all(
+      apps.map((a) => (a as { id?: number }).id)
+        .filter((id): id is number => id != null)
+        .map((id) => fetch(`/api/data/applications?id=${id}`, { method: 'DELETE' })),
+    );
+    setApps([]); showToast('전체 삭제 완료');
   };
 
   // ─── Event CRUD ───
@@ -203,6 +329,75 @@ export default function AdminPage() {
     if (!confirm('이 아카이브 행사를 삭제하시겠습니까?')) return;
     await clientDB.remove(STORES.ARCHIVE, key);
     setArchives(await clientDB.getAll<ArchiveEvent>(STORES.ARCHIVE)); showToast('삭제 완료');
+  };
+
+  const reorderArchiveImages = async (fromIdx: number, toIdx: number) => {
+    if (!imagePickerArc || fromIdx === toIdx) return;
+    const imgs = [...(imagePickerArc.images || [])];
+    const [moved] = imgs.splice(fromIdx, 1);
+    imgs.splice(toIdx, 0, moved);
+    const updated = { ...imagePickerArc, images: imgs };
+    setImagePickerArc(updated);
+    setArchives(prev => prev.map(a => a.order === imagePickerArc.order ? updated : a));
+    try { await clientDB.put(STORES.ARCHIVE, updated); showToast('이미지 순서 변경 완료'); }
+    catch { showToast('로컬 저장 완료', false); }
+  };
+
+  const deleteArchiveImage = async (imgSrc: string) => {
+    if (!imagePickerArc) return;
+    const imgs = (imagePickerArc.images || []).filter(i => i !== imgSrc);
+    const newRep = imagePickerArc.imageData === imgSrc ? (imgs[0] ?? null) : imagePickerArc.imageData;
+    const updated = { ...imagePickerArc, images: imgs, imageData: newRep };
+    setImagePickerArc(updated);
+    setArchives(prev => prev.map(a => a.order === imagePickerArc.order ? updated : a));
+    try { await clientDB.put(STORES.ARCHIVE, updated); showToast('이미지 삭제 완료'); }
+    catch { showToast('로컬 저장 완료', false); }
+  };
+
+  const setRepresentativeImage = async (arc: ArchiveEvent, imgSrc: string) => {
+    const imgs = [...(arc.images || [])];
+    const pos = imgs.indexOf(imgSrc);
+    if (pos > 0) { imgs.splice(pos, 1); imgs.unshift(imgSrc); }
+    const updated = { ...arc, imageData: imgSrc, images: imgs };
+    // order(required)로 매칭 — 낙관적 업데이트
+    setArchives((prev) => prev.map((a) => a.order === arc.order ? updated : a));
+    setImagePickerArc(updated);
+    try {
+      await clientDB.put(STORES.ARCHIVE, updated);
+      showToast('대표 이미지 저장 완료');
+    } catch {
+      showToast('Supabase 미설정 — 새로고침 시 초기화됩니다', true);
+    }
+  };
+
+  const moveArchiveOrder = async (arc: ArchiveEvent, direction: 'up' | 'down') => {
+    const sorted = [...archives].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    const idx = sorted.findIndex((a) => a.order === arc.order);
+    const swapIdx = direction === 'up' ? idx - 1 : idx + 1;
+    if (swapIdx < 0 || swapIdx >= sorted.length) return;
+
+    const target = sorted[swapIdx];
+    const arcOrder = arc.order;
+    const tgtOrder = target.order;
+
+    // order(required)로 매칭 — 낙관적 업데이트
+    setArchives((prev) =>
+      prev.map((a) => {
+        if (a.order === arcOrder) return { ...a, order: tgtOrder };
+        if (a.order === tgtOrder) return { ...a, order: arcOrder };
+        return a;
+      })
+    );
+
+    try {
+      // unique constraint 방지: 임시값 → target 먼저 → arc 마지막
+      await clientDB.put(STORES.ARCHIVE, { ...arc, order: Date.now() });
+      await clientDB.put(STORES.ARCHIVE, { ...target, order: arcOrder });
+      await clientDB.put(STORES.ARCHIVE, { ...arc,    order: tgtOrder });
+      showToast('순서 변경 완료');
+    } catch {
+      showToast('Supabase 미설정 — 새로고침 시 초기화됩니다', true);
+    }
   };
 
   // ─── Partner CRUD ───
@@ -334,23 +529,42 @@ export default function AdminPage() {
   };
 
   const navBtnStyle = (active: boolean): React.CSSProperties => ({
-    fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.08em',
+    fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 10, letterSpacing: '0.08em',
     color: active ? '#4ade80' : 'rgba(255,255,255,0.4)',
     background: active ? 'rgba(74,222,128,.08)' : 'none',
     border: 'none', padding: '8px 14px', borderRadius: 6, cursor: 'pointer', transition: 'all .2s',
   });
 
   const tabs: [Tab, string][] = [
-    ['dashboard', '대시보드'], ['applications', '신청내역'], ['events', '행사관리'],
+    ['dashboard', '대시보드'], ['applications', '신청내역'], ['proposals', '제안접수'], ['members', '회원관리'], ['payments', '결제내역'], ['bookings', '예약내역'], ['events', '행사관리'],
     ['archive', '아카이브'], ['partners', '제휴업체'], ['images', '이미지'],
     ['content', '콘텐츠'], ['travel', '여행지'], ['settings', '설정'],
   ];
+
+  const mLabel: React.CSSProperties = { display: 'block', fontSize: 11, fontWeight: 700, color: '#6b7280', marginBottom: 4 };
+  const mInput: React.CSSProperties = { width: '100%', padding: '8px 10px', border: '1.5px solid #e5e7eb', borderRadius: 8, fontSize: 13, color: '#111', background: '#fafafa', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' };
+
+  const exportBookingsCSV = () => {
+    const header = ['신청일시', '상태', '일정', '날짜', '구역', '사이트', '인원', '웰니스클래스', '예약자', '연락처', '이메일', '반려견', '견종', '접종', '금액', '요청'];
+    const stTxt = (s?: string) => s === 'paid' ? '입금확정' : s === 'cancelled' ? '취소됨' : '입금대기';
+    const rows = bookings.map((b) => [
+      b.created_at ? new Date(b.created_at).toLocaleString('ko-KR') : '', stTxt(b.status), b.booking_label || '', b.date_label || '',
+      b.zone || '', b.site || '', b.headcount != null ? `${b.headcount}인` : '', (b.tshirt_sizes || []).join(' / '),
+      b.name || '', b.phone || '', b.email || '', b.pet_name || '', b.pet_breed || '',
+      b.pet_vaccine === 'yes' ? '완료' : b.pet_vaccine === 'no' ? '미완료' : '', b.amount != null ? String(b.amount) : '', b.request || '',
+    ]);
+    const csv = [header, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = `gwaa_bookings_${Date.now()}.csv`; a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
     <div style={{ background: '#f8fafc', minHeight: '100vh' }}>
       {/* Admin Header */}
       <header style={{ position: 'sticky', top: 0, zIndex: 100, background: '#0a0a0a', padding: '0 24px', height: 56, display: 'flex', alignItems: 'center', justifyContent: 'space-between', borderBottom: '1px solid rgba(255,255,255,.07)', gap: 16 }}>
-        <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 12, letterSpacing: '0.1em', color: '#4ade80', flexShrink: 0 }}>GWAA ADMIN</div>
+        <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.1em', color: '#4ade80', flexShrink: 0 }}>GWAA ADMIN</div>
         <nav style={{ display: 'flex', gap: 2, overflowX: 'auto' }}>
           {tabs.map(([t, l]) => (
             <button key={t} onClick={() => switchTab(t)} style={navBtnStyle(tab === t)}>{l}</button>
@@ -364,13 +578,13 @@ export default function AdminPage() {
         {/* ── Dashboard ── */}
         {tab === 'dashboard' && (
           <div>
-            <h1 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 32, marginBottom: 8, color: '#111' }}>대시보드</h1>
+            <h1 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 32, marginBottom: 8, color: '#111' }}>대시보드</h1>
             <p style={{ fontSize: 13, color: '#9ca3af', marginBottom: 28 }}>{new Date().toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' })}</p>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 16, marginBottom: 32 }}>
               {[{ label: '전체 신청', num: apps.length, sub: '누적' }, { label: '메이트쉽', num: apps.filter(a => a.type === 'mateship').length, sub: '가입 신청' }, { label: '교육 신청', num: apps.filter(a => a.type === 'education').length, sub: '교육 프로그램' }, { label: '등록 행사', num: events.length, sub: '진행중·예정 포함' }].map(({ label, num, sub }) => (
                 <div key={label} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, padding: '22px 24px' }}>
                   <div style={{ fontSize: 11, color: '#9ca3af', letterSpacing: '0.05em', marginBottom: 6 }}>{label}</div>
-                  <div style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 36, color: '#111', lineHeight: 1 }}>{num}</div>
+                  <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 36, color: '#111', lineHeight: 1 }}>{num}</div>
                   <div style={{ fontSize: 11, color: '#16a34a', marginTop: 4 }}>{sub}</div>
                 </div>
               ))}
@@ -378,7 +592,7 @@ export default function AdminPage() {
             <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '18px 24px', borderBottom: '1px solid #e5e7eb' }}>
                 <div><div style={{ fontSize: 15, fontWeight: 700, color: '#111' }}>최근 신청 내역</div><div style={{ fontSize: 12, color: '#9ca3af' }}>최근 5건</div></div>
-                <button onClick={() => switchTab('applications')} style={{ fontSize: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", padding: '8px 18px', border: '1.5px solid #e5e7eb', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#6b7280' }}>전체 보기 →</button>
+                <button onClick={() => switchTab('applications')} style={{ fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", padding: '8px 18px', border: '1.5px solid #e5e7eb', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#6b7280' }}>전체 보기 →</button>
               </div>
               <AppTable apps={apps.slice(-5).reverse()} short />
             </div>
@@ -390,11 +604,190 @@ export default function AdminPage() {
           <div>
             <SectionHeader title="신청 내역" sub="메이트쉽 가입 & 교육 신청 접수 목록" />
             <div style={{ display: 'flex', gap: 10, marginBottom: 20 }}>
-              <button onClick={exportCSV} style={{ fontSize: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", padding: '8px 18px', border: '1.5px solid #e5e7eb', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#6b7280' }}>CSV 내보내기</button>
-              <button onClick={clearApplications} style={{ fontSize: 12, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", padding: '8px 18px', border: '1.5px solid #fca5a5', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#ef4444' }}>전체 삭제</button>
+              <button onClick={exportCSV} style={{ fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", padding: '8px 18px', border: '1.5px solid #e5e7eb', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#6b7280' }}>CSV 내보내기</button>
+              <button onClick={clearApplications} style={{ fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", padding: '8px 18px', border: '1.5px solid #fca5a5', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#ef4444' }}>전체 삭제</button>
             </div>
             <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
               <AppTable apps={[...apps].reverse()} />
+            </div>
+          </div>
+        )}
+
+        {/* ── Proposals (제휴·등록 제안) ── */}
+        {tab === 'proposals' && (
+          <div>
+            <SectionHeader title="제안 접수" sub="여행지 등록 제안 & 메이트쉽 제휴 제안 목록" />
+            <div style={{ fontSize: 12, color: '#9ca3af', marginBottom: 20 }}>
+              총 {proposals.length}건 · 여행지 {proposals.filter((p) => p.kind === 'travel').length}건 · 제휴 {proposals.filter((p) => p.kind === 'mateship').length}건
+            </div>
+            <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'auto' }}>
+              {proposals.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>접수된 제안이 없습니다</div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
+                      {['접수일시', '유형', '업체/장소명', '지역', '업종', '연락처', '이메일', '링크', '내용'].map((h) => (
+                        <th key={h} style={{ padding: '12px 14px', fontSize: 12, color: '#6b7280', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '1px solid #e5e7eb' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {[...proposals].reverse().map((p, i) => (
+                      <tr key={p.id ?? i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                        <td style={{ padding: '11px 14px', color: '#6b7280', whiteSpace: 'nowrap' }}>{p.created_at ? new Date(p.created_at).toLocaleString('ko-KR') : ''}</td>
+                        <td style={{ padding: '11px 14px', whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: p.kind === 'mateship' ? '#fef3c7' : '#dcfce7', color: p.kind === 'mateship' ? '#92400e' : '#16a34a' }}>
+                            {p.kind === 'mateship' ? '제휴 제안' : '여행지 등록'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '11px 14px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{p.name || ''}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.region || '-'}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.category || '-'}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.contact || ''}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.email || '-'}</td>
+                        <td style={{ padding: '11px 14px', color: '#2563eb', maxWidth: 180, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                          {p.link ? <a href={p.link.startsWith('http') ? p.link : `https://${p.link}`} target="_blank" rel="noopener noreferrer" style={{ color: '#2563eb' }}>{p.link}</a> : '-'}
+                        </td>
+                        <td style={{ padding: '11px 14px', color: '#374151', maxWidth: 260, whiteSpace: 'pre-wrap' }}>{p.message || '-'}</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Members (회원관리) ── */}
+        {tab === 'members' && (
+          <div>
+            <SectionHeader title="회원 관리" sub="디지털 회원증 발급 대상 · 회비 납부 회원 등록/관리" />
+            {/* 회원 추가 폼 */}
+            <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, padding: '16px 18px', marginBottom: 16, display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px,1fr))', gap: 10, alignItems: 'end' }}>
+              <div><label style={mLabel}>이름 *</label><input value={newMember.name || ''} onChange={(e) => setNewMember((p) => ({ ...p, name: e.target.value }))} style={mInput} placeholder="홍길동" /></div>
+              <div><label style={mLabel}>전화번호 *</label><input value={newMember.phone || ''} onChange={(e) => setNewMember((p) => ({ ...p, phone: e.target.value }))} style={mInput} placeholder="010-0000-0000" /></div>
+              <div><label style={mLabel}>지역</label><input value={newMember.region || ''} onChange={(e) => setNewMember((p) => ({ ...p, region: e.target.value }))} style={mInput} placeholder="원주" /></div>
+              <div><label style={mLabel}>상태</label><select value={newMember.status || 'active'} onChange={(e) => setNewMember((p) => ({ ...p, status: e.target.value }))} style={mInput}><option value="active">활성</option><option value="expired">만료</option><option value="pending">대기</option></select></div>
+              <div><label style={mLabel}>가입일</label><input type="date" value={newMember.joined_at || ''} onChange={(e) => setNewMember((p) => ({ ...p, joined_at: e.target.value }))} style={mInput} /></div>
+              <div><label style={mLabel}>만료일</label><input type="date" value={newMember.expires_at || ''} onChange={(e) => setNewMember((p) => ({ ...p, expires_at: e.target.value }))} style={mInput} /></div>
+              <button onClick={saveMember} style={{ padding: '9px 18px', background: '#16a34a', color: '#fff', border: 'none', borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: 'pointer', height: 37 }}>+ 회원 추가</button>
+            </div>
+            {/* 검색 */}
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12, gap: 12 }}>
+              <input value={memberSearch} onChange={(e) => setMemberSearch(e.target.value)} placeholder="이름·전화·회원번호 검색" style={{ ...mInput, maxWidth: 280 }} />
+              <span style={{ fontSize: 12, color: '#9ca3af', whiteSpace: 'nowrap' }}>총 {members.length}명 · 활성 {members.filter((m) => m.status === 'active').length}명</span>
+            </div>
+            <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'auto' }}>
+              {(() => {
+                const q = memberSearch.trim().toLowerCase();
+                const filtered = q ? members.filter((m) => `${m.name} ${m.phone} ${m.member_no} ${m.region}`.toLowerCase().includes(q)) : members;
+                if (filtered.length === 0) return <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>{members.length === 0 ? '등록된 회원이 없습니다' : '검색 결과 없음'}</div>;
+                return (
+                  <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                    <thead><tr style={{ background: '#f9fafb', textAlign: 'left' }}>{['회원번호', '이름', '전화', '지역', '상태', '가입일', '만료일', '관리'].map((h) => <th key={h} style={{ padding: '11px 14px', fontSize: 12, color: '#6b7280', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '1px solid #e5e7eb' }}>{h}</th>)}</tr></thead>
+                    <tbody>
+                      {[...filtered].reverse().map((m, i) => (
+                        <tr key={m.id ?? i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                          <td style={{ padding: '10px 14px', fontFamily: 'monospace', color: '#374151', whiteSpace: 'nowrap' }}>{m.member_no}</td>
+                          <td style={{ padding: '10px 14px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{m.name}</td>
+                          <td style={{ padding: '10px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{m.phone}</td>
+                          <td style={{ padding: '10px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{m.region || '-'}</td>
+                          <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}>
+                            <select value={m.status || 'active'} onChange={(e) => updateMemberStatus(m, e.target.value)} style={{ fontSize: 12, padding: '3px 6px', borderRadius: 6, border: '1px solid #e5e7eb', background: m.status === 'active' ? '#dcfce7' : m.status === 'expired' ? '#fee2e2' : '#fef3c7', color: m.status === 'active' ? '#16a34a' : m.status === 'expired' ? '#dc2626' : '#92400e', fontWeight: 700, cursor: 'pointer' }}>
+                              <option value="active">활성</option><option value="expired">만료</option><option value="pending">대기</option>
+                            </select>
+                          </td>
+                          <td style={{ padding: '10px 14px', color: '#6b7280', whiteSpace: 'nowrap' }}>{m.joined_at || '-'}</td>
+                          <td style={{ padding: '10px 14px', color: '#6b7280', whiteSpace: 'nowrap' }}>{m.expires_at || '-'}</td>
+                          <td style={{ padding: '10px 14px', whiteSpace: 'nowrap' }}><button onClick={() => deleteMember(m)} style={{ fontSize: 12, color: '#ef4444', background: 'none', border: '1px solid #fca5a5', borderRadius: 6, padding: '4px 10px', cursor: 'pointer' }}>삭제</button></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                );
+              })()}
+            </div>
+          </div>
+        )}
+
+        {/* ── Payments (결제내역) ── */}
+        {tab === 'payments' && (
+          <div>
+            <SectionHeader title="결제 내역" sub="회비·후원 온라인 결제 내역 (회비 결제는 회원으로 자동 등록됩니다)" />
+            <div style={{ fontSize: 12, color: '#9ca3af', marginBottom: 20 }}>
+              총 {payments.length}건 · 완료 {payments.filter((p) => p.status === 'paid').length}건 · 회비 {payments.filter((p) => p.kind === 'membership').length}건 · 후원 {payments.filter((p) => p.kind === 'donation').length}건 · 합계 {payments.filter((p) => p.status === 'paid').reduce((s, p) => s + (Number(p.amount) || 0), 0).toLocaleString()}원
+            </div>
+            <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'auto' }}>
+              {payments.length === 0 ? (
+                <div style={{ textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>결제 내역이 없습니다 (포트원 연동 후 표시됩니다)</div>
+              ) : (
+                <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
+                  <thead>
+                    <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
+                      {['결제일시', '유형', '이름', '연락처', '이메일', '금액', '상태'].map((h) => (
+                        <th key={h} style={{ padding: '12px 14px', fontSize: 12, color: '#6b7280', fontWeight: 700, whiteSpace: 'nowrap', borderBottom: '1px solid #e5e7eb' }}>{h}</th>
+                      ))}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {payments.map((p, i) => (
+                      <tr key={p.id ?? i} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                        <td style={{ padding: '11px 14px', color: '#6b7280', whiteSpace: 'nowrap' }}>{(p.paid_at || p.created_at) ? new Date(p.paid_at || p.created_at!).toLocaleString('ko-KR') : ''}</td>
+                        <td style={{ padding: '11px 14px', whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: p.kind === 'membership' ? '#dcfce7' : '#fef3c7', color: p.kind === 'membership' ? '#16a34a' : '#92400e' }}>
+                            {p.kind === 'membership' ? '회비' : '후원'}
+                          </span>
+                        </td>
+                        <td style={{ padding: '11px 14px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{p.name || ''}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.phone || '-'}</td>
+                        <td style={{ padding: '11px 14px', color: '#374151', whiteSpace: 'nowrap' }}>{p.email || '-'}</td>
+                        <td style={{ padding: '11px 14px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{(Number(p.amount) || 0).toLocaleString()}원</td>
+                        <td style={{ padding: '11px 14px', whiteSpace: 'nowrap' }}>
+                          <span style={{ fontSize: 11, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: p.status === 'paid' ? '#dcfce7' : '#f3f4f6', color: p.status === 'paid' ? '#16a34a' : '#6b7280' }}>
+                            {p.status === 'paid' ? '완료' : (p.status || '대기')}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* ── Bookings ── */}
+        {tab === 'bookings' && (
+          <div>
+            <SectionHeader title="예약 내역" sub="펫스카웃 2026 캠핑 사이트 예약 접수 목록" />
+            {(() => {
+              const paid = bookings.filter((b) => b.status === 'paid');
+              const arrived = paid.filter((b) => b.checked_in_at);
+              const noshow = paid.filter((b) => !b.checked_in_at);
+              const pill = (label: string, n: number, bg: string, c: string) => (
+                <span style={{ fontSize: 12, fontWeight: 700, padding: '5px 12px', borderRadius: 9999, background: bg, color: c }}>{label} {n}</span>
+              );
+              return (
+                <>
+                  <div style={{ display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap', alignItems: 'center' }}>
+                    {pill('확정', paid.length, '#f0fdf4', '#166534')}
+                    {pill('도착', arrived.length, '#dcfce7', '#16a34a')}
+                    {pill('미도착', noshow.length, '#fef3c7', '#b45309')}
+                    <span style={{ fontSize: 11, color: '#9ca3af' }}>(입금확정 기준 · 현장 입장현황)</span>
+                  </div>
+                  <div style={{ display: 'flex', gap: 10, marginBottom: 20, flexWrap: 'wrap' }}>
+                    <button onClick={async () => setBookings(await fetchBookings())} style={{ fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", padding: '8px 18px', border: '1.5px solid #16a34a', borderRadius: 6, background: '#f0fdf4', cursor: 'pointer', color: '#166534', fontWeight: 700 }}>↻ 새로고침</button>
+                    <button onClick={() => setNoShowOnly(false)} style={{ fontSize: 12, padding: '8px 18px', border: `1.5px solid ${!noShowOnly ? '#16a34a' : '#e5e7eb'}`, borderRadius: 6, background: !noShowOnly ? '#16a34a' : 'none', cursor: 'pointer', color: !noShowOnly ? '#fff' : '#6b7280', fontWeight: 700 }}>전체</button>
+                    <button onClick={() => setNoShowOnly(true)} style={{ fontSize: 12, padding: '8px 18px', border: `1.5px solid ${noShowOnly ? '#b45309' : '#e5e7eb'}`, borderRadius: 6, background: noShowOnly ? '#f59e0b' : 'none', cursor: 'pointer', color: noShowOnly ? '#fff' : '#6b7280', fontWeight: 700 }}>미도착만</button>
+                    <button onClick={exportBookingsCSV} style={{ fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", padding: '8px 18px', border: '1.5px solid #e5e7eb', borderRadius: 6, background: 'none', cursor: 'pointer', color: '#6b7280' }}>CSV 내보내기</button>
+                    <span style={{ fontSize: 12, color: '#9ca3af', alignSelf: 'center' }}>총 {bookings.length}건</span>
+                  </div>
+                </>
+              );
+            })()}
+            <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'auto' }}>
+              <BookingTable bookings={noShowOnly ? bookings.filter((b) => b.status === 'paid' && !b.checked_in_at) : [...bookings]} onUpdate={updateBookingStatus} onSend={sendTicketMail} />
             </div>
           </div>
         )}
@@ -427,32 +820,59 @@ export default function AdminPage() {
         )}
 
         {/* ── Archive ── */}
-        {tab === 'archive' && (
+        {tab === 'archive' && (() => {
+          const sortedForAdmin = [...archives].sort((a, b) => (a.order || 0) - (b.order || 0));
+          return (
           <div>
-            <SectionHeader title="아카이브 행사" sub="지난 행사 기록 관리 — 행사 페이지 벤토 그리드에 표시" onAdd={() => { setEditArchive({}); setArchiveModal(true); }} addLabel="+ 행사 추가" />
+            <SectionHeader title="아카이브 행사" sub="지난 행사 기록 관리 — ↑↓ 로 순서 조정, 썸네일 클릭으로 대표 이미지 설정" onAdd={() => { setEditArchive({}); setArchiveModal(true); }} addLabel="+ 행사 추가" />
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 16 }}>
-              {archives.map((arc) => (
-                <div key={arc.id} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
-                  <div style={{ height: 120, background: arc.imageData ? `url(${arc.imageData}) center/cover` : 'linear-gradient(135deg,#e8f5e9,#a5d6a7)', display: 'flex', alignItems: 'flex-end', padding: 12, position: 'relative' }}>
+              {sortedForAdmin.map((arc, listIdx) => {
+                const thumb = arc.imageData || (arc.images && arc.images[0]) || null;
+                return (
+                <div key={arc.order} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, overflow: 'hidden' }}>
+                  {/* 썸네일 — 클릭 시 이미지 피커 오픈 */}
+                  <div
+                    onClick={() => setImagePickerArc(arc)}
+                    style={{
+                      height: 120, cursor: 'pointer', position: 'relative',
+                      background: thumb ? `url(${thumb}) center/cover` : 'linear-gradient(135deg,#e8f5e9,#a5d6a7)',
+                    }}
+                  >
                     {arc.feat && <span style={{ position: 'absolute', top: 10, left: 10, background: '#16a34a', color: '#fff', fontSize: 9, fontWeight: 700, padding: '2px 8px', borderRadius: 9999 }}>FEATURED</span>}
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0)', display: 'flex', alignItems: 'center', justifyContent: 'center', transition: 'background 0.2s' }}
+                      onMouseEnter={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0.4)')}
+                      onMouseLeave={(e) => (e.currentTarget.style.background = 'rgba(0,0,0,0)')}
+                    >
+                      <span style={{ color: '#fff', fontSize: 11, fontWeight: 700, letterSpacing: '0.04em', textShadow: '0 1px 4px rgba(0,0,0,0.6)' }}>🖼️ 대표 이미지 선정</span>
+                    </div>
+                    {arc.images && arc.images.length > 0 && (
+                      <span style={{ position: 'absolute', bottom: 8, right: 8, background: 'rgba(0,0,0,0.55)', color: '#fff', fontSize: 9, fontWeight: 700, padding: '2px 6px', borderRadius: 4 }}>
+                        📷 {arc.images.length}장
+                      </span>
+                    )}
                   </div>
                   <div style={{ padding: '14px 16px' }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: '#111', marginBottom: 3 }}>{arc.title}</div>
-                    <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 8 }}>{arc.year} · {arc.loc} · {arc.ppl}명</div>
-                    <div style={{ display: 'flex', gap: 6 }}>
+                    <div style={{ fontSize: 11, color: '#9ca3af', marginBottom: 10 }}>{arc.year} · {arc.loc} {arc.ppl ? `· ${arc.ppl}명` : ''}</div>
+                    <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', alignItems: 'center' }}>
+                      {/* 순서 버튼 */}
+                      <button onClick={() => moveArchiveOrder(arc, 'up')} disabled={listIdx === 0} style={{ fontSize: 13, padding: '4px 8px', borderRadius: 6, border: '1px solid #e5e7eb', background: 'none', cursor: listIdx === 0 ? 'default' : 'pointer', color: listIdx === 0 ? '#d1d5db' : '#374151' }}>↑</button>
+                      <button onClick={() => moveArchiveOrder(arc, 'down')} disabled={listIdx === sortedForAdmin.length - 1} style={{ fontSize: 13, padding: '4px 8px', borderRadius: 6, border: '1px solid #e5e7eb', background: 'none', cursor: listIdx === sortedForAdmin.length - 1 ? 'default' : 'pointer', color: listIdx === sortedForAdmin.length - 1 ? '#d1d5db' : '#374151' }}>↓</button>
+                      <span style={{ fontSize: 10, color: '#d1d5db', userSelect: 'none' }}>|</span>
                       <button onClick={() => { const imgs = arc.images && arc.images.length > 0 ? arc.images : [arc.imageData, arc.imageData2].filter((x): x is string => !!x); setEditArchive({ ...arc, _key: arc.id, images: imgs }); setArchiveModal(true); }} style={btnEdit}>수정</button>
                       <button onClick={() => deleteArchive(arc.id!)} style={btnDel}>삭제</button>
                     </div>
                   </div>
                 </div>
-              ))}
+              )})}
               <button onClick={() => { setEditArchive({}); setArchiveModal(true); }} style={{ background: '#f8fafc', border: '2px dashed #d1d5db', borderRadius: 12, display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 8, cursor: 'pointer', minHeight: 160 }}>
                 <span style={{ fontSize: 24, opacity: 0.4 }}>+</span>
                 <span style={{ fontSize: 13, color: '#9ca3af' }}>행사 추가</span>
               </button>
             </div>
           </div>
-        )}
+          );
+        })()}
 
         {/* ── Partners ── */}
         {tab === 'partners' && (
@@ -576,7 +996,7 @@ export default function AdminPage() {
 
             {/* Lookbook */}
             <div style={{ borderTop: '1px solid #e5e7eb', paddingTop: 32 }}>
-              <h2 style={{ fontFamily: "'Bebas Neue', cursive", fontSize: 24, color: '#111', marginBottom: 4 }}>룩북</h2>
+              <h2 style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: 24, color: '#111', marginBottom: 4 }}>룩북</h2>
               <p style={{ fontSize: 13, color: '#9ca3af', marginBottom: 20 }}>홈페이지 룩북 갤러리 항목</p>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4,1fr)', gap: 14 }}>
                 {lookbookItems.map((lb) => (
@@ -612,7 +1032,7 @@ export default function AdminPage() {
                 <thead>
                   <tr>
                     {['장소명', '지역', '유형', '주소', '파트너', '조작'].map((h) => (
-                      <th key={h} style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.08em', color: '#9ca3af', textAlign: 'left', padding: '11px 16px', background: '#f8fafc', borderBottom: '1px solid #e5e7eb' }}>{h}</th>
+                      <th key={h} style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 10, letterSpacing: '0.08em', color: '#9ca3af', textAlign: 'left', padding: '11px 16px', background: '#f8fafc', borderBottom: '1px solid #e5e7eb' }}>{h}</th>
                     ))}
                   </tr>
                 </thead>
@@ -656,7 +1076,7 @@ export default function AdminPage() {
                 return (
                   <div key={page} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, padding: '22px 24px' }}>
                     <div style={{ fontSize: 14, fontWeight: 700, color: '#111', marginBottom: 4 }}>{labels[page]} 페이지</div>
-                    <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, color: '#9ca3af', letterSpacing: '0.08em', marginBottom: 12 }}>{page.toUpperCase()}</div>
+                    <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 10, color: '#9ca3af', letterSpacing: '0.08em', marginBottom: 12 }}>{page.toUpperCase()}</div>
                     <textarea
                       value={hashtagDraft[page] || ''}
                       onChange={(e) => setHashtagDraft((prev) => ({ ...prev, [page]: e.target.value }))}
@@ -716,7 +1136,7 @@ export default function AdminPage() {
               <div style={fieldStyle}>
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 10 }}>
                   <label style={labelStyle}>행사 이미지 (최대 20장)</label>
-                  <span style={{ fontSize: 11, color: '#6b7280', fontFamily: "'SF Mono','Menlo','Monaco','Consolas',monospace" }}>
+                  <span style={{ fontSize: 11, color: '#6b7280', fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif" }}>
                     {(editArchive.images || []).length} / 20
                   </span>
                 </div>
@@ -902,6 +1322,90 @@ export default function AdminPage() {
         )}
       </AnimatePresence>
 
+      {/* ── Image Picker Modal ── */}
+      <AnimatePresence>
+        {imagePickerArc && (
+          <motion.div
+            initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
+            onClick={(e) => e.target === e.currentTarget && setImagePickerArc(null)}
+            style={modalOverlayStyle}
+          >
+            <motion.div
+              initial={{ y: 20, scale: 0.97 }} animate={{ y: 0, scale: 1 }} exit={{ y: 20, scale: 0.97 }}
+              onClick={(e) => e.stopPropagation()}
+              style={{ ...modalBoxStyle, width: 'min(900px, 100%)', maxWidth: '95vw' }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 6 }}>
+                <h2 style={{ fontSize: 17, fontWeight: 700, color: '#111' }}>대표 이미지 선정</h2>
+                <button onClick={() => setImagePickerArc(null)} style={{ background: 'none', border: 'none', fontSize: 20, cursor: 'pointer', color: '#9ca3af', lineHeight: 1 }}>×</button>
+              </div>
+              <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 16 }}>
+                {imagePickerArc.title} — {(imagePickerArc.images || []).length}장 · 클릭: 대표 설정 / ⠿ 드래그: 순서 변경 / × 버튼: 삭제
+              </p>
+              {(!imagePickerArc.images || imagePickerArc.images.length === 0) ? (
+                <div style={{ textAlign: 'center', padding: '40px 0', fontSize: 13, color: '#9ca3af' }}>이미지가 없습니다</div>
+              ) : (
+                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 8, maxHeight: '65vh', overflowY: 'auto', paddingRight: 4 }}>
+                  {(imagePickerArc.images || []).map((img, idx) => {
+                    const isRep = img === imagePickerArc.imageData || (idx === 0 && !imagePickerArc.imageData);
+                    const isDragging = arcDragSrcIdx === idx;
+                    const isDragOver = arcDragOverIdx === idx && arcDragSrcIdx !== idx;
+                    return (
+                      <div
+                        key={img}
+                        onDragOver={(e) => { e.preventDefault(); setArcDragOverIdx(idx); }}
+                        onDragLeave={() => setArcDragOverIdx(null)}
+                        onDrop={(e) => { e.preventDefault(); const src = arcDragSrcRef.current; if (src !== null && src !== idx) reorderArchiveImages(src, idx); arcDragSrcRef.current = null; setArcDragSrcIdx(null); setArcDragOverIdx(null); }}
+                        onClick={() => { if (!isRep) setRepresentativeImage(imagePickerArc, img); }}
+                        onMouseEnter={(e) => { if (!isRep) (e.currentTarget.querySelector('.hover-overlay') as HTMLElement | null)?.style.setProperty('opacity','1'); }}
+                        onMouseLeave={(e) => { (e.currentTarget.querySelector('.hover-overlay') as HTMLElement | null)?.style.setProperty('opacity','0'); }}
+                        style={{
+                          position: 'relative', aspectRatio: '1', borderRadius: 8, overflow: 'hidden',
+                          border: isDragOver ? '2px dashed #16a34a' : isRep ? '3px solid #16a34a' : '2px solid #e5e7eb',
+                          cursor: isRep ? 'default' : 'pointer',
+                          opacity: isDragging ? 0.35 : 1,
+                          transition: 'opacity 0.15s, border-color 0.1s',
+                          flexShrink: 0,
+                        }}
+                      >
+                        {/* 드래그 핸들 */}
+                        <div
+                          draggable
+                          onDragStart={(e) => { e.stopPropagation(); arcDragSrcRef.current = idx; setArcDragSrcIdx(idx); }}
+                          onDragEnd={() => { arcDragSrcRef.current = null; setArcDragSrcIdx(null); setArcDragOverIdx(null); }}
+                          onClick={(e) => e.stopPropagation()}
+                          style={{ position: 'absolute', top: 4, left: 4, color: '#fff', fontSize: 12, lineHeight: 1, cursor: 'grab', zIndex: 2, textShadow: '0 1px 2px rgba(0,0,0,.8)', userSelect: 'none', padding: '2px 3px', borderRadius: 2, background: 'rgba(0,0,0,0.35)' }}
+                        >⠿</div>
+                        {/* 삭제 버튼 */}
+                        <button
+                          onClick={(e) => { e.stopPropagation(); deleteArchiveImage(img); }}
+                          style={{ position: 'absolute', top: 4, right: 4, width: 18, height: 18, borderRadius: '50%', background: 'rgba(239,68,68,0.85)', color: '#fff', border: 'none', cursor: 'pointer', fontSize: 10, fontWeight: 700, lineHeight: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', zIndex: 2, padding: 0 }}
+                        >×</button>
+                        <img
+                          src={img} alt=""
+                          style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', pointerEvents: 'none' }}
+                        />
+                        <div
+                          className="hover-overlay"
+                          style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.42)', opacity: 0, transition: 'opacity 0.15s', pointerEvents: 'none' }}
+                        />
+                        {isRep && (
+                          <span style={{ position: 'absolute', bottom: 4, left: 4, background: '#16a34a', color: '#fff', fontSize: 8, fontWeight: 700, padding: '2px 5px', borderRadius: 3, letterSpacing: '0.04em', pointerEvents: 'none' }}>대표</span>
+                        )}
+                        <span style={{ position: 'absolute', bottom: 4, right: 4, background: 'rgba(0,0,0,0.5)', color: '#fff', fontSize: 8, padding: '1px 4px', borderRadius: 3, pointerEvents: 'none' }}>{idx + 1}</span>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+              <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: 16 }}>
+                <button onClick={() => setImagePickerArc(null)} style={btnSave}>완료</button>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       <AnimatePresence>{toast && <Toast msg={toast.msg} err={toast.err} />}</AnimatePresence>
     </div>
   );
@@ -911,7 +1415,7 @@ function AppTable({ apps, short }: { apps: Application[]; short?: boolean }) {
   if (apps.length === 0) {
     return <table style={{ width: '100%', borderCollapse: 'collapse' }}><tbody><tr><td style={{ textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>신청 내역이 없습니다</td></tr></tbody></table>;
   }
-  const thStyle: React.CSSProperties = { fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.08em', color: '#9ca3af', textAlign: 'left', padding: '11px 20px', background: '#f8fafc', borderBottom: '1px solid #e5e7eb' };
+  const thStyle: React.CSSProperties = { fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 10, letterSpacing: '0.08em', color: '#9ca3af', textAlign: 'left', padding: '11px 20px', background: '#f8fafc', borderBottom: '1px solid #e5e7eb' };
   const tdStyle: React.CSSProperties = { fontSize: 13, color: '#6b7280', padding: '13px 20px', borderBottom: '1px solid #e5e7eb', verticalAlign: 'middle' };
   return (
     <div style={{ overflowX: 'auto' }}>
@@ -936,5 +1440,68 @@ function AppTable({ apps, short }: { apps: Application[]; short?: boolean }) {
         </tbody>
       </table>
     </div>
+  );
+}
+
+function BookingTable({ bookings, onUpdate, onSend }: { bookings: Booking[]; onUpdate?: (b: Booking, action: 'cancel' | 'confirm') => void; onSend?: (b: Booking) => void }) {
+  if (bookings.length === 0) {
+    return <table style={{ width: '100%', borderCollapse: 'collapse' }}><tbody><tr><td style={{ textAlign: 'center', padding: 40, color: '#9ca3af', fontSize: 13 }}>예약 내역이 없습니다</td></tr></tbody></table>;
+  }
+  const thStyle: React.CSSProperties = { fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 10, letterSpacing: '0.08em', color: '#9ca3af', textAlign: 'left', padding: '11px 16px', background: '#f8fafc', borderBottom: '1px solid #e5e7eb', whiteSpace: 'nowrap' };
+  const tdStyle: React.CSSProperties = { fontSize: 13, color: '#6b7280', padding: '13px 16px', borderBottom: '1px solid #e5e7eb', verticalAlign: 'middle', whiteSpace: 'nowrap' };
+  const statusInfo = (s?: string) => s === 'paid' ? { t: '입금확정', bg: '#dcfce7', c: '#16a34a' }
+    : s === 'cancelled' ? { t: '취소됨', bg: '#fee2e2', c: '#dc2626' }
+    : { t: '입금대기', bg: '#fef3c7', c: '#92400e' };
+  const actBtn = (bg: string, c: string): React.CSSProperties => ({ fontSize: 11, fontWeight: 700, padding: '4px 10px', borderRadius: 6, border: 'none', background: bg, color: c, cursor: 'pointer', fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif" });
+  return (
+    <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+      <thead>
+        <tr>
+          <th style={thStyle}>신청일시</th><th style={thStyle}>상태</th><th style={thStyle}>도착</th><th style={thStyle}>일정</th><th style={thStyle}>사이트</th><th style={thStyle}>인원</th>
+          <th style={thStyle}>예약자</th><th style={thStyle}>연락처</th><th style={thStyle}>반려견</th>
+          <th style={thStyle}>접종</th><th style={thStyle}>금액</th><th style={{ ...thStyle, position: 'sticky', right: 0, zIndex: 3, boxShadow: '-6px 0 8px -6px rgba(0,0,0,0.12)' }}>관리</th>
+        </tr>
+      </thead>
+      <tbody>
+        {bookings.map((b, i) => {
+          const st = statusInfo(b.status);
+          const cancelled = b.status === 'cancelled';
+          return (
+          <tr key={b.id ?? i} style={cancelled ? { opacity: 0.5 } : undefined}>
+            <td style={tdStyle}>{b.created_at ? new Date(b.created_at).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
+            <td style={tdStyle}><span style={{ fontSize: 10, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: st.bg, color: st.c }}>{st.t}</span></td>
+            <td style={tdStyle}>{b.status !== 'paid' ? <span style={{ fontSize: 11, color: '#9ca3af' }}>—</span>
+              : b.checked_in_at
+                ? <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: '#dcfce7', color: '#16a34a' }}>✓ {new Date(b.checked_in_at).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
+                : <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: '#fef3c7', color: '#b45309' }}>미도착</span>}</td>
+            <td style={tdStyle}><span style={{ fontSize: 10, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: '#f0fdf4', color: '#166534' }}>{b.booking_label || '-'}</span><div style={{ fontSize: 11, color: '#9ca3af', marginTop: 2 }}>{b.date_label || ''}</div></td>
+            <td style={{ ...tdStyle, textDecoration: cancelled ? 'line-through' : 'none' }}>
+              {b.site ? `${b.zone || ''} ${b.site}` : (b.booking_type === 'day' ? '관람권' : (b.zone || '관람권'))}
+              {Array.isArray(b.tshirt_sizes) && b.tshirt_sizes.length > 0 && <div style={{ fontSize: 11, color: '#7c3aed', marginTop: 2, textDecoration: 'none' }}>+ 클래스 {b.tshirt_sizes.length}개</div>}
+            </td>
+            <td style={tdStyle}>{b.headcount != null ? `${b.headcount}인` : '-'}</td>
+            <td style={tdStyle}>{b.name || '-'}</td>
+            <td style={tdStyle}>{b.phone || '-'}</td>
+            <td style={tdStyle}>{b.pet_name ? `${b.pet_name} (${b.pet_breed || ''})` : '-'}</td>
+            <td style={tdStyle}>{b.pet_vaccine === 'yes' ? '완료' : b.pet_vaccine === 'no' ? '미완료' : '-'}</td>
+            <td style={{ ...tdStyle, fontWeight: 700, color: '#16a34a' }}>{b.amount != null ? `${b.amount.toLocaleString()}원` : '-'}</td>
+            <td style={{ ...tdStyle, position: 'sticky', right: 0, background: '#fff', zIndex: 1, boxShadow: '-6px 0 8px -6px rgba(0,0,0,0.12)' }}>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 6, alignItems: 'flex-start' }}>
+                {onUpdate && !cancelled && (
+                  <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap' }}>
+                    {b.status !== 'paid' && <button onClick={() => onUpdate(b, 'confirm')} style={actBtn('#dcfce7', '#166534')}>입금확정</button>}
+                    {b.status === 'paid' && onSend && <button onClick={() => onSend(b)} style={actBtn('#dbeafe', '#1d4ed8')}>✉ 메일발송</button>}
+                    <button onClick={() => onUpdate(b, 'cancel')} style={actBtn('#fee2e2', '#dc2626')}>취소</button>
+                  </div>
+                )}
+                {b.ticket_token && <a href={`/t/${b.ticket_token}`} target="_blank" rel="noopener noreferrer" style={{ fontSize: 11, color: '#2563eb', fontWeight: 700 }}>🎫 입장권 링크</a>}
+                {cancelled && !b.ticket_token && <span style={{ fontSize: 11, color: '#9ca3af' }}>—</span>}
+              </div>
+            </td>
+          </tr>
+          );
+        })}
+      </tbody>
+    </table>
   );
 }

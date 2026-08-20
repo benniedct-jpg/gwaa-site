@@ -52,11 +52,11 @@ export default function DailyTip() {
         {tip.icon}
       </div>
       <div>
-        <div style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 9, color: '#16a34a', letterSpacing: '0.12em', marginBottom: 4 }}>
+        <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 11, color: '#16a34a', letterSpacing: '0.06em', marginBottom: 4 }}>
           TODAY&apos;S PET TIP
         </div>
         <div style={{ fontSize: isMobile ? 13 : 14, color: '#111', fontWeight: 700, marginBottom: 2 }}>{tip.title}</div>
-        <p style={{ fontSize: isMobile ? 12 : 13, color: '#374151', lineHeight: 1.7, margin: 0 }}>{tip.text}</p>
+        <p style={{ fontSize: isMobile ? 13 : 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{tip.text}</p>
       </div>
     </motion.section>
   );

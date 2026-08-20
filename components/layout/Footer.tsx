@@ -23,6 +23,7 @@ const NAV_COLS = [
       { label: '교육 프로그램', href: '/education' },
       { label: '반려동물 여행', href: '/travel' },
       { label: '메이트쉽 멤버십', href: '/mateship' },
+      { label: '회비·후원',     href: '/support' },
     ],
   },
 ];
@@ -30,12 +31,14 @@ const NAV_COLS = [
 export default function Footer() {
   const [email, setEmail] = useState('');
   const [subbed, setSubbed] = useState(false);
+  const [agreeMkt, setAgreeMkt] = useState(false);
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';
 
   const handleSub = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!email.trim()) return;
+    if (!agreeMkt) return;
     try {
       await fetch('/api/data/subscribers', {
         method: 'POST',
@@ -63,9 +66,9 @@ export default function Footer() {
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
             <div style={{ width: 3, height: 22, borderRadius: 2, background: '#16a34a', flexShrink: 0 }} />
-            <span style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 13, fontWeight: 700, color: '#111', letterSpacing: '0.08em' }}>GWAA</span>
+            <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 13, fontWeight: 700, color: '#111', letterSpacing: '0.08em' }}>GWAA</span>
           </div>
-          <p style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.85 }}>
+          <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.65 }}>
             사단법인 강원도반려동물협회<br />
             반려동물과 사람이 함께 행복한<br />강원도 문화를 만들어갑니다.
           </p>
@@ -80,7 +83,7 @@ export default function Footer() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 background: '#fff', border: '1px solid #e5e7eb',
                 fontSize: 13, fontWeight: 700, color: '#6b7280',
-                fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace",
+                fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
                 textDecoration: 'none',
               }}
               aria-label="카카오채널"
@@ -108,12 +111,12 @@ export default function Footer() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {NAV_COLS.map((col) => (
               <div key={col.heading}>
-                <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 14, fontWeight: 700 }}>
+                <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 14, fontWeight: 700 }}>
                   {col.heading.toUpperCase()}
                 </h4>
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {col.links.map((l) => (
-                    <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'none' }}>
+                    <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#6b7280', textDecoration: 'none' }}>
                       {l.label}
                     </Link>
                   ))}
@@ -124,12 +127,12 @@ export default function Footer() {
         ) : (
           NAV_COLS.map((col) => (
             <div key={col.heading}>
-              <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 16, fontWeight: 700 }}>
+              <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 16, fontWeight: 700 }}>
                 {col.heading.toUpperCase()}
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                 {col.links.map((l) => (
-                  <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }} className="hover:text-gray-700">
+                  <Link key={l.href} href={l.href} style={{ fontSize: 13, color: '#6b7280', textDecoration: 'none', transition: 'color 0.15s' }} className="hover:text-gray-700">
                     {l.label}
                   </Link>
                 ))}
@@ -140,10 +143,10 @@ export default function Footer() {
 
         {/* Newsletter */}
         <div>
-          <h4 style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, letterSpacing: '0.12em', color: '#16a34a', marginBottom: 12, fontWeight: 700 }}>
+          <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 12, fontWeight: 700 }}>
             NEWSLETTER
           </h4>
-          <p style={{ fontSize: 12, color: '#9ca3af', lineHeight: 1.75, marginBottom: 16 }}>
+          <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, marginBottom: 16 }}>
             GWAA 새 행사, 교육 일정, 메이트쉽 소식을<br />이메일로 가장 먼저 받아보세요.
           </p>
           <AnimatePresence mode="wait">
@@ -167,6 +170,10 @@ export default function Footer() {
                   required
                   style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', borderRadius: 10 }}
                 />
+                <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 11, color: '#6b7280', lineHeight: 1.5 }}>
+                  <input type="checkbox" checked={agreeMkt} onChange={(e) => setAgreeMkt(e.target.checked)} required style={{ marginTop: 2, accentColor: '#16a34a' }} />
+                  <span>[필수] 광고성 정보(행사·교육·혜택 안내) 수신 및 이메일 수집·이용에 동의합니다. 수신거부는 언제든 가능합니다.</span>
+                </label>
                 <motion.button
                   type="submit"
                   whileHover={{ scale: 1.02 }}
@@ -196,16 +203,18 @@ export default function Footer() {
         alignItems: isMobile ? 'flex-start' : 'center',
         gap: 8,
       }}>
-        <p style={{ fontSize: 11, color: '#9ca3af', lineHeight: 1.7 }}>
-          대표 이지영 · 033-813-0333 · ganimal1@naver.com{isMobile ? <br /> : ' · '}© 2026 사단법인 강원도반려동물협회 All rights reserved.
-        </p>
-        <div style={{ display: 'flex', gap: 16 }}>
+        <div style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.7 }}>
+          <p>사단법인 강원도반려동물협회 · 대표: 이지영 · 사업자등록번호 891-82-00469</p>
+          <p>강원특별자치도 원주시 천매봉길 20-9 · 033-813-0333 · ganimal1@naver.com</p>
+          <p style={{ marginTop: 4 }}>© 2026 사단법인 강원도반려동물협회 All rights reserved.</p>
+        </div>
+        <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
           {[
-            { label: '카카오채널', href: 'https://pf.kakao.com/_wipZX' },
-            { label: '교육 신청', href: '/education' },
-            { label: '메이트쉽', href: '/mateship' },
+            { label: '이용약관', href: '/terms' },
+            { label: '개인정보처리방침', href: '/privacy' },
+            { label: '환불 정책', href: '/refund' },
           ].map((l) => (
-            <Link key={l.href} href={l.href} style={{ fontSize: 11, color: '#9ca3af', textDecoration: 'none', transition: 'color 0.15s' }} className="hover:text-gray-600">
+            <Link key={l.href} href={l.href} style={{ fontSize: 12, color: '#6b7280', textDecoration: 'none', fontWeight: 600, transition: 'color 0.15s' }} className="hover:text-gray-600">
               {l.label}
             </Link>
           ))}

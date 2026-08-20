@@ -1,681 +1,223 @@
--- GWAA 초기 데이터 시드
--- Supabase SQL Editor에서 schema.sql 실행 후 이 파일을 실행하세요
-
--- ────────────────────────────────────────────────
--- 히어로 이미지 (슬라이드)
--- ────────────────────────────────────────────────
-update hero_images set image_data = 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1400&q=85' where id = 1;
-update hero_images set image_data = 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1400&q=85' where id = 2;
-update hero_images set image_data = 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1400&q=85' where id = 3;
-
--- ────────────────────────────────────────────────
--- 활동카드 (홈 메인)
--- ────────────────────────────────────────────────
-insert into activity_cards ("order", image_data, tag, tag_color, icon, title, description, link, link_text) values
-(1, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
- 'EDUCATION', 'green', '🎓',
- '반려동물 교육',
- '독스포츠(어질리티), 오비디언스 교육부터 반려동물행동지도사 국가자격증 취득까지. 강원도 공인 전문 트레이너와 체계적인 커리큘럼.',
- '/education', '교육 신청하기 →'),
-
-(2, 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80',
- 'EVENTS', 'blue', '🎪',
- '반려동물 행사',
- '강원도 전역에서 펼쳐지는 반려동물 문화축제, 트레킹, 캠핑, 사진공모전. 2021년부터 4만명이 함께했습니다.',
- '/events', '행사 보기 →'),
-
-(3, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'MATESHIP', 'amber', '🤝',
- '메이트쉽 멤버십',
- '호텔, 카페, 캠핑, 사료·용품 할인과 행사 우선 참여까지. 메이트쉽 회원은 연간 40만원 이상 절약합니다.',
- '/mateship', '혜택 보기 →');
-
--- ────────────────────────────────────────────────
--- 행사 (이벤트)
--- ────────────────────────────────────────────────
-insert into event_cards ("order", image_data, images, title, date_text, location, description, content, status, link, benefit, cta_text) values
-(20260604, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80',
- '{}',
- '2026 강원도 반려동물 문화축제',
- '2026.09.12(토) — 13(일)', '춘천 중도',
- '강원도 최대 반려동물 문화축제. 어질리티 챔피언십, 반려견 수영장, 포토존, 먹거리 마켓이 한자리에.',
- '강원도 전역의 반려인이 모이는 연간 최대 행사입니다. 어질리티 대회, 오비디언스 시범, 반려견 동반 수영장, 포토존 등 다양한 프로그램이 운영됩니다. 메이트쉽 회원은 입장료 무료 및 우선 참여 혜택이 있습니다.',
- 'soon', '',
- '⭐ 메이트쉽 회원 입장 무료', '사전 신청하기 →'),
-
-(20260501, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
- '{}',
- '2026 반려동물 숲치유 프로그램',
- '2026.04.04 — 2026.11.07 (주말)', '양평 숲치유센터',
- '반려동물과 함께하는 자연 속 힐링 프로그램. 전문 숲치유사와 함께 진행되는 치유의 걷기.',
- '반려동물과 함께 자연 속에서 걷고 교감하는 힐링 프로그램입니다. 숲치유사 자격증을 가진 전문 강사가 동행하며, 반려동물의 스트레스 해소와 보호자의 심리적 안정을 동시에 도모합니다.',
- 'live', '',
- '⭐ 메이트쉽 회원 우선 예약', '사전 예약하기 →'),
-
-(20260301, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80',
- '{}',
- '반려견 동반 캠핑 프로그램',
- '2026.05.01 — 2026.09.30 (월별 운영)', '강원도 전역 캠핑장',
- '강원도 야외 캠핑장에서 반려동물과 함께하는 1박 2일 캠핑. 전용 그라운드와 프로그램 포함.',
- '강원도의 아름다운 자연 속 캠핑장에서 반려견과 함께하는 1박 2일 프로그램입니다. 전용 운동장, 어질리티 체험, 야간 트레킹, 반려견 행동 상담 서비스가 포함됩니다.',
- 'live', '',
- '⭐ 회원 30% 할인', '사전 신청하기 →'),
-
-(20260101, 'https://images.unsplash.com/photo-1516912481808-3406841bd33c?w=800&q=80',
- '{}',
- '반려동물 동반 요가 클래스',
- '2026.03.01 — 2026.12.31 (매월 정기)', '원주 요가스튜디오',
- '반려견과 함께 즐기는 도가요가(Doga) 클래스. 전문 요가 강사와 반려동물 행동전문가가 함께합니다.',
- '반려견과 보호자가 함께하는 도가(Doga) 클래스입니다. 반려견의 몸통 스트레칭, 마사지, 호흡 등을 보조하며 둘의 유대감을 높이는 특별한 시간입니다.',
- 'live', '',
- '⭐ 메이트쉽 회원 무료', '신청하기 →');
-
--- ────────────────────────────────────────────────
--- 아카이브
--- ────────────────────────────────────────────────
-insert into archive_events ("order", feat, year, title, location, ppl, date_text, place, part, organizer, description, image_data, image_data2, images) values
-(1, true, 2025,
- 'Mission Dog Trekking — 고성',
- '고성', '350+', '2025.10.18(토) 13:00 ~ 18:00',
- '강원특별자치도 고성군 현내면 일대',
- '자체 기획·제작·운영', 'GWAA 강원도반려동물협회',
- '강원도 고성에서 사람과 반려견이 함께 자연을 걷고 교감하는 트레킹 이벤트. 총 350여 쌍이 참가하여 건봉사~천진해변 코스를 완주했습니다. 반려견 어질리티 체험 부스와 수의사 건강 상담 서비스도 함께 운영되었습니다.',
- 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=85',
- 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=85',
- ARRAY['https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=85','https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=85','https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=1200&q=85']),
-
-(2, false, 2025,
- '가평군 반려동물 문화행사',
- '가평', '5,000', '2025.06.07(토) 10:00 ~ 17:00',
- '경기도 가평군 자라섬 중도 일원',
- '자체 기획·제작·운영', '가평군',
- '반려동물과 함께하는 야외 문화축제. 5,000여 명의 반려인이 자라섬 중도를 가득 채웠습니다. 반려견 수영장, 어질리티 코스, 수제 간식 마켓, 포토존이 운영되었고 수의사 무료 건강 검진 서비스도 진행되었습니다.',
- 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&q=85',
- 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=85',
- ARRAY['https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&q=85','https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=85']),
-
-(3, false, 2024,
- '제2회 원주시 반려동물문화행사',
- '원주', '5,000', '2024.10.19(토)',
- '강원특별자치도 원주시 중앙공원',
- '자체 기획·제작·운영', '원주시',
- '원주시 반려인들을 위한 반려동물 문화행사 2회. 5,000여 명이 참가했습니다. 원주시 중앙공원을 가득 메운 반려인들과 함께 어질리티, 복종 훈련 시범, 반려동물 패션쇼, 사진 공모전 등 다양한 프로그램이 진행되었습니다.',
- 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=85']),
-
-(4, true, 2024,
- '제2회 강릉시반려동물문화축제',
- '강릉', '3,500', '2024.09.28(토)',
- '강원특별자치도 강릉시 경포호 일원',
- '자체 기획·제작·운영', '강릉시',
- '강릉 경포호 일대에서 열린 반려동물 문화축제. 3,500명이 참가했습니다. 경포호의 아름다운 자연 속에서 펼쳐진 이 행사는 어질리티 챔피언십, 반려견 수영 경기, 수제 간식 마켓, 포토존으로 구성되었습니다.',
- 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=85']),
-
-(5, false, 2024,
- '삼척해안 반려견 트레킹 & 페스타',
- '삼척', '2,000', '2024 (2회 진행)',
- '강원특별자치도 삼척시 해안일대',
- '자체 기획·제작·운영', '삼척시',
- '삼척 해안을 따라 반려견과 함께 걷는 트레킹 행사. 총 2회에 걸쳐 2,000여 명이 참가했습니다.',
- 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1560807707-8cc77767d783?w=1200&q=85']),
-
-(6, false, 2024,
- '원주시 반려견 이동식 운동장',
- '원주', '2,190', '2024 (7회 진행)',
- '강원특별자치도 원주시 일원',
- '자체 기획·제작·운영', '원주시',
- '원주시와 협력하여 운영한 반려견 이동식 운동장. 7회에 걸쳐 총 2,190명이 참가하였으며, 매 회차마다 반려견 훈련 시범과 건강 상담 서비스가 함께 운영되었습니다.',
- 'https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1514984879728-be0aff75a6e8?w=1200&q=85']),
-
-(7, false, 2023,
- '제1회 강릉시반려동물문화축제',
- '강릉', '3,000', '2023.09.23(토)',
- '강원특별자치도 강릉시 경포호 일원',
- '자체 기획·제작·운영', '강릉시',
- '강릉시와 함께한 첫 번째 반려동물 문화축제. 3,000여 명의 반려인이 참가했습니다. 첫 회임에도 불구하고 큰 성공을 거두어 강릉시 대표 반려동물 행사로 자리잡았습니다.',
- 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=1200&q=85']),
-
-(8, false, 2022,
- '전국댕댕자랑 사진공모전',
- '원주', '1,340', '2022',
- '강원특별자치도 원주시 (온·오프라인)',
- '자체 기획·제작·운영', 'GWAA',
- '전국 반려인을 대상으로 진행한 반려동물 사진공모전. 1,340명이 참여하여 역대 최다 참여율을 기록했습니다.',
- 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=85']),
-
-(9, false, 2021,
- '제1회 강원도반려동물문화축제',
- '원주', '1,500', '2021 — 협회 창립',
- '강원특별자치도 원주시',
- '자체 기획·제작·운영', 'GWAA',
- '협회 창립과 함께 열린 제1회 반려동물문화축제. 1,500명이 참가했습니다. GWAA의 첫 번째 공식 행사로서 강원도 반려동물 문화의 새로운 출발점이 되었습니다.',
- 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=85',
- null,
- ARRAY['https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=85']);
-
--- ────────────────────────────────────────────────
--- 여행지 — 강원도 반려동물 동반 가능 장소 50곳
--- ────────────────────────────────────────────────
-insert into travel_places ("order", region, type, type_label, name, icon, address, feature, description, pet_info, hours, price, is_partner, image_data, map_url) values
-
--- 춘천
-(1, '춘천', '체험', '테마파크', '강아지숲', '🌲',
- '강원특별자치도 춘천시 남산면 충효로 437',
- '국내 최대 반려견 테마파크 · 리드줄 해제 운동장',
- '3만 평 자연 숲 속 반려견 테마파크. 대·소형견 분리 운동장, 노즈워크 산책로, 어질리티 체험, 반려견 수영장 완비. 국내 최대 규모로 반려인들의 성지.',
- '🐾 5차 예방접종 완료견 · 3개월 이상 · 맹견 입장 불가 · 리드줄 필수',
- '10:00~18:00 (월요일·설·추석 당일 휴무)', '성인 17,000원 / 청소년 15,000원 / 어린이 12,000원 / 반려견 8,000원',
- false, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80',
- 'https://place.map.kakao.com/8093811'),
-
-(2, '춘천', '체험', '레일바이크', '경강레일바이크 (강촌레일파크)', '🚂',
- '강원특별자치도 춘천시 남산면 강촌로 1-1',
- '반려견 전용 펫바이크 운영 · 북한강 철교 코스',
- '경강역 폐역에서 출발해 북한강 철교를 건너는 코스. 반려견 전용 탑승석 펫바이크 별도 운영. 반려견 2마리까지 동반 탑승 가능.',
- '🐾 펫바이크: 반려견 합산 10kg 이하 · 목줄 착용',
- '09:00~17:40 (연중무휴)', '일반 2인승 20,000원 / 4인승 30,000원',
- false, 'https://images.unsplash.com/photo-1544568100-847a948585b9?w=800&q=80',
- 'https://place.map.kakao.com/26534803'),
-
-(3, '춘천', '체험', '카누·카약', '춘천 물레길 카누', '🛶',
- '강원특별자치도 춘천시 스포츠타운길223번길 95',
- '반려견과 카누 동승 · 의암호 수상 투어',
- '의암호 위에서 반려견과 함께 즐기는 카누 체험. 자연생태공원길 코스(약 3km, 1시간) 인기. 중형견 이하 동반 탑승 가능.',
- '🐾 중형견 이하 동반 가능 · 구명조끼 착용 필수',
- '10:00~19:00 (계절별 상이)', '2인 30,000원 (추가 성인 10,000원)',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/10065044'),
-
-(4, '춘천', '공원', '산책', '공지천 반려견 산책로', '🌿',
- '강원특별자치도 춘천시 근화동 공지천 일대',
- '넓은 강변 · 무료 개방',
- '춘천 시내 공지천변 산책로. 소형견부터 대형견까지 자유롭게 산책할 수 있는 강변 공원. 벤치·쉼터 완비. 춘천 시내 반려견 산책 명소.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'https://place.map.kakao.com/8093898'),
-
-(5, '춘천', '관광', '케이블카', '삼악산 호수 케이블카', '🚡',
- '강원특별자치도 춘천시 서면 박사로 473',
- '소양강 호수 위 케이블카 · 반려동물 전용 캐빈',
- '소양강 호수 수면 위를 가로지르는 케이블카. 반려동물 전용 캐빈 별도 운영으로 케이지 또는 이동가방에 넣은 반려동물 동반 탑승 가능.',
- '🐾 소형 반려동물 · 케이지 또는 이동가방 필수',
- '09:00~18:00 (연중무휴)', '왕복 성인 14,000원 / 소인 11,000원',
- false, 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
- 'https://place.map.kakao.com/1499671590'),
-
--- 강릉
-(6, '강릉', '호텔', '호텔', '세인트존스호텔', '🏨',
- '강원특별자치도 강릉시 강문동 34-2',
- '5성급 · 메이트쉽 파트너 최저가 보장 · 체중 제한 없음',
- '경포 해변 바로 앞 5성급 호텔. 반려견 전용 객실 운영. 체중 제한 없이 최대 2마리 동반 가능. 반려견 전용 어메니티(스너그 하우스·전용 수건·배변 용품·샴푸) 제공.',
- '🐾 전 견종 체중 제한 없음 · 최대 2마리 · 예방접종 증명 권장',
- '체크인 15:00 / 체크아웃 11:00', '펫 객실 350,000원~ / 반려견 추가 30,000원',
- true, 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
- 'https://place.map.kakao.com/7969831'),
-
-(7, '강릉', '카페', '애견카페', '체크이스트 카페', '☕',
- '강원특별자치도 강릉시 강변복길 153',
- '사천해변 근처 감성 인테리어 · 반려견 전용 간식',
- '사천해변 근처 골목에 자리한 감성 애견동반 카페. 반려견 전용 간식과 물그릇 비치. 테라스에서 산책 후 쉬어가기 좋음.',
- '🐾 전 견종 · 목줄 착용 필수 · 배변패드 비치',
- '10:00~20:00 (연중무휴)', '음료 6,000원~12,000원',
- false, 'https://images.unsplash.com/photo-1495474472287-4d71bcdd2085?w=800&q=80',
- 'https://place.map.kakao.com/1625044735'),
-
-(8, '강릉', '카페', '카페', '카페콥스', '☕',
- '강원특별자치도 강릉시 초당순두부길 54',
- '초당동 감성 카페 · 넓은 마당',
- '강릉 초당동 인기 카페. 넓은 야외 마당에서 반려견과 함께 여유롭게 커피와 베이커리를 즐길 수 있음. 들깨 디저트가 유명.',
- '🐾 전 견종 · 야외 공간 자유 동반 · 목줄 착용',
- '11:00~20:00 (화요일 휴무)', '음료 6,000원~10,000원',
- false, 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
- 'https://place.map.kakao.com/1544044553'),
-
-(9, '강릉', '카페', '프라이빗 카페', '르꼬따쥬', '🏡',
- '강원특별자치도 강릉시 한밭골길 50-11',
- '100% 예약제 프라이빗 팜크닉 · 반려견 동반 옵션',
- '관광농원을 개조한 100% 예약제 프라이빗 카페. 잔디밭에서 반려견과 함께 팜크닉을 즐길 수 있음. 반려견 동반 시 펫크닉 세트(10,000원) 추가.',
- '🐾 전 견종 · 예약 시 반려동물 동반 옵션 선택 필수',
- '10:00~17:00 (예약제 운영)', '음료 포함 인당 15,000원~ / 반려견 10,000원',
- false, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=800&q=80',
- 'https://place.map.kakao.com/1875069985'),
-
-(10, '강릉', '식당', '레스토랑', '그릴웍스', '🍖',
- '강원특별자치도 강릉시 사천면 한과마을길 553',
- '전 견종 실내 동반 · 텍사스 바베큐',
- '강릉 인기 반려견 동반 레스토랑. 정통 텍사스 바베큐. 실내·야외 테라스 모두 소·중·대형견 동반 가능.',
- '🐾 소·중·대형견 실내외 · 맹견 제외 · 배변 처리 필수',
- '11:00~20:00 (월·화 휴무)', '메뉴당 15,000원~35,000원',
- false, 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
- 'https://place.map.kakao.com/1819087254'),
-
-(11, '강릉', '체험', '레일바이크', '정동진 레일바이크', '🚂',
- '강원특별자치도 강릉시 강동면 정동진리 36-1',
- '동해 바다 절경 · 소형 반려견 동반',
- '정동진역~모래시계공원 구간 동해 바다를 옆에 두고 달리는 레일바이크. 소형 반려동물(3kg 이하) 케이지에 넣어 동반 탑승 가능.',
- '🐾 소형견 3kg 이하 · 이동장(켄넬) 필수 · 배변봉투 지참',
- '08:30~16:40 (휴게 11:20~12:20, 연중무휴)', '2인승 25,000원 / 4인승 35,000원',
- false, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80',
- 'https://place.map.kakao.com/17388803'),
-
-(12, '강릉', '관광', '미술관', '하슬라아트월드', '🎨',
- '강원특별자치도 강릉시 강동면 율곡로 1441',
- '야외 조각공원 전 견종 가능 · 바다 전망',
- '동해가 내려다보이는 언덕 위 아트뮤지엄. 넓은 야외 조각공원에서 반려견 목줄 착용 후 자유 관람 가능. 실내 구간은 반드시 안거나 캐리어 이용.',
- '🐾 야외 조각공원 전 견종 · 목줄 착용 · 실내 안고 이동',
- '09:00~18:00 (연중무휴)', '성인 17,000원 / 청소년 13,000원 / 어린이 11,000원',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/7874637'),
-
-(13, '강릉', '공원', '해변·산책', '안목해변 펫비치', '🌊',
- '강원특별자치도 강릉시 견소동 안목해변',
- '100m 펫비치 전용 구역 · 샤워시설 완비',
- '강릉 안목해변 내 반려견 전용 펫비치 100m 구간. 펜스 설치, 배변봉투함·파라솔·테이블·샤워시설 완비. 커피거리와 바로 연결.',
- '🐾 목줄 착용 필수(비치 내 해제 가능) · 배변봉투 지참',
- '24시간 개방 (성수기 시간 제한 있음)', '무료',
- false, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/8083756'),
-
-(14, '강릉', '트레킹', '트레킹', '바우길 1코스 선자령 풍차길', '🏔️',
- '강원특별자치도 강릉시 성산면 대관령로 560',
- '평탄 능선길 · 사계절 반려견 추천 코스',
- '해발 1,157m 선자령까지 이어지는 평탄한 능선길. 강아지 관절에 부담이 적고 겨울 설원, 여름 초록 능선 모두 절경. 편도 약 4km, 왕복 3시간.',
- '🐾 목줄 착용 필수 · 배변봉투 지참 · 대형견 가능',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=80',
- 'https://place.map.kakao.com/27348994'),
-
-(15, '강릉', '식당', '맛집', '세레니타', '🍝',
- '강원특별자치도 강릉시 율곡로 3034',
- '전 견종 동반 · 이탈리안 다이닝',
- '강릉 인기 이탈리안 레스토랑. 넓은 공간에서 소·중·대형견 동반 가능. 맹견 및 공격성 강한 견종 제외.',
- '🐾 전 견종 동반 · 맹견 제외 · 목줄 착용',
- '11:30~21:00 (월요일 휴무)', '메뉴당 15,000원~30,000원',
- false, 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
- 'https://place.map.kakao.com/1781005234'),
-
-(16, '강릉', '공원', '해변', '사근진해변', '🌊',
- '강원특별자치도 강릉시 해안로604번길 16',
- '조용한 소규모 해변 · 전 견종 동반',
- '강릉 북쪽의 작고 조용한 해변. 성수기에도 비교적 한적해 반려견과 여유롭게 시간을 보내기 좋음.',
- '🐾 목줄 착용 필수 · 성수기 일부 시간 제한',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=800&q=80',
- 'https://place.map.kakao.com/8083210'),
-
--- 속초
-(17, '속초', '공원', '공원·산책', '설악해맞이공원', '🌅',
- '강원특별자치도 속초시 동해대로 3664',
- '동해 일출 명소 · 반려견 산책 인프라 우수',
- '속초 3경 중 하나. 해맞이광장·연인의길·행복의길 등 테마별 산책로와 설악산 관문 조형물, 조명분수대. 반려견 동반 산책 명소.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80',
- 'https://place.map.kakao.com/18513451'),
-
-(18, '속초', '공원', '반려견 놀이터', '영랑호 반려견 놀이터', '🐾',
- '강원특별자치도 속초시 영랑호반길 일대',
- '소·대형 분리 운동장 · 어질리티 시설',
- '속초 3경 영랑호 수변공원 끝자락 반려견 전용 놀이터. 소형견·대형견 구역 완전 분리, 어질리티 시설 완비. 영랑호 산책로와 연결.',
- '🐾 소·대형견 구역 분리 · 입장 후 목줄 해제 가능',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'https://place.map.kakao.com/15676994'),
-
-(19, '속초', '카페', '카페', '칠성조선소', '⚓',
- '강원특별자치도 속초시 중앙로46번길 45',
- '실제 조선소 개조 · 이색 뉴트로 공간',
- '실제 조선소를 개조한 속초 대표 핫플레이스. 넓은 야외 공간에서 반려견 동반 가능. 독특한 뉴트로 인테리어와 청초호 뷰가 매력.',
- '🐾 야외 공간 전 견종 · 목줄 착용 · 실내 소형견만',
- '11:00~19:00 (라스트오더 18:30)', '음료 6,000원~12,000원',
- false, 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
- 'https://place.map.kakao.com/1634039700'),
-
-(20, '속초', '공원', '호수 산책', '청초호 수변공원', '🌊',
- '강원특별자치도 속초시 청호동 청초호 일대',
- '호수 데크 산책 · 속초 시내 전망',
- '강과 바다를 잇는 속초 청초호. 호수 주변 데크길에서 반려견과 함께 설악산과 속초 시내 전망 감상.',
- '🐾 목줄 착용 필수',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/16497059'),
-
--- 양양
-(21, '양양', '해변', '애견 전용 해변', '멍비치 (양양 지경리)', '🌊',
- '강원특별자치도 양양군 현남면 지경리 지경리해수욕장',
- '전국 유일 반려견 전용 해수욕장 · 7~8월 운영',
- '반려견 없이는 입장 불가능한 국내 유일 반려견 전용 해수욕장. 목줄 해제 구역 운영, 반려견 샤워장·드라이룸·대형 선풍기 완비.',
- '🐾 반려견 필수 동반 · 접종 권장 · 목줄 해제 구역 운영',
- '09:00~18:00 (7/12~8/24 시즌 운영)', '견주 5,000원 / 소형견(~5kg) 5,000원 / 중형견(5~10kg) 10,000원 / 대형견(10kg~) 15,000원',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/1699591782'),
-
-(22, '양양', '캠핑', '해변 캠핑', '죽도해변 야영장', '⛺',
- '강원특별자치도 양양군 현남면 죽도해변길 80',
- '메이트쉽 회원 30% 할인 · 해변 바로 앞',
- '동해 해변에서 바로 캠핑할 수 있는 반려견 동반 야영장. 전 사이트 동반 가능.',
- '🐾 전 견종 · 목줄 상시 착용 · 배변 처리 필수',
- '체크인 14:00 / 체크아웃 11:00', '1박 30,000원~ (메이트쉽 회원 21,000원~)',
- true, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80',
- 'https://place.map.kakao.com/8082456'),
-
-(23, '양양', '공원', '해변·산책', '인구해변', '🏄',
- '강원특별자치도 양양군 현남면 인구항길 일대',
- '서핑 메카 · 반려견 동반 핫플',
- '양양 서핑의 메카이자 반려견 동반 여행지. 서퍼들과 반려견이 어우러지는 독특한 분위기. 주변에 반려견 동반 카페·식당 밀집.',
- '🐾 목줄 착용 필수 · 성수기 일부 구역 제한',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/8082101'),
-
--- 고성
-(24, '고성', '트레킹', '트레킹', '건봉사 반려견 산책로', '🏔️',
- '강원특별자치도 고성군 거진읍 건봉사로 723',
- '천년 고찰 주변 청정 숲길 · 무료',
- '신라시대 창건 천년 고찰 건봉사 주변 청정 자연 트레킹 코스. 왕복 약 5km. 계곡과 숲이 어우러짐.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '07:00~18:00 (연중무휴)', '무료',
- false, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80',
- 'https://place.map.kakao.com/8084793'),
-
-(25, '고성', '공원', '해변·산책', '화진포 해수욕장', '🌊',
- '강원특별자치도 고성군 거진읍 화진포길 135',
- '최북단 청정 해변 · 반려견 동반',
- '국내 최북단 청정 석호와 동해 바다가 맞닿는 화진포. 바다, 호수, 갯벌을 함께 즐길 수 있으며 반려견 동반 산책 가능.',
- '🐾 목줄 착용 필수 · 성수기 일부 제한',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/27418044'),
-
-(26, '고성', '캠핑', '오토캠핑', '송지호오토캠핑장', '⛺',
- '강원특별자치도 고성군 죽왕면 동해대로 6021',
- '공공캠핑장 · 반려견 동반 · 송지호 뷰',
- '고성군 운영 공공 오토캠핑장. 천연기념물 송지호 옆 위치. 반려견 동반 사이트 운영. 겨울 철새 도래지로 사계절 아름다움.',
- '🐾 목줄 착용 필수 · 지정 사이트에서만 동반',
- '체크인 14:00 / 체크아웃 11:00', '1박 20,000원~35,000원',
- false, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80',
- 'https://place.map.kakao.com/8084989'),
-
--- 평창
-(27, '평창', '관광', '목장', '대관령 하늘목장', '🐄',
- '강원특별자치도 평창군 대관령면 횡계리 470-5',
- '해발 1,080m · 반려견 입장료 5,000원',
- '해발 1,080m 대관령 고원 목장. 반려견 동반 가능 구역 지정. 트랙터마차 소형견 탑승 가능. 드넓은 초원에서 반려견과 함께 인생사진.',
- '🐾 목줄 착용 필수 · 가축 구역 접근 금지 · 공격성 강한 견종 제한',
- '하절기(4~10월) 09:00~18:00 / 동절기(11~3월) 09:00~17:30', '대인 8,000원 / 소인 6,000원 / 반려견 5,000원',
- false, 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
- 'https://place.map.kakao.com/8072218'),
-
-(28, '평창', '리조트', '리조트', '휘닉스파크 리조트', '🎿',
- '강원특별자치도 평창군 봉평면 태기로 174',
- '4계절 리조트 · 펫 전용 객실 · 워터파크',
- '평창 사계절 종합 리조트. 스키·워터파크·루지·골프. 반려견 전용 객실에 애견하우스·배변백·배변패드·식기·장난감 어메니티 제공.',
- '🐾 20kg 이하 · 최대 2마리 · 종합백신·광견병 접종 증명 필수',
- '체크인 15:00 / 체크아웃 11:00', '펫 객실 1박 180,000원~ / 반려견 추가 20,000원',
- true, 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=800&q=80',
- 'https://place.map.kakao.com/8073765'),
-
-(29, '평창', '관광', '양떼목장', '대관령 양떼목장', '🐑',
- '강원특별자치도 평창군 대관령면 대관령마루길 483-32',
- '반려견 동반 산책 · 양 먹이주기 체험',
- '드라마 촬영지로 유명한 대관령 양떼목장. 반려견 동반으로 넓은 초원 산책 가능. 단, 양 구역 접근 제한.',
- '🐾 목줄 착용 필수 · 양 구역 접근 금지',
- '09:00~17:30 (연중무휴)', '성인 5,000원 / 소인 4,000원',
- false, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=800&q=80',
- 'https://place.map.kakao.com/8072148'),
-
--- 홍천
-(30, '홍천', '리조트', '리조트', '소노펫클럽&리조트 비발디파크', '🐾',
- '강원특별자치도 홍천군 서면 한치골길 262',
- '반려견 특화 리조트 · 전용 레스토랑·수영장',
- '반려견 동반 특화 리조트. 전문 셰프의 반려동물 전용 레스토랑, 반려견 행동 상담 센터, 반려견 풀장, 샤워 시설 완비.',
- '🐾 맹견·45kg 이상 제외 · 2년 내 종합백신·광견병 접종 · 중대형견 보호자 1인 동반 필수',
- '체크인 15:00 / 체크아웃 11:00', '1박 200,000원~ / 반려견 소중형 30,000원·중대형 40,000원·대형 50,000원',
- false, 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=800&q=80',
- 'https://place.map.kakao.com/1535768073'),
-
-(31, '홍천', '캠핑', '계곡 캠핑', '봉바위돌집 캠핑장', '⛺',
- '강원특별자치도 홍천군 서면 반곡길 일대',
- '계곡 뷰 명소 · 대형견 불가',
- '홍천 계곡 뷰가 아름다운 캠핑장. 반려견 동반 가능하며 조용하고 프라이빗한 분위기. 최대 2마리까지 동반 가능.',
- '🐾 최대 2마리 · 소·중형견만 (대형견 불가) · 목줄 착용 필수',
- '체크인 14:00 / 체크아웃 11:00', '1박 50,000원~',
- false, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80',
- 'https://place.map.kakao.com/27394888'),
-
--- 횡성
-(32, '횡성', '공원', '산책', '횡성호수길 5구간', '🌿',
- '강원특별자치도 횡성군 갑천면 횡성호수길 일대',
- '호수 옆 흙길 · 관절 부담 없는 평지 코스',
- '횡성호수를 끼고 걷는 약 10km 산책 코스. 오르막·내리막 없는 흙길로 반려견 관절에 부담 없음. 호수 뷰가 아름다운 사계절 산책 명소.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'https://place.map.kakao.com/27363752'),
-
-(33, '횡성', '식당', '레스토랑', '원주 무튼 (오크밸리 인근)', '🍽️',
- '강원특별자치도 횡성군 서원면 경강로 1428',
- '미슐랭 경력 쉐프 · 야외 테라스 전 견종',
- '미슐랭 경력 쉐프가 운영하는 오크밸리 인근 레스토랑. 야외 테라스에서 소·중·대형견 동반 가능. 프리미엄 다이닝.',
- '🐾 전 견종 야외 테라스 동반 · 실내 소형견만',
- '11:00~21:00 (라스트오더 20:00, 수요일 휴무)', '메뉴당 20,000원~50,000원',
- false, 'https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=800&q=80',
- 'https://place.map.kakao.com/1751985632'),
-
--- 원주
-(34, '원주', '트레킹', '트레킹', '치악산 둘레길 11코스', '🏔️',
- '강원특별자치도 원주시 소초면 치악로 일대',
- '반려견 허용 국립공원 코스 · 야자매트 완비',
- '치악산 국립공원 내 반려견 허용 구간. 대부분 평지로 야자매트 포장. 황골~비로봉 왕복 약 6km, 약 2시간.',
- '🐾 목줄 착용 필수 · 배변봉투 지참 · 동물등록증 권장',
- '일출~일몰 (계절별 상이)', '무료',
- false, 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=80',
- 'https://place.map.kakao.com/8044454'),
-
-(35, '원주', '펜션', '애견펜션', '트리몰리 애견펜션', '🏡',
- '강원특별자치도 원주시 귀래면 일대',
- '견종 제한 없음 · 24시간 미온수풀 무료',
- '견종 제한 없이 소·중·대형견 최대 4마리 동반 가능한 프라이빗 펜션. 개별 실내 미온수풀(24시간 무료)·개별 바베큐장·개별 운동장 제공.',
- '🐾 전 견종 · 최대 4마리 · 12kg 이하 1마리당 15,000원 추가',
- '체크인 15:00 / 체크아웃 11:00', '객실 59,000원~ / 반려견 15,000원/마리',
- false, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=800&q=80',
- 'https://place.map.kakao.com/1987645321'),
-
-(36, '원주', '공원', '산책', '원주 섬강 반려견 산책로', '🌊',
- '강원특별자치도 원주시 섬강변 일대',
- '무료 · 강변 흙길 왕복 4km',
- '섬강변을 따라 조성된 반려견 산책 코스. 왕복 약 4km. 포장 없는 자연 흙길로 반려견이 자연스럽게 즐길 수 있음.',
- '🐾 목줄 착용 필수',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/8044002'),
-
--- 인제
-(37, '인제', '체험', '래프팅', '내린천 반려견 래프팅', '🌊',
- '강원특별자치도 인제군 기린면 내린천로 2011',
- '메이트쉽 회원 할인 · 강원도 청정 래프팅',
- '강원도 대표 래프팅 성지 내린천에서 반려견과 함께 래프팅 체험. 반려견 안전 조끼 대여 제공. 약 2시간 코스. 4월~10월 운영.',
- '🐾 중형견 이하 · 반려견 안전 조끼 착용 필수',
- '09:00~17:00 (4월~10월 운영)', '1인 35,000원~ (메이트쉽 회원 할인)',
- true, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/8056892'),
-
-(38, '인제', '캠핑', '캠핑', '설하관광농원 캠핑장', '⛺',
- '강원특별자치도 인제군 북면 설악로 3208',
- '반려견 전용 울타리 사이트 · 목줄 해제 가능',
- '설악산 입구 인근 자연 속 캠핑장. 반려동물 전용 사이트에 울타리 설치로 목줄 해제 캠핑 가능.',
- '🐾 20kg 이하 (대형견·맹견 불가) · 전용 사이트 배정',
- '체크인 14:00 / 체크아웃 11:00', '1박 40,000원~60,000원',
- false, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80',
- 'https://place.map.kakao.com/8058102'),
-
-(39, '인제', '공원', '트레킹', '미산계곡 반려견 산책로', '🏔️',
- '강원특별자치도 인제군 기린면 미산리 일대',
- '청정 계곡 · 여름 반려견 물놀이 명소',
- '인제 청정 미산계곡. 맑고 시원한 계곡물에서 반려견과 함께 물놀이 가능. 여름 피서지로 인기. 계곡을 따라 자연 트레킹.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80',
- 'https://place.map.kakao.com/8056001'),
-
--- 화천
-(40, '화천', '캠핑', '국립야영장', '국립화천숲속야영장', '🌲',
- '강원특별자치도 화천군 하남면 용암리 일대',
- '반려견 동반 가능 국립야영장 · 울타리·야자매트 완비',
- '산림청 운영 반려견 동반 가능 국립자연휴양림 야영장. 강원도 유일. 전용 울타리·야자매트 설치 사이트.',
- '🐾 동물등록 완료 · 광견병 예방접종 · 최대 2마리 · 건강한 외관',
- '체크인 14:00 / 체크아웃 11:00', '1박 10,000원~20,000원 (국립공원 요금)',
- false, 'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=800&q=80',
- 'https://place.map.kakao.com/27310988'),
-
-(41, '화천', '공원', '산책·공원', '화천천 수달래 산책로', '🌿',
- '강원특별자치도 화천군 화천읍 화천천 일대',
- '무료 · 봄 수달래 군락 · 조용한 산책',
- '화천천변 산책로. 봄에는 수달래(산철쭉) 군락이 아름답게 피어남. 관광객이 적고 조용해 반려견과 여유로운 산책에 적합.',
- '🐾 목줄 착용 필수',
- '24시간 개방', '무료',
- false, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'https://place.map.kakao.com/8026015'),
-
--- 양구
-(42, '양구', '공원', '생태공원', '한반도섬 (양구 수입천)', '🌿',
- '강원특별자치도 양구군 방산면 수입리 한반도섬',
- '국내 최대 인공 습지 · 반려견 데크 산책',
- '위에서 보면 한반도 모양인 국내 최대 인공 습지섬. 잘 정비된 데크 산책로를 따라 반려견과 함께 생태 탐방 가능.',
- '🐾 목줄 착용 필수 · 배변봉투 지참',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/27322516'),
-
--- 정선
-(43, '정선', '체험', '레일바이크', '정선 레일바이크', '🚂',
- '강원특별자치도 정선군 여량면 레일바이크길 230',
- '구절리~아우라지 7.2km · 소형 반려동물 동반',
- '구절리역~아우라지 구간 약 7.2km 동강 절경을 따라 달리는 레일바이크. 소형 반려동물을 케이지에 넣어 동반 탑승 가능.',
- '🐾 소형 반려동물 · 케이지(켄넬) 필수',
- '09:00~17:30 (연중무휴)', '2인승 35,000원 / 4인승 50,000원',
- false, 'https://images.unsplash.com/photo-1544568100-847a948585b9?w=800&q=80',
- 'https://place.map.kakao.com/8068701'),
-
-(44, '정선', '관광', '트레킹', '만항재 야생화 트레킹', '🌸',
- '강원특별자치도 정선군 고한읍 함백산 만항재',
- '해발 1,330m · 야생화 군락 · 쿨한 여름',
- '국내 포장도로 중 가장 높은 고개 만항재(해발 1,330m). 7~8월 야생화 군락이 장관. 반려견과 함께 쿨한 여름 고산 트레킹 가능.',
- '🐾 목줄 착용 필수 · 추위 대비 필요',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=80',
- 'https://place.map.kakao.com/8069102'),
-
--- 삼척
-(45, '삼척', '관광', '케이블카', '삼척 해상 케이블카', '🚡',
- '강원특별자치도 삼척시 정상동 이사부길 33',
- '동해 바다 위 케이블카 · 케이지 대여 가능',
- '동양 최장 해상 케이블카(1.4km). 소형 반려동물 케이지에 넣어 탑승 가능. 케이지 대여 서비스 제공.',
- '🐾 소형 반려동물 케이지 탑승 · 케이지 대여 2,000원',
- '09:00~18:00 (연중무휴)', '왕복 성인 12,000원 / 소인 8,000원 (케이지 대여 2,000원)',
- false, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=800&q=80',
- 'https://place.map.kakao.com/1270985455'),
-
-(46, '삼척', '공원', '해변·산책', '삼척 맹방해변', '🌊',
- '강원특별자치도 삼척시 근덕면 맹방해변길 일대',
- '넓은 백사장 · 반려견 동반 해변 산책',
- '삼척의 넓고 깨끗한 백사장 맹방해변. 비교적 한적해 반려견과 함께 자유롭게 산책하기 좋음. 주변 솔숲 산책로 추가 가능.',
- '🐾 목줄 착용 필수 · 성수기 일부 제한',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
- 'https://place.map.kakao.com/8081001'),
-
--- 동해
-(47, '동해', '공원', '해변·공원', '묵호 논골담길 & 해변', '🎨',
- '강원특별자치도 동해시 묵호동 논골담길 일대',
- '벽화마을 · 바다 전망 · 반려견 산책',
- '아름다운 벽화가 가득한 묵호 논골담길. 오르막 골목길을 반려견과 함께 걸으며 동해 바다 전망 감상. 묵호해변까지 연결 산책 가능.',
- '🐾 목줄 착용 필수',
- '상시 개방', '무료',
- false, 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800&q=80',
- 'https://place.map.kakao.com/8079542'),
-
--- 태백
-(48, '태백', '트레킹', '트레킹', '태백산 반려견 등반 코스', '🏔️',
- '강원특별자치도 태백시 소도동 태백산국립공원',
- '해발 1,567m · 반려견 동반 허용 구간',
- '태백산국립공원 내 반려견 동반 허용 구간(유일사 탐방로). 겨울 설경이 특히 아름다움.',
- '🐾 동물등록 완료 · 목줄 착용 필수 · 허용 구간 외 출입 금지',
- '일출~일몰 (계절별 상이)', '성인 2,000원 / 소인 1,000원',
- false, 'https://images.unsplash.com/photo-1601758228041-f3b2795255f1?w=800&q=80',
- 'https://place.map.kakao.com/8075001'),
-
--- 영월
-(49, '영월', '관광', '동물원', '달빛동물원 (펫힐링)', '🦜',
- '강원특별자치도 영월군 영월읍 단종로 산 9-2',
- '반려동물 동반 입장 · 이색 동물 체험',
- '다양한 이색 동물을 만날 수 있는 영월 달빛동물원. 반려견 동반 입장 가능. 야간 운영(달빛)으로 특별한 분위기.',
- '🐾 반려견 동반 가능 · 목줄 착용 필수 · 공격성 견종 제한',
- '10:00~22:00 (계절별 상이)', '성인 10,000원 / 소인 8,000원',
- false, 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80',
- 'https://place.map.kakao.com/27394021'),
-
-(50, '영월', '공원', '산책', '영월 동강 강변 산책로', '🌊',
- '강원특별자치도 영월군 영월읍 동강 일대',
- '동강 절경 · 반려견 강변 산책',
- '영월 동강의 아름다운 절경을 따라 반려견과 함께 강변 산책 가능. 래프팅 시즌(5~9월)에는 다양한 수상 레저 체험도 인근에서 즐길 수 있음.',
- '🐾 목줄 착용 필수 · 래프팅 동반 시 운영사 사전 확인',
- '상시 개방', '무료 (래프팅 별도 요금)',
- false, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80',
- 'https://place.map.kakao.com/27394101');
-
--- ────────────────────────────────────────────────
--- 메이트쉽 파트너
--- ────────────────────────────────────────────────
-insert into mateship_partners ("order", name, region, type, discount, icon, gradient, link, image_data) values
-(1, '세인트존스호텔',         '강릉', '호텔',     '최저가 보장 + 조식 무료', '🏨', 'linear-gradient(135deg,#dbeafe 0%,#93c5fd 100%)', '#', 'https://images.unsplash.com/photo-1611892440504-42a792e24d32?w=400&q=80'),
-(2, '휘닉스파크 리조트',      '평창', '리조트',   '객실 요금 20% 할인',       '⛷️', 'linear-gradient(135deg,#cffafe 0%,#67e8f9 100%)', '#', 'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=400&q=80'),
-(3, '죽도해변 야영장',        '양양', '캠핑',     '1박 요금 30% 할인',         '🏕️', 'linear-gradient(135deg,#dcfce7 0%,#86efac 100%)', '#', 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=400&q=80'),
-(4, '홍천 반려동물 테마파크', '홍천', '테마파크', '입장료 30% 할인',           '🌳', 'linear-gradient(135deg,#d1fae5 0%,#6ee7b7 100%)', '#', 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=400&q=80'),
-(5, '강아지숲',               '춘천', '테마파크', '입장료 20% 할인',           '🌲', 'linear-gradient(135deg,#fef3c7 0%,#fcd34d 100%)', '#', 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=400&q=80'),
-(6, '내린천 래프팅',          '인제', '액티비티', '이용료 30% 할인',           '🚣', 'linear-gradient(135deg,#dbeafe 0%,#7dd3fc 100%)', '#', 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=400&q=80');
-
--- ────────────────────────────────────────────────
--- 룩북
--- ────────────────────────────────────────────────
-insert into lookbook_items ("order", image_data, label, link, is_main) values
-(1, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=800&q=80', '트레킹 & 아웃도어', '/travel', true),
-(2, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=800&q=80', '캠핑', '/travel',    false),
-(3, 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80', '해변', '/travel',    false),
-(4, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=800&q=80', '교육 & 훈련', '/education', false),
-(5, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=800&q=80', '문화 행사', '/events',  false);
-
--- ────────────────────────────────────────────────
--- 갤러리
--- ────────────────────────────────────────────────
-insert into gallery_items ("order", image_data, caption, active) values
-(1, 'https://images.unsplash.com/photo-1551632811-561732d1e306?w=1200&q=85', '2025 Mission Dog Trekking — 고성', true),
-(2, 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=1200&q=85', '가평군 반려동물 문화행사 2025', true),
-(3, 'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=1200&q=85', '강원도 반려동물 캠핑 페스티벌', true),
-(4, 'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=1200&q=85', '어질리티 챔피언십 대회', true),
-(5, 'https://images.unsplash.com/photo-1548199973-03cce0bbc87b?w=1200&q=85', '반려견 해변 페스타 — 삼척', true),
-(6, 'https://images.unsplash.com/photo-1534361960057-19f4434a337d?w=1200&q=85', '선자령 반려견 트레킹', true);
-
--- ────────────────────────────────────────────────
--- 해시태그
--- ────────────────────────────────────────────────
-insert into page_hashtags (page, tags) values
-('index',     ARRAY['#강원도반려동물협회','#GWAA','#강원도반려동물','#메이트쉽멤버십','#독스포츠교육','#어질리티교육','#오비디언스훈련','#반려동물행동지도사','#강원도반려견여행','#원주반려동물','#강릉반려동물']),
-('events',    ARRAY['#강원도반려동물행사','#반려동물축제','#반려견트레킹','#반려동물캠핑','#강원도반려견문화','#GWAA행사','#강릉반려동물축제','#원주반려동물행사']),
-('travel',    ARRAY['#강원도반려동물여행','#강원도반려견동반','#강릉반려동물카페','#속초반려견해변','#평창반려동물리조트','#강원도반려견캠핑','#강아지숲춘천','#세인트존스호텔강릉']),
-('education', ARRAY['#강원도반려동물교육','#어질리티클럽원주','#어질리티교육','#오비디언스훈련','#반려동물행동지도사','#독스포츠강원도','#국가자격증반려동물']),
-('mateship',  ARRAY['#메이트쉽멤버십','#반려동물할인','#강원도제휴업체','#반려동물여행할인','#GWAA회원','#강릉호텔할인','#평창리조트할인']),
-('about',     ARRAY['#강원도반려동물협회','#GWAA','#반려동물문화','#강원도반려인','#사단법인협회'])
-on conflict (page) do update set tags = excluded.tags;
+-- GWAA seed data (현재 확정 데이터 기준 자동 생성)
+-- schema.sql 실행 후 이 파일 실행
+
+-- activity_cards (3 rows)
+delete from activity_cards;
+insert into activity_cards (id,"order",image_data,tag,tag_color,icon,title,description,link,link_text) values (1,1,'/images/events/walk-edu-2025/01.webp','EDUCATION','green','🎓','반려동물 교육','독스포츠(어질리티), 오비디언스 교육부터 반려동물행동지도사 국가자격증 취득까지. 전문 트레이너와 체계적인 커리큘럼.','/education','교육 신청하기 →');
+insert into activity_cards (id,"order",image_data,tag,tag_color,icon,title,description,link,link_text) values (2,2,'/images/events/wonju-2025/01.webp','EVENTS','blue','🎪','반려동물 행사','강원도 전역에서 펼쳐지는 반려동물 문화축제, 트레킹, 캠핑, 사진공모전. 2021년부터 4만명이 함께했습니다.','/events','행사 보기 →');
+insert into activity_cards (id,"order",image_data,tag,tag_color,icon,title,description,link,link_text) values (3,3,'/images/events/gapyeong-2025/01.webp','MATESHIP','amber','🤝','메이트쉽 멤버십','호텔, 카페, 캠핑, 사료·용품 할인과 행사 우선 참여까지. 메이트쉽 회원은 연간 40만원 이상 절약합니다.','/mateship','혜택 보기 →');
+select setval(pg_get_serial_sequence('activity_cards','id'), (select max(id) from activity_cards));
+
+-- event_cards (3 rows)
+delete from event_cards;
+insert into event_cards (id,"order",image_data,images,title,date_text,location,description,content,status,link,benefit,cta_text) values (1,3,'/images/events/beach-gosung-2025/01.webp',ARRAY['/images/events/beach-gosung-2025/01.webp','/images/events/beach-gosung-2025/02.webp','/images/events/beach-gosung-2025/03.webp','/images/events/beach-gosung-2025/04.webp','/images/events/beach-gosung-2025/05.webp','/images/events/beach-gosung-2025/06.webp','/images/events/beach-gosung-2025/07.webp','/images/events/beach-gosung-2025/08.webp','/images/events/beach-gosung-2025/09.webp','/images/events/beach-gosung-2025/10.webp','/images/events/beach-gosung-2025/11.webp','/images/events/beach-gosung-2025/12.webp','/images/events/beach-gosung-2025/13.webp','/images/events/beach-gosung-2025/14.webp'],'반려동물 동반 비치요가 클래스','2026.07.10 — 2026.08.21','고성 썬베드비치','해변에서 반려견과 함께 즐기는 요가 클래스. 메이트쉽 회원 무료.','','live','','⭐ 회원 무료 이용','신청하기 →');
+insert into event_cards (id,"order",image_data,images,title,date_text,location,description,content,status,link,benefit,cta_text) values (2,4,'/images/events/gosung-2026/01.webp',ARRAY['/images/events/gosung-2026/01.webp'],'2026 고성 미션트레킹 & 힐링 비치','2026년','트레킹 · 고성','강원도 고성에서 반려견과 함께하는 미션 트레킹과 해변 힐링 프로그램.
+
+자연 속에서 반려견과 보호자가 함께 걷고 교감하며, 고성의 아름다운 해변과 트레킹 코스를 동시에 즐기는 복합 프로그램입니다.','','upcoming','','','자세히 보기 →');
+insert into event_cards (id,"order",image_data,images,title,date_text,location,description,content,status,link,benefit,cta_text) values (3,5,'/images/events/jamboree-2026/01.webp',ARRAY['/images/events/jamboree-2026/01.webp','/images/events/jamboree-2026/02.webp','/images/events/jamboree-2026/03.webp','/images/events/jamboree-2026/04.webp'],'2026 세계잼버리 캠핑 & 펫스카웃 페스티벌','2026년','캠핑 · 강원도','2026 세계잼버리와 연계한 반려동물 동반 캠핑 & 펫스카웃 페스티벌.
+
+반려견과 보호자가 함께 스카웃 정신으로 자연을 탐험하고 캠핑을 즐기는 글로벌 반려동물 문화 행사입니다.','','upcoming','','','자세히 보기 →');
+select setval(pg_get_serial_sequence('event_cards','id'), (select max(id) from event_cards));
+
+-- archive_events (22 rows)
+delete from archive_events;
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (1,3,true,2025,'제3회 원주시 반려동물 문화축제 — 애니멀대학교','원주','6,000','2025. 10. 4.(토) 10:00 ~ 17:00','원주천 로아노크광장 (원주시 봉산동)','프로젝트 자체 기획 · 제작 · 운영','원주시','''2025 원주시 반려동물 문화행사 – 애니멀 대학교'' 행사는 대학교 캠퍼스 콘셉트로 꾸며졌습니다.
+
+참가자들은 반려동물과 함께 체육, 예술, 교육 등 세 개의 학과형 프로그램에 참여하는 것으로 진행됩니다.
+
+예술학과에서는 펫케스트라, 반려견 장기자랑, 학생회장 선거 등,
+체육학과에서는 반려견 운동회와 행동교정 프로그램 등,
+교육학과에서는 유기동물 입양 홍보와 훈련사 토크쇼 등이 운영되었습니다.','/images/events/wonju-2025/29.webp','/images/events/wonju-2025/02.webp',ARRAY['/images/events/wonju-2025/29.webp','/images/events/wonju-2025/21.webp','/images/events/wonju-2025/05.webp','/images/events/wonju-2025/07.webp','/images/events/wonju-2025/01.webp','/images/events/wonju-2025/02.webp','/images/events/wonju-2025/03.webp','/images/events/wonju-2025/04.webp','/images/events/wonju-2025/06.webp','/images/events/wonju-2025/08.webp','/images/events/wonju-2025/09.webp','/images/events/wonju-2025/10.webp','/images/events/wonju-2025/11.webp','/images/events/wonju-2025/12.webp','/images/events/wonju-2025/13.webp','/images/events/wonju-2025/14.webp','/images/events/wonju-2025/15.webp','/images/events/wonju-2025/16.webp','/images/events/wonju-2025/17.webp','/images/events/wonju-2025/18.webp','/images/events/wonju-2025/19.webp','/images/events/wonju-2025/20.webp','/images/events/wonju-2025/22.webp','/images/events/wonju-2025/23.webp','/images/events/wonju-2025/24.webp','/images/events/wonju-2025/25.webp','/images/events/wonju-2025/26.webp','/images/events/wonju-2025/27.webp','/images/events/wonju-2025/28.webp','/images/events/wonju-2025/30.webp','/images/events/wonju-2025/31.webp','/images/events/wonju-2025/32.webp','/images/events/wonju-2025/33.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (2,4,false,2025,'고성 미션트레킹 & 힐링 비치','고성','','2025. 10. 18.(토) 13:00 ~ 18:00','고성군 현내면 일대','프로젝트 자체 기획 · 제작 · 운영','고성군 현내면 주민자치회, 웰니스 고성','강원도 고성에서 사람과 반려견이 함께 자연을 걷고 교감하는 트레킹 이벤트를 열었습니다.
+
+이 행사는 아름다운 바다와 숲이 어우러진 고성의 자연 환경을 배경으로, 반려견과 보호자가 함께 트레킹 코스를 완주하며 ''함께 걷는 경험''을 중심으로 한 문화 콘텐츠로 기획됐습니다.
+
+참가자들은 트레킹 코스를 걸으며 다양한 미션을 수행했고, 고성 인근 카페에서 무료 음료 제공과 체험 프로그램을 제공했습니다.
+
+고성군과 지역 협력 기관은 이 행사를 통해 반려견 동반 여행 수요 증가에 부응하고, 지역 관광 자원·웰니스 관광 콘텐츠로 확장하려는 목표를 공유했습니다.','/images/events/gosung-trek-2025/31.webp','/images/events/gosung-trek-2025/32.webp',ARRAY['/images/events/gosung-trek-2025/31.webp','/images/events/gosung-trek-2025/32.webp','/images/events/gosung-trek-2025/01.webp','/images/events/gosung-trek-2025/02.webp','/images/events/gosung-trek-2025/03.webp','/images/events/gosung-trek-2025/04.webp','/images/events/gosung-trek-2025/05.webp','/images/events/gosung-trek-2025/06.webp','/images/events/gosung-trek-2025/07.webp','/images/events/gosung-trek-2025/08.webp','/images/events/gosung-trek-2025/09.webp','/images/events/gosung-trek-2025/10.webp','/images/events/gosung-trek-2025/11.webp','/images/events/gosung-trek-2025/12.webp','/images/events/gosung-trek-2025/13.webp','/images/events/gosung-trek-2025/14.webp','/images/events/gosung-trek-2025/15.webp','/images/events/gosung-trek-2025/16.webp','/images/events/gosung-trek-2025/18.webp','/images/events/gosung-trek-2025/19.webp','/images/events/gosung-trek-2025/20.webp','/images/events/gosung-trek-2025/21.webp','/images/events/gosung-trek-2025/23.webp','/images/events/gosung-trek-2025/24.webp','/images/events/gosung-trek-2025/25.webp','/images/events/gosung-trek-2025/26.webp','/images/events/gosung-trek-2025/27.webp','/images/events/gosung-trek-2025/28.webp','/images/events/gosung-trek-2025/30.webp','/images/events/gosung-trek-2025/17.webp','/images/events/gosung-trek-2025/22.webp','/images/events/gosung-trek-2025/29.webp','/images/events/gosung-trek-2025/poster.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (3,5,false,2025,'고성 해변 요가','고성','','2025. 8. 9.(토) ~ 8. 24.(일) (총 20일)','강원도 고성군 대진5리 해수욕장','프로젝트 자체 기획 · 제작 · 운영','고성군, 웰니스 고성, 썬베드 카페','고성 비치 요가는 강원도 고성 대진5리 해수욕장을 반려견과 사람이 함께 쉬고 회복하는 국내 최초 해변형 반려동물 동반 웰니스 프로그램으로 재구성한 프로젝트다.
+
+이 프로그램은 단순한 요가 체험이 아니라 해변이라는 열린 자연 공간을 반려견·사람·관광이 공존하는 힐링 존으로 전환하는 시도다.
+
+해변에는 반려견 전용 쿨링 매트, 휴식 데크, 놀이존, 포토존, 요가 텐트가 설치되고, 보호자는 반려견과 함께 요가·휴식·산책·교감·기록(사진)을 하나의 흐름으로 경험한다.
+
+특히 이 프로그램은 하루 2회, 20일간 운영되는 장기 체류형 구조로 설계되어, 단발 이벤트가 아닌 고성의 새로운 관광 루틴으로 작동하도록 기획되었다.','/images/events/beach-gosung-2025/07.webp','/images/events/beach-gosung-2025/04.webp',ARRAY['/images/events/beach-gosung-2025/07.webp','/images/events/beach-gosung-2025/05.webp','/images/events/beach-gosung-2025/06.webp','/images/events/beach-gosung-2025/04.webp','/images/events/beach-gosung-2025/09.webp','/images/events/beach-gosung-2025/01.webp','/images/events/beach-gosung-2025/08.webp','/images/events/beach-gosung-2025/02.webp','/images/events/beach-gosung-2025/03.webp','/images/events/beach-gosung-2025/10.webp','/images/events/beach-gosung-2025/11.webp','/images/events/beach-gosung-2025/12.webp','/images/events/beach-gosung-2025/13.webp','/images/events/beach-gosung-2025/14.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (4,6,false,2025,'원주 댕댕방범대','원주','','2025년','원주시','프로젝트 자체 기획 · 제작 · 운영','강원도반려동물협회','댕댕방범대는 반려견과 보호자가 함께 산책하며 동네를 지키는 시민 참여형 생활 안전 프로젝트다.
+
+이 활동은 단순한 봉사가 아니라 반려견 산책을 지역 순찰과 공동체 돌봄으로 확장한 새로운 도시 안전 모델이다.
+
+방범대원들은 정해진 시간에 반려견과 함께 동네를 걷고, 위험 요소, 시설 이상, 취약 구역을 자연스럽게 확인하며 눈에 보이는 안전과 사람의 체감 안전을 동시에 높인다.
+
+반려견은 사람들의 시선을 끌고 보호자는 지역의 눈이 된다.','/images/events/dangdang-2025/05.webp','/images/events/dangdang-2025/02.webp',ARRAY['/images/events/dangdang-2025/05.webp','/images/events/dangdang-2025/08.webp','/images/events/dangdang-2025/09.webp','/images/events/dangdang-2025/01.webp','/images/events/dangdang-2025/02.webp','/images/events/dangdang-2025/03.webp','/images/events/dangdang-2025/06.webp','/images/events/dangdang-2025/04.webp','/images/events/dangdang-2025/07.webp','/images/events/dangdang-2025/10.webp','/images/events/dangdang-2025/11.webp','/images/events/dangdang-2025/12.webp','/images/events/dangdang-2025/13.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (5,7,false,2025,'제1회 가평군 반려동물 문화행사 — 활짝펫','가평','3,000','2025. 6. 7.(토) 10:00 ~ 17:00','경기도 가평군 자라섬 꽃축제 행사장 일원','프로젝트 자체 기획 · 제작 · 운영','가평군','''2025 가평군 반려동물 문화행사 – 활짝펫'' 행사는 반려인과 반려견이 자연·예술·놀이·교육 콘텐츠를 함께 즐기도록 설계된 전일 outdoor 라이프스타일 페스티벌이다.
+
+이 행사는 자라섬 꽃축제와 함께 열리며 반려견과 보호자가 꽃이 만발한 자연 속에서 하루를 보내며 교감·놀이·문화 체험을 동시에 경험할 수 있도록 "동반 라이프스타일"을 장려하는 것이 본 행사의 핵심 목적이다.
+
+본 행사는 반려동물에 대한 올바른 인식 확산과 반려문화 성숙, 반려동물과 함께하는 지역 관광 활성화를 목표로 운영됐다.','/images/events/gapyeong-2025/33.webp','/images/events/gapyeong-2025/32.webp',ARRAY['/images/events/gapyeong-2025/33.webp','/images/events/gapyeong-2025/32.webp','/images/events/gapyeong-2025/31.webp','/images/events/gapyeong-2025/29.webp','/images/events/gapyeong-2025/27.webp','/images/events/gapyeong-2025/26.webp','/images/events/gapyeong-2025/28.webp','/images/events/gapyeong-2025/30.webp','/images/events/gapyeong-2025/25.webp','/images/events/gapyeong-2025/24.webp','/images/events/gapyeong-2025/20.webp','/images/events/gapyeong-2025/22.webp','/images/events/gapyeong-2025/21.webp','/images/events/gapyeong-2025/23.webp','/images/events/gapyeong-2025/01.webp','/images/events/gapyeong-2025/02.webp','/images/events/gapyeong-2025/03.webp','/images/events/gapyeong-2025/04.webp','/images/events/gapyeong-2025/05.webp','/images/events/gapyeong-2025/06.webp','/images/events/gapyeong-2025/07.webp','/images/events/gapyeong-2025/08.webp','/images/events/gapyeong-2025/09.webp','/images/events/gapyeong-2025/10.webp','/images/events/gapyeong-2025/11.webp','/images/events/gapyeong-2025/12.webp','/images/events/gapyeong-2025/13.webp','/images/events/gapyeong-2025/14.webp','/images/events/gapyeong-2025/15.webp','/images/events/gapyeong-2025/16.webp','/images/events/gapyeong-2025/17.webp','/images/events/gapyeong-2025/18.webp','/images/events/gapyeong-2025/19.webp','/images/events/gapyeong-2025/34.webp','/images/events/gapyeong-2025/35.webp','/images/events/gapyeong-2025/36.webp','/images/events/gapyeong-2025/37.webp','/images/events/gapyeong-2025/38.webp','/images/events/gapyeong-2025/39.webp','/images/events/gapyeong-2025/40.webp','/images/events/gapyeong-2025/41.webp','/images/events/gapyeong-2025/42.webp','/images/events/gapyeong-2025/43.webp','/images/events/gapyeong-2025/44.webp','/images/events/gapyeong-2025/45.webp','/images/events/gapyeong-2025/46.webp','/images/events/gapyeong-2025/47.webp','/images/events/gapyeong-2025/48.webp','/images/events/gapyeong-2025/49.webp','/images/events/gapyeong-2025/50.webp','/images/events/gapyeong-2025/51.webp','/images/events/gapyeong-2025/52.webp','/images/events/gapyeong-2025/53.webp','/images/events/gapyeong-2025/54.webp','/images/events/gapyeong-2025/55.webp','/images/events/gapyeong-2025/56.webp','/images/events/gapyeong-2025/57.webp','/images/events/gapyeong-2025/58.webp','/images/events/gapyeong-2025/59.webp','/images/events/gapyeong-2025/60.webp','/images/events/gapyeong-2025/61.webp','/images/events/gapyeong-2025/62.webp','/images/events/gapyeong-2025/63.webp','/images/events/gapyeong-2025/64.webp','/images/events/gapyeong-2025/65.webp','/images/events/gapyeong-2025/66.webp','/images/events/gapyeong-2025/67.webp','/images/events/gapyeong-2025/68.webp','/images/events/gapyeong-2025/69.webp','/images/events/gapyeong-2025/70.webp','/images/events/gapyeong-2025/71.webp','/images/events/gapyeong-2025/72.webp','/images/events/gapyeong-2025/73.webp','/images/events/gapyeong-2025/74.webp','/images/events/gapyeong-2025/75.webp','/images/events/gapyeong-2025/76.webp','/images/events/gapyeong-2025/77.webp','/images/events/gapyeong-2025/78.webp','/images/events/gapyeong-2025/79.webp','/images/events/gapyeong-2025/80.webp','/images/events/gapyeong-2025/81.webp','/images/events/gapyeong-2025/82.webp','/images/events/gapyeong-2025/83.webp','/images/events/gapyeong-2025/84.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (6,8,false,2025,'반려동물 산책 교육 프로그램 — 햅삐크루 1기·2기','원주','','2025. 5. 17.(토) ~ 11. 1.(토)','원주시 관내 산책로 및 지정 야외 교육 코스','프로젝트 자체 기획 · 제작 · 운영','원주시','햅삐 산책크루는 원주시와 강원도반려동물협회가 함께 운영하는 반려견 동반 산책 실습형 교육 프로그램이다.
+
+이 프로그램은 단순히 "산책을 시키는 법"이 아니라, 사람과 반려견이 같은 리듬으로 걷고, 같은 규칙으로 움직이는 법을 배우는 과정이다.
+
+짖음, 당김, 흥분, 사회성 부족과 같은 문제 행동은 훈련이 부족해서가 아니라 산책이라는 일상이 제대로 설계되지 않았기 때문에 발생한다는 관점에서 출발한다.
+
+햅삐 산책크루는 실제 거리와 공원, 보행 환경에서 전문 트레이너와 함께 걷고 멈추고 마주치는 과정을 반복하며 보호자의 리더십, 반려견의 안정감, 사회적 거리 조절을 동시에 훈련한다.','/images/events/walk-edu-2025/01.webp','/images/events/walk-edu-2025/02.webp',ARRAY['/images/events/walk-edu-2025/01.webp','/images/events/walk-edu-2025/02.webp','/images/events/walk-edu-2025/03.webp','/images/events/walk-edu-2025/04.webp','/images/events/walk-edu-2025/05.webp','/images/events/walk-edu-2025/06.webp','/images/events/walk-edu-2025/07.webp','/images/events/walk-edu-2025/08.webp','/images/events/walk-edu-2025/09.webp','/images/events/walk-edu-2025/10.webp','/images/events/walk-edu-2025/11.webp','/images/events/walk-edu-2025/12.webp','/images/events/walk-edu-2025/13.webp','/images/events/walk-edu-2025/14.webp','/images/events/walk-edu-2025/15.webp','/images/events/walk-edu-2025/16.webp','/images/events/walk-edu-2025/17.webp','/images/events/walk-edu-2025/18.webp','/images/events/walk-edu-2025/19.webp','/images/events/walk-edu-2025/20.webp','/images/events/walk-edu-2025/21.webp','/images/events/walk-edu-2025/22.webp','/images/events/walk-edu-2025/23.webp','/images/events/walk-edu-2025/24.webp','/images/events/walk-edu-2025/25.webp','/images/events/walk-edu-2025/26.webp','/images/events/walk-edu-2025/27.webp','/images/events/walk-edu-2025/28.webp','/images/events/walk-edu-2025/29.webp','/images/events/walk-edu-2025/30.webp','/images/events/walk-edu-2025/31.webp','/images/events/walk-edu-2025/32.webp','/images/events/walk-edu-2025/33.webp','/images/events/walk-edu-2025/34.webp','/images/events/walk-edu-2025/35.webp','/images/events/walk-edu-2025/36.webp','/images/events/walk-edu-2025/37.webp','/images/events/walk-edu-2025/38.webp','/images/events/walk-edu-2025/39.webp','/images/events/walk-edu-2025/40.webp','/images/events/walk-edu-2025/41.webp','/images/events/walk-edu-2025/42.webp','/images/events/walk-edu-2025/43.webp','/images/events/walk-edu-2025/44.webp','/images/events/walk-edu-2025/45.webp','/images/events/walk-edu-2025/46.webp','/images/events/walk-edu-2025/47.webp','/images/events/walk-edu-2025/48.webp','/images/events/walk-edu-2025/49.webp','/images/events/walk-edu-2025/50.webp','/images/events/walk-edu-2025/51.webp','/images/events/walk-edu-2025/52.webp','/images/events/walk-edu-2025/53.webp','/images/events/walk-edu-2025/54.webp','/images/events/walk-edu-2025/55.webp','/images/events/walk-edu-2025/56.webp','/images/events/walk-edu-2025/57.webp','/images/events/walk-edu-2025/58.webp','/images/events/walk-edu-2025/59.webp','/images/events/walk-edu-2025/60.webp','/images/events/walk-edu-2025/61.webp','/images/events/walk-edu-2025/62.webp','/images/events/walk-edu-2025/63.webp','/images/events/walk-edu-2025/64.webp','/images/events/walk-edu-2025/65.webp','/images/events/walk-edu-2025/66.webp','/images/events/walk-edu-2025/67.webp','/images/events/walk-edu-2025/68.webp','/images/events/walk-edu-2025/69.webp','/images/events/walk-edu-2025/70.webp','/images/events/walk-edu-2025/71.webp','/images/events/walk-edu-2025/72.webp','/images/events/walk-edu-2025/73.webp','/images/events/walk-edu-2025/74.webp','/images/events/walk-edu-2025/75.webp','/images/events/walk-edu-2025/76.webp','/images/events/walk-edu-2025/77.webp','/images/events/walk-edu-2025/78.webp','/images/events/walk-edu-2025/79.webp','/images/events/walk-edu-2025/80.webp','/images/events/walk-edu-2025/81.webp','/images/events/walk-edu-2025/82.webp','/images/events/walk-edu-2025/83.webp','/images/events/walk-edu-2025/84.webp','/images/events/walk-edu-2025/85.webp','/images/events/walk-edu-2025/86.webp','/images/events/walk-edu-2025/87.webp','/images/events/walk-edu-2025/88.webp','/images/events/walk-edu-2025/89.webp','/images/events/walk-edu-2025/90.webp','/images/events/walk-edu-2025/91.webp','/images/events/walk-edu-2025/92.webp','/images/events/walk-edu-2025/93.webp','/images/events/walk-edu-2025/94.webp','/images/events/walk-edu-2025/95.webp','/images/events/walk-edu-2025/96.webp','/images/events/walk-edu-2025/97.webp','/images/events/walk-edu-2025/98.webp','/images/events/walk-edu-2025/99.webp','/images/events/walk-edu-2025/100.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (7,13,false,2024,'제2회 원주시 반려동물문화행사 — 다함께 펫밀리','원주','5,000','2024. 10. 19.(토)','원주시 중앙공원 일원','프로젝트 자체 기획 · 제작 · 운영','원주시','제2회 원주시 반려동물문화행사 ''다함께 펫밀리''는 반려동물과 보호자가 함께 나들이하며 문화·교육·놀이를 체험하는 원주시의 대표적인 반려동물 문화 행사다.
+
+가족과 같은 반려동물, 그 가족 모두가 함께할 수 있는 하루의 특별함을 원주 중앙공원에서 만들어냈다.
+
+체험 부스, 반려동물 퍼레이드, 입양 홍보 등 다채로운 프로그램이 원주 시민들과 함께 이어졌다.','/images/events/wonju-2024/21.webp','/images/events/wonju-2024/01.webp',ARRAY['/images/events/wonju-2024/21.webp','/images/events/wonju-2024/08.webp','/images/events/wonju-2024/31.webp','/images/events/wonju-2024/11.webp','/images/events/wonju-2024/09.webp','/images/events/wonju-2024/02.webp','/images/events/wonju-2024/01.webp','/images/events/wonju-2024/03.webp','/images/events/wonju-2024/04.webp','/images/events/wonju-2024/05.webp','/images/events/wonju-2024/06.webp','/images/events/wonju-2024/07.webp','/images/events/wonju-2024/10.webp','/images/events/wonju-2024/12.webp','/images/events/wonju-2024/13.webp','/images/events/wonju-2024/14.webp','/images/events/wonju-2024/15.webp','/images/events/wonju-2024/16.webp','/images/events/wonju-2024/17.webp','/images/events/wonju-2024/18.webp','/images/events/wonju-2024/19.webp','/images/events/wonju-2024/20.webp','/images/events/wonju-2024/22.webp','/images/events/wonju-2024/23.webp','/images/events/wonju-2024/24.webp','/images/events/wonju-2024/25.webp','/images/events/wonju-2024/26.webp','/images/events/wonju-2024/27.webp','/images/events/wonju-2024/28.webp','/images/events/wonju-2024/29.webp','/images/events/wonju-2024/30.webp','/images/events/wonju-2024/32.webp','/images/events/wonju-2024/33.webp','/images/events/wonju-2024/34.webp','/images/events/wonju-2024/35.webp','/images/events/wonju-2024/36.webp','/images/events/wonju-2024/37.webp','/images/events/wonju-2024/38.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (8,12,false,2024,'제2회 강릉시 반려동물 문화축제 — 올림펫','강릉','3,500','2024. 10. 19.(토) ~ 10. 20.(일)','강릉종합운동장 야외공연장 일원','프로젝트 자체 기획 · 제작 · 운영','강릉시','강릉이 두 번째로 품은 반려동물 문화 축제, 올림펫 2024.
+
+첫 회의 설렘과 감동을 이어받아 더 넓어진 공간, 더 다양해진 프로그램으로 돌아왔다.
+
+강릉 시민과 전국의 반려인들이 모여 반려동물과 함께하는 문화의 가능성을 다시 한 번 확인한 자리였다.','/images/events/olimpet-2024/01.webp','/images/events/olimpet-2024/02.webp',ARRAY['/images/events/olimpet-2024/01.webp','/images/events/olimpet-2024/19.webp','/images/events/olimpet-2024/20.webp','/images/events/olimpet-2024/02.webp','/images/events/olimpet-2024/03.webp','/images/events/olimpet-2024/04.webp','/images/events/olimpet-2024/05.webp','/images/events/olimpet-2024/06.webp','/images/events/olimpet-2024/07.webp','/images/events/olimpet-2024/08.webp','/images/events/olimpet-2024/09.webp','/images/events/olimpet-2024/10.webp','/images/events/olimpet-2024/11.webp','/images/events/olimpet-2024/12.webp','/images/events/olimpet-2024/13.webp','/images/events/olimpet-2024/14.webp','/images/events/olimpet-2024/15.webp','/images/events/olimpet-2024/16.webp','/images/events/olimpet-2024/17.webp','/images/events/olimpet-2024/18.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (9,14,false,2024,'삼척해안 반려견 트레킹 & 페스타','삼척','1,000','2024년 (2회 진행)','강원특별자치도 삼척시 해안 일대','프로젝트 자체 기획 · 제작 · 운영','강원특별자치도, 삼척시','강원도 삼척의 수려한 해안 자연 속에서 반려견과 보호자가 함께 걷는 트레킹 프로그램이 열렸다.
+
+파도 소리를 배경으로 일상에서 벗어나 자연과 교감하고, 반려견과 함께 걷는 시간의 특별함을 경험하는 강원도반려동물협회의 야외 웰니스 활동이다.','/images/events/samcheok-trek-2024/06.webp','/images/events/samcheok-trek-2024/05.webp',ARRAY['/images/events/samcheok-trek-2024/06.webp','/images/events/samcheok-trek-2024/02.webp','/images/events/samcheok-trek-2024/05.webp','/images/events/samcheok-trek-2024/04.webp','/images/events/samcheok-trek-2024/01.webp','/images/events/samcheok-trek-2024/03.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (10,17,false,2024,'원주시 반려견 이동식 운동장','원주','2,190','2024년 (8회 진행)','강원특별자치도 원주시 일원','프로젝트 자체 기획 · 제작 · 운영','원주시','이동식 반려동물 운동장은 고정된 공간이 없어도 반려동물이 마음껏 뛰어놀 수 있도록 GWAA가 직접 현장으로 찾아가 설치·운영하는 이동형 프로그램이다.
+
+원주 시내 8개 장소에서 운영되며, 반려동물 접근성이 낮은 지역의 주민들에게 임시 운동장을 조성해 보호자와 반려동물 모두에게 새로운 경험을 선사했다.','/images/events/playground-2024/01.webp','/images/events/playground-2024/02.webp',ARRAY['/images/events/playground-2024/01.webp','/images/events/playground-2024/02.webp','/images/events/playground-2024/10.webp','/images/events/playground-2024/03.webp','/images/events/playground-2024/04.webp','/images/events/playground-2024/05.webp','/images/events/playground-2024/06.webp','/images/events/playground-2024/07.webp','/images/events/playground-2024/08.webp','/images/events/playground-2024/09.webp','/images/events/playground-2024/11.webp','/images/events/playground-2024/12.webp','/images/events/playground-2024/13.webp','/images/events/playground-2024/14.webp','/images/events/playground-2024/15.webp','/images/events/playground-2024/16.webp','/images/events/playground-2024/17.webp','/images/events/playground-2024/18.webp','/images/events/playground-2024/19.webp','/images/events/playground-2024/20.webp','/images/events/playground-2024/21.webp','/images/events/playground-2024/22.webp','/images/events/playground-2024/23.webp','/images/events/playground-2024/24.webp','/images/events/playground-2024/25.webp','/images/events/playground-2024/26.webp','/images/events/playground-2024/27.webp','/images/events/playground-2024/28.webp','/images/events/playground-2024/29.webp','/images/events/playground-2024/30.webp','/images/events/playground-2024/31.webp','/images/events/playground-2024/32.webp','/images/events/playground-2024/33.webp','/images/events/playground-2024/34.webp','/images/events/playground-2024/35.webp','/images/events/playground-2024/36.webp','/images/events/playground-2024/37.webp','/images/events/playground-2024/38.webp','/images/events/playground-2024/39.webp','/images/events/playground-2024/40.webp','/images/events/playground-2024/41.webp','/images/events/playground-2024/42.webp','/images/events/playground-2024/43.webp','/images/events/playground-2024/44.webp','/images/events/playground-2024/45.webp','/images/events/playground-2024/46.webp','/images/events/playground-2024/47.webp','/images/events/playground-2024/48.webp','/images/events/playground-2024/49.webp','/images/events/playground-2024/50.webp','/images/events/playground-2024/51.webp','/images/events/playground-2024/52.webp','/images/events/playground-2024/53.webp','/images/events/playground-2024/54.webp','/images/events/playground-2024/55.webp','/images/events/playground-2024/56.webp','/images/events/playground-2024/57.webp','/images/events/playground-2024/58.webp','/images/events/playground-2024/59.webp','/images/events/playground-2024/60.webp','/images/events/playground-2024/61.webp','/images/events/playground-2024/62.webp','/images/events/playground-2024/63.webp','/images/events/playground-2024/64.webp','/images/events/playground-2024/65.webp','/images/events/playground-2024/66.webp','/images/events/playground-2024/67.webp','/images/events/playground-2024/68.webp','/images/events/playground-2024/69.webp','/images/events/playground-2024/70.webp','/images/events/playground-2024/71.webp','/images/events/playground-2024/72.webp','/images/events/playground-2024/73.webp','/images/events/playground-2024/74.webp','/images/events/playground-2024/75.webp','/images/events/playground-2024/76.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (11,15,false,2024,'원주시 반려가족을 위한 맞춤교육','원주','','2024년 (8회 진행)','강원특별자치도 원주시 일원','프로젝트 자체 기획 · 제작 · 운영','원주시','이동식 운동장과 연계하여 운영된 반려가족 맞춤형 교육 프로그램이다.
+
+원주시와 강원도반려동물협회가 공동 기획하여 연 8회에 걸쳐 진행됐으며, 반려동물 보호자의 올바른 돌봄 방법, 기본 예절 교육, 문제행동 해소 등 실생활 밀착형 내용으로 구성됐다.
+
+이동식 운동장을 찾아온 시민들이 놀이와 교육을 한 자리에서 경험할 수 있도록 설계된 연계 프로그램이다.','/images/events/edu-2024/01.webp','/images/events/edu-2024/02.webp',ARRAY['/images/events/edu-2024/01.webp','/images/events/edu-2024/02.webp','/images/events/edu-2024/03.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (12,16,false,2024,'댕댕플로깅 & 반려동물 봉사 활동','강원도','','2022 — 2024','강원도 일원','자체 기획 · 운영','강원도반려동물협회','반려견 산책과 환경 미화를 결합한 댕댕플로깅, 그리고 지역 사회 봉사 활동을 함께 펼쳐온 GWAA의 실천 기록.
+
+2022년부터 2024년까지 꾸준히 이어온 환경·봉사 활동으로, 반려동물 보호자들이 함께 지역 사회에 기여하는 문화를 만들어왔다.','/images/events/dangdang-plogging-2024/01.webp','/images/events/dangdang-plogging-2024/02.webp',ARRAY['/images/events/dangdang-plogging-2024/01.webp','/images/events/dangdang-plogging-2024/02.webp','/images/events/dangdang-plogging-2024/03.webp','/images/events/dangdang-plogging-2024/04.webp','/images/events/dangdang-plogging-2024/05.webp','/images/events/dangdang-plogging-2024/06.webp','/images/events/dangdang-plogging-2024/07.webp','/images/events/dangdang-plogging-2024/08.webp','/images/events/dangdang-plogging-2024/09.webp','/images/events/plogging-volunteer/01.webp','/images/events/plogging-volunteer/02.webp','/images/events/plogging-volunteer/03.webp','/images/events/plogging-volunteer/04.webp','/images/events/plogging-volunteer/05.webp','/images/events/plogging-volunteer/06.webp','/images/events/plogging-volunteer/07.webp','/images/events/plogging-volunteer/08.webp','/images/events/plogging-volunteer/09.webp','/images/events/plogging-volunteer/10.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (13,18,false,2023,'제1회 강릉시 반려동물 문화축제 — 올림펫','강릉','3,000','2023. 10. 21.(토)','강릉종합운동장 야외공연장','프로젝트 자체 기획 · 제작 · 운영','강릉시','강릉에서 처음으로 열린 반려동물 문화축제, 올림펫.
+
+강릉이라는 도시가 반려동물과 보호자 모두를 위한 생활문화 공간으로 진화하는 첫 걸음을 내디딘 자리였다.
+
+올림픽의 도시 강릉에서, 반려동물과 함께하는 새로운 형태의 지역 축제가 시작되었다.','/images/events/gangwon-fest-2023/64.webp','/images/events/gangwon-fest-2023/02.webp',ARRAY['/images/events/gangwon-fest-2023/64.webp','/images/events/gangwon-fest-2023/65.webp','/images/events/gangwon-fest-2023/01.webp','/images/events/gangwon-fest-2023/02.webp','/images/events/gangwon-fest-2023/03.webp','/images/events/gangwon-fest-2023/04.webp','/images/events/gangwon-fest-2023/05.webp','/images/events/gangwon-fest-2023/06.webp','/images/events/gangwon-fest-2023/07.webp','/images/events/gangwon-fest-2023/08.webp','/images/events/gangwon-fest-2023/09.webp','/images/events/gangwon-fest-2023/10.webp','/images/events/gangwon-fest-2023/11.webp','/images/events/gangwon-fest-2023/12.webp','/images/events/gangwon-fest-2023/13.webp','/images/events/gangwon-fest-2023/14.webp','/images/events/gangwon-fest-2023/15.webp','/images/events/gangwon-fest-2023/16.webp','/images/events/gangwon-fest-2023/17.webp','/images/events/gangwon-fest-2023/18.webp','/images/events/gangwon-fest-2023/19.webp','/images/events/gangwon-fest-2023/20.webp','/images/events/gangwon-fest-2023/21.webp','/images/events/gangwon-fest-2023/22.webp','/images/events/gangwon-fest-2023/23.webp','/images/events/gangwon-fest-2023/24.webp','/images/events/gangwon-fest-2023/25.webp','/images/events/gangwon-fest-2023/26.webp','/images/events/gangwon-fest-2023/27.webp','/images/events/gangwon-fest-2023/28.webp','/images/events/gangwon-fest-2023/29.webp','/images/events/gangwon-fest-2023/30.webp','/images/events/gangwon-fest-2023/31.webp','/images/events/gangwon-fest-2023/32.webp','/images/events/gangwon-fest-2023/33.webp','/images/events/gangwon-fest-2023/34.webp','/images/events/gangwon-fest-2023/35.webp','/images/events/gangwon-fest-2023/36.webp','/images/events/gangwon-fest-2023/37.webp','/images/events/gangwon-fest-2023/38.webp','/images/events/gangwon-fest-2023/39.webp','/images/events/gangwon-fest-2023/40.webp','/images/events/gangwon-fest-2023/41.webp','/images/events/gangwon-fest-2023/42.webp','/images/events/gangwon-fest-2023/43.webp','/images/events/gangwon-fest-2023/44.webp','/images/events/gangwon-fest-2023/45.webp','/images/events/gangwon-fest-2023/46.webp','/images/events/gangwon-fest-2023/48.webp','/images/events/gangwon-fest-2023/49.webp','/images/events/gangwon-fest-2023/50.webp','/images/events/gangwon-fest-2023/51.webp','/images/events/gangwon-fest-2023/52.webp','/images/events/gangwon-fest-2023/53.webp','/images/events/gangwon-fest-2023/54.webp','/images/events/gangwon-fest-2023/55.webp','/images/events/gangwon-fest-2023/56.webp','/images/events/gangwon-fest-2023/57.webp','/images/events/gangwon-fest-2023/58.webp','/images/events/gangwon-fest-2023/66.webp','/images/events/gangwon-fest-2023/67.webp','/images/events/gangwon-fest-2023/68.webp','/images/events/gangwon-fest-2023/69.webp','/images/events/gangwon-fest-2023/70.webp','/images/events/gangwon-fest-2023/71.webp','/images/events/gangwon-fest-2023/72.webp','/images/events/gangwon-fest-2023/73.webp','/images/events/gangwon-fest-2023/74.webp','/images/events/gangwon-fest-2023/75.webp','/images/events/gangwon-fest-2023/76.webp','/images/events/gangwon-fest-2023/77.webp','/images/events/gangwon-fest-2023/78.webp','/images/events/gangwon-fest-2023/79.webp','/images/events/gangwon-fest-2023/80.webp','/images/events/gangwon-fest-2023/81.webp','/images/events/gangwon-fest-2023/82.webp','/images/events/gangwon-fest-2023/83.webp','/images/events/gangwon-fest-2023/84.webp','/images/events/gangwon-fest-2023/85.webp','/images/events/gangwon-fest-2023/86.webp','/images/events/gangwon-fest-2023/87.webp','/images/events/gangwon-fest-2023/88.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (14,9,false,2025,'유기동물 사회화 교육','강원특별자치도','','2025. 10. ~ 12.','강원특별자치도 원주시','프로젝트 자체 기획 · 제작 · 운영','원주시','가평군 유기동물보호소와 협력하여 진행한 유기견 사회화 교육 및 입양홍보 사업이다.
+
+보호소에 머무는 유기견들이 새로운 가정에서 적응할 수 있도록 사회화 훈련을 지원하고, 입양 희망자를 대상으로 올바른 입양 문화를 안내하는 프로그램을 운영했다.
+
+반려동물을 ''구매''가 아닌 ''입양''으로 맞이하는 문화 조성을 위한 GWAA의 사회공헌 사업.','/images/events/gapyeong-adopt-2025/01.webp','/images/events/gapyeong-adopt-2025/02.webp',ARRAY['/images/events/gapyeong-adopt-2025/01.webp','/images/events/gapyeong-adopt-2025/02.webp','/images/events/gapyeong-adopt-2025/03.webp','/images/events/gapyeong-adopt-2025/04.webp','/images/events/gapyeong-adopt-2025/05.webp','/images/events/gapyeong-adopt-2025/06.webp','/images/events/gapyeong-adopt-2025/07.webp','/images/events/gapyeong-adopt-2025/08.webp','/images/events/gapyeong-adopt-2025/09.webp','/images/events/gapyeong-adopt-2025/10.webp','/images/events/gapyeong-adopt-2025/11.webp','/images/events/gapyeong-adopt-2025/12.webp','/images/events/gapyeong-adopt-2025/13.webp','/images/events/gapyeong-adopt-2025/14.webp','/images/events/gapyeong-adopt-2025/15.webp','/images/events/gapyeong-adopt-2025/16.webp','/images/events/gapyeong-adopt-2025/17.webp','/images/events/gapyeong-adopt-2025/18.webp','/images/events/gapyeong-adopt-2025/19.webp','/images/events/gapyeong-adopt-2025/20.webp','/images/events/gapyeong-adopt-2025/21.webp','/images/events/gapyeong-adopt-2025/22.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (15,11,false,2024,'원주시 반려동물 문화행사 — 댕댕크루전','원주','','2024년','원주시 샘마루공원','프로젝트 자체 기획 · 제작 · 운영','원주시','반려견 팀을 꾸려 크루 대결을 벌이는 독특한 포맷의 원주 반려동물 문화행사.
+
+보호자와 반려견이 한 팀이 되어 다양한 미션과 경쟁을 펼치며 유대감과 즐거움을 동시에 경험하는 참여형 이벤트다.','/images/events/dangdang-crew/50.webp','/images/events/dangdang-crew/01.webp',ARRAY['/images/events/dangdang-crew/50.webp','/images/events/dangdang-crew/01.webp','/images/events/dangdang-crew/02.webp','/images/events/dangdang-crew/03.webp','/images/events/dangdang-crew/04.webp','/images/events/dangdang-crew/05.webp','/images/events/dangdang-crew/06.webp','/images/events/dangdang-crew/07.webp','/images/events/dangdang-crew/08.webp','/images/events/dangdang-crew/09.webp','/images/events/dangdang-crew/10.webp','/images/events/dangdang-crew/11.webp','/images/events/dangdang-crew/12.webp','/images/events/dangdang-crew/13.webp','/images/events/dangdang-crew/14.webp','/images/events/dangdang-crew/15.webp','/images/events/dangdang-crew/16.webp','/images/events/dangdang-crew/17.webp','/images/events/dangdang-crew/18.webp','/images/events/dangdang-crew/19.webp','/images/events/dangdang-crew/20.webp','/images/events/dangdang-crew/21.webp','/images/events/dangdang-crew/22.webp','/images/events/dangdang-crew/23.webp','/images/events/dangdang-crew/24.webp','/images/events/dangdang-crew/25.webp','/images/events/dangdang-crew/26.webp','/images/events/dangdang-crew/27.webp','/images/events/dangdang-crew/28.webp','/images/events/dangdang-crew/29.webp','/images/events/dangdang-crew/30.webp','/images/events/dangdang-crew/31.webp','/images/events/dangdang-crew/32.webp','/images/events/dangdang-crew/33.webp','/images/events/dangdang-crew/34.webp','/images/events/dangdang-crew/35.webp','/images/events/dangdang-crew/36.webp','/images/events/dangdang-crew/37.webp','/images/events/dangdang-crew/38.webp','/images/events/dangdang-crew/39.webp','/images/events/dangdang-crew/40.webp','/images/events/dangdang-crew/41.webp','/images/events/dangdang-crew/42.webp','/images/events/dangdang-crew/43.webp','/images/events/dangdang-crew/44.webp','/images/events/dangdang-crew/45.webp','/images/events/dangdang-crew/46.webp','/images/events/dangdang-crew/47.webp','/images/events/dangdang-crew/48.webp','/images/events/dangdang-crew/49.webp','/images/events/dangdang-crew/51.webp','/images/events/dangdang-crew/52.webp','/images/events/dangdang-crew/53.webp','/images/events/dangdang-crew/54.webp','/images/events/dangdang-crew/55.webp','/images/events/dangdang-crew/56.webp','/images/events/dangdang-crew/57.webp','/images/events/dangdang-crew/58.webp','/images/events/dangdang-crew/59.webp','/images/events/dangdang-crew/60.webp','/images/events/dangdang-crew/61.webp','/images/events/dangdang-crew/62.webp','/images/events/dangdang-crew/63.webp','/images/events/dangdang-crew/64.webp','/images/events/dangdang-crew/65.webp','/images/events/dangdang-crew/66.webp','/images/events/dangdang-crew/67.webp','/images/events/dangdang-crew/68.webp','/images/events/dangdang-crew/69.webp','/images/events/dangdang-crew/70.webp','/images/events/dangdang-crew/71.webp','/images/events/dangdang-crew/72.webp','/images/events/dangdang-crew/73.webp','/images/events/dangdang-crew/74.webp','/images/events/dangdang-crew/75.webp','/images/events/dangdang-crew/76.webp','/images/events/dangdang-crew/77.webp','/images/events/dangdang-crew/78.webp','/images/events/dangdang-crew/79.webp','/images/events/dangdang-crew/80.webp','/images/events/dangdang-crew/81.webp','/images/events/dangdang-crew/82.webp','/images/events/dangdang-crew/83.webp','/images/events/dangdang-crew/84.webp','/images/events/dangdang-crew/85.webp','/images/events/dangdang-crew/86.webp','/images/events/dangdang-crew/87.webp','/images/events/dangdang-crew/88.webp','/images/events/dangdang-crew/89.webp','/images/events/dangdang-crew/90.webp','/images/events/dangdang-crew/91.webp','/images/events/dangdang-crew/92.webp','/images/events/dangdang-crew/93.webp','/images/events/dangdang-crew/94.webp','/images/events/dangdang-crew/95.webp','/images/events/dangdang-crew/96.webp','/images/events/dangdang-crew/97.webp','/images/events/dangdang-crew/98.webp','/images/events/dangdang-crew/99.webp','/images/events/dangdang-crew/100.webp','/images/events/dangdang-crew/101.webp','/images/events/dangdang-crew/102.webp','/images/events/dangdang-crew/103.webp','/images/events/dangdang-crew/104.webp','/images/events/dangdang-crew/105.webp','/images/events/dangdang-crew/106.webp','/images/events/dangdang-crew/107.webp','/images/events/dangdang-crew/109.webp','/images/events/dangdang-crew/110.webp','/images/events/dangdang-crew/111.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (16,1,false,2026,'제1회 청주시 반려동물 문화행사 — 학교종이댕댕댕','청주','','2026년','충청북도 청주시','프로젝트 자체 기획 · 제작 · 운영','충북보건과학대학교','청주시에서 처음 열린 반려동물 문화행사로, 학교를 콘셉트로 한 체험형 프로그램이 운영됐다.
+
+반려동물과 보호자가 함께 배우고 참여하는 교육적 문화행사로, 강원도를 넘어 충청권으로 확장된 GWAA의 첫 발걸음이다.','/images/events/chungju-2025/01.webp','/images/events/chungju-2025/02.webp',ARRAY['/images/events/chungju-2025/01.webp','/images/events/chungju-2025/02.webp','/images/events/chungju-2025/03.webp','/images/events/chungju-2025/04.webp','/images/events/chungju-2025/05.webp','/images/events/chungju-2025/06.webp','/images/events/chungju-2025/07.webp','/images/events/chungju-2025/08.webp','/images/events/chungju-2025/09.webp','/images/events/chungju-2025/10.webp','/images/events/chungju-2025/11.webp','/images/events/chungju-2025/12.webp','/images/events/chungju-2025/13.webp','/images/events/chungju-2025/14.webp','/images/events/chungju-2025/15.webp','/images/events/chungju-2025/16.webp','/images/events/chungju-2025/17.webp','/images/events/chungju-2025/18.webp','/images/events/chungju-2025/19.webp','/images/events/chungju-2025/20.webp','/images/events/chungju-2025/21.webp','/images/events/chungju-2025/22.webp','/images/events/chungju-2025/23.webp','/images/events/chungju-2025/24.webp','/images/events/chungju-2025/25.webp','/images/events/chungju-2025/26.webp','/images/events/chungju-2025/27.webp','/images/events/chungju-2025/28.webp','/images/events/chungju-2025/29.webp','/images/events/chungju-2025/30.webp','/images/events/chungju-2025/31.webp','/images/events/chungju-2025/32.webp','/images/events/chungju-2025/33.webp','/images/events/chungju-2025/34.webp','/images/events/chungju-2025/35.webp','/images/events/chungju-2025/36.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (17,2,false,2026,'반려동물 산책 교육 프로그램 — 햅삐크루 3기','원주','','2026년','원주시 관내 산책로 및 지정 야외 교육 코스','프로젝트 자체 기획 · 제작 · 운영','원주시','3기를 맞이한 햅삐크루는 원주시와 강원도반려동물협회가 함께 운영하는 반려견 동반 산책 실습형 교육 프로그램이다.
+
+1·2기의 경험을 바탕으로 더욱 체계화된 커리큘럼으로, 보호자와 반려견이 함께 걷고 성장하는 시간을 만들어가고 있다.','/images/events/walk-edu-2026/26.webp','/images/events/walk-edu-2026/01.webp',ARRAY['/images/events/walk-edu-2026/26.webp','/images/events/walk-edu-2026/01.webp','/images/events/walk-edu-2026/02.webp','/images/events/walk-edu-2026/03.webp','/images/events/walk-edu-2026/04.webp','/images/events/walk-edu-2026/05.webp','/images/events/walk-edu-2026/06.webp','/images/events/walk-edu-2026/07.webp','/images/events/walk-edu-2026/08.webp','/images/events/walk-edu-2026/09.webp','/images/events/walk-edu-2026/10.webp','/images/events/walk-edu-2026/11.webp','/images/events/walk-edu-2026/12.webp','/images/events/walk-edu-2026/13.webp','/images/events/walk-edu-2026/14.webp','/images/events/walk-edu-2026/15.webp','/images/events/walk-edu-2026/16.webp','/images/events/walk-edu-2026/17.webp','/images/events/walk-edu-2026/18.webp','/images/events/walk-edu-2026/19.webp','/images/events/walk-edu-2026/20.webp','/images/events/walk-edu-2026/21.webp','/images/events/walk-edu-2026/22.webp','/images/events/walk-edu-2026/23.webp','/images/events/walk-edu-2026/24.webp','/images/events/walk-edu-2026/25.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (18,10,false,2025,'고성 썬베드비치','고성','','2025년','강원특별자치도 고성군 해변','프로젝트 자체 기획 · 제작 · 운영','웰니스고성','고성 바다에서 반려견과 함께 썬베드를 즐기는 특별한 프로그램.
+
+파도 소리를 들으며 반려견과 함께하는 특별한 해변의 하루, 고성 썬베드비치에서 새로운 반려동물 문화를 선보였다.','/images/events/sunbed-gosung-2025/01.webp','/images/events/sunbed-gosung-2025/02.webp',ARRAY['/images/events/sunbed-gosung-2025/01.webp','/images/events/sunbed-gosung-2025/02.webp','/images/events/sunbed-gosung-2025/03.webp','/images/events/sunbed-gosung-2025/04.webp','/images/events/sunbed-gosung-2025/05.webp','/images/events/sunbed-gosung-2025/06.webp','/images/events/sunbed-gosung-2025/07.webp','/images/events/sunbed-gosung-2025/08.webp','/images/events/sunbed-gosung-2025/09.webp','/images/events/sunbed-gosung-2025/10.webp','/images/events/sunbed-gosung-2025/11.webp','/images/events/sunbed-gosung-2025/12.webp','/images/events/sunbed-gosung-2025/13.webp','/images/events/sunbed-gosung-2025/14.webp','/images/events/sunbed-gosung-2025/15.webp','/images/events/sunbed-gosung-2025/16.webp','/images/events/sunbed-gosung-2025/17.webp','/images/events/sunbed-gosung-2025/18.webp','/images/events/sunbed-gosung-2025/19.webp','/images/events/sunbed-gosung-2025/20.webp','/images/events/sunbed-gosung-2025/21.webp','/images/events/sunbed-gosung-2025/22.webp','/images/events/sunbed-gosung-2025/23.webp','/images/events/sunbed-gosung-2025/24.webp','/images/events/sunbed-gosung-2025/25.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (19,19,false,2022,'강릉 반려동물 재난구호 키트 기부','강릉','','2022년','강원특별자치도 강릉시','기부 · 구호','강원도반려동물협회','재난은 사람만의 위기가 아닙니다. 갑작스러운 상황에서 가장 먼저 길을 잃는 건 말 못 하는 반려동물입니다.
+
+강원도반려동물협회는 강릉 지역 보호자들에게 반려동물 재난구호 키트와 위치추적이 가능한 인식표를 전달했습니다. 비상 상황에서도 가족을 잃지 않도록, 작은 준비가 큰 안심이 되기를 바라는 마음을 담았습니다.','/images/events/gangreung-relief-2022/01.webp','',ARRAY['/images/events/gangreung-relief-2022/01.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (20,20,false,2022,'전국댕댕자랑 반려동물 사진공모전','원주','1,340','2022. 11. 22.(월) ~ 12. 6.(화)','강원특별자치도 원주시 (온·오프라인)','프로젝트 자체 기획 · 제작 · 운영','강원도반려동물협회','''전국댕댕자랑 반려동물 사진공모전''은 강원도반려동물협회가 주관한 반려동물 테마 사진 경연 행사다.
+
+반려동물과 보호자가 함께한 특별한 순간을 사진으로 담아 보내주신 사연들이 모여 따뜻한 전시와 공모전으로 이어졌다.
+
+전국에서 모인 1,340개의 순간들 — 우리 반려동물의 가장 빛나는 표정이 모였습니다.','/images/events/photo-contest-2022/05.webp','/images/events/photo-contest-2022/05.webp',ARRAY['/images/events/photo-contest-2022/05.webp','/images/events/photo-contest-2022/01.webp','/images/events/photo-contest-2022/02.webp','/images/events/photo-contest-2022/03.webp','/images/events/photo-contest-2022/04.webp','/images/events/photo-contest-2022/06.webp','/images/events/photo-contest-2022/07.webp','/images/events/photo-contest-2022/08.webp','/images/events/photo-contest-2022/09.webp','/images/events/photo-contest-2022/10.webp','/images/events/photo-contest-2022/11.webp','/images/events/photo-contest-2022/12.webp','/images/events/photo-contest-2022/13.webp','/images/events/photo-contest-2022/14.webp','/images/events/photo-contest-2022/15.webp','/images/events/photo-contest-2022/16.webp','/images/events/photo-contest-2022/17.webp','/images/events/photo-contest-2022/18.webp','/images/events/photo-contest-2022/19.webp','/images/events/photo-contest-2022/20.webp','/images/events/photo-contest-2022/21.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (21,22,false,2021,'제1회 강원도 반려동물 문화축제','원주','1,500','2021년 — 협회 창립','강원특별자치도 원주시','프로젝트 자체 기획 · 제작 · 운영','강원도반려동물협회','강원도반려동물협회가 처음으로 주최한 제1회 강원도반려동물문화축제는 강원도 반려동물 문화의 첫 씨앗이었다.
+
+반려동물과 보호자가 한자리에 모여 서로를 이해하고 교감하는 자리를 만들었으며, 강원도에 반려동물 문화를 뿌리내리기 위한 협회의 가장 뜨거운 첫 발걸음을 내딛었다.','/images/events/gangwon-fest-2021/04.webp','/images/events/gangwon-fest-2021/02.webp',ARRAY['/images/events/gangwon-fest-2021/04.webp','/images/events/gangwon-fest-2021/01.webp','/images/events/gangwon-fest-2021/02.webp','/images/events/gangwon-fest-2021/03.webp']);
+insert into archive_events (id,"order",feat,year,title,location,ppl,date_text,place,part,organizer,description,image_data,image_data2,images) values (22,21,false,2022,'반려동물 펫푸드 쿠킹클래스','원주','40','2022년 (총 4회)','강원 원주','자체 기획 · 운영','강원도반려동물협회','반려동물을 위한 수제 먹거리(펫푸드)를 직접 만들어보는 교육 클래스.
+
+2022년 4회에 걸쳐 주민 40여 명이 참여한, 강원도반려동물협회의 첫 정기 소모임 프로그램이다.','/images/events/cooking-class-2022/01.webp','/images/events/cooking-class-2022/02.webp',ARRAY['/images/events/cooking-class-2022/01.webp','/images/events/cooking-class-2022/02.webp','/images/events/cooking-class-2022/03.webp','/images/events/cooking-class-2022/04.webp','/images/events/cooking-class-2022/05.webp','/images/events/cooking-class-2022/06.webp','/images/events/cooking-class-2022/07.webp','/images/events/cooking-class-2022/08.webp','/images/events/cooking-class-2022/09.webp','/images/events/cooking-class-2022/10.webp','/images/events/cooking-class-2022/11.webp','/images/events/cooking-class-2022/12.webp','/images/events/cooking-class-2022/13.webp','/images/events/cooking-class-2022/14.webp','/images/events/cooking-class-2022/15.webp','/images/events/cooking-class-2022/16.webp','/images/events/cooking-class-2022/17.webp','/images/events/cooking-class-2022/18.webp']);
+select setval(pg_get_serial_sequence('archive_events','id'), (select max(id) from archive_events));
+
+-- travel_places (50 rows)
+delete from travel_places;
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (1,1,'춘천','체험','테마파크','강아지숲','🌲','춘천시 남산면 충효로 437','국내 최대 반려견 테마파크 · 리드줄 해제 운동장','3만 평 자연 숲 속 반려견 테마파크. 대·소형견 분리 운동장, 노즈워크 산책로, 어질리티 체험, 반려견 수영장 완비.','🐾 5차 예방접종 완료견 · 3개월 이상 · 맹견 입장 불가 · 리드줄 필수','10:00–18:00 (월요일·설·추석 당일 휴무)','성인 17,000원 / 청소년 15,000원 / 어린이 12,000원 / 반려견 8,000원',false,'https://images.unsplash.com/photo-1587300003388-59208cc962cb?w=600&q=80','https://map.naver.com/v5/search/강아지숲+춘천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (2,2,'춘천','체험','레일바이크','경강레일바이크 (강촌레일파크)','🚂','춘천시 남산면 강촌로 1-1','반려견 전용 펫바이크 운영 · 북한강 철교 코스','경강역 폐역에서 출발해 북한강 철교를 건너는 코스. 반려견 전용 탑승석 펫바이크 별도 운영. 반려견 2마리까지 동반 탑승 가능.','🐾 펫바이크: 반려견 합산 10kg 이하 · 목줄 착용','09:00–17:40 (연중무휴)','일반 2인승 20,000원 / 4인승 30,000원 (펫바이크 별도 문의)',false,'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80','https://map.naver.com/v5/search/경강레일바이크+강촌');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (3,3,'춘천','체험','카누·카약','춘천 물레길 카누','🛶','춘천시 스포츠타운길223번길 95 (의암호)','반려견과 카누 동승 · 의암호 수상 투어','의암호 위에서 반려견과 함께 즐기는 카누 체험. 자연생태공원길 코스(약 3km, 1시간) 인기. 중형견 이하 동반 탑승 가능.','🐾 중형견 이하 동반 가능 · 구명조끼 착용 필수','10:00–19:00 (계절별 상이)','2인 30,000원 (추가 성인 10,000원)',false,'https://images.unsplash.com/photo-1544551763-46a013bb70d5?w=600&q=80','https://map.naver.com/v5/search/춘천물레길+의암호');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (4,4,'춘천','공원','산책','공지천 반려견 산책로','🌿','춘천시 근화동 공지천 일대','넓은 강변 · 무료 개방','춘천 시내 한가운데 위치한 공지천변 산책로. 소형견부터 대형견까지 자유롭게 산책할 수 있는 강변 공원. 벤치와 쉼터 완비.','🐾 목줄 착용 필수 · 배변봉투 지참','24시간 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/공지천유원지+춘천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (5,5,'춘천','관광','케이블카','삼악산 호수 케이블카','🚡','춘천시 서면 박사로 473','소양강 호수 위 케이블카 · 반려동물 전용 캐빈','소양강 호수 수면 위를 가로지르는 케이블카. 반려동물 전용 캐빈 별도 운영으로 케이지 또는 이동가방에 넣은 반려동물 동반 탑승 가능.','🐾 소형 반려동물 · 케이지 또는 이동가방 필수','09:00–18:00 (연중무휴)','왕복 성인 14,000원 / 소인 11,000원',false,'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600&q=80','https://map.naver.com/v5/search/삼악산호수케이블카+춘천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (6,6,'강릉','호텔','호텔','세인트존스호텔','🏨','강릉시 강문동 34-2','5성급 · 메이트쉽 파트너 최저가 보장 · 체중 제한 없음','경포 해변 바로 앞 5성급 호텔. 반려견 전용 객실 운영. 체중 제한 없이 최대 2마리 동반 가능. 반려견 전용 어메니티 제공.','🐾 전 견종 체중 제한 없음 · 최대 2마리(스위트 3마리)','체크인 15:00 / 체크아웃 11:00','펫 객실 350,000원~ / 반려견 추가 30,000원',true,'https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&q=80','https://map.naver.com/v5/search/세인트존스호텔+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (7,7,'강릉','카페','애견카페','체크이스트 카페','☕','강릉시 강변복길 153','사천해변 근처 감성 인테리어 · 반려견 전용 간식','사천해변 근처 골목에 자리한 감성 애견동반 카페. 반려견 전용 간식과 물그릇 비치. 테라스에서 산책 후 쉬어가기 좋음.','🐾 전 견종 · 목줄 착용 필수 · 배변패드 비치','10:00–20:00 (연중무휴)','음료 6,000원–12,000원',false,'https://images.unsplash.com/photo-1554118811-1e0d58224f24?w=600&q=80','https://map.naver.com/v5/search/체크이스트카페+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (8,8,'강릉','카페','카페','카페콥스','☕','강릉시 초당순두부길 54','초당동 감성 카페 · 넓은 마당','강릉 초당동 인기 카페. 넓은 야외 마당에서 반려견과 함께 여유롭게 커피와 베이커리를 즐길 수 있음.','🐾 전 견종 · 야외 공간 자유 동반 · 목줄 착용','11:00–20:00 (화요일 휴무)','음료 6,000원–10,000원',false,'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80','https://map.naver.com/v5/search/카페콥스+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (9,9,'강릉','카페','프라이빗 카페','르꼬따쥬','🏡','강릉시 한밭골길 50-11','100% 예약제 프라이빗 팜크닉 · 반려견 동반 옵션','관광농원을 개조한 100% 예약제 프라이빗 카페. 잔디밭에서 반려견과 함께 팜크닉을 즐길 수 있음.','🐾 전 견종 · 예약 시 반려동물 동반 옵션 선택 필수','10:00–17:00 (예약제 운영)','음료 포함 인당 15,000원~ / 반려견 10,000원',false,'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600&q=80','https://map.naver.com/v5/search/르꼬따쥬+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (10,10,'강릉','식당','레스토랑','그릴웍스','🍖','강릉시 사천면 한과마을길 553','전 견종 실내 동반 · 텍사스 바베큐','강릉 사천에 위치한 정통 텍사스 바베큐 레스토랑. 실내·야외 테라스 모두 소·중·대형견 동반 가능.','🐾 소·중·대형견 실내외 동반 · 맹견 제외','11:00–20:00 (월·화 휴무)','메뉴당 15,000원–35,000원',false,'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80','https://map.naver.com/v5/search/그릴웍스+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (11,11,'강릉','체험','레일바이크','정동진 레일바이크','🚂','강릉시 강동면 정동진리 36-1','동해 바다 절경 · 소형 반려견 동반','정동진역~모래시계공원 구간 동해 바다를 옆에 두고 달리는 레일바이크. 소형 반려동물(3kg 이하) 케이지에 넣어 동반 탑승 가능.','🐾 소형견 3kg 이하 · 이동장(켄넬) 필수','08:30–16:40 (연중무휴)','2인승 25,000원 / 4인승 35,000원',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/정동진레일바이크');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (12,12,'강릉','관광','미술관','하슬라아트월드','🎨','강릉시 강동면 율곡로 1441','야외 조각공원 전 견종 가능 · 바다 전망','동해가 내려다보이는 언덕 위 아트뮤지엄. 넓은 야외 조각공원에서 반려견 목줄 착용 후 자유롭게 관람 가능.','🐾 야외 조각공원 전 견종 · 목줄 착용 · 실내 안고 이동','09:00–18:00 (연중무휴)','성인 17,000원 / 청소년 13,000원 / 어린이 11,000원',false,'https://images.unsplash.com/photo-1518998053901-5348d3961a04?w=600&q=80','https://map.naver.com/v5/search/하슬라아트월드+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (13,13,'강릉','공원','해변·산책','안목해변 펫비치','🌊','강릉시 견소동 안목해변','100m 펫비치 전용 구역 · 샤워시설 완비','강릉 안목해변 내 반려견 전용 펫비치 100m 구간. 펜스 설치, 배변봉투함·파라솔·샤워시설 완비.','🐾 목줄 착용 필수(비치 내 해제 가능) · 배변봉투 지참','24시간 개방 (성수기 시간 제한 있음)','무료',false,'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=600&q=80','https://map.naver.com/v5/search/안목해변+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (14,14,'강릉','트레킹','트레킹','바우길 1코스 선자령 풍차길','🏔️','강릉시 성산면 대관령로 560 (대관령 양떼목장 옆)','평탄 능선길 · 사계절 반려견 추천 코스','해발 1,157m 선자령까지 이어지는 평탄한 능선길. 겨울 설원, 여름 초록 능선 모두 절경. 편도 약 4km.','🐾 목줄 착용 필수 · 배변봉투 지참 · 대형견 가능','상시 개방','무료',false,'https://images.unsplash.com/photo-1469521669194-babb45599def?w=600&q=80','https://map.naver.com/v5/search/선자령+대관령');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (15,15,'속초','공원','공원·산책','설악해맞이공원','🌅','속초시 동해대로 3664 (대포동)','동해 일출 명소 · 반려견 산책 인프라 우수','속초 3경 중 하나. 해맞이광장·연인의길·행복의길 등 테마별 산책로. 반려견 동반 산책 명소.','🐾 목줄 착용 필수 · 배변봉투 지참','24시간 개방','무료',false,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80','https://map.naver.com/v5/search/설악해맞이공원+속초');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (16,16,'속초','공원','반려견 놀이터','영랑호 반려견 놀이터','🐾','속초시 영랑호반길 일대','소·대형 분리 운동장 · 어질리티 시설','속초 3경 영랑호 수변공원 끝자락 반려견 전용 놀이터. 소형견·대형견 구역 완전 분리, 어질리티 시설 완비.','🐾 소·대형견 구역 분리 · 입장 후 목줄 해제 가능','상시 개방','무료',false,'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=600&q=80','https://map.naver.com/v5/search/영랑호+반려견+속초');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (17,17,'속초','카페','카페','칠성조선소','⚓','속초시 중앙로46번길 45','실제 조선소 개조 · 이색 뉴트로 공간','실제 조선소를 개조한 속초 대표 핫플레이스. 넓은 야외 공간에서 반려견 동반 가능. 청초호 뷰가 매력.','🐾 야외 공간 전 견종 · 목줄 착용 · 실내 소형견만','11:00–19:00 (라스트오더 18:30)','음료 6,000원–12,000원',false,'https://images.unsplash.com/photo-1501339847302-ac426a4a7cbb?w=600&q=80','https://map.naver.com/v5/search/칠성조선소+속초');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (18,18,'속초','공원','호수 산책','청초호 수변공원','🌊','속초시 청호동 청초호 일대','호수 데크 산책 · 속초 시내 전망','강과 바다를 잇는 속초 청초호. 호수 주변 데크길에서 반려견과 함께 설악산과 속초 시내 전망을 즐길 수 있음.','🐾 목줄 착용 필수','24시간 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/청초호수변공원+속초');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (19,19,'양양','해변','애견 전용 해변','멍비치 (양양 지경리)','🌊','양양군 현남면 지경리해수욕장','전국 유일 반려견 전용 해수욕장 · 7~8월 운영','반려견 없이는 입장 불가능한 국내 유일 반려견 전용 해수욕장. 목줄 해제 구역, 샤워장·드라이룸 완비.','🐾 반려견 필수 동반 · 접종 권장 · 목줄 해제 구역 운영','09:00–18:00 (7~8월 시즌 운영)','견주 5,000원 / 소형견 5,000원 / 중형견 10,000원 / 대형견 15,000원',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/멍비치+양양');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (20,20,'양양','캠핑','해변 캠핑','죽도해변 야영장','⛺','양양군 현남면 죽도해변길 80','메이트쉽 회원 30% 할인 · 해변 바로 앞','동해 해변에서 바로 캠핑할 수 있는 반려견 동반 야영장. 죽도해변 모래사장을 배경으로 반려견과 함께 캠핑.','🐾 전 견종 · 목줄 상시 착용 · 배변 처리 필수','체크인 14:00 / 체크아웃 11:00','1박 30,000원~ (메이트쉽 회원 21,000원~)',true,'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80','https://map.naver.com/v5/search/죽도해변야영장+양양');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (21,21,'양양','공원','해변·산책','인구해변','🏄','양양군 현남면 인구항길 일대','서핑 메카 · 반려견 동반 핫플','양양 서핑의 메카이자 반려견 동반 여행지. 서퍼들과 반려견이 어우러지는 독특한 분위기. 주변에 반려견 동반 카페·식당 밀집.','🐾 목줄 착용 필수 · 성수기 일부 구역 제한','24시간 개방','무료',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/인구해변+양양');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (22,22,'고성','트레킹','트레킹','건봉사 반려견 산책로','🏔️','고성군 거진읍 건봉사로 723','천년 고찰 주변 청정 숲길 · 무료','신라시대 창건 천년 고찰 건봉사 주변 청정 자연 트레킹 코스. 왕복 약 5km. 계곡과 숲이 어우러진 반려견 추천 코스.','🐾 목줄 착용 필수 · 배변봉투 지참','07:00–18:00 (연중무휴)','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/건봉사+고성');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (23,23,'고성','공원','해변·산책','화진포 해수욕장','🌊','고성군 거진읍 화진포길 135','최북단 청정 해변 · 반려견 동반','국내 최북단 청정 석호와 동해 바다가 맞닿는 화진포. 바다, 호수, 갯벌을 함께 즐길 수 있으며 반려견 동반 산책 가능.','🐾 목줄 착용 필수 · 성수기 일부 제한','상시 개방','무료',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/화진포해수욕장+고성');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (24,24,'고성','캠핑','오토캠핑','송지호오토캠핑장','⛺','고성군 죽왕면 동해대로 6021','공공캠핑장 · 반려견 동반 · 송지호 뷰','고성군 운영 공공 오토캠핑장. 천연기념물 송지호 옆에 위치. 반려견 동반 사이트 운영.','🐾 목줄 착용 필수 · 지정 사이트에서만 동반','체크인 14:00 / 체크아웃 11:00','1박 20,000원–35,000원',false,'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80','https://map.naver.com/v5/search/송지호오토캠핑장+고성');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (25,25,'평창','관광','목장','대관령 하늘목장','🐄','평창군 대관령면 횡계리 470-5','해발 1,080m · 반려견 입장료 5,000원','해발 1,080m 대관령 고원 목장. 반려견 동반 가능 구역 지정. 드넓은 초원에서 반려견과 함께 인생사진 촬영.','🐾 목줄 착용 필수 · 가축 구역 접근 금지','하절기(4~10월) 09:00–18:00 / 동절기(11~3월) 09:00–17:30','대인 8,000원 / 소인 6,000원 / 반려견 5,000원',false,'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80','https://map.naver.com/v5/search/대관령하늘목장+평창');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (26,26,'평창','리조트','리조트','휘닉스파크 리조트','🎿','평창군 봉평면 태기로 174','4계절 리조트 · 펫 전용 객실 · 워터파크','평창 사계절 종합 리조트. 스키·워터파크·루지·골프 등 다양한 액티비티. 반려견 전용 객실 어메니티 완비.','🐾 20kg 이하 · 최대 2마리 · 종합백신·광견병 접종 증명 필수','체크인 15:00 / 체크아웃 11:00','펫 객실 1박 180,000원~ / 반려견 추가 20,000원',true,'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80','https://map.naver.com/v5/search/휘닉스파크+평창');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (27,27,'평창','관광','양떼목장','대관령 양떼목장','🐑','평창군 대관령면 대관령마루길 483-32','반려견 동반 산책 · 양 먹이주기 체험','드라마 촬영지로 유명한 대관령 양떼목장. 반려견 동반으로 넓은 초원 산책 가능. 단, 양 구역 접근 제한.','🐾 목줄 착용 필수 · 양 구역 접근 금지','09:00–17:30 (연중무휴)','성인 5,000원 / 소인 4,000원',false,'https://images.unsplash.com/photo-1500595046743-cd271d694d30?w=600&q=80','https://map.naver.com/v5/search/대관령양떼목장+평창');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (28,28,'홍천','리조트','리조트','소노펫클럽&리조트 비발디파크','🐾','홍천군 서면 한치골길 262','반려견 특화 리조트 · 전용 레스토랑·수영장','반려견 동반 테마 리조트. 반려동물 전문 셰프의 전용 레스토랑, 반려견 행동 상담 센터, 반려견 풀장 완비.','🐾 맹견·45kg 이상 제외 · 2년 내 종합백신·광견병 접종','체크인 15:00 / 체크아웃 11:00','1박 200,000원~ / 반려견 소중형 30,000원·대형 50,000원',false,'https://images.unsplash.com/photo-1582719508461-905c673771fd?w=600&q=80','https://map.naver.com/v5/search/소노펫클럽+비발디파크+홍천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (29,29,'홍천','캠핑','계곡 캠핑','봉바위돌집 캠핑장','⛺','홍천군 서면 반곡길 일대','계곡 뷰 명소 · 대형견 불가','홍천 계곡 뷰가 아름다운 캠핑장. 반려견 동반 가능하며 조용하고 프라이빗한 분위기.','🐾 최대 2마리 · 소·중형견만 (대형견 불가) · 목줄 착용 필수','체크인 14:00 / 체크아웃 11:00','1박 50,000원~',false,'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80','https://map.naver.com/v5/search/봉바위돌집캠핑장+홍천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (30,30,'홍천','공원','산책','횡성호수길 5구간','🌿','횡성군 갑천면 횡성호수길 일대','호수 옆 흙길 · 관절 부담 없는 평지 코스','횡성호수를 끼고 걷는 약 10km 산책 코스. 흙길로 반려견 관절에 부담 없음. 사계절 산책 명소.','🐾 목줄 착용 필수 · 배변봉투 지참','상시 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/횡성호수길');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (31,31,'원주','트레킹','트레킹','치악산 둘레길 11코스','🏔️','원주시 소초면 치악로 일대','반려견 허용 국립공원 코스 · 야자매트 완비','치악산 국립공원 내 반려견 허용 구간. 야자매트 포장되어 반려견 관절 보호. 왕복 약 6km.','🐾 목줄 착용 필수 · 배변봉투 지참 · 동물등록증 권장','일출~일몰 (계절별 상이)','무료',false,'https://images.unsplash.com/photo-1469521669194-babb45599def?w=600&q=80','https://map.naver.com/v5/search/치악산둘레길+원주');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (32,32,'원주','펜션','애견펜션','트리몰리 애견펜션','🏡','원주시 귀래면 일대','견종 제한 없음 · 24시간 미온수풀 무료','견종 제한 없이 최대 4마리까지 동반 가능한 프라이빗 펜션. 개별 실내 미온수풀·바베큐장·운동장 제공.','🐾 전 견종 · 최대 4마리','체크인 15:00 / 체크아웃 11:00','객실 59,000원~ / 반려견 15,000원/마리',false,'https://images.unsplash.com/photo-1510798831971-661eb04b3739?w=600&q=80','https://map.naver.com/v5/search/트리몰리애견펜션+원주');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (33,33,'원주','공원','산책','원주 섬강 반려견 산책로','🌊','원주시 섬강변 일대 (문막읍)','무료 · 강변 흙길 왕복 4km','섬강변을 따라 조성된 반려견 산책 코스. 왕복 약 4km. 자연 흙길로 반려견이 자연스럽게 즐길 수 있음.','🐾 목줄 착용 필수','24시간 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/섬강+원주');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (34,34,'원주','식당','레스토랑','원주 무튼','🍽️','횡성군 서원면 경강로 1428 (오크밸리 인근)','미슐랭 경력 쉐프 · 야외 테라스 전 견종','미슐랭 경력 쉐프가 운영하는 오크밸리 인근 레스토랑. 야외 테라스에서 소·중·대형견 동반 가능.','🐾 전 견종 야외 테라스 동반 · 실내 소형견만','11:00–21:00 (라스트오더 20:00, 수요일 휴무)','메뉴당 20,000원–50,000원',false,'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80','https://map.naver.com/v5/search/무튼+오크밸리+횡성');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (35,35,'인제','체험','래프팅','내린천 반려견 래프팅','🌊','인제군 기린면 내린천로 2011','메이트쉽 회원 할인 · 강원도 청정 래프팅','강원도 대표 래프팅 성지 내린천에서 반려견과 함께 래프팅 체험. 반려견 안전 조끼 대여 제공. 4월~10월 운영.','🐾 중형견 이하 · 반려견 안전 조끼 착용 필수','09:00–17:00 (4월~10월 운영)','1인 35,000원~ (메이트쉽 회원 할인)',true,'https://images.unsplash.com/photo-1525973132219-88a8f0ec4fc7?w=600&q=80','https://map.naver.com/v5/search/내린천래프팅+인제');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (36,36,'인제','캠핑','캠핑','설하관광농원 캠핑장','⛺','인제군 북면 설악로 3208','반려견 전용 울타리 사이트 · 목줄 해제 가능','설악산 입구 인근 자연 속 캠핑장. 반려동물 동반 전용 사이트에 울타리 설치로 목줄 해제 캠핑 가능.','🐾 20kg 이하 (대형견·맹견 불가) · 전용 사이트 배정','체크인 14:00 / 체크아웃 11:00','1박 40,000원–60,000원',false,'https://images.unsplash.com/photo-1504280390367-361c6d9f38f4?w=600&q=80','https://map.naver.com/v5/search/설하관광농원+인제');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (37,37,'인제','공원','트레킹','미산계곡 반려견 산책로','🏔️','인제군 기린면 미산리 일대','청정 계곡 · 여름 반려견 물놀이 명소','인제 청정 미산계곡. 맑고 시원한 계곡물에서 반려견과 함께 물놀이 가능. 여름 피서지로 인기.','🐾 목줄 착용 필수 · 배변봉투 지참','상시 개방','무료',false,'https://images.unsplash.com/photo-1544735716-392fe2489ffa?w=600&q=80','https://map.naver.com/v5/search/미산계곡+인제');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (38,38,'화천','캠핑','국립야영장','국립화천숲속야영장','🌲','화천군 하남면 용암리 일대','반려견 동반 가능 국립야영장 · 울타리·야자매트 완비','산림청 운영 반려견 동반 가능 국립자연휴양림 야영장. 강원도 유일. 전용 울타리·야자매트 설치 사이트.','🐾 동물등록 완료 · 광견병 예방접종 · 최대 2마리','체크인 14:00 / 체크아웃 11:00','1박 10,000원–20,000원',false,'https://images.unsplash.com/photo-1567889977869-46d61e52ddfc?w=600&q=80','https://map.naver.com/v5/search/화천숲속야영장');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (39,39,'화천','공원','산책·공원','화천천 수달래 산책로','🌿','화천군 화천읍 화천천 일대','무료 · 봄 수달래 군락 · 조용한 산책','화천천변을 따라 조성된 산책로. 봄에는 수달래(산철쭉) 군락이 아름답게 피어남. 반려견과 여유로운 산책에 적합.','🐾 목줄 착용 필수','24시간 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/화천천+화천');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (40,40,'양구','공원','생태공원','한반도섬 (양구 수입천)','🌿','양구군 방산면 수입리 한반도섬','국내 최대 인공 습지 · 반려견 데크 산책','위에서 보면 한반도 모양인 국내 최대 인공 습지섬. 잘 정비된 데크 산책로를 따라 반려견과 함께 생태 탐방 가능.','🐾 목줄 착용 필수 · 배변봉투 지참','상시 개방','무료',false,'https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=600&q=80','https://map.naver.com/v5/search/한반도섬+양구');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (41,41,'정선','체험','레일바이크','정선 레일바이크','🚂','정선군 여량면 레일바이크길 230','구절리~아우라지 7.2km · 소형 반려동물 동반','구절리역~아우라지 구간 약 7.2km 동강 절경을 따라 달리는 레일바이크. 소형 반려동물을 케이지에 넣어 동반 탑승 가능.','🐾 소형 반려동물 · 케이지(켄넬) 필수','09:00–17:30 (연중무휴)','2인승 35,000원 / 4인승 50,000원',false,'https://images.unsplash.com/photo-1551632811-561732d1e306?w=600&q=80','https://map.naver.com/v5/search/정선레일바이크');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (42,42,'정선','관광','트레킹','만항재 야생화 트레킹','🌸','정선군 고한읍 함백산 만항재','해발 1,330m · 야생화 군락 · 반려견 트레킹','국내 포장도로 중 가장 높은 고개 만항재(해발 1,330m). 7~8월 야생화 군락이 장관. 반려견과 함께 쿨한 여름 고산 트레킹 가능.','🐾 목줄 착용 필수 · 추위 대비 필요','상시 개방','무료',false,'https://images.unsplash.com/photo-1469521669194-babb45599def?w=600&q=80','https://map.naver.com/v5/search/만항재+정선');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (43,43,'삼척','관광','케이블카','삼척 해상 케이블카','🚡','삼척시 정상동 이사부길 33','동해 바다 위 케이블카 · 케이지 대여 가능','동양 최장 해상 케이블카 구간(1.4km). 소형 반려동물 케이지에 넣어 탑승 가능. 케이지 대여 서비스 제공.','🐾 소형 반려동물 케이지 탑승 · 케이지 대여 2,000원','09:00–18:00 (연중무휴)','왕복 성인 12,000원 / 소인 8,000원 (케이지 대여 2,000원)',false,'https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?w=600&q=80','https://map.naver.com/v5/search/삼척해상케이블카');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (44,44,'삼척','공원','해변·산책','삼척 맹방해변','🌊','삼척시 근덕면 맹방해변길 일대','넓은 백사장 · 반려견 동반 해변 산책','삼척의 넓고 깨끗한 백사장 맹방해변. 비교적 한적해 반려견과 함께 자유롭게 산책하기 좋음.','🐾 목줄 착용 필수 · 성수기 일부 제한','상시 개방','무료',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/맹방해변+삼척');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (45,45,'동해','공원','해변·공원','묵호 논골담길 & 해변','🎨','동해시 묵호동 논골담길 일대','벽화마을 · 바다 전망 · 반려견 산책','아름다운 벽화가 가득한 묵호 논골담길. 오르막 골목길을 반려견과 함께 걸으며 동해 바다 전망 감상.','🐾 목줄 착용 필수','상시 개방','무료',false,'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=600&q=80','https://map.naver.com/v5/search/묵호논골담길+동해');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (46,46,'태백','트레킹','트레킹','태백산 반려견 등반 코스','🏔️','태백시 소도동 태백산국립공원','해발 1,567m 천제단 · 반려견 동반 허용 구간','태백산국립공원 내 반려견 동반 허용 구간. 유일사 탐방로 이용. 겨울 설경이 특히 아름다움.','🐾 동물등록 완료 · 목줄 착용 필수 · 허용 구간 외 출입 금지','일출~일몰 (계절별 상이)','성인 2,000원 / 소인 1,000원',false,'https://images.unsplash.com/photo-1469521669194-babb45599def?w=600&q=80','https://map.naver.com/v5/search/태백산국립공원');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (47,47,'영월','관광','동물원','달빛동물원 (펫힐링)','🦜','영월군 영월읍 단종로 산 9-2','반려동물 동반 입장 · 이색 동물 체험','다양한 이색 동물을 만날 수 있는 영월 달빛동물원. 반려견 동반 입장 가능하며 야간 운영으로 특별한 분위기.','🐾 반려견 동반 가능 · 목줄 착용 필수 · 공격성 견종 제한','10:00–22:00 (계절별 상이)','성인 10,000원 / 소인 8,000원',false,'https://images.unsplash.com/photo-1474511320723-9a56873867b5?w=600&q=80','https://map.naver.com/v5/search/달빛동물원+영월');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (48,48,'영월','공원','산책','영월 동강 래프팅 & 산책','🌊','영월군 영월읍 동강 일대','동강 절경 · 반려견 강변 산책','영월 동강의 아름다운 절경을 따라 반려견과 함께 강변 산책 가능. 래프팅 시즌(5~9월) 수상 레저 체험도 가능.','🐾 목줄 착용 필수 · 래프팅 동반 시 운영사 사전 확인','상시 개방','무료 (래프팅 별도 요금)',false,'https://images.unsplash.com/photo-1525973132219-88a8f0ec4fc7?w=600&q=80','https://map.naver.com/v5/search/동강+영월');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (49,49,'강릉','식당','맛집','세레니타','🍝','강릉시 율곡로 3034','전 견종 동반 · 이탈리안 다이닝','강릉 인기 이탈리안 레스토랑. 넓은 공간에서 소·중·대형견 동반 가능. 맹견 및 공격성 강한 견종 제외.','🐾 전 견종 동반 · 맹견 제외 · 목줄 착용','11:30–21:00 (월요일 휴무)','메뉴당 15,000원–30,000원',false,'https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=600&q=80','https://map.naver.com/v5/search/세레니타+강릉');
+insert into travel_places (id,"order",region,type,type_label,name,icon,address,feature,description,pet_info,hours,price,is_partner,image_data,map_url) values (50,50,'강릉','공원','해변','사근진해변','🌊','강릉시 해안로604번길 16 (사근진)','조용한 소규모 해변 · 전 견종 동반','강릉 북쪽의 작고 조용한 해변. 성수기에도 비교적 한적해 반려견과 여유롭게 시간을 보내기 좋음.','🐾 목줄 착용 필수 · 성수기 일부 시간 제한','24시간 개방','무료',false,'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?w=600&q=80','https://map.naver.com/v5/search/사근진해변+강릉');
+select setval(pg_get_serial_sequence('travel_places','id'), (select max(id) from travel_places));
+
+-- mateship_partners (14 rows)
+delete from mateship_partners;
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (1,1,'세인트존스호텔','강릉','호텔','특별회원가','🏨','linear-gradient(135deg,#dbeafe 0%,#93c5fd 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (2,2,'휘닉스파크 리조트','평창','리조트','회원 할인','⛷️','linear-gradient(135deg,#cffafe 0%,#67e8f9 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (3,3,'퍼피파크 애견카페','원주','카페','30% 할인','☕','linear-gradient(135deg,#fef3c7 0%,#fcd34d 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (4,4,'죽도해변 반려견 캠핑장','양양','캠핑','30% 할인','🏕️','linear-gradient(135deg,#dcfce7 0%,#86efac 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (5,5,'반려동물 테마파크','홍천','공원','회원 할인','🌳','linear-gradient(135deg,#d1fae5 0%,#6ee7b7 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (6,6,'삼성동 예한의원','서울','의료','회원 할인','⚕️','linear-gradient(135deg,#fce7f3 0%,#f9a8d4 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (7,7,'인터불고 호텔','원주','호텔','특별회원가','🏨','linear-gradient(135deg,#ede9fe 0%,#c4b5fd 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (8,8,'인섹트도그','-','사료','회원 할인','🐛','linear-gradient(135deg,#d1fae5 0%,#6ee7b7 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (9,9,'배기도그','-','사료','회원 할인','🐶','linear-gradient(135deg,#fef3c7 0%,#fcd34d 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (10,10,'요세라독','-','펫케어','회원 할인','🐕','linear-gradient(135deg,#ecfdf5 0%,#a7f3d0 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (11,11,'요세라캣','-','펫케어','회원 할인','🐈','linear-gradient(135deg,#f0f9ff 0%,#bae6fd 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (12,12,'레오나르도','-','식당','회원 할인','🍽️','linear-gradient(135deg,#fff7ed 0%,#fed7aa 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (13,13,'베지독','-','사료','회원 할인','🥦','linear-gradient(135deg,#f0fdf4 0%,#86efac 100%)','#',null);
+insert into mateship_partners (id,"order",name,region,type,discount,icon,gradient,link,image_data) values (14,14,'나투어리베','-','펫케어','회원 할인','🌿','linear-gradient(135deg,#ecfdf5 0%,#6ee7b7 100%)','#',null);
+select setval(pg_get_serial_sequence('mateship_partners','id'), (select max(id) from mateship_partners));
+
+-- lookbook_items (5 rows)
+delete from lookbook_items;
+insert into lookbook_items (id,"order",image_data,label,link,is_main) values (1,1,'/images/events/gosung-trek-2025/05.webp','캠핑 · 아웃도어','http://localhost:3000/events/3',true);
+insert into lookbook_items (id,"order",image_data,label,link,is_main) values (2,2,'/images/events/gosung-trek-2025/01.webp','트레킹','http://localhost:3000/events/2',false);
+insert into lookbook_items (id,"order",image_data,label,link,is_main) values (3,3,'/images/events/gapyeong-2025/03.webp','문화축제','/travel',false);
+insert into lookbook_items (id,"order",image_data,label,link,is_main) values (4,4,'/images/events/walk-edu-2025/03.webp','교육','/education',false);
+insert into lookbook_items (id,"order",image_data,label,link,is_main) values (5,5,'/images/events/dangdang-plogging-2024/03.webp','봉사활동','/about',false);
+select setval(pg_get_serial_sequence('lookbook_items','id'), (select max(id) from lookbook_items));
+
+-- gallery_items (5 rows)
+delete from gallery_items;
+insert into gallery_items (id,"order",image_data,caption,active) values (1,1,'/images/gallery/g_trek_gosung.webp','2025 Mission Dog Trekking — 고성',true);
+insert into gallery_items (id,"order",image_data,caption,active) values (3,3,'/images/events/beach-gosung-2025/01.webp','고성 해변 반려견 축제 — 썬베드비치',true);
+insert into gallery_items (id,"order",image_data,caption,active) values (4,4,'/images/gallery/g_wonju_2025.webp','제3회 원주시 반려동물문화축제 — 애니멀대학교',true);
+insert into gallery_items (id,"order",image_data,caption,active) values (8,8,'/images/gallery/ig_01.webp','산책교육 현장 — 햅삐크루',true);
+insert into gallery_items (id,"order",image_data,caption,active) values (9,9,'/images/gallery/ig_02.webp','2026 청주시 반려동물 문화행사 — 학교종이 댕댕댕',true);
+select setval(pg_get_serial_sequence('gallery_items','id'), (select max(id) from gallery_items));
+
+-- page_hashtags (6 rows)
+delete from page_hashtags;
+insert into page_hashtags (page, tags) values ('index', ARRAY['#반려동물동반여행','#강원도반려동물','#반려동물훈련','#반려동물협회','#강원도캠핑']);
+insert into page_hashtags (page, tags) values ('events', ARRAY['#반려동물동반행사','#반려동물축제','#반려동물캠핑','#강원도반려동물','#반려동물페스티벌']);
+insert into page_hashtags (page, tags) values ('travel', ARRAY['#강원도반려동물동반','#반려동물동반카페','#속초반려동물','#강릉반려동물','#반려동물동반숙소']);
+insert into page_hashtags (page, tags) values ('education', ARRAY['#반려동물행동지도사','#반려동물교육','#반려동물훈련','#어질리티교육','#반려동물국가자격증']);
+insert into page_hashtags (page, tags) values ('mateship', ARRAY['#반려동물할인','#고양이사료할인','#반려묘사료할인','#반려동물멤버십','#강원도반려동물혜택']);
+insert into page_hashtags (page, tags) values ('about', ARRAY['#강원도반려동물협회','#GWAA','#반려동물협회','#강원도반려인','#반려동물문화']);

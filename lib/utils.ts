@@ -42,6 +42,10 @@ export const NAV_MENU = [
     { label: '반려동물 동반 지도', href: '/travel#map' },
     { label: '전체 장소 보기',   href: '/travel#places' },
   ]},
+  { label: 'SUPPORT', href: '/support', children: [
+    { label: '멤버십 회비 납부', href: '/support' },
+    { label: '후원하기',        href: '/support' },
+  ]},
   { label: 'CONTACT', href: '/contact', children: [
     { label: '연락처',      href: '/contact#channels' },
     { label: '카카오 채널', href: 'https://pf.kakao.com/_wipZX' },

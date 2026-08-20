@@ -1,4 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { signAdmin } from '@/lib/adminAuth';
 
 const COOKIE = 'gwaa_admin_auth';
 const MAX_AGE = 60 * 60 * 8; // 8시간
@@ -16,7 +17,7 @@ export async function POST(req: NextRequest) {
   }
 
   const res = NextResponse.json({ ok: true });
-  res.cookies.set(COOKIE, 'granted', {
+  res.cookies.set(COOKIE, signAdmin(MAX_AGE), {
     httpOnly: true,
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',

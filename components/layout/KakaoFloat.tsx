@@ -8,7 +8,7 @@ export default function KakaoFloat() {
   const [hovered, setHovered] = useState(false);
 
   return (
-    <div className="fixed bottom-7 right-5 z-[999] flex items-center gap-3">
+    <div className="fixed bottom-7 right-5 z-[999] flex items-center gap-3" style={{ bottom: 'calc(1.75rem + var(--kakao-lift, 0px))', transition: 'bottom 0.25s ease' }}>
       {/* Tooltip label */}
       <AnimatePresence>
         {hovered && (

@@ -55,7 +55,7 @@ function HandWrittenTitle({
         <motion.h2
           className="tracking-tight flex items-center gap-2"
           style={{
-            fontFamily: "'Bebas Neue', cursive",
+            fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
             fontSize: "clamp(40px, 7vw, 72px)",
             color: "#111",
             letterSpacing: "0.02em",

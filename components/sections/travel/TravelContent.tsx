@@ -7,9 +7,10 @@ import { useGWAADB } from '@/hooks/useGWAADB';
 import { TravelPlace } from '@/types';
 import Eyebrow from '@/components/ui/Eyebrow';
 import { fadeUp, staggerContainer } from '@/lib/animations';
+import ProposalModal from '@/components/shared/ProposalModal';
 
-const MONO  = "'SF Mono','Menlo','Monaco','Consolas','Courier New',monospace";
-const BEBAS = "'Bebas Neue', cursive";
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
+const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
 
 // ── 카테고리 ──
 const CATEGORIES = [
@@ -175,9 +176,9 @@ function PetBadge({ petInfo }: { petInfo: string }) {
   const has = (k: string) => petInfo.toLowerCase().includes(k);
   return (
     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-      {(has('소형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 9, padding: '2px 6px', borderRadius: 9999, background: '#dcfce7', color: '#16a34a', fontWeight: 700 }}>소형</span>}
-      {(has('중형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 9, padding: '2px 6px', borderRadius: 9999, background: '#fef3c7', color: '#d97706', fontWeight: 700 }}>중형</span>}
-      {(has('대형') || has('전 견종') || has('모든') || has('체중 제한 없')) && <span style={{ fontFamily: MONO, fontSize: 9, padding: '2px 6px', borderRadius: 9999, background: '#fee2e2', color: '#dc2626', fontWeight: 700 }}>대형</span>}
+      {(has('소형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#dcfce7', color: '#16a34a', fontWeight: 700 }}>소형</span>}
+      {(has('중형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#fef3c7', color: '#d97706', fontWeight: 700 }}>중형</span>}
+      {(has('대형') || has('전 견종') || has('모든') || has('체중 제한 없')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#fee2e2', color: '#dc2626', fontWeight: 700 }}>대형</span>}
     </div>
   );
 }
@@ -189,6 +190,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
   const [category,    setCategory]    = useState('전체');
   const [partnerOnly, setPartnerOnly] = useState(false);
   const [openCourse,  setOpenCourse]  = useState<string | null>(null);
+  const [proposalOpen, setProposalOpen] = useState(false);
   const [isMobile,    setIsMobile]    = useState(false);
 
   useEffect(() => {
@@ -230,27 +232,32 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
   return (
     <>
       {/* ─── STATS ─── */}
-      <section style={{ padding: `20px ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+      <section style={{ background: '#f9fafb', borderTop: '1px solid #e5e7eb', borderBottom: '1px solid #e5e7eb' }}>
         <div style={{
           display: 'grid',
-          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, auto)',
-          gap: isMobile ? '16px' : '48px',
-          justifyContent: isMobile ? undefined : 'start',
+          gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)',
+          gap: 0,
         }}>
           {[
-            { n: `${places.length || 50}+`, label: '등록 장소', icon: '📍' },
-            { n: '16',  label: '강원도 지역',  icon: '🗺️' },
-            { n: '5',   label: '추천 코스',    icon: '🧭' },
-            { n: '100%', label: '반려동물 동반 가능', icon: '🐾' },
-          ].map(({ n, label, icon }) => (
-            <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-              <span style={{ fontSize: isMobile ? 18 : 20 }}>{icon}</span>
-              <div>
-                <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 18 : 22, color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em' }}>{n}</div>
-                <div style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.08em' }}>{label.toUpperCase()}</div>
+            { n: `${places.length || 50}+`, label: '등록 장소' },
+            { n: '16',   label: '강원도 지역' },
+            { n: '5',    label: '추천 코스' },
+            { n: '100%', label: '반려동물 동반' },
+          ].map(({ n, label }, i) => {
+            const isLast = isMobile ? i % 2 === 1 : i === 3;
+            const isTop  = isMobile && i < 2;
+            return (
+              <div key={label} style={{
+                padding: isMobile ? '32px 20px' : '44px 0',
+                textAlign: 'center',
+                borderRight: isLast ? 'none' : '1px solid #e5e7eb',
+                borderBottom: isTop ? '1px solid #e5e7eb' : 'none',
+              }}>
+                <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(32px,8vw,44px)' : 'clamp(40px,4.5vw,56px)', color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 8 }}>{n}</div>
+                <div style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', letterSpacing: '0.02em' }}>{label}</div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </section>
 
@@ -262,7 +269,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
             <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
               추천 반려동물 여행 코스
             </h2>
-            <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.7 }}>
+            <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6 }}>
               강원도 현지 데이터를 기반으로 엄선한 코스. 반려동물 동반 조건을 모두 검증했습니다.
             </p>
           </motion.div>
@@ -280,12 +287,12 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                     <div style={{ position: 'relative', height: 150, background: `url(${course.cover}) center/cover`, overflow: 'hidden' }}>
                       <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.65))' }} />
                       <div style={{ position: 'absolute', top: 10, left: 12, display: 'flex', gap: 6 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 9, background: course.color, color: '#fff', padding: '3px 8px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.08em' }}>{course.duration.toUpperCase()}</span>
-                        <span style={{ fontFamily: MONO, fontSize: 9, background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '3px 8px', borderRadius: 9999, letterSpacing: '0.08em', backdropFilter: 'blur(4px)' }}>{course.theme}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11, background: course.color, color: '#fff', padding: '3px 8px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.04em' }}>{course.duration.toUpperCase()}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(255,255,255,0.2)', color: '#fff', padding: '3px 8px', borderRadius: 9999, letterSpacing: '0.04em', backdropFilter: 'blur(4px)' }}>{course.theme}</span>
                       </div>
                       <div style={{ position: 'absolute', bottom: 12, left: 12, right: 12 }}>
                         <h3 style={{ fontFamily: BEBAS, fontSize: 20, color: '#fff', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 2 }}>{course.title}</h3>
-                        <p style={{ fontFamily: MONO, fontSize: 10, color: 'rgba(255,255,255,0.75)', letterSpacing: '0.06em' }}>{course.subtitle}</p>
+                        <p style={{ fontFamily: MONO, fontSize: 12, color: 'rgba(255,255,255,0.9)', letterSpacing: '0.02em' }}>{course.subtitle}</p>
                       </div>
                     </div>
 
@@ -293,7 +300,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                     <div style={{ padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
                       <div style={{ display: 'flex', gap: 5, flexWrap: 'wrap' }}>
                         {course.tags.slice(0, 3).map((t) => (
-                          <span key={t} style={{ fontFamily: MONO, fontSize: 9, padding: '2px 7px', borderRadius: 9999, background: '#f3f4f6', color: '#6b7280', letterSpacing: '0.06em' }}>{t}</span>
+                          <span key={t} style={{ fontFamily: MONO, fontSize: 11, padding: '2px 7px', borderRadius: 9999, background: '#f3f4f6', color: '#4b5563', letterSpacing: '0.02em' }}>{t}</span>
                         ))}
                       </div>
                       <span style={{ fontSize: 14, color: '#9ca3af', transform: isOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.25s', display: 'block' }}>▾</span>
@@ -313,7 +320,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                           <div style={{ padding: '0 16px 16px', borderTop: '1px solid #f0f0f0' }}>
                             {course.days.map((day) => (
                               <div key={day.label} style={{ marginTop: 14 }}>
-                                <div style={{ fontFamily: MONO, fontSize: 9, color: course.color, fontWeight: 700, letterSpacing: '0.14em', marginBottom: 10 }}>{day.label}</div>
+                                <div style={{ fontFamily: MONO, fontSize: 11, color: course.color, fontWeight: 700, letterSpacing: '0.06em', marginBottom: 10 }}>{day.label}</div>
                                 <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
                                   {day.stops.map((stop, si) => (
                                     <div key={si} style={{ display: 'flex', gap: 10, paddingBottom: si < day.stops.length - 1 ? 10 : 0, position: 'relative' }}>
@@ -323,10 +330,10 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                                       <div style={{ flexShrink: 0, width: 30, height: 30, borderRadius: '50%', background: '#f8fafb', border: '1.5px solid #e5e7eb', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 13, zIndex: 1 }}>{stop.icon}</div>
                                       <div style={{ flex: 1, paddingTop: 3 }}>
                                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginBottom: 2, flexWrap: 'wrap' }}>
-                                          <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.06em' }}>{stop.time}</span>
+                                          <span style={{ fontFamily: MONO, fontSize: 11, color: '#6b7280', letterSpacing: '0.02em' }}>{stop.time}</span>
                                           <span style={{ fontSize: 12, fontWeight: 700, color: '#111' }}>{stop.place}</span>
                                         </div>
-                                        <p style={{ fontSize: 11, color: '#6b7280', lineHeight: 1.6, margin: 0 }}>{stop.tip}</p>
+                                        <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, margin: 0 }}>{stop.tip}</p>
                                       </div>
                                     </div>
                                   ))}
@@ -348,12 +355,26 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
       {/* ─── PLACES DATABASE ─── */}
       <section style={{ padding: `${py} ${px} 88px`, background: '#fff' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
-          <motion.div variants={fadeUp} style={{ marginBottom: 24 }}>
-            <Eyebrow text="PET TRAVEL DATABASE" />
-            <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6 }}>
-              강원도 반려동물 여행지
-            </h2>
-            <p style={{ fontSize: 13, color: '#6b7280' }}>운영시간 · 입장료 · 반려동물 조건을 모두 확인할 수 있습니다.</p>
+          <motion.div variants={fadeUp} style={{ marginBottom: 24, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12 }}>
+            <div>
+              <Eyebrow text="PET TRAVEL DATABASE" />
+              <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(28px,5vw,52px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 6 }}>
+                강원도 반려동물 여행지
+              </h2>
+              <p style={{ fontSize: 13, color: '#6b7280' }}>운영시간 · 입장료 · 반려동물 조건을 모두 확인할 수 있습니다.</p>
+            </div>
+            <button
+              onClick={() => setProposalOpen(true)}
+              style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0,
+                fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#16a34a',
+                background: '#f0fdf4', border: '1.5px solid #bbf7d0',
+                padding: '9px 16px', borderRadius: 9999, cursor: 'pointer', letterSpacing: '0.02em',
+                whiteSpace: 'nowrap',
+              }}
+            >
+              🐾 우리 매장도 등록하고 싶어요 →
+            </button>
           </motion.div>
 
           {/* Search */}
@@ -442,13 +463,13 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
 
           {/* Result count */}
           <motion.div variants={fadeUp} style={{ marginBottom: 16, display: 'flex', alignItems: 'center', gap: 10 }}>
-            <span style={{ fontFamily: MONO, fontSize: 11, color: '#9ca3af', letterSpacing: '0.06em' }}>
+            <span style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', letterSpacing: '0.02em' }}>
               {filtered.length}곳의 장소
             </span>
             {(region !== '전체' || category !== '전체' || partnerOnly || search) && (
               <button
                 onClick={() => { setRegion('전체'); setCategory('전체'); setPartnerOnly(false); setSearch(''); }}
-                style={{ fontFamily: MONO, fontSize: 10, color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.04em' }}
+                style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.02em' }}
               >
                 필터 초기화
               </button>
@@ -458,7 +479,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
           {/* Cards */}
           {loading ? (
             <div style={{ height: 280, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-              <span style={{ fontFamily: MONO, fontSize: 12, color: '#9ca3af', letterSpacing: '0.12em' }}>LOADING...</span>
+              <span style={{ fontFamily: MONO, fontSize: 13, color: '#6b7280', letterSpacing: '0.06em' }}>LOADING...</span>
             </div>
           ) : (
             <div style={{
@@ -493,12 +514,12 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                         : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
                     }}>
                       <div style={{ position: 'absolute', top: 10, left: 10, display: 'flex', gap: 5 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 9, background: REGION_COLOR[place.region] || '#16a34a', color: '#fff', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.06em' }}>{place.region}</span>
-                        <span style={{ fontFamily: MONO, fontSize: 9, background: 'rgba(0,0,0,0.5)', color: '#fff', padding: '3px 7px', borderRadius: 9999, letterSpacing: '0.04em', backdropFilter: 'blur(4px)' }}>{place.typeLabel || place.type}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11, background: REGION_COLOR[place.region] || '#16a34a', color: '#fff', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.04em' }}>{place.region}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(0,0,0,0.5)', color: '#fff', padding: '3px 7px', borderRadius: 9999, letterSpacing: '0.02em', backdropFilter: 'blur(4px)' }}>{place.typeLabel || place.type}</span>
                       </div>
                       {place.isPartner && (
                         <div style={{ position: 'absolute', top: 10, right: 10 }}>
-                          <span style={{ fontFamily: MONO, fontSize: 8, background: '#fef3c7', color: '#92400e', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, border: '1px solid #fde68a' }}>⭐ PARTNER</span>
+                          <span style={{ fontFamily: MONO, fontSize: 11, background: '#fef3c7', color: '#92400e', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, border: '1px solid #fde68a' }}>⭐ PARTNER</span>
                         </div>
                       )}
                       {/* No-image fallback label */}
@@ -520,7 +541,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                       <div style={{ marginBottom: 8 }}>
                         <PetBadge petInfo={place.petInfo || ''} />
                         {place.petInfo && (
-                          <p style={{ fontFamily: MONO, fontSize: 10, color: '#6b7280', marginTop: 4, lineHeight: 1.5 }}>{place.petInfo}</p>
+                          <p style={{ fontFamily: MONO, fontSize: 12, color: '#4b5563', marginTop: 4, lineHeight: 1.5 }}>{place.petInfo}</p>
                         )}
                       </div>
 
@@ -528,20 +549,20 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                       <div style={{ display: 'flex', flexDirection: 'column', gap: 3, marginBottom: 10, paddingTop: 8, borderTop: '1px solid #f3f4f6' }}>
                         {place.hours && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>⏰</span>
-                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.hours}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 11, color: '#6b7280', letterSpacing: '0.02em', flexShrink: 0, paddingTop: 1 }}>⏰</span>
+                            <span style={{ fontSize: 13, color: '#374151', lineHeight: 1.4 }}>{place.hours}</span>
                           </div>
                         )}
                         {place.price && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>💰</span>
-                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.price}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 11, color: '#6b7280', letterSpacing: '0.02em', flexShrink: 0, paddingTop: 1 }}>💰</span>
+                            <span style={{ fontSize: 13, color: '#374151', lineHeight: 1.4 }}>{place.price}</span>
                           </div>
                         )}
                         {place.address && (
                           <div style={{ display: 'flex', gap: 6, alignItems: 'flex-start' }}>
-                            <span style={{ fontFamily: MONO, fontSize: 9, color: '#9ca3af', letterSpacing: '0.04em', flexShrink: 0, paddingTop: 1 }}>📍</span>
-                            <span style={{ fontSize: 11, color: '#374151', lineHeight: 1.4 }}>{place.address}</span>
+                            <span style={{ fontFamily: MONO, fontSize: 11, color: '#6b7280', letterSpacing: '0.02em', flexShrink: 0, paddingTop: 1 }}>📍</span>
+                            <span style={{ fontSize: 13, color: '#374151', lineHeight: 1.4 }}>{place.address}</span>
                           </div>
                         )}
                       </div>
@@ -563,7 +584,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                           onClick={(e) => e.stopPropagation()}
                           style={{
                             display: 'inline-flex', alignItems: 'center', gap: 5,
-                            fontFamily: MONO, fontSize: 10, color: '#fff',
+                            fontFamily: MONO, fontSize: 12, color: '#fff',
                             fontWeight: 700, letterSpacing: '0.06em', textDecoration: 'none',
                             background: '#16a34a', padding: '6px 12px', borderRadius: 8,
                           }}
@@ -586,6 +607,8 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
           )}
         </motion.div>
       </section>
+
+      <ProposalModal kind="travel" open={proposalOpen} onClose={() => setProposalOpen(false)} />
     </>
   );
 }

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { gwaaDB, STORES } from '@/lib/db/gwaaDB';
 import { PageHashtags } from '@/types';
 
 interface SeoTagsProps {
@@ -12,11 +11,14 @@ export default function SeoTags({ page }: SeoTagsProps) {
   const [tags, setTags] = useState<string[]>([]);
 
   useEffect(() => {
-    gwaaDB.initDefaults().then(() =>
-      gwaaDB.get<PageHashtags>(STORES.HASHTAGS, page).then((ht) => {
-        if (ht?.tags) setTags(ht.tags);
+    let cancelled = false;
+    fetch(`/api/data/page_hashtags?id=${page}`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((ht: PageHashtags | null) => {
+        if (!cancelled && ht?.tags) setTags(ht.tags);
       })
-    );
+      .catch(() => {});
+    return () => { cancelled = true; };
   }, [page]);
 
   if (!tags.length) return null;

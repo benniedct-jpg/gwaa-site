@@ -16,6 +16,7 @@ const SLIDES = [
     titleAccent: '제한 없이',
     sub: '2021년부터 4만명과 함께한 강원도 대표 반려동물 협회. 교육, 행사, 메이트쉽 멤버십으로 반려생활을 새롭게.',
     bg1: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 40%, #a5d6a7 100%)',
+    bgImg: '/images/events/fest/01.webp',
     actions: [
       { label: '메이트쉽 가입 →', href: '/mateship#join', primary: true },
       { label: '협회 소개', href: '/about', primary: false },
@@ -28,6 +29,7 @@ const SLIDES = [
     titleAccent: '교육',
     sub: '독스포츠(어질리티), 오비디언스 교육, 반려동물행동지도사 국가자격증 취득까지. 전문 트레이너가 함께합니다.',
     bg1: 'linear-gradient(135deg, #e0f0e8 0%, #b8d9c4 40%, #7fb89a 100%)',
+    bgImg: '/images/events/edu/02.webp',
     actions: [
       { label: '교육 신청하기 →', href: '/education#apply', primary: true },
       { label: '프로그램 보기', href: '/education', primary: false },
@@ -40,6 +42,7 @@ const SLIDES = [
     titleAccent: '절약',
     sub: '호텔, 카페, 캠핑, 사료·용품 할인과 행사 우선 참여권까지. 메이트쉽 회원이 되면 강원도가 달라집니다.',
     bg1: 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 40%, #ffe082 100%)',
+    bgImg: '/images/events/fest/09.webp',
     actions: [
       { label: '혜택 보기 →', href: '/mateship#benefits', primary: true },
       { label: '계산기 해보기', href: '/mateship#calculator', primary: false },
@@ -121,7 +124,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
   }, []);
 
   const slide = SLIDES[current];
-  const bgImg = heroImages?.[current]?.imageData;
+  const bgImg = heroImages?.[current]?.imageData ?? slide.bgImg;
 
   return (
     <section
@@ -202,7 +205,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                 animation: 'dot-pulse 2s ease infinite',
                 flexShrink: 0,
               }} />
-              <span style={{ fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", fontSize: 10, color: '#6b7280', letterSpacing: '0.1em' }}>
+              <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, color: '#6b7280', letterSpacing: '0.04em' }}>
                 {slide.tag}
               </span>
             </motion.div>
@@ -245,7 +248,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
               </motion.svg>
 
               <h1 style={{
-                fontFamily: "'Bebas Neue', cursive",
+                fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                 fontSize: 'clamp(48px, 7vw, 84px)',
                 lineHeight: 0.95,
                 color: '#111',
@@ -283,7 +286,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.4 }}
-              style={{ fontSize: 15, color: '#374151', lineHeight: 1.75, fontWeight: 300, marginBottom: 28 }}
+              style={{ fontSize: 15, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}
             >
               {slide.sub}
             </motion.p>

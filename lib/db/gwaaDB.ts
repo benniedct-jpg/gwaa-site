@@ -5,7 +5,7 @@ export { STORES } from './stores';
 export type { StoreName } from './stores';
 
 const DB_NAME = 'gwaaImages';
-const DB_VER = 4;
+const DB_VER = 5;
 const MAX_SIZE = 2 * 1024 * 1024;
 const ALLOWED = new Set(['image/jpeg', 'image/png', 'image/webp']);
 

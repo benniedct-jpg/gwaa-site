@@ -119,29 +119,29 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
   };
 
   return (
-    <section style={{ padding: '80px 60px 60px', background: '#fff', borderBottom: '1px solid #e5e7eb', overflow: 'hidden' }}>
+    <section style={{ position: 'relative', padding: '60px 60px 48px', background: '#fff', borderBottom: '1px solid #e5e7eb', overflow: 'hidden' }}>
       {/* Grid background */}
       <div style={{
         position: 'absolute', inset: 0, pointerEvents: 'none',
         backgroundImage: 'linear-gradient(to right, #e5e7eb 1px, transparent 1px), linear-gradient(to bottom, #e5e7eb 1px, transparent 1px)',
-        backgroundSize: '48px 48px', opacity: 0.3,
-        maskImage: 'radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)',
-        WebkitMaskImage: 'radial-gradient(ellipse 80% 50% at 50% 0%, #000 70%, transparent 110%)',
+        backgroundSize: '48px 48px', opacity: 0.25,
+        maskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 60%, transparent 100%)',
+        WebkitMaskImage: 'radial-gradient(ellipse 80% 60% at 50% 0%, #000 60%, transparent 100%)',
       }} />
 
-      <p style={{ textAlign: 'center', fontSize: 10, fontFamily: "'SF Mono', 'Menlo', 'Monaco', 'Consolas', 'Courier New', monospace", letterSpacing: '0.14em', color: '#9ca3af', marginBottom: 10, textTransform: 'uppercase', position: 'relative' }}>
+      <p style={{ textAlign: 'center', fontSize: 12, fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", letterSpacing: '0.02em', color: '#6b7280', marginBottom: 8, position: 'relative' }}>
         강원도반려동물협회 · 함께한 순간들
       </p>
       <h3 style={{
         textAlign: 'center', fontSize: 'clamp(28px, 5vw, 52px)',
-        fontFamily: "'Bebas Neue', cursive", letterSpacing: '0.02em', lineHeight: 0.95,
+        fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", letterSpacing: '0.02em', lineHeight: 0.95,
         color: '#111', marginBottom: 0, position: 'relative',
       }}>
         GWAA <span style={{ color: '#16a34a' }}>갤러리</span>
       </h3>
 
       {/* Fan of photos */}
-      <div style={{ position: 'relative', height: 360, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div style={{ position: 'relative', height: 300, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
         <motion.div
           style={{ position: 'relative' }}
           initial={{ opacity: 0 }}
@@ -154,7 +154,7 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
             initial="hidden"
             animate={isLoaded ? 'visible' : 'hidden'}
           >
-            <div style={{ position: 'relative', width: 220, height: 220 }}>
+            <div style={{ position: 'relative', width: 200, height: 200 }}>
               {[...POSITIONS].reverse().map((pos, revIdx) => {
                 const idx = POSITIONS.length - 1 - revIdx;
                 const item = activeItems[idx];
@@ -171,8 +171,8 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
                       fallbackIcon={FALLBACK_ICONS[idx]}
                       direction={pos.direction}
                       caption={item?.caption ?? ''}
-                      width={220}
-                      height={220}
+                      width={200}
+                      height={200}
                     />
                   </motion.div>
                 );
@@ -183,12 +183,12 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
       </div>
 
       {/* CTA */}
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 8, position: 'relative' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 4, position: 'relative' }}>
         <Link
           href="/events#archive"
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
-            padding: '12px 28px', borderRadius: 9999,
+            padding: '10px 24px', borderRadius: 9999,
             background: '#16a34a', color: '#fff',
             fontSize: 13, fontWeight: 700, letterSpacing: '0.04em',
             boxShadow: '0 2px 12px rgba(22,163,74,0.3)',
