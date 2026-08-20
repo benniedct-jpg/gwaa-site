@@ -71,11 +71,11 @@ export default function PetscoutContent() {
     { Icon: Users, title: '사회성 적응 소그룹존', desc: '사회성이 서투른 반려견을 위한 적응형 소그룹 존.' },
   ];
 
-  const booths = ['반려견 연고 만들기', '캐리커쳐', '동물등록 부스', '반려견 행동교정'];
+  const booths = ['반려견 연고 만들기', '동물등록 부스', '반려견 행동교정'];
   const paidBooths = [{ name: '코닥 포토부스', price: '2,000원' }];
 
   const moreZones: { Icon: LucideIcon; title: string; desc: string; warm?: boolean }[] = [
-    { Icon: ShoppingBag, title: '브랜드존 · 50팀 마켓', desc: '반려동물·캠핑 브랜드 50팀. 체험·특가·포토존까지.' },
+    { Icon: ShoppingBag, title: '브랜드존 · 마켓', desc: '반려동물·캠핑 브랜드 마켓. 체험·특가·포토존까지.' },
     { Icon: Telescope, title: '별자리 관찰존', desc: '천체망원경과 해설로 즐기는 밤하늘 스타게이징.', warm: true },
     { Icon: UtensilsCrossed, title: '푸드트럭 존', desc: '하루 종일 열리는 다양한 먹거리 존.' },
   ];
@@ -364,7 +364,7 @@ export default function PetscoutContent() {
             <span key={b.name} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 9999, background: '#f9fafb', border: '1px solid #e8e8e8', fontSize: 13.5, fontWeight: 600, color: '#374151', wordBreak: 'keep-all' }}>{b.name}<span style={{ fontSize: 11, fontWeight: 700, color: '#6b7280' }}>{b.price}</span></span>
           ))}
         </div>
-        <p style={{ fontSize: 12, color: '#6b7280', marginTop: 14, lineHeight: 1.6 }}>연고 만들기·캐리커쳐·동물등록·행동교정 상담은 무료로 즐기실 수 있어요. 코닥 포토부스만 2,000원이며, 이 외에도 일부 유료 체험부스가 별도 운영됩니다.</p>
+        <p style={{ fontSize: 12, color: '#6b7280', marginTop: 14, lineHeight: 1.6 }}>연고 만들기·동물등록·행동교정 상담은 무료로 즐기실 수 있어요. 코닥 포토부스만 2,000원이며, 이 외에도 일부 유료 체험부스가 별도 운영됩니다.</p>
       </div>
 
       {/* 더 즐길거리 */}
