@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
-import { Map as MapIcon, Loader2, CheckCircle2 } from 'lucide-react';
+import { Map as MapIcon, Loader2, CheckCircle2, Clock } from 'lucide-react';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
@@ -847,8 +847,8 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               </>
             ) : (
               <>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}><CheckCircle2 size={56} color={GREEN} strokeWidth={1.6} /></div>
-                <h3 style={{ fontFamily: BEBAS, fontSize: 28, color: GREEN_DK, marginBottom: 6 }}>{paid ? '예약이 확정되었습니다' : '예약이 접수되었습니다'}</h3>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}>{paid ? <CheckCircle2 size={56} color={GREEN} strokeWidth={1.6} /> : <Clock size={56} color="#f59e0b" strokeWidth={1.6} />}</div>
+                <h3 style={{ fontFamily: BEBAS, fontSize: 28, color: paid ? GREEN_DK : '#b45309', marginBottom: 6 }}>{paid ? '예약이 확정되었습니다' : '예약 대기중'}</h3>
                 <p style={{ fontSize: 14, color: GREEN, fontWeight: 700, marginBottom: 18 }}>{paid ? '결제가 완료되어 입장권을 보내드렸어요 🐾' : (CARD_ENABLED ? '카드로 즉시 결제하거나, 계좌이체로 확정하세요 🐾' : '아래 계좌로 입금하시면 예약이 확정됩니다 🐾')}</p>
                 <div style={{ background: '#fff', border: `2px solid ${BORDER}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 16px', textAlign: 'left' }}>
                   <DoneRow label="예약자" value={String(d.name)} />
