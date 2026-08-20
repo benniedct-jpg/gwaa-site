@@ -204,6 +204,17 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ef4444', color: '#fff', fontSize: 12.5, fontWeight: 800, padding: '6px 14px', borderRadius: 9999 }}>🔥 {rgMode ? `D-${dday} · 낭만기버존 18면 한정` : `예약 마감까지 D-${dday}`}</span>
             </div>
           )}
+          {hasBooking && (
+            <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
+              <button
+                onClick={() => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
+                style={{ padding: '13px 30px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 6px 18px rgba(22,163,74,0.4)' }}
+              >
+                예약하기 →
+              </button>
+              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.92)', fontWeight: 600 }}>당일권 20,000원 · 2박3일 135,000원부터</span>
+            </div>
+          )}
         </div>
       </div>
 
@@ -549,7 +560,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               <div style={{ maxWidth: 760, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <div style={{ fontSize: 13.5, fontWeight: 800, color: '#111', lineHeight: 1.3 }}>캠핑 예약 · 클래스 신청{rgMode ? ' · 낭만기버존' : ''}</div>
-                  <div style={{ fontSize: 11.5, color: '#6b7280', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>9/4~9/6 · 고성 세계잼버리 수련장</div>
+                  <div style={{ fontSize: 11.5, color: '#6b7280', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>9/4~9/6 고성 · 당일권 2만원 · 캠핑 13.5만원~</div>
                 </div>
                 <button
                   onClick={() => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
