@@ -93,6 +93,12 @@ const PORTONE_STORE_ID = process.env.NEXT_PUBLIC_PORTONE_STORE_ID || '';
 const PORTONE_CHANNEL_KEY = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY || '';
 const CARD_ENABLED = !!(PORTONE_STORE_ID && PORTONE_CHANNEL_KEY);
 type PortOneSDK = { requestPayment: (o: Record<string, unknown>) => Promise<{ code?: string | null; message?: string; paymentId?: string }> };
+// 인앱 브라우저(인스타·카톡·페북 등) 감지 — 앱 내 브라우저는 카드결제 후 복귀가 깨지기 쉬워 외부 브라우저로 안내
+function isInAppBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = (navigator.userAgent || '').toLowerCase();
+  return /instagram|kakaotalk|fban|fbav|fb_iab|line\/|naver|daumapps|; wv\)/.test(ua);
+}
 
 const SITEMAP = '/images/events/jamboree-2026/sitemap.webp';
 
@@ -142,6 +148,9 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
   const [doneData, setDoneData] = useState<Record<string, unknown> | null>(null);
   const [paid, setPaid] = useState(false); // 카드결제 확정 여부
   const [payMsg, setPayMsg] = useState(''); // 카드결제 안내/오류 메시지
+  const [inApp, setInApp] = useState(false); // 인앱 브라우저 여부(결제 복귀 안내용)
+  const [linkCopied, setLinkCopied] = useState(false);
+  useEffect(() => { setInApp(isInAppBrowser()); }, []);
   const [rgMode, setRgMode] = useState(false); // 낭만기버존 전용(숨김 링크) 모드
 
   // 잔여석 로드
@@ -797,6 +806,13 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               </div>
             </a>
 
+            {CARD_ENABLED && inApp && (
+              <div style={{ background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 10, padding: '12px 14px', marginTop: 12, fontSize: 12.5, color: '#9a3412', lineHeight: 1.65, textAlign: 'left' }}>
+                ⚠️ 인스타·카톡 앱 안에서 여시면 <b>결제 후 화면이 안 돌아올 수 있어요.</b> 원활한 카드결제를 위해 Chrome·Safari 등 기본 브라우저로 열어주세요.
+                <button type="button" onClick={() => { try { navigator.clipboard?.writeText(window.location.href); setLinkCopied(true); } catch { /* noop */ } }} style={{ display: 'block', width: '100%', marginTop: 8, padding: '9px', borderRadius: 8, border: '1px solid #fdba74', background: '#fff', color: '#9a3412', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>{linkCopied ? '✓ 링크 복사됨 — 브라우저에 붙여넣어 여세요' : '📋 링크 복사하기'}</button>
+              </div>
+            )}
+
             <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 10, padding: '14px 18px', marginTop: 12, textAlign: 'center', fontSize: 14, color: MUTED }}>
               입금 예정 금액 &nbsp; <strong style={{ fontSize: 22, color: GREEN, fontWeight: 700 }}>{total.toLocaleString()}원</strong>
               <div style={{ fontSize: 12, marginTop: 4 }}>{CARD_ENABLED ? '예약 접수 후 다음 화면에서 카드 즉시결제 또는 계좌이체로 확정합니다.' : '예약 접수 후 다음 화면에서 입금 계좌를 안내해 드립니다. (계좌이체 접수)'}</div>
@@ -861,6 +877,12 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                 <>
                 {CARD_ENABLED && (
                   <>
+                    {inApp && (
+                      <div style={{ background: '#fff7ed', border: '1px solid #fdba74', borderRadius: 10, padding: '12px 14px', maxWidth: 420, margin: '0 auto 10px', fontSize: 12.5, color: '#9a3412', lineHeight: 1.65, textAlign: 'left' }}>
+                        ⚠️ 인스타·카톡 앱 안에서는 결제 후 화면이 안 돌아올 수 있어요. Chrome·Safari 등 기본 브라우저로 열어주세요.
+                        <button type="button" onClick={() => { try { navigator.clipboard?.writeText(window.location.href); setLinkCopied(true); } catch { /* noop */ } }} style={{ display: 'block', width: '100%', marginTop: 8, padding: '9px', borderRadius: 8, border: '1px solid #fdba74', background: '#fff', color: '#9a3412', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>{linkCopied ? '✓ 링크 복사됨 — 브라우저에 붙여넣어 여세요' : '📋 링크 복사하기'}</button>
+                      </div>
+                    )}
                     <button type="button" onClick={() => payCard()} style={{ display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '16px', borderRadius: 12, border: 'none', background: GREEN, color: '#fff', fontWeight: 800, fontSize: 16, cursor: 'pointer' }}>💳 카드로 즉시 결제하고 확정하기</button>
                     <div style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>카드 결제 시 입장권이 바로 발송됩니다 · 또는 아래 계좌이체</div>
                     <div style={{ fontSize: 11.5, color: '#b45309', fontWeight: 600, marginBottom: 14 }}>※ 하나카드는 현재 결제 불가 — 다른 카드로 결제해 주세요</div>
