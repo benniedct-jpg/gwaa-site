@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import RecapSection from './RecapSection';
 import {
   Tent, Music, Globe, Gift, Dog, Volleyball, Wind, Lock, Droplets, Waves, Flame,
   ShoppingBag, Telescope, UtensilsCrossed, MapPin, Backpack, PawPrint,
@@ -201,6 +202,9 @@ export default function PetscoutContent() {
 
   return (
     <div style={{ marginTop: isMobile ? 8 : 16 }}>
+
+      {/* 행사 후기(RECAP) — 비공개(RECAP_PUBLISHED=false). ?recap=preview 로만 미리보기. 행사 후 사진 채우고 공개 */}
+      <RecapSection />
 
       {/* 컨셉 인트로 */}
       <div style={{ ...wrap, position: 'relative', overflow: 'hidden', background: `linear-gradient(135deg, ${GREEN_DK} 0%, #146c34 55%, #1b5e34 100%)`, borderRadius: 18, padding: isMobile ? '28px 22px' : '48px 44px', color: '#fff' }}>
