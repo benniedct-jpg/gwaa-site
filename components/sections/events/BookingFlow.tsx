@@ -817,7 +817,6 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
             <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 10, padding: '14px 18px', marginTop: 12, textAlign: 'center', fontSize: 14, color: MUTED }}>
               입금 예정 금액 &nbsp; <strong style={{ fontSize: 22, color: GREEN, fontWeight: 700 }}>{total.toLocaleString()}원</strong>
               <div style={{ fontSize: 12, marginTop: 4 }}>{CARD_ENABLED ? '예약 접수 후 다음 화면에서 카드 즉시결제 또는 계좌이체로 확정합니다.' : '예약 접수 후 다음 화면에서 입금 계좌를 안내해 드립니다. (계좌이체 접수)'}</div>
-              {CARD_ENABLED && <div style={{ fontSize: 11.5, marginTop: 4, color: '#b45309', fontWeight: 600 }}>※ 하나카드는 현재 결제가 어려워요. 다른 카드로 결제해 주세요.</div>}
               <div style={{ fontSize: 11.5, marginTop: 6, color: '#6b7280' }}>
                 취소·환불은 <a href="/refund" target="_blank" style={{ color: GREEN, fontWeight: 600 }}>환불 정책</a>을 따릅니다. (행사 7일 전 전액 · 3~6일 전 50% · 2일 전~당일 불가)
               </div>
@@ -913,8 +912,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                     <button type="button" onClick={() => payCard()} style={isMobile
                       ? { display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '13px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 14, cursor: 'pointer' }
                       : { display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '16px', borderRadius: 12, border: 'none', background: GREEN, color: '#fff', fontWeight: 800, fontSize: 16, cursor: 'pointer' }}>💳 카드로 즉시 결제하고 확정하기</button>
-                    <div style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>{isMobile ? '휴대폰에서는 아래 계좌이체를 권장해요.' : '카드 결제 시 입장권이 바로 발송됩니다 · 또는 아래 계좌이체'}</div>
-                    <div style={{ fontSize: 11.5, color: '#b45309', fontWeight: 600, marginBottom: 14 }}>※ 하나카드는 현재 결제 불가 — 다른 카드로 결제해 주세요</div>
+                    <div style={{ fontSize: 12, color: MUTED, marginBottom: 14 }}>{isMobile ? '휴대폰에서는 아래 계좌이체를 권장해요.' : '카드 결제 시 입장권이 바로 발송됩니다 · 또는 아래 계좌이체'}</div>
                   </>
                 )}
                 {payMsg && <div style={{ maxWidth: 420, margin: '0 auto 12px', fontSize: 13, color: '#dc2626', fontWeight: 600, lineHeight: 1.6 }}>{payMsg}</div>}
