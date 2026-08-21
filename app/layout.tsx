@@ -34,7 +34,7 @@ const gothicA1 = Gothic_A1({
 
 // 검색엔진 소유확인 코드 — Search Console / 네이버 서치어드바이저 등록 후 발급값 입력
 const GOOGLE_SITE_VERIFICATION = '';
-const NAVER_SITE_VERIFICATION = '';
+const NAVER_SITE_VERIFICATION = 'e994b14322c2982f97b845e46c9fc2ab0355cbbb';
 
 // Organization 구조화데이터 — GWAA 브랜드 중심 · 전국 활동 톤 (협회 주소는 넣지 않음 · AI 검색 인용 최적화)
 const orgJsonLd = {
