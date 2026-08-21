@@ -12,7 +12,7 @@ const ALLOWED = [
   'event_id', 'booking_type', 'booking_label', 'date_label', 'booking_dates',
   'zone', 'site', 'headcount', 'tshirt_sizes', 'name', 'phone', 'email',
   'pet_name', 'pet_breed', 'pet_age', 'pet_vaccine', 'request', 'amount',
-  'agree_privacy', 'agree_portrait',
+  'agree_privacy', 'agree_portrait', 'pay_method',
 ];
 function pick(body: Record<string, unknown>) {
   const out: Record<string, unknown> = {};

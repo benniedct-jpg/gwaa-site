@@ -318,6 +318,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
       pet_name: form.petName, pet_breed: form.petBreed, pet_age: form.petAge, pet_vaccine: form.petVaccine,
       request: (type !== 'day' && dogCount > 0) ? (form.request ? `${form.request}\n(반려견 ${dogCount}마리)` : `반려견 ${dogCount}마리`) : form.request, amount,
       agree_privacy: agree, agree_portrait: agree,
+      pay_method: (!CARD_ENABLED || viaTransfer) ? 'transfer' : 'card', // 예약 시 선택한 결제수단(의향)
     };
     setSubmitting(true);
     try {

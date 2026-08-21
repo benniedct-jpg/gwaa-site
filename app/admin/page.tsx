@@ -43,6 +43,7 @@ type Booking = {
   name?: string; phone?: string; email?: string; pet_name?: string; pet_breed?: string;
   pet_age?: string; pet_vaccine?: string; request?: string; amount?: number;
   status?: string; created_at?: string; ticket_token?: string; checked_in_at?: string;
+  pay_method?: string; payment_key?: string; paid_at?: string;
 };
 
 type Application = {
@@ -1469,7 +1470,15 @@ function BookingTable({ bookings, onUpdate, onSend }: { bookings: Booking[]; onU
           return (
           <tr key={b.id ?? i} style={cancelled ? { opacity: 0.5 } : undefined}>
             <td style={tdStyle}>{b.created_at ? new Date(b.created_at).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '-'}</td>
-            <td style={tdStyle}><span style={{ fontSize: 10, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: st.bg, color: st.c }}>{st.t}</span></td>
+            <td style={tdStyle}>
+              <span style={{ fontSize: 10, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: st.bg, color: st.c }}>{st.t}</span>
+              {(() => {
+                const card = b.payment_key || b.pay_method === 'card';
+                const transfer = !card && b.pay_method === 'transfer';
+                if (!card && !transfer) return null;
+                return <div style={{ fontSize: 10, fontWeight: 700, marginTop: 3, color: card ? '#1d4ed8' : '#6b7280' }}>{card ? '💳 카드' : '🏦 계좌'}</div>;
+              })()}
+            </td>
             <td style={tdStyle}>{b.status !== 'paid' ? <span style={{ fontSize: 11, color: '#9ca3af' }}>—</span>
               : b.checked_in_at
                 ? <span style={{ fontSize: 10, fontWeight: 700, padding: '3px 9px', borderRadius: 9999, background: '#dcfce7', color: '#16a34a' }}>✓ {new Date(b.checked_in_at).toLocaleString('ko-KR', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' })}</span>
