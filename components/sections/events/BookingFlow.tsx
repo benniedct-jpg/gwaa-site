@@ -826,15 +826,29 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
             {errorMsg && <div style={{ color: '#dc2626', fontSize: 13, textAlign: 'center', marginTop: 14 }}>{errorMsg}</div>}
 
             {CARD_ENABLED ? (
-              <>
-                <button disabled={submitting} onClick={() => submit()} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
-                  {submitting ? '예약 접수 중...' : `💳 카드로 결제하고 예약 확정 (${total.toLocaleString()}원)`}
-                </button>
-                <button type="button" disabled={submitting} onClick={() => submit(true)} style={{ display: 'block', width: '100%', maxWidth: '100%', margin: '10px 0 0', padding: '15px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 15, cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.5 : 1 }}>
-                  🏦 계좌이체로 예약하기
-                </button>
-                <div style={{ fontSize: 12, color: MUTED, textAlign: 'center', marginTop: 8, lineHeight: 1.5 }}>계좌이체를 선택하면 다음 화면에서 입금 계좌를 안내해 드려요.</div>
-              </>
+              isMobile ? (
+                // 모바일: 계좌이체를 기본(초록)으로, 카드는 아래(보조). 모바일 카드결제가 KCP측 이슈로 불안정해서 계좌이체 우선.
+                <>
+                  <button type="button" disabled={submitting} onClick={() => submit(true)} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
+                    {submitting ? '예약 접수 중...' : `🏦 계좌이체로 예약하기 (${total.toLocaleString()}원)`}
+                  </button>
+                  <button type="button" disabled={submitting} onClick={() => submit()} style={{ display: 'block', width: '100%', maxWidth: '100%', margin: '10px 0 0', padding: '15px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 15, cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.5 : 1 }}>
+                    💳 카드로 결제하기
+                  </button>
+                  <div style={{ fontSize: 12, color: MUTED, textAlign: 'center', marginTop: 8, lineHeight: 1.5 }}>휴대폰에서는 계좌이체가 가장 확실해요. 카드 결제도 가능합니다.</div>
+                </>
+              ) : (
+                // 데스크톱: 카드 즉시결제가 정상 동작 → 카드를 기본으로.
+                <>
+                  <button disabled={submitting} onClick={() => submit()} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
+                    {submitting ? '예약 접수 중...' : `💳 카드로 결제하고 예약 확정 (${total.toLocaleString()}원)`}
+                  </button>
+                  <button type="button" disabled={submitting} onClick={() => submit(true)} style={{ display: 'block', width: '100%', maxWidth: '100%', margin: '10px 0 0', padding: '15px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 15, cursor: submitting ? 'default' : 'pointer', opacity: submitting ? 0.5 : 1 }}>
+                    🏦 계좌이체로 예약하기
+                  </button>
+                  <div style={{ fontSize: 12, color: MUTED, textAlign: 'center', marginTop: 8, lineHeight: 1.5 }}>계좌이체를 선택하면 다음 화면에서 입금 계좌를 안내해 드려요.</div>
+                </>
+              )
             ) : (
               <button disabled={submitting} onClick={() => submit()} style={{ ...nextBtn(submitting), maxWidth: '100%', marginTop: 20 }}>
                 {submitting ? '예약 접수 중...' : `예약 접수하기 (${total.toLocaleString()}원)`}
@@ -896,8 +910,10 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                         <button type="button" onClick={() => { try { navigator.clipboard?.writeText(window.location.href); setLinkCopied(true); } catch { /* noop */ } }} style={{ display: 'block', width: '100%', marginTop: 8, padding: '9px', borderRadius: 8, border: '1px solid #fdba74', background: '#fff', color: '#9a3412', fontWeight: 700, fontSize: 12.5, cursor: 'pointer' }}>{linkCopied ? '✓ 링크 복사됨 — 브라우저에 붙여넣어 여세요' : '📋 링크 복사하기'}</button>
                       </div>
                     )}
-                    <button type="button" onClick={() => payCard()} style={{ display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '16px', borderRadius: 12, border: 'none', background: GREEN, color: '#fff', fontWeight: 800, fontSize: 16, cursor: 'pointer' }}>💳 카드로 즉시 결제하고 확정하기</button>
-                    <div style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>카드 결제 시 입장권이 바로 발송됩니다 · 또는 아래 계좌이체</div>
+                    <button type="button" onClick={() => payCard()} style={isMobile
+                      ? { display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '13px', borderRadius: 12, border: `1.5px solid ${GREEN}`, background: '#fff', color: GREEN_DK, fontWeight: 700, fontSize: 14, cursor: 'pointer' }
+                      : { display: 'block', width: '100%', maxWidth: 420, margin: '0 auto 8px', padding: '16px', borderRadius: 12, border: 'none', background: GREEN, color: '#fff', fontWeight: 800, fontSize: 16, cursor: 'pointer' }}>💳 카드로 즉시 결제하고 확정하기</button>
+                    <div style={{ fontSize: 12, color: MUTED, marginBottom: 4 }}>{isMobile ? '휴대폰에서는 아래 계좌이체를 권장해요.' : '카드 결제 시 입장권이 바로 발송됩니다 · 또는 아래 계좌이체'}</div>
                     <div style={{ fontSize: 11.5, color: '#b45309', fontWeight: 600, marginBottom: 14 }}>※ 하나카드는 현재 결제 불가 — 다른 카드로 결제해 주세요</div>
                   </>
                 )}
