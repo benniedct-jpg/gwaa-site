@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Bebas_Neue, Noto_Sans_KR, Black_Han_Sans, Gothic_A1 } from 'next/font/google';
 import './globals.css';
 import SiteChrome from '@/components/layout/SiteChrome';
+import InAppBrowserBanner from '@/components/InAppBrowserBanner';
 import { Analytics } from '@vercel/analytics/next';
 import Script from 'next/script';
 
@@ -83,6 +84,7 @@ export default function RootLayout({
     <html lang="ko" className={`${bebasNeue.variable} ${notoSansKR.variable} ${blackHanSans.variable} ${gothicA1.variable}`}>
       <body style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(orgJsonLd) }} />
+        <InAppBrowserBanner />
         <SiteChrome>{children}</SiteChrome>
         <Analytics />
         <Script id="ms-clarity" strategy="afterInteractive" dangerouslySetInnerHTML={{ __html: `(function(c,l,a,r,i,t,y){c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);})(window,document,"clarity","script","y6acwopk3j");` }} />
