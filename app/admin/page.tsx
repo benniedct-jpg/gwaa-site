@@ -1473,10 +1473,14 @@ function BookingTable({ bookings, onUpdate, onSend }: { bookings: Booking[]; onU
             <td style={tdStyle}>
               <span style={{ fontSize: 10, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: st.bg, color: st.c }}>{st.t}</span>
               {(() => {
-                const card = b.payment_key || b.pay_method === 'card';
-                const transfer = !card && b.pay_method === 'transfer';
-                if (!card && !transfer) return null;
-                return <div style={{ fontSize: 10, fontWeight: 700, marginTop: 3, color: card ? '#1d4ed8' : '#6b7280' }}>{card ? '💳 카드' : '🏦 계좌'}</div>;
+                const paidCard = !!b.payment_key;                       // 실제 카드결제 완료
+                const cardIntent = !paidCard && b.pay_method === 'card'; // 카드 선택했으나 미완료(시도/이탈)
+                const transfer = !paidCard && b.pay_method === 'transfer';
+                let label: string | null = null, color = '#6b7280';
+                if (paidCard) { label = '💳 카드결제'; color = '#16a34a'; }
+                else if (cardIntent) { label = '💳 카드선택'; color = '#9ca3af'; }
+                else if (transfer) { label = '🏦 계좌'; color = '#6b7280'; }
+                return label ? <div style={{ fontSize: 10, fontWeight: 700, marginTop: 3, color }}>{label}</div> : null;
               })()}
             </td>
             <td style={tdStyle}>{b.status !== 'paid' ? <span style={{ fontSize: 11, color: '#9ca3af' }}>—</span>
