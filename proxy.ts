@@ -32,6 +32,15 @@ async function verifyAdminEdge(token?: string): Promise<boolean> {
 }
 
 export async function proxy(req: NextRequest) {
+  // 대표주소 통합: 광고·검색 유입이 옛 주소로 와도 브랜드주소로 (308). API는 matcher에서 제외됨.
+  if ((req.headers.get('host') || '') === 'gwaa-site.vercel.app') {
+    const url = req.nextUrl.clone();
+    url.protocol = 'https:';
+    url.host = 'gwaa.or.kr';
+    url.port = '';
+    return NextResponse.redirect(url, 308);
+  }
+
   const { pathname } = req.nextUrl;
 
   if (pathname.startsWith('/admin/login')) return NextResponse.next();
@@ -49,5 +58,6 @@ export async function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ['/admin/:path*'],
+  // 페이지 경로 전체(대표주소 통합용) + /admin 보호. API·정적파일은 제외(웹훅 등 보호).
+  matcher: ['/((?!api|_next/static|_next/image|favicon.ico|robots.txt|sitemap.xml).*)'],
 };
