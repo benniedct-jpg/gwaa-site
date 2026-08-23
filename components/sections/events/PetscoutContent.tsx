@@ -72,7 +72,7 @@ export default function PetscoutContent() {
     { Icon: Users, title: '사회성 적응 소그룹존', desc: '사회성이 서투른 반려견을 위한 적응형 소그룹 존.' },
   ];
 
-  const booths = ['반려견 연고 만들기', '동물등록 부스', '반려견 행동교정', '숲속 사우나', '심신안정 명상', '선라이즈 요가'];
+  const booths = ['천연 연고 만들기 (사람·반려견 공용)', '동물등록 부스', '반려견 행동교정', '숲속 사우나', '심신안정 명상', '선라이즈 요가'];
   const paidBooths = [{ name: '코닥 포토부스', price: '2,000원' }];
 
   const moreZones: { Icon: LucideIcon; title: string; desc: string; warm?: boolean }[] = [
@@ -381,7 +381,7 @@ export default function PetscoutContent() {
             <span key={b.name} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 9999, background: '#f9fafb', border: '1px solid #e8e8e8', fontSize: 13.5, fontWeight: 600, color: '#374151', wordBreak: 'keep-all' }}>{b.name}<span style={{ fontSize: 11, fontWeight: 700, color: '#6b7280' }}>{b.price}</span></span>
           ))}
         </div>
-        <p style={{ fontSize: 12, color: '#6b7280', marginTop: 14, lineHeight: 1.6 }}>연고 만들기·동물등록·행동교정 상담부터 숲속 사우나·아침 명상·요가까지 무료로 즐기실 수 있어요. 코닥 포토부스만 2,000원이며, 이 외에도 일부 유료 체험부스가 별도 운영됩니다.</p>
+        <p style={{ fontSize: 12, color: '#6b7280', marginTop: 14, lineHeight: 1.6 }}>천연 연고 만들기(사람·반려견 함께 쓸 수 있어요)·동물등록·행동교정 상담부터 숲속 사우나·아침 명상·요가까지 무료로 즐기실 수 있어요. 코닥 포토부스만 2,000원이며, 이 외에도 일부 유료 체험부스가 별도 운영됩니다.</p>
       </div>
 
       {/* 더 즐길거리 */}
