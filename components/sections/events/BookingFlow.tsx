@@ -82,6 +82,9 @@ const ZONES: Record<string, Zone> = {
   // 낭만기버존 — 숨김 링크(?rg=코드) 전용. 지도/공개 목록엔 노출 안 됨(아래 map에서 필터). 자리번호 없이 존 단위 접수(site='')
   RG: { label: '낭만기버존', desc: '초대 전용 · 낭만기버 웰니스존 · 8×8m', tier: 'near', sites: seqD('RG', 18), poly: '' },
 };
+// 협회 자체 사용 등으로 온라인 예약을 막을 구역(마감 처리). 여기 키만 넣으면 지도·목록에서 '마감'으로 표시되고 선택 불가.
+const BLOCKED_ZONE_KEYS: string[] = ['A'];
+const BLOCKED_SITES = new Set(BLOCKED_ZONE_KEYS.flatMap((k) => ZONES[k].sites));
 // 낭만기버존 숨김 링크 코드 — 공유용. 필요 시 이 값만 바꾸면 됨. 접속: /events/3?rg=<이 코드>
 const RG_CODE = 'nangman-2026';
 
@@ -215,6 +218,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
     return rows.flatMap((b) => b.booking_dates || []);
   };
   const isSiteAvailable = (s: string): boolean => {
+    if (BLOCKED_SITES.has(s)) return false; // 마감 구역(협회 자체 사용)
     const bd = siteBookedDates(s);
     return !requiredDates().some((d) => bd.includes(d));
   };

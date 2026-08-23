@@ -57,6 +57,9 @@ export async function POST(req: NextRequest) {
   const dates = (body.booking_dates as string[]) || [];
   const needsSite = body.booking_type !== 'day' && !!site;
 
+  // 협회 자체 사용으로 마감한 A 구역(A1~) — 온라인 예약 차단(방어)
+  if (/^A\d+$/.test(site)) return NextResponse.json({ error: 'SITE_BLOCKED' }, { status: 409 });
+
   if (needsSite) {
     const free = await isSiteFree(eventId, site, dates);
     if (!free) return NextResponse.json({ error: 'SITE_TAKEN' }, { status: 409 });
