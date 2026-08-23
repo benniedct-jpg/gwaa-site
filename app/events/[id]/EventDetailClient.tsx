@@ -176,7 +176,10 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
         ) : (
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' }} />
         )}
-        <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.82) 100%)' }} />
+        <div
+          onClick={hasBooking ? () => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) : undefined}
+          style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.82) 100%)', cursor: hasBooking ? 'pointer' : 'default' }}
+        />
 
         <div style={{ position: 'absolute', top: 20, left: isMobile ? 16 : 40, zIndex: 2 }}>
           <Link href="/events" style={{ display: 'flex', alignItems: 'center', gap: 6, color: 'rgba(255,255,255,0.92)', fontSize: 13, fontFamily: MONO, letterSpacing: '0.08em', textDecoration: 'none', background: 'rgba(0,0,0,0.48)', padding: '8px 16px', borderRadius: 9999, backdropFilter: 'blur(8px)' }}>
@@ -212,7 +215,10 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               >
                 예약하기 →
               </button>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.92)', fontWeight: 600 }}>당일권 20,000원 · 2박3일 135,000원부터</span>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                <span style={{ fontSize: 13.5, color: '#fff', fontWeight: 800 }}>🎫 당일권 20,000원 <span style={{ fontWeight: 600, color: 'rgba(255,255,255,0.85)' }}>· 고성·속초·강릉이면 당일치기 OK</span></span>
+                <span style={{ fontSize: 12.5, color: 'rgba(255,255,255,0.8)', fontWeight: 600 }}>2박 3일 캠핑 135,000원부터</span>
+              </div>
             </div>
           )}
         </div>
