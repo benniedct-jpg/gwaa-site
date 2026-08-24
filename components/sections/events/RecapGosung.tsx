@@ -18,9 +18,9 @@ const RECAP_PUBLISHED = false; // ← 공개할 때 true 로
 
 const INTRO = '반려견과 함께한 고성의 하루, 영상으로 만나보세요.';
 const VIDEOS: { src: string; cap: string }[] = [
+  { src: '/images/events/gosung-2026/recap/vid3', cap: '함께라서 더 특별했던 순간' },
   { src: '/images/events/gosung-2026/recap/vid1', cap: '반려견과 함께 걷는 미션 트레킹' },
   { src: '/images/events/gosung-2026/recap/vid2', cap: '고성 바다 앞, 힐링 비치' },
-  { src: '/images/events/gosung-2026/recap/vid3', cap: '함께라서 더 특별했던 순간' },
 ];
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
@@ -69,7 +69,8 @@ export default function RecapGosung() {
             <div style={{ fontSize: isMobile ? 16 : 19, fontWeight: 800, color: '#fff', textAlign: 'center', marginBottom: 16, wordBreak: 'keep-all' }}>{v.cap}</div>
             <video
               src={`${v.src}.mp4`} poster={`${v.src}.jpg`}
-              muted loop autoPlay playsInline controls preload="metadata"
+              playsInline controls preload="metadata"
+              onPlay={(e) => { document.querySelectorAll<HTMLVideoElement>('#recap video').forEach((el) => { if (el !== e.currentTarget) el.pause(); }); }}
               style={{ width: '100%', maxWidth: isMobile ? 300 : 360, aspectRatio: '9 / 16', objectFit: 'cover', margin: '0 auto', display: 'block', borderRadius: 16, background: '#000', boxShadow: '0 10px 34px rgba(0,0,0,0.4)' }}
             />
           </div>
