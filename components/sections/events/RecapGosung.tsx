@@ -14,8 +14,10 @@ import { useIsMobile } from '@/hooks/useIsMobile';
      아래 VIDEOS 에 확장자 제외 경로 + 캡션.
    ──────────────────────────────────────────────────────────── */
 
-const RECAP_PUBLISHED = false; // ← 공개할 때 true 로
+const RECAP_PUBLISHED = true; // ← 공개할 때 true 로
 
+const EVENT_DATE = '2026.07.18';
+const EVENT_PLACE = '강원 고성';
 const INTRO = '반려견과 함께한 고성의 하루, 영상으로 만나보세요.';
 const VIDEOS: { src: string; cap: string }[] = [
   { src: '/images/events/gosung-2026/recap/vid3', cap: '함께라서 더 특별했던 순간' },
@@ -54,9 +56,14 @@ export default function RecapGosung() {
           <span style={{ width: 20, height: 2, background: GREEN, borderRadius: 1 }} />
           <span style={{ fontFamily: MONO, fontSize: 11, color: GREEN, letterSpacing: '0.08em', fontWeight: 700 }}>RECAP 2026 · 영상 후기</span>
         </div>
-        <h2 style={{ fontFamily: BEBAS, fontWeight: 800, fontSize: isMobile ? 28 : 38, color: '#111', letterSpacing: '0.01em', lineHeight: 1.12, marginBottom: 8, wordBreak: 'keep-all' }}>
+        <h2 style={{ fontFamily: BEBAS, fontWeight: 800, fontSize: isMobile ? 28 : 38, color: '#111', letterSpacing: '0.01em', lineHeight: 1.12, marginBottom: 10, wordBreak: 'keep-all' }}>
           2026 고성 미션트레킹 &amp; 힐링 비치
         </h2>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 12 }}>
+          <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#111', background: '#eef7ef', border: '1px solid #d6ecd8', borderRadius: 999, padding: '4px 11px' }}>📅 {EVENT_DATE}</span>
+          <span style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#111', background: '#eef7ef', border: '1px solid #d6ecd8', borderRadius: 999, padding: '4px 11px' }}>📍 {EVENT_PLACE}</span>
+          <span style={{ fontFamily: MONO, fontSize: 11.5, fontWeight: 700, color: '#fff', background: '#6b7280', borderRadius: 999, padding: '4px 11px' }}>행사 종료</span>
+        </div>
         <p style={{ fontSize: isMobile ? 14 : 15, color: MUTED, lineHeight: 1.7, marginBottom: isMobile ? 26 : 36, wordBreak: 'keep-all' }}>{INTRO}</p>
 
         {/* 영상 후기 — 1개씩 개별 강조 */}
