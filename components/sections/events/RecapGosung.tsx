@@ -24,12 +24,8 @@ const G: {
 } = {
   hero: '/images/events/beach-gosung-2025/01.webp',
   intro: '반려견과 함께 걷고, 고성 바다에서 쉬어간 하루의 기록.',
-  stats: [
-    { big: '', label: '함께한 참가자' },
-    { big: '', label: '동반 반려견' },
-    { big: '고성', label: '천혜의 트레킹 코스' },
-    { big: '힐링 비치', label: '동해 바다 앞' },
-  ],
+  // 숫자(참가자·반려견 수)가 확정되면 여기에 채우면 리캡 숫자 카드가 나타납니다. 비워두면 표시 안 함.
+  stats: [] as { big: string; label: string }[],
   groups: [
     { eyebrow: 'MISSION TREK', title: '미션 트레킹', base: '/images/events/gosung-trek-2025', photos: ['01.webp', '02.webp', '03.webp', '04.webp', '05.webp', '06.webp'] },
     { eyebrow: 'HEALING BEACH', title: '힐링 비치', base: '/images/events/beach-gosung-2025', photos: ['02.webp', '03.webp', '04.webp', '05.webp', '06.webp', '07.webp'] },
@@ -93,7 +89,7 @@ export default function RecapGosung() {
         </div>
 
         {/* 리캡 숫자 */}
-        {(G.stats.some((s) => s.big) || preview) && (
+        {G.stats.length > 0 && (
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: isMobile ? 10 : 14, marginBottom: isMobile ? 28 : 40 }}>
             {G.stats.map((s, i) => (
               <div key={i} style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 14, padding: isMobile ? '16px 12px' : '20px 16px', textAlign: 'center' }}>
