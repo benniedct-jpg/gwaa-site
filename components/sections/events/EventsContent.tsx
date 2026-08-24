@@ -119,7 +119,8 @@ export default function EventsContent({
   const FLAGSHIP_ID = 3;
   const FLAGSHIP_DATE = '2026-09-04';
   const flagship = filtered.find((e) => (e.id ?? e.order) === FLAGSHIP_ID);
-  const otherUpcoming = filtered.filter((e) => (e.id ?? e.order) !== FLAGSHIP_ID);
+  // 다가오는 행사 = 플래그십 제외 + 종료(ended)된 행사 제외(종료 행사는 아래 "지금까지 함께한 날들"로 내려감)
+  const otherUpcoming = filtered.filter((e) => (e.id ?? e.order) !== FLAGSHIP_ID && e.status !== 'ended');
   const ddayNum = Math.ceil((new Date(FLAGSHIP_DATE + 'T00:00:00').getTime() - Date.now()) / 86400000);
   const ddayLabel = ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
 
@@ -134,21 +135,56 @@ export default function EventsContent({
     setSubDone(true); setSubEmail('');
   };
 
-  // 날짜(시작일) 기준 최신순 정렬 — date 문자열의 앞 8자리(YYYYMMDD), 없으면 연도로 폴백
-  const archiveDateKey = (a: ArchiveEvent) =>
-    (a.date || String(a.year ?? '')).replace(/[^0-9]/g, '').slice(0, 8).padEnd(8, '0');
-  const sortedArchives = [...archives].sort((a, b) => {
-    const da = archiveDateKey(a), db = archiveDateKey(b);
-    if (db !== da) return db > da ? 1 : -1;          // 최신 날짜 먼저
-    return (a.order ?? 999) - (b.order ?? 999);       // 같은 날짜면 수동 순서
+  // ── 지난 행사 = 종료된 상세행사(event_cards, status:'ended') + 아카이브 스토어 병합 ──
+  // 날짜(시작일) 앞 8자리(YYYYMMDD) 기준 최신순. 종료된 상세행사는 상세페이지(/events/[id])로 링크해 후기 유지.
+  const dateKey8 = (s?: string, y?: number) =>
+    (s || String(y ?? '')).replace(/[^0-9]/g, '').slice(0, 8).padEnd(8, '0');
+  const yearOf = (s?: string, fallback?: number) => {
+    const m = (s || '').match(/\d{4}/);
+    return m ? Number(m[0]) : (fallback ?? new Date().getFullYear());
+  };
+
+  type PastItem = {
+    key: string; href: string; title: string; loc?: string; year: number;
+    date?: string; thumb?: string | null; ppl?: string | number; feat?: boolean; sortKey: string;
+  };
+
+  const endedEvents: PastItem[] = filtered
+    .filter((e) => e.status === 'ended')
+    .map((e) => ({
+      key: `ev-${e.id ?? e.order}`,
+      href: `/events/${e.id ?? e.order}`,
+      title: e.title,
+      loc: e.loc,
+      year: yearOf(e.date),
+      date: e.date,
+      thumb: e.imageData || (e.images && e.images[0]) || null,
+      feat: false,
+      sortKey: dateKey8(e.date),
+    }));
+
+  const archiveItems: PastItem[] = [...archives].map((a) => ({
+    key: `arc-${a.id ?? a.order}`,
+    href: `/events/archive/${a.id ?? a.order}`,
+    title: a.title,
+    loc: a.loc,
+    year: a.year,
+    date: a.date,
+    thumb: a.imageData || (a.images && a.images[0]) || null,
+    ppl: a.ppl,
+    feat: a.feat,
+    sortKey: dateKey8(a.date, a.year),
+  }));
+
+  const sortedPast = [...endedEvents, ...archiveItems].sort((a, b) => {
+    if (b.sortKey !== a.sortKey) return b.sortKey > a.sortKey ? 1 : -1;
+    return 0;
   });
 
-  const years = [...new Set(sortedArchives.map((a) => a.year))].sort((a, b) => b - a);
+  const years = [...new Set(sortedPast.map((p) => p.year))].sort((a, b) => b - a);
 
   const filteredArchives =
-    yearFilter === 'all'
-      ? sortedArchives
-      : sortedArchives.filter((a) => a.year === yearFilter);
+    yearFilter === 'all' ? sortedPast : sortedPast.filter((p) => p.year === yearFilter);
 
   return (
     <>
@@ -369,18 +405,17 @@ export default function EventsContent({
               }}
             >
               {filteredArchives.map((arc, i) => {
-                const thumb = arc.imageData || (arc.images && arc.images[0]) || null;
-                const archiveId = arc.id ?? arc.order;
+                const thumb = arc.thumb;
 
                 if (arc.feat) {
                   return (
                     <motion.div
-                      key={archiveId}
+                      key={arc.key}
                       variants={fadeUp}
                       custom={i * 0.04}
                       style={{ gridColumn: '1 / -1' }}
                     >
-                      <Link href={`/events/archive/${archiveId}`} style={{ textDecoration: 'none', display: 'block' }}>
+                      <Link href={arc.href} style={{ textDecoration: 'none', display: 'block' }}>
                         <motion.div
                           whileHover={!isMobile ? { y: -3, boxShadow: '0 16px 40px rgba(0,0,0,0.10)' } : undefined}
                           transition={{ duration: 0.2 }}
@@ -433,8 +468,8 @@ export default function EventsContent({
                 }
 
                 return (
-                  <motion.div key={archiveId} variants={fadeUp} custom={i * 0.04}>
-                    <Link href={`/events/archive/${archiveId}`} style={{ textDecoration: 'none', display: 'block' }}>
+                  <motion.div key={arc.key} variants={fadeUp} custom={i * 0.04}>
+                    <Link href={arc.href} style={{ textDecoration: 'none', display: 'block' }}>
                       <motion.div
                         whileHover={!isMobile ? { y: -4, boxShadow: '0 12px 32px rgba(0,0,0,0.1)' } : undefined}
                         transition={{ duration: 0.18 }}
