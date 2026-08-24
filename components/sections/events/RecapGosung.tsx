@@ -18,12 +18,19 @@ const RATIO = '4 / 5';
 
 const G: {
   hero: string; intro: string;
+  videos: string[];
   stats: { big: string; label: string }[];
   groups: { eyebrow: string; title: string; base: string; photos: string[] }[];
   reviews: { text: string; who: string }[];
 } = {
   hero: '/images/events/beach-gosung-2025/01.webp',
   intro: '반려견과 함께 걷고, 고성 바다에서 쉬어간 하루의 기록.',
+  // 영상 후기(강조) — 확장자 제외 경로. .mp4(영상) + .jpg(포스터) 자동
+  videos: [
+    '/images/events/gosung-2026/recap/vid1',
+    '/images/events/gosung-2026/recap/vid2',
+    '/images/events/gosung-2026/recap/vid3',
+  ],
   // 숫자(참가자·반려견 수)가 확정되면 여기에 채우면 리캡 숫자 카드가 나타납니다. 비워두면 표시 안 함.
   stats: [] as { big: string; label: string }[],
   groups: [
@@ -87,6 +94,23 @@ export default function RecapGosung() {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={G.hero} alt="2026 고성 미션트레킹 & 힐링 비치 대표 이미지" style={{ width: '100%', display: 'block' }} />
         </div>
+
+        {/* 영상 후기 (강조) */}
+        {G.videos.length > 0 && (
+          <div style={{ marginBottom: isMobile ? 32 : 46, background: 'linear-gradient(135deg,#0f3d24,#14532d)', borderRadius: 18, padding: isMobile ? '20px 16px' : '28px 26px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+              <span style={{ width: 20, height: 2, background: '#eab543', borderRadius: 1 }} />
+              <span style={{ fontFamily: MONO, fontSize: 11, color: '#eab543', letterSpacing: '0.1em', fontWeight: 700 }}>REELS · 영상 후기</span>
+            </div>
+            <h3 style={{ fontSize: isMobile ? 19 : 24, fontWeight: 800, color: '#fff', marginBottom: 16, wordBreak: 'keep-all' }}>생생한 현장 영상</h3>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(3,1fr)', gap: isMobile ? 8 : 14 }}>
+              {G.videos.map((v) => (
+                <video key={v} src={`${v}.mp4`} poster={`${v}.jpg`} muted loop autoPlay playsInline controls preload="metadata"
+                  style={{ width: '100%', aspectRatio: '9 / 16', objectFit: 'cover', borderRadius: 14, background: '#000', display: 'block', boxShadow: '0 6px 20px rgba(0,0,0,0.35)' }} />
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* 리캡 숫자 */}
         {G.stats.length > 0 && (
