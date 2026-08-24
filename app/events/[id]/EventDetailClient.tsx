@@ -8,6 +8,7 @@ import Badge from '@/components/ui/Badge';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import BookingFlow from '@/components/sections/events/BookingFlow';
 import PetscoutContent from '@/components/sections/events/PetscoutContent';
+import RecapGosung from '@/components/sections/events/RecapGosung';
 import { Calendar, MapPin } from 'lucide-react';
 
 // 예약 기능이 열려 있는 행사 id (펫스카웃 2026)
@@ -328,6 +329,9 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               </p>
             </div>
           )}
+
+          {/* 2026 고성 미션트레킹 & 힐링 비치 — 후기(비공개, ?recap=preview 로 미리보기) */}
+          {event.id === 2 && <RecapGosung />}
 
           {hasBooking && eventPoster && (
             <div style={{ margin: isMobile ? '4px 0 40px' : '12px 0 56px' }}>
