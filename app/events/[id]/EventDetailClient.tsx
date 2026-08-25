@@ -569,7 +569,10 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             >
               <div style={{ maxWidth: 760, margin: '0 auto', display: 'flex', alignItems: 'center', gap: 12 }}>
                 <div style={{ flex: 1, minWidth: 0 }}>
-                  <div style={{ fontSize: 13.5, fontWeight: 800, color: '#111', lineHeight: 1.3 }}>캠핑 예약 · 클래스 신청{rgMode ? ' · 낭만기버존' : ''}</div>
+                  <div style={{ fontSize: 13.5, fontWeight: 800, color: '#111', lineHeight: 1.3, display: 'flex', alignItems: 'center', gap: 6 }}>
+                    {dday !== null && dday > 0 && <span style={{ background: '#ef4444', color: '#fff', fontSize: 11, fontWeight: 800, padding: '2px 8px', borderRadius: 9999, whiteSpace: 'nowrap' }}>🔥 D-{dday}</span>}
+                    캠핑 예약 · 클래스 신청{rgMode ? ' · 낭만기버존' : ''}
+                  </div>
                   <div style={{ fontSize: 11.5, color: '#6b7280', marginTop: 2, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>9/4~9/6 고성 · 당일권 2만원 · 캠핑 13.5만원~</div>
                 </div>
                 <button
