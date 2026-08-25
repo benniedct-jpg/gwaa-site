@@ -146,6 +146,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
   const [emailConfirm, setEmailConfirm] = useState(''); // 이메일 재확인(오타 반송 방지)
   const [agree, setAgree] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [copiedAmt, setCopiedAmt] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
   const [doneData, setDoneData] = useState<Record<string, unknown> | null>(null);
@@ -946,7 +947,10 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                 )}
                 {payMsg && <div style={{ maxWidth: 420, margin: '0 auto 12px', fontSize: 13, color: '#dc2626', fontWeight: 600, lineHeight: 1.6 }}>{payMsg}</div>}
                 <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 20px', textAlign: 'left' }}>
-                  <div style={{ fontSize: 14, fontWeight: 800, color: GREEN_DK, marginBottom: 12 }}>{CARD_ENABLED ? '🏦 계좌이체로 입금' : '💳 입금 계좌'}</div>
+                  <div style={{ fontSize: 14, fontWeight: 800, color: GREEN_DK, marginBottom: 6 }}>{CARD_ENABLED ? '🏦 계좌이체로 입금' : '💳 입금 계좌'}</div>
+                  <div style={{ fontSize: 12.5, color: GREEN_DK, background: '#dcfce7', borderRadius: 8, padding: '9px 11px', marginBottom: 12, lineHeight: 1.6, fontWeight: 600 }}>
+                    가장 확실하고 빠른 방법이에요. <strong>입금이 확인되면 입장권(QR)을 이메일로 바로 보내드려요.</strong>
+                  </div>
                   <DoneRow label="은행" value={ACCOUNT.bank} />
                   <DoneRow label="계좌번호" value={ACCOUNT.number} highlight />
                   <button type="button" onClick={copyAccount} style={{ width: '100%', margin: '8px 0 2px', padding: '11px', borderRadius: 9, border: `1.5px solid ${GREEN}`, background: copied ? GREEN : '#fff', color: copied ? '#fff' : GREEN_DK, fontWeight: 800, fontSize: 13.5, cursor: 'pointer', fontFamily: MONO }}>
@@ -954,10 +958,14 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   </button>
                   <DoneRow label="예금주" value={ACCOUNT.holder} />
                   <DoneRow label="입금 금액" value={`${dAmount.toLocaleString()}원`} highlight />
+                  <button type="button" onClick={() => { navigator.clipboard?.writeText(String(dAmount)).then(() => { setCopiedAmt(true); setTimeout(() => setCopiedAmt(false), 1600); }).catch(() => {}); }} style={{ width: '100%', margin: '8px 0 2px', padding: '11px', borderRadius: 9, border: `1.5px solid ${GREEN}`, background: copiedAmt ? GREEN : '#fff', color: copiedAmt ? '#fff' : GREEN_DK, fontWeight: 800, fontSize: 13.5, cursor: 'pointer', fontFamily: MONO }}>
+                    {copiedAmt ? '✓ 금액 복사됨' : `📋 금액 복사하기 (${dAmount.toLocaleString()}원)`}
+                  </button>
                   <p style={{ fontSize: 12.5, color: MUTED, lineHeight: 1.75, marginTop: 12, marginBottom: 0 }}>
                     · 입금자명은 <strong style={{ color: '#111' }}>예약자 성함({String(d.name)})</strong>으로 해주세요.<br />
+                    · 다른 이름으로 입금하시는 경우 <strong style={{ color: '#111' }}>033-813-0333</strong>으로 알려주시면 바로 확인해 드려요.<br />
                     · <strong style={{ color: '#111' }}>예약 후 3일 이내</strong> 입금해 주세요. (미입금 시 자동 취소)<br />
-                    · 입금이 확인되면 예약이 최종 확정되고 안내드립니다.
+                    · 입금 확인 후 예약이 최종 확정되며, <strong style={{ color: '#111' }}>입장권(QR)을 이메일로 보내드립니다.</strong>
                   </p>
                 </div>
                 </>
