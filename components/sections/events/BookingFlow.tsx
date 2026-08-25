@@ -190,9 +190,10 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
           setDoneData(done); setStep(4);
           scrollToBooking();
           if (failCode) {
-            // 결제 실패·취소 — confirm 호출 없이 재시도/계좌이체 안내
+            // 결제 실패·취소 — confirm 호출 없이 재시도/계좌이체 안내 + 안내 메일 자동 발송
             setSubmitting(false);
             setPayMsg(`결제가 취소되었거나 실패했어요. [${failCode}] ${failMsg ?? ''} — 아래에서 다시 결제하시거나 계좌이체로 진행하실 수 있어요.`.replace(/\s+—/, ' —'));
+            try { fetch('/api/bookings/notify-unpaid', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: done.order_id }) }).catch(() => {}); } catch { /* noop */ }
           } else {
             // 성공(또는 결과 파라미터 없음) — 서버 승인검증
             setSubmitting(true);
@@ -369,6 +370,12 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
   };
 
   // ── 카드 즉시결제 (접수된 예약을 결제창으로 확정) ──
+  // 결제 실패·취소로 미입금 상태가 된 예약자에게 입금/결제 안내 메일 자동 발송(서버가 pending 건만 발송)
+  const notifyUnpaid = (orderId?: string) => {
+    if (!orderId) return;
+    try { fetch('/api/bookings/notify-unpaid', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: orderId }) }).catch(() => {}); } catch { /* noop */ }
+  };
+
   const payCard = async (data?: Record<string, unknown>) => {
     const d = (data ?? doneData) as Record<string, unknown> | null;
     if (!d?.order_id) return;
@@ -395,16 +402,18 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
       if (resp.code != null) {
         sessionStorage.removeItem('gwaa_booking_pay');
         setPayMsg(`결제가 취소되었거나 실패했어요. [${resp.code}] ${resp.message ?? ''} — 계좌이체로도 진행하실 수 있어요.`);
+        notifyUnpaid(orderId); // 결제 실패 → 안내 메일 자동 발송
         setSubmitting(false); return;
       }
       const conf = await fetch('/api/bookings/confirm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: orderId, paymentId }) });
       const cj = await conf.json().catch(() => ({}));
       sessionStorage.removeItem('gwaa_booking_pay');
-      if (!conf.ok || !cj.ok) { setPayMsg(cj.error || '결제 확인에 실패했어요. 잠시 후 다시 시도하시거나 계좌이체로 진행해 주세요.'); setSubmitting(false); return; }
+      if (!conf.ok || !cj.ok) { setPayMsg(cj.error || '결제 확인에 실패했어요. 잠시 후 다시 시도하시거나 계좌이체로 진행해 주세요.'); notifyUnpaid(orderId); setSubmitting(false); return; }
       setPaid(true); setSubmitting(false);
     } catch {
       sessionStorage.removeItem('gwaa_booking_pay');
       setPayMsg('결제 처리 중 오류가 발생했어요. 계좌이체로 진행하실 수 있어요.');
+      notifyUnpaid(orderId); // 결제 실패/오류 → 안내 메일 자동 발송(서버가 pending 건만 발송)
       setSubmitting(false);
     }
   };

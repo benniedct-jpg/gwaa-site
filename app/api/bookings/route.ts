@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { supaConfigured, db, activeBookings, isSiteFree, newOrderId, newTicketToken, type Booking } from '@/lib/bookingsDb';
 import { verifyAdmin } from '@/lib/adminAuth';
-import { sendTicketEmail } from '@/lib/email';
+import { sendTicketEmail, sendReminderEmail } from '@/lib/email';
 
 function isAdmin(req: NextRequest) {
   return verifyAdmin(req.cookies.get('gwaa_admin_auth')?.value);
@@ -76,6 +76,13 @@ export async function POST(req: NextRequest) {
   };
   const { data, error } = await db().from('bookings').insert(record).select('id, order_id, amount, ticket_token').single();
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+
+  // 계좌이체 예약(=미입금 접수)엔 접수 즉시 '입금 안내' 메일 자동 발송.
+  // (카드는 성공 시 입장권 메일, 실패·취소 시 /api/bookings/remind 에서 발송)
+  if (body.pay_method === 'transfer' && body.email) {
+    try { await sendReminderEmail({ ...record, id: data?.id } as unknown as Booking, ''); } catch { /* 메일 실패해도 예약 접수는 성공 처리 */ }
+  }
+
   return NextResponse.json({ ok: true, id: data?.id, order_id: data?.order_id, amount: data?.amount, ticket_token: data?.ticket_token });
 }
 
