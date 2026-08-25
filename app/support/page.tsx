@@ -9,6 +9,11 @@ const STORE_ID = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
 const CHANNEL_KEY = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
 const DONATE_PRESETS = [10000, 30000, 50000, 100000];
 
+// 회비(정기결제/빌링키)가 KCP 하위사업자몰 미지원으로 "하위사업자몰 오류" 발생 →
+// 현재는 행사(예약) 단건 결제만 운영. 회비·후원 결제 임시 중단.
+// 정기결제 계약이 정리되거나 방향이 정해지면 true 로 되돌리면 원복됨.
+const SUPPORT_PAYMENTS_ENABLED = false;
+
 type PortOneResp = { code?: string; message?: string; paymentId?: string; billingKey?: string };
 declare global {
   interface Window {
@@ -164,6 +169,21 @@ export default function SupportPage() {
     flex: 1, padding: '14px', borderRadius: 12, border: `1.5px solid ${active ? GREEN : '#e5e7eb'}`,
     background: active ? '#f0fdf4' : '#fff', color: active ? GREEN : '#6b7280', fontWeight: 700, fontSize: 14, cursor: 'pointer',
   });
+
+  // 회비·후원 결제 임시 중단 — 현재는 행사(예약) 단건 결제만 운영
+  if (!SUPPORT_PAYMENTS_ENABLED) {
+    return (
+      <main style={{ maxWidth: 480, margin: '0 auto', padding: '80px 24px', fontFamily: MONO, textAlign: 'center', color: '#374151' }}>
+        <div style={{ fontSize: 44, marginBottom: 12 }}>🐾</div>
+        <h1 style={{ fontSize: 24, fontWeight: 800, color: '#111', marginBottom: 10 }}>회비·후원 준비 중입니다</h1>
+        <p style={{ fontSize: 15, color: '#4b5563', lineHeight: 1.7 }}>
+          멤버십 회비·후원 결제는 현재 준비 중입니다. 오픈되면 안내드릴게요.<br /><br />
+          행사 참가 신청·결제는 <a href="/events" style={{ color: GREEN, fontWeight: 700 }}>행사 페이지</a>에서 진행하실 수 있습니다.
+        </p>
+        <a href="/events" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>행사 보러가기 →</a>
+      </main>
+    );
+  }
 
   if (done) {
     return (
