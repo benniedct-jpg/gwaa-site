@@ -172,22 +172,38 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
       s.id = 'portone-sdk'; s.src = 'https://cdn.portone.io/v2/browser-sdk.js'; s.async = true;
       document.body.appendChild(s);
     }
-    // 모바일: 결제창에서 이 페이지로 되돌아온 경우 저장해둔 정보로 승인 확인
+    // 모바일(사파리 등): 결제창에서 이 페이지로 리다이렉트 복귀 — 저장해둔 예약으로 이어서 처리
     const raw = sessionStorage.getItem('gwaa_booking_pay');
     if (raw) {
       sessionStorage.removeItem('gwaa_booking_pay');
+      // 복귀 URL 결과 파라미터: 실패/취소 시 code·message, 성공 시 paymentId·transactionType
+      const sp = new URLSearchParams(window.location.search);
+      const failCode = sp.get('code');
+      const failMsg = sp.get('message');
+      try { window.history.replaceState({}, '', new URL(window.location.href).pathname); } catch { /* noop */ }
+      // 사파리는 리다이렉트=전체 새로고침 → 페이지 최상단에서 시작함. 예약 위젯으로 즉시 스크롤(원점 복귀처럼 보이는 문제 방지)
+      const scrollToBooking = () => { setTimeout(() => { try { document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' }); } catch { /* noop */ } }, 250); };
       try {
         const { done, paymentId } = JSON.parse(raw) as { done: Record<string, unknown>; paymentId: string };
         if (done?.order_id && paymentId) {
-          setDoneData(done); setStep(4); setSubmitting(true);
-          fetch('/api/bookings/confirm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: done.order_id, paymentId }) })
-            .then((r) => r.json().catch(() => ({})))
-            .then((cj) => { if (cj.ok) setPaid(true); else setPayMsg(cj.error || '결제가 완료되지 않았어요. 계좌이체로 진행하실 수 있어요.'); })
-            .catch(() => setPayMsg('결제 확인 중 오류가 발생했어요. 계좌이체로 진행하실 수 있어요.'))
-            .finally(() => setSubmitting(false));
+          // 예약은 이미 접수(pending)됨 → 결과와 무관하게 step4 복원(입력값·자리 유지)
+          setDoneData(done); setStep(4);
+          scrollToBooking();
+          if (failCode) {
+            // 결제 실패·취소 — confirm 호출 없이 재시도/계좌이체 안내
+            setSubmitting(false);
+            setPayMsg(`결제가 취소되었거나 실패했어요. [${failCode}] ${failMsg ?? ''} — 아래에서 다시 결제하시거나 계좌이체로 진행하실 수 있어요.`.replace(/\s+—/, ' —'));
+          } else {
+            // 성공(또는 결과 파라미터 없음) — 서버 승인검증
+            setSubmitting(true);
+            fetch('/api/bookings/confirm', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ order_id: done.order_id, paymentId }) })
+              .then((r) => r.json().catch(() => ({})))
+              .then((cj) => { if (cj.ok) setPaid(true); else setPayMsg(cj.error || '결제가 완료되지 않았어요. 아래에서 다시 결제하시거나 계좌이체로 진행하실 수 있어요.'); })
+              .catch(() => setPayMsg('결제 확인 중 오류가 발생했어요. 계좌이체로 진행하실 수 있어요.'))
+              .finally(() => setSubmitting(false));
+          }
         }
       } catch { /* 저장값 파손 시 무시 */ }
-      try { window.history.replaceState({}, '', new URL(window.location.href).pathname); } catch { /* noop */ }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
