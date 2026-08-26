@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import RecapSection from './RecapSection';
+import SponsorMarquee from './SponsorMarquee';
 import {
   Tent, Music, Globe, Gift, Dog, Volleyball, Wind, Lock, Droplets, Waves, Flame,
   ShoppingBag, Telescope, UtensilsCrossed, MapPin, Backpack, PawPrint,
@@ -688,6 +689,8 @@ export default function PetscoutContent() {
           })}
         </div>
       </div>
+
+      <SponsorMarquee />
 
     </div>
   );
