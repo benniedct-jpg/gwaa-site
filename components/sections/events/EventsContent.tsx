@@ -453,13 +453,6 @@ export default function EventsContent({
                           {/* 액자형 포스터 */}
                           <div style={{ position: 'relative', flex: isMobile ? 'none' : '0 0 52%', aspectRatio: isMobile ? '16/10' : undefined, minHeight: isMobile ? undefined : 340 }}>
                             <CardImage src={thumb} alt={arc.title} mode="fill" gradient={GRADIENTS[i % GRADIENTS.length]} radius={10} />
-                            <div style={{ position: 'absolute', top: 18, left: 18 }}>
-                              <span style={{
-                                fontFamily: MONO, fontSize: 11, color: '#92400e',
-                                background: '#fef3c7', border: '1px solid #fde68a',
-                                padding: '4px 10px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.06em',
-                              }}>FEATURED</span>
-                            </div>
                           </div>
                           {/* 정보 패널 */}
                           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '22px 22px 26px' : '40px 44px' }}>
