@@ -75,7 +75,6 @@ export default function FlowingGallery({
         .fg-track { animation-name: fgScrollY; animation-timing-function: linear; animation-iteration-count: infinite; will-change: transform; }
         .fg-wall:hover .fg-track, .fg-wall:focus-within .fg-track { animation-play-state: paused; }
         @keyframes fgScrollY { from { transform: translateY(0); } to { transform: translateY(-50%); } }
-        @media (prefers-reduced-motion: reduce) { .fg-track { animation: none !important; } }
       `}</style>
 
       {lightbox && (
