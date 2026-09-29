@@ -18,17 +18,21 @@ export default function MateshipCTA() {
   const isMobile = useIsMobile();
 
   return (
-    <section style={{ padding: isMobile ? '56px 20px' : '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#f0fdf4', position: 'relative', overflow: 'hidden' }}>
+    <section style={{ padding: isMobile ? '56px 20px' : '88px 60px', borderBottom: '1px solid #e5e7eb', background: '#EDFAF8', position: 'relative', overflow: 'hidden' }}>
       {/* Glow blobs */}
       <motion.div
-        animate={{ scale: [1, 1.2, 1], opacity: [0.06, 0.12, 0.06] }}
+        initial={{ scale: 1, opacity: 0.08 }}
+        whileInView={{ scale: [1, 1.2, 1], opacity: [0.06, 0.12, 0.06] }}
+        viewport={{ margin: '0px' }}
         transition={{ duration: 6, repeat: Infinity, ease: 'easeInOut' }}
-        style={{ position: 'absolute', top: '-20%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: '#16a34a', filter: 'blur(100px)', pointerEvents: 'none' }}
+        style={{ position: 'absolute', top: '-20%', right: '-10%', width: 500, height: 500, borderRadius: '50%', background: '#12A79D', filter: 'blur(80px)', pointerEvents: 'none' }}
       />
       <motion.div
-        animate={{ scale: [1.1, 1, 1.1], opacity: [0.04, 0.08, 0.04] }}
+        initial={{ scale: 1.1, opacity: 0.06 }}
+        whileInView={{ scale: [1.1, 1, 1.1], opacity: [0.04, 0.08, 0.04] }}
+        viewport={{ margin: '0px' }}
         transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut', delay: 3 }}
-        style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: '#2563eb', filter: 'blur(100px)', pointerEvents: 'none' }}
+        style={{ position: 'absolute', bottom: '-10%', left: '-5%', width: 400, height: 400, borderRadius: '50%', background: '#EF7726', filter: 'blur(80px)', pointerEvents: 'none' }}
       />
 
       <motion.div
@@ -46,8 +50,8 @@ export default function MateshipCTA() {
         {/* Left */}
         <div>
           <motion.div variants={fadeUp} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-            <div style={{ width: 24, height: 2, background: '#16a34a', borderRadius: 1, flexShrink: 0 }} />
-            <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, color: '#16a34a', letterSpacing: '0.06em' }}>
+            <div style={{ width: 24, height: 2, background: '#12A79D', borderRadius: 1, flexShrink: 0 }} />
+            <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, color: '#12A79D', letterSpacing: '0.06em' }}>
               GWAA MATESHIP
             </span>
           </motion.div>
@@ -63,7 +67,7 @@ export default function MateshipCTA() {
             }}
           >
             강원도를 제한 없이<br />
-            <span style={{ color: '#16a34a' }}>메이트쉽</span>으로
+            <span style={{ color: '#12A79D' }}>메이트쉽</span>으로
           </motion.h2>
 
           <motion.p variants={fadeUp} custom={0.14} style={{ fontSize: 15, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}>
@@ -75,9 +79,9 @@ export default function MateshipCTA() {
               href="/mateship#join"
               style={{
                 display: 'inline-flex', alignItems: 'center', padding: '13px 24px',
-                borderRadius: 9999, background: '#16a34a', color: '#fff',
+                borderRadius: 9999, background: '#12A79D', color: '#fff',
                 fontSize: 13, fontWeight: 700, letterSpacing: '0.04em',
-                boxShadow: '0 4px 20px rgba(22,163,74,0.35)',
+                boxShadow: '0 4px 20px rgba(18,167,157,0.35)',
                 whiteSpace: 'nowrap', flexShrink: 0,
               }}
             >
@@ -112,7 +116,7 @@ export default function MateshipCTA() {
                 borderBottom: i < PERKS.length - 1 ? '1px solid #e5e7eb' : 'none',
               }}
             >
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#16a34a', flexShrink: 0 }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: i % 2 === 0 ? '#12A79D' : '#EF7726', flexShrink: 0 }} />
               <span style={{ fontSize: 13, color: '#374151', fontWeight: 400 }}>{perk}</span>
             </motion.div>
           ))}

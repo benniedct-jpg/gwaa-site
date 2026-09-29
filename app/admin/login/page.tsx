@@ -55,7 +55,7 @@ export default function AdminLoginPage() {
       }}>
         {/* Logo mark */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 32 }}>
-          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <div style={{ width: 32, height: 32, borderRadius: 8, background: '#12A79D', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
             <span style={{ color: '#fff', fontSize: 16 }}>🐾</span>
           </div>
           <div>
@@ -100,7 +100,7 @@ export default function AdminLoginPage() {
               padding: '12px',
               borderRadius: 10,
               border: 'none',
-              background: loading || !pw ? '#d1fae5' : '#16a34a',
+              background: loading || !pw ? '#CFF5EF' : '#12A79D',
               color: '#fff',
               fontSize: 14,
               fontWeight: 700,

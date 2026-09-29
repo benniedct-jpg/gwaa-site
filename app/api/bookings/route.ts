@@ -57,8 +57,9 @@ export async function POST(req: NextRequest) {
   const dates = (body.booking_dates as string[]) || [];
   const needsSite = body.booking_type !== 'day' && !!site;
 
-  // 협회 자체 사용으로 마감한 A 구역(A1~) — 온라인 예약 차단(방어)
-  if (/^A\d+$/.test(site)) return NextResponse.json({ error: 'SITE_BLOCKED' }, { status: 409 });
+  // 협회 자체 사용 등으로 마감한 A·D·E 구역 + 개별 마감 사이트(C8·F4 일부) — 온라인 예약 차단(방어)
+  const BLOCKED_SITE_IDS = new Set(['C2', 'C8', 'F4-1', 'F4-2', 'F4-3', 'F4-11', 'F4-12', 'F4-14']);
+  if (/^[ADE]\d+$/.test(site) || BLOCKED_SITE_IDS.has(site)) return NextResponse.json({ error: 'SITE_BLOCKED' }, { status: 409 });
 
   if (needsSite) {
     const free = await isSiteFree(eventId, site, dates);
@@ -80,7 +81,7 @@ export async function POST(req: NextRequest) {
   // 계좌이체 예약(=미입금 접수)엔 접수 즉시 '입금 안내' 메일 자동 발송.
   // (카드는 성공 시 입장권 메일, 실패·취소 시 /api/bookings/remind 에서 발송)
   if (body.pay_method === 'transfer' && body.email) {
-    try { await sendReminderEmail({ ...record, id: data?.id } as unknown as Booking, ''); } catch { /* 메일 실패해도 예약 접수는 성공 처리 */ }
+    try { await sendReminderEmail({ ...record, id: data?.id } as unknown as Booking, '', undefined, false, 'receipt'); } catch { /* 메일 실패해도 예약 접수는 성공 처리 */ }
   }
 
   return NextResponse.json({ ok: true, id: data?.id, order_id: data?.order_id, amount: data?.amount, ticket_token: data?.ticket_token });
@@ -114,6 +115,7 @@ export async function PATCH(req: NextRequest) {
       }
       try {
         mail = await sendTicketEmail({ ...booking, ticket_token: token }, token);
+        if (mail.sent) { try { await db().from('bookings').update({ ticket_sent_at: new Date().toISOString() }).eq('id', id); } catch { /* noop */ } }
       } catch (e) {
         mail = { sent: false, reason: e instanceof Error ? e.message : String(e) };
       }

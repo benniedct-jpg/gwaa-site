@@ -4,11 +4,22 @@
 @source "../lib/**/*.{ts,tsx,js,jsx}";
 
 @theme {
-  --color-green:        #16a34a;
-  --color-green-hover:  #15803d;
-  --color-green-light:  #22c55e;
+  /* 브랜드 팔레트 = 로고(gwaa) 기준: 틸 + 오렌지. (2026-09 그린 #16a34a에서 교정)
+     ⚠ 아래 --color-green* 키는 하위호환용 별칭이며 실제 값은 '틸'입니다.
+     신규 코드는 --color-teal* / --color-orange* 를 쓰세요. */
+  --color-teal:         #12A79D;   /* 주색(로고 워드마크 틸 계열) */
+  --color-teal-hover:   #0D7E76;
+  --color-teal-light:   #2CC7BC;
+  --color-teal-vivid:   #2BAFA8;   /* 로고 원색 틸(밝은 액센트·틴트용) */
+  --color-orange:       #EF7726;   /* 보조 액센트(로고 강아지 오렌지) */
+  --color-orange-hover: #C9560F;
+
+  /* 하위호환 별칭(기존 bg-green/text-green 유틸 유지) → 값은 틸 */
+  --color-green:        #12A79D;
+  --color-green-hover:  #0D7E76;
+  --color-green-light:  #2CC7BC;
   --color-blue:         #2563eb;
-  --color-amber:        #d97706;
+  --color-amber:        #EF7726;
 
   --color-bg:           #ffffff;
   --color-bg-soft:      #f8fafb;
@@ -74,7 +85,7 @@ ul, ol { list-style: none; }
 
 /* Better text selection */
 ::selection {
-  background: rgba(22, 163, 74, 0.15);
+  background: rgba(18,167,157, 0.15);
   color: #111;
 }
 
@@ -94,11 +105,11 @@ a[style]:hover, a[class]:hover { opacity: 1; }
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 4px; }
 ::-webkit-scrollbar-track { background: #f3f4f6; }
-::-webkit-scrollbar-thumb { background: #16a34a; border-radius: 2px; }
+::-webkit-scrollbar-thumb { background: #12A79D; border-radius: 2px; }
 
 /* ── Focus Visible ── */
 *:focus-visible {
-  outline: 2px solid #16a34a;
+  outline: 2px solid #12A79D;
   outline-offset: 3px;
   border-radius: 4px;
 }

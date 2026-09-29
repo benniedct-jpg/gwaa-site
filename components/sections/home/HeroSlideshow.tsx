@@ -15,7 +15,7 @@ const SLIDES = [
     title: '반려동물과 함께\n강원도를',
     titleAccent: '제한 없이',
     sub: '2021년부터 4만명과 함께한 강원도 대표 반려동물 협회. 교육, 행사, 메이트쉽 멤버십으로 반려생활을 새롭게.',
-    bg1: 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 40%, #a5d6a7 100%)',
+    bg1: 'linear-gradient(160deg, #0D7E76 0%, #12A79D 55%, #35BDB4 100%)',
     bgImg: '/images/events/fest/01.webp',
     actions: [
       { label: '메이트쉽 가입 →', href: '/mateship#join', primary: true },
@@ -28,7 +28,7 @@ const SLIDES = [
     title: '체계적인\n반려동물',
     titleAccent: '교육',
     sub: '독스포츠(어질리티), 오비디언스 교육, 반려동물행동지도사 국가자격증 취득까지. 전문 트레이너가 함께합니다.',
-    bg1: 'linear-gradient(135deg, #e0f0e8 0%, #b8d9c4 40%, #7fb89a 100%)',
+    bg1: 'linear-gradient(160deg, #0F857D 0%, #14A79D 55%, #2BAFA8 100%)',
     bgImg: '/images/events/edu/02.webp',
     actions: [
       { label: '교육 신청하기 →', href: '/education#apply', primary: true },
@@ -41,7 +41,7 @@ const SLIDES = [
     title: '연간 40만원\n이상',
     titleAccent: '절약',
     sub: '호텔, 카페, 캠핑, 사료·용품 할인과 행사 우선 참여권까지. 메이트쉽 회원이 되면 강원도가 달라집니다.',
-    bg1: 'linear-gradient(135deg, #fff8e1 0%, #ffecb3 40%, #ffe082 100%)',
+    bg1: 'linear-gradient(160deg, #C9560F 0%, #EF7726 55%, #FF9A5C 100%)',
     bgImg: '/images/events/fest/09.webp',
     actions: [
       { label: '혜택 보기 →', href: '/mateship#benefits', primary: true },
@@ -51,9 +51,9 @@ const SLIDES = [
 ];
 
 const DOT_COLORS: Record<string, string> = {
-  green: '#16a34a',
+  green: '#12A79D',
   blue: '#2563eb',
-  amber: '#d97706',
+  amber: '#EF7726',
 };
 
 export default function HeroSlideshow({ initialData }: { initialData?: HeroImage[] }) {
@@ -78,8 +78,9 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
     return () => clearTimeout(t);
   }, [current, next]);
 
-  /* THREE.js-like particle canvas */
+  /* Particle canvas — reduced-motion 시 생략, 화면 밖/탭 숨김 시 드로잉 정지(성능) */
   useEffect(() => {
+    if (typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const canvas = canvasRef.current;
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
@@ -87,8 +88,9 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
 
     let w = canvas.width = canvas.offsetWidth;
     let h = canvas.height = canvas.offsetHeight;
+    const COUNT = window.innerWidth < 768 ? 24 : 44;
 
-    const particles = Array.from({ length: 60 }, () => ({
+    const particles = Array.from({ length: COUNT }, () => ({
       x: Math.random() * w,
       y: Math.random() * h,
       r: Math.random() * 2.5 + 0.5,
@@ -97,20 +99,27 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
       a: Math.random() * 0.35 + 0.05,
     }));
 
+    let visible = true;
     const draw = () => {
-      ctx.clearRect(0, 0, w, h);
-      particles.forEach((p) => {
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(22,163,74,${p.a})`;
-        ctx.fill();
-        p.x += p.vx; p.y += p.vy;
-        if (p.x < 0 || p.x > w) p.vx *= -1;
-        if (p.y < 0 || p.y > h) p.vy *= -1;
-      });
+      if (visible && !document.hidden) {
+        ctx.clearRect(0, 0, w, h);
+        particles.forEach((p) => {
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(255,255,255,${p.a})`;
+          ctx.fill();
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > w) p.vx *= -1;
+          if (p.y < 0 || p.y > h) p.vy *= -1;
+        });
+      }
       animFrameRef.current = requestAnimationFrame(draw);
     };
     draw();
+
+    // 히어로가 화면 밖이면 드로잉 스킵(상시 CPU 절감)
+    const io = new IntersectionObserver(([e]) => { visible = e.isIntersecting; }, { threshold: 0 });
+    io.observe(canvas);
 
     const onResize = () => {
       w = canvas.width = canvas.offsetWidth;
@@ -119,6 +128,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
     window.addEventListener('resize', onResize);
     return () => {
       cancelAnimationFrame(animFrameRef.current);
+      io.disconnect();
       window.removeEventListener('resize', onResize);
     };
   }, []);
@@ -130,8 +140,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
     <section
       style={{
         position: 'relative',
-        height: '100vh',
-        minHeight: 640,
+        minHeight: 'clamp(468px, 64vh, 620px)',
         overflow: 'hidden',
         marginTop: -64,
       }}
@@ -146,7 +155,9 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
           transition={{ duration: 0.9, ease: [0.4, 0, 0.2, 1] }}
           style={{
             position: 'absolute', inset: 0,
-            background: bgImg ? `url(${bgImg}) center/cover no-repeat` : slide.bg1,
+            background: bgImg
+              ? `linear-gradient(150deg, rgba(6,44,41,0.52) 0%, rgba(6,44,41,0.22) 60%, rgba(6,44,41,0.10) 100%), url(${bgImg}) center/cover no-repeat`
+              : slide.bg1,
           }}
         />
       </AnimatePresence>
@@ -154,13 +165,13 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
       {/* Overlays */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(105deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%)',
+        background: 'linear-gradient(102deg, rgba(6,42,39,0.42) 0%, rgba(6,42,39,0.14) 48%, transparent 82%)',
         pointerEvents: 'none',
       }} />
       <div style={{
         position: 'absolute', bottom: 0, left: 0, right: 0,
         height: 200,
-        background: 'linear-gradient(transparent, rgba(255,255,255,0.6))',
+        background: 'linear-gradient(transparent, rgba(6,42,39,0.22))',
         pointerEvents: 'none',
       }} />
 
@@ -180,10 +191,10 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
           transition={{ duration: 0.4 }}
           style={{
             position: 'absolute', inset: 0,
-            display: 'flex', alignItems: 'flex-end',
+            display: 'flex', alignItems: 'center',
             padding: isMobile
-              ? 'calc(64px + 24px) 20px 56px'
-              : 'calc(64px + 40px) 60px 80px',
+              ? 'calc(64px + 12px) 20px 40px'
+              : 'calc(64px + 20px) 60px 40px',
           }}
         >
           <div style={{ maxWidth: 640, position: 'relative', zIndex: 2 }}>
@@ -229,7 +240,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                   d="M 950 60 C 1250 200, 1050 320, 600 350 C 250 350, 150 320, 150 200 C 150 80, 350 50, 600 50 C 850 50, 950 120, 950 120"
                   fill="none"
                   strokeWidth="10"
-                  stroke="#16a34a"
+                  stroke="rgba(255,255,255,0.8)"
                   strokeLinecap="round"
                   strokeLinejoin="round"
                   style={{ opacity: 0.55 }}
@@ -251,9 +262,10 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                 fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif",
                 fontSize: 'clamp(48px, 7vw, 84px)',
                 lineHeight: 0.95,
-                color: '#111',
+                color: '#fff',
                 letterSpacing: '0.02em',
                 whiteSpace: 'pre-line',
+                textShadow: '0 2px 14px rgba(6,42,39,0.25)',
               }}>
                 {slide.title.split('\n').map((line, li) => (
                   <span key={li} style={{ display: 'block' }}>
@@ -274,7 +286,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                   initial={{ opacity: 0, y: 24 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.3, duration: 0.4 }}
-                  style={{ color: '#16a34a', display: 'block' }}
+                  style={{ color: '#fff', display: 'block' }}
                 >
                   {slide.titleAccent}
                 </motion.span>
@@ -286,7 +298,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.4 }}
-              style={{ fontSize: 15, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}
+              style={{ fontSize: 15, color: 'rgba(255,255,255,0.94)', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}
             >
               {slide.sub}
             </motion.p>
@@ -306,10 +318,10 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                     display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
                     padding: '12px 26px', borderRadius: 9999, fontSize: 13, fontWeight: 700,
                     letterSpacing: '0.04em', textDecoration: 'none', minHeight: 44,
-                    background: a.primary ? '#16a34a' : 'rgba(255,255,255,0.85)',
-                    color: a.primary ? '#fff' : '#111',
-                    border: a.primary ? 'none' : '1.5px solid #d1d5db',
-                    boxShadow: a.primary ? '0 2px 12px rgba(22,163,74,0.3)' : '0 1px 3px rgba(0,0,0,0.08)',
+                    background: a.primary ? '#fff' : 'rgba(255,255,255,0.16)',
+                    color: a.primary ? '#0D7E76' : '#fff',
+                    border: a.primary ? 'none' : '1.5px solid rgba(255,255,255,0.7)',
+                    boxShadow: a.primary ? '0 2px 12px rgba(18,167,157,0.3)' : '0 1px 3px rgba(0,0,0,0.08)',
                     backdropFilter: 'blur(8px)',
                     transition: 'all 0.15s',
                   }}
@@ -338,7 +350,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
             style={{
               width: i === current ? 28 : 8,
               height: 8, borderRadius: 4,
-              background: i === current ? '#16a34a' : 'rgba(0,0,0,0.2)',
+              background: i === current ? '#12A79D' : 'rgba(0,0,0,0.2)',
               border: 'none', cursor: 'pointer',
               transition: 'all 0.3s ease',
               padding: 0,
@@ -355,7 +367,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
         transition={{ duration: INTERVAL / 1000, ease: 'linear' }}
         style={{
           position: 'absolute', bottom: 0, left: 0,
-          height: 3, background: '#16a34a', zIndex: 10,
+          height: 3, background: '#12A79D', zIndex: 10,
           width: '100%',
         }}
       />
@@ -364,6 +376,13 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
         @keyframes dot-pulse {
           0%,100% { opacity:1; transform:scale(1); }
           50% { opacity:0.5; transform:scale(0.8); }
+        }
+        @keyframes mascot-hop {
+          0%,100% { transform: translateY(0) rotate(0deg); }
+          50% { transform: translateY(-12px) rotate(-1.5deg); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          [style*="mascot-hop"] { animation: none !important; }
         }
       `}</style>
     </section>

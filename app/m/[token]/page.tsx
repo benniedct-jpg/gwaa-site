@@ -29,8 +29,8 @@ export default async function MemberVerifyPage({ params }: { params: Promise<{ t
   }
 
   const THEME: Record<State, { bg: string; accent: string; icon: string; title: string; sub: string }> = {
-    valid:    { bg: '#f0fdf4', accent: '#16a34a', icon: '✓', title: '유효한 회원입니다', sub: '회원 할인을 적용해 주세요.' },
-    expired:  { bg: '#fff7ed', accent: '#f59e0b', icon: '⟳', title: 'QR이 만료됐어요', sub: '회원 화면에서 QR을 새로고침한 뒤 다시 스캔해 주세요.' },
+    valid:    { bg: '#EDFAF8', accent: '#12A79D', icon: '✓', title: '유효한 회원입니다', sub: '회원 할인을 적용해 주세요.' },
+    expired:  { bg: '#fff7ed', accent: '#F5A524', icon: '⟳', title: 'QR이 만료됐어요', sub: '회원 화면에서 QR을 새로고침한 뒤 다시 스캔해 주세요.' },
     inactive: { bg: '#fef2f2', accent: '#dc2626', icon: '!', title: '비활성 회원입니다', sub: '회비 미납/만료 상태예요. 할인 적용이 어렵습니다.' },
     invalid:  { bg: '#fef2f2', accent: '#dc2626', icon: '✕', title: '유효하지 않은 회원증', sub: '올바른 회원증 QR이 아니에요.' },
   };
@@ -51,7 +51,7 @@ export default async function MemberVerifyPage({ params }: { params: Promise<{ t
             <Row label="이름" value={String(member.name ?? '')} />
             <Row label="회원번호" value={String(member.member_no ?? '')} mono />
             {member.region ? <Row label="지역" value={String(member.region)} /> : null}
-            <Row label="상태" value="활성 회원" accent="#16a34a" />
+            <Row label="상태" value="활성 회원" accent="#12A79D" />
           </div>
         )}
 

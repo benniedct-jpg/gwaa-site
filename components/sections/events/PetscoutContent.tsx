@@ -13,9 +13,9 @@ import {
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 // 라틴·숫자는 Bebas, 한글은 Black Han Sans로 폴백 → 강렬한 한글 제목
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
-const GREEN = '#16a34a';
-const GREEN_DK = '#15803d';
-const WARM = '#f59e0b';        // 축제 온기 포인트 컬러 (캠프파이어/가을)
+const GREEN = '#12A79D';
+const GREEN_DK = '#0D7E76';
+const WARM = '#F5A524';        // 축제 온기 포인트 컬러 (캠프파이어/가을)
 const MUTED = '#6b7280';
 
 const cardBase: React.CSSProperties = { background: '#fff', border: '1px solid #e8e8e8', borderRadius: 14 };
@@ -24,8 +24,8 @@ const cardTint: React.CSSProperties = { background: '#f4f8f4', border: '1px soli
 // 아이콘 배지 (일관된 처리) — warm: 밤·축제 요소는 따뜻한 톤
 function IconBadge({ Icon, size = 40, warm = false }: { Icon: LucideIcon; size?: number; warm?: boolean }) {
   const color = warm ? WARM : GREEN;
-  const bg = warm ? '#fffbeb' : '#f0fdf4';
-  const bd = warm ? '#fde68a' : '#dcfce7';
+  const bg = warm ? '#fffbeb' : '#EDFAF8';
+  const bd = warm ? '#fde68a' : '#D6F5F1';
   return (
     <div style={{ width: size, height: size, borderRadius: 11, background: bg, border: `1px solid ${bd}`, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
       <Icon size={Math.round(size * 0.52)} color={color} strokeWidth={1.75} />
@@ -34,7 +34,7 @@ function IconBadge({ Icon, size = 40, warm = false }: { Icon: LucideIcon; size?:
 }
 
 // 2026 펫스카웃 캠프 & 펫페스티벌 상세 콘텐츠 (event id=3) — 제안서 v7 기준
-export default function PetscoutContent() {
+export default function PetscoutContent({ recap = false }: { recap?: boolean } = {}) {
   const isMobile = useIsMobile();
   const [dayIdx, setDayIdx] = useState(1);      // 기본 DAY 2 (메인)
   const [openFaq, setOpenFaq] = useState<number | null>(null);
@@ -126,7 +126,7 @@ export default function PetscoutContent() {
   // 현장 숲속 사우나존(신규) + 근처 사우나·온천 안내
   const saunas = [
     {
-      Icon: Flame, badge: '현장 · 무료', grad: 'linear-gradient(135deg,#166534,#22c55e)',
+      Icon: Flame, badge: '현장 · 무료', grad: 'linear-gradient(135deg,#0A5F59,#2CC7BC)',
       name: '숲속 사우나존',
       benefit: '숲속에서 즐기는 핫앤콜드 리커버리! 사우나로 몸을 뜨겁게 달군 뒤 아이스 버킷(냉수)에 풍덩 — 캠핑의 피로가 확 풀려요. 참가자 누구나 무료로 이용할 수 있어요.',
       dist: '행사장 내 · 무료', addr: '펫스카웃 행사장 · 숲속 사우나존', tel: '',
@@ -147,7 +147,7 @@ export default function PetscoutContent() {
       url: 'https://map.naver.com/p/entry/place/1515190710',
     },
     {
-      Icon: Wind, badge: '사우나·찜질', grad: 'linear-gradient(135deg,#f59e0b,#fbbf24)',
+      Icon: Wind, badge: '사우나·찜질', grad: 'linear-gradient(135deg,#F5A524,#fbbf24)',
       name: '일성콘도 고성',
       benefit: '사우나·찜질방을 갖춘 동해 인근 콘도. 온 가족이 함께 뜨끈하게 몸을 풀기 좋아요. 단, 사우나 이용 가능 시간이 따로 정해져 있으니 방문 전 전화로 확인해 주세요.',
       dist: '차로 약 5분', addr: '강원 고성군 토성면', tel: '02-546-8293',
@@ -157,15 +157,15 @@ export default function PetscoutContent() {
 
   // 장비 렌탈 — 텐트 없어도 몸만 오면 OK (네이버 스토어 연결)
   const rentals = [
-    { name: '에어텐트 6.3', badge: '에어텐트', grad: 'linear-gradient(135deg,#16a34a,#4ade80)', desc: '펌프로 빠르게 부풀리는 에어텐트. 설영이 서툴러도 걱정 없어요.', url: 'https://smartstore.naver.com/funny_joy/products/13703291049' },
+    { name: '에어텐트 6.3', badge: '에어텐트', grad: 'linear-gradient(135deg,#12A79D,#4FE0D3)', desc: '펌프로 빠르게 부풀리는 에어텐트. 설영이 서툴러도 걱정 없어요.', url: 'https://smartstore.naver.com/funny_joy/products/13703291049' },
     { name: '에어텐트 8.0', badge: '대형 에어텐트', grad: 'linear-gradient(135deg,#0ea5e9,#7dd3fc)', desc: '더 넓은 공간의 대형 에어텐트. 가족·단체에 넉넉해요.', url: 'https://smartstore.naver.com/funny_joy/products/13703341143' },
-    { name: '4종 구성품 세트', badge: '장비 세트', grad: 'linear-gradient(135deg,#f59e0b,#fbbf24)', desc: '캠핑에 필요한 기본 장비 4종 구성. 필요한 것만 간편하게.', url: 'https://smartstore.naver.com/funny_joy/products/13703352911' },
+    { name: '4종 구성품 세트', badge: '장비 세트', grad: 'linear-gradient(135deg,#F5A524,#fbbf24)', desc: '캠핑에 필요한 기본 장비 4종 구성. 필요한 것만 간편하게.', url: 'https://smartstore.naver.com/funny_joy/products/13703352911' },
   ];
 
   // 웰니스 클래스 (유료) — 낭만기버 웰니스존 · 25,000원/클래스
   const wcImg = '/images/events/jamboree-2026/classes';
   const wellnessClasses = [
-    { emoji: '🐶', name: '퍼피요가', host: '소울얼라인먼트', grad: 'linear-gradient(135deg,#16a34a,#4ade80)', img: `${wcImg}/puppy.webp`, desc: '반려견과 자연 속에서 교감하는 힐링 요가 (반려동물 없이도 참여 가능)', when: '9/5(토) 15:30 · 9/6(일) 09:00' },
+    { emoji: '🐶', name: '퍼피요가', host: '소울얼라인먼트', grad: 'linear-gradient(135deg,#12A79D,#4FE0D3)', img: `${wcImg}/puppy.webp`, desc: '반려견과 자연 속에서 교감하는 힐링 요가 (반려동물 없이도 참여 가능)', when: '9/5(토) 15:30 · 9/6(일) 09:00' },
     { emoji: '🤸', name: '아크로요가', host: 'TJ & 징조', grad: 'linear-gradient(135deg,#0284c7,#38bdf8)', img: `${wcImg}/acro.webp`, desc: '함께 호흡하며 균형을 만드는 파트너 요가 (혼자도 참여 가능)', when: '9/5(토) 10:30 · 18:30' },
     { emoji: '🐾', name: '애니멀플로우', host: '최민호', grad: 'linear-gradient(135deg,#65a30d,#a3e635)', img: `${wcImg}/animalflow.webp`, desc: '동물의 움직임을 담은 전신 맨몸 운동', when: '9/5(토) 17:00 · 9/6(일) 10:30' },
     { emoji: '🎵', name: '핸드팬 사운드힐링', host: '하택후', grad: 'linear-gradient(135deg,#7c3aed,#a78bfa)', img: `${wcImg}/handpan.webp`, desc: '잔잔한 핸드팬 선율로 몸과 마음을 쉬어가는 시간', when: '9/4(금) 19:00 · 9/5(토) 09:00' },
@@ -238,10 +238,10 @@ export default function PetscoutContent() {
             { Icon: Music, big: '라이브 5팀', label: '인디밴드 + 이박사' },
             { Icon: Wind, big: '웰니스 5클래스', label: '요가·사운드힐링 등' },
             { Icon: PawPrint, big: '오프리쉬 5존', label: '+ 무료 체험부스' },
-            { Icon: Gift, big: '웰컴키트', label: '예약 전원 증정' },
+            { Icon: Gift, big: '웰컴키트', label: '참가자 전원 증정' },
           ].map((s) => (
-            <div key={s.big} style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 14, padding: isMobile ? '16px 12px' : '20px 16px', textAlign: 'center' }}>
-              <div style={{ width: 46, height: 46, borderRadius: 12, background: '#fff', border: '1px solid #bbf7d0', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
+            <div key={s.big} style={{ background: '#EDFAF8', border: '1px solid #D6F5F1', borderRadius: 14, padding: isMobile ? '16px 12px' : '20px 16px', textAlign: 'center' }}>
+              <div style={{ width: 46, height: 46, borderRadius: 12, background: '#fff', border: '1px solid #BFF3EC', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 10px' }}>
                 <s.Icon size={22} color={GREEN} strokeWidth={2} />
               </div>
               <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 18 : 21, color: '#111', letterSpacing: '0.01em', lineHeight: 1.12, wordBreak: 'keep-all' }}>{s.big}</div>
@@ -285,7 +285,7 @@ export default function PetscoutContent() {
         </div>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 14 }}>
           {['🔥 핀란드식 텐트 사우나', '❄️ 천연 냉수 아이스버킷', '💪 캠핑 후 근육 회복', '🌲 숲 한가운데 힐링', '🆓 참가자 전원 무료'].map((t) => (
-            <span key={t} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', fontWeight: 700, fontSize: 13, padding: '8px 14px', borderRadius: 9999, wordBreak: 'keep-all' }}>{t}</span>
+            <span key={t} style={{ background: '#EDFAF8', border: '1px solid #BFF3EC', color: '#0D7E76', fontWeight: 700, fontSize: 13, padding: '8px 14px', borderRadius: 9999, wordBreak: 'keep-all' }}>{t}</span>
           ))}
         </div>
       </div>
@@ -334,7 +334,7 @@ export default function PetscoutContent() {
           <div style={{ background: GREEN_DK, padding: '14px 18px' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8 }}>
               <span style={{ fontFamily: BEBAS, fontSize: 20, color: '#fff', letterSpacing: '0.04em' }}>{activeDay.day}</span>
-              <span style={{ fontSize: 12, color: '#86efac', fontWeight: 700 }}>{activeDay.date}</span>
+              <span style={{ fontSize: 12, color: '#8FEEE3', fontWeight: 700 }}>{activeDay.date}</span>
             </div>
             <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.7)', marginTop: 3, letterSpacing: '0.02em' }}>{activeDay.theme}</div>
           </div>
@@ -376,7 +376,7 @@ export default function PetscoutContent() {
         <H>무료 체험 부스</H>
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: isMobile ? 8 : 10 }}>
           {booths.map((b) => (
-            <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 9999, background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: 13.5, fontWeight: 600, color: '#15803d', wordBreak: 'keep-all' }}>{b}<span style={{ fontSize: 11, fontWeight: 700, color: '#16a34a' }}>무료</span></span>
+            <span key={b} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 9999, background: '#EDFAF8', border: '1px solid #BFF3EC', fontSize: 13.5, fontWeight: 600, color: '#0D7E76', wordBreak: 'keep-all' }}>{b}<span style={{ fontSize: 11, fontWeight: 700, color: '#12A79D' }}>무료</span></span>
           ))}
           {paidBooths.map((b) => (
             <span key={b.name} style={{ display: 'inline-flex', alignItems: 'center', gap: 6, padding: '10px 18px', borderRadius: 9999, background: '#f9fafb', border: '1px solid #e8e8e8', fontSize: 13.5, fontWeight: 600, color: '#374151', wordBreak: 'keep-all' }}>{b.name}<span style={{ fontSize: 11, fontWeight: 700, color: '#6b7280' }}>{b.price}</span></span>
@@ -404,10 +404,10 @@ export default function PetscoutContent() {
       <div style={wrap}>
         <Eyebrow>PLAY &amp; WIN</Eyebrow>
         <H>현장 참여 게임 &amp; 경품</H>
-        <div style={{ background: 'linear-gradient(135deg,#15803d,#166534)', borderRadius: 16, padding: isMobile ? '22px 20px' : '30px 32px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
+        <div style={{ background: 'linear-gradient(135deg,#0D7E76,#0A5F59)', borderRadius: 16, padding: isMobile ? '22px 20px' : '30px 32px', color: '#fff', position: 'relative', overflow: 'hidden' }}>
           <div aria-hidden style={{ position: 'absolute', right: -10, top: -10, fontSize: 120, opacity: 0.12, lineHeight: 1 }}>🎁</div>
           <div style={{ fontSize: isMobile ? 17 : 20, fontWeight: 800, lineHeight: 1.35, wordBreak: 'keep-all', position: 'relative' }}>
-            무대에서 펼쳐지는 참여 게임, <span style={{ color: '#bbf7d0' }}>참여만 해도 경품 찬스</span> 🎯
+            무대에서 펼쳐지는 참여 게임, <span style={{ color: '#BFF3EC' }}>참여만 해도 경품 찬스</span> 🎯
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, margin: '14px 0 12px', position: 'relative' }}>
             {['카톡 채널 빙고', '초성 퀴즈', '강아지 장기자랑', '버스킹 장기자랑', '깜짝 미션'].map((g) => (
@@ -420,6 +420,7 @@ export default function PetscoutContent() {
         </div>
       </div>
 
+      {!recap && (<>
       {/* 웰니스 클래스 (유료) */}
       <div style={wrap}>
         <Eyebrow>WELLNESS CLASS</Eyebrow>
@@ -444,7 +445,7 @@ export default function PetscoutContent() {
         {/* 가격 안내 */}
         <div style={{ background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 12, padding: isMobile ? '14px 16px' : '16px 20px', marginBottom: isMobile ? 14 : 18, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
           <div>
-            <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 26 : 30, color: '#b45309' }}>{rgMode ? '15,000원' : '25,000원'}</span>
+            <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 26 : 30, color: '#C9560F' }}>{rgMode ? '15,000원' : '25,000원'}</span>
             <span style={{ fontSize: 13, color: '#92400e', fontWeight: 700 }}> / 1인 · 클래스별</span>
           </div>
           <span style={{ fontSize: 12.5, color: '#92400e', lineHeight: 1.6, wordBreak: 'keep-all', flex: 1, minWidth: 200 }}>
@@ -500,7 +501,7 @@ export default function PetscoutContent() {
         <H>참가 요금</H>
 
         {/* 밸류 스택 — 참가비에 포함되는 것 */}
-        <div style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 14, padding: isMobile ? '20px 18px' : '24px', marginBottom: isMobile ? 12 : 14 }}>
+        <div style={{ background: '#EDFAF8', border: '1px solid #D6F5F1', borderRadius: 14, padding: isMobile ? '20px 18px' : '24px', marginBottom: isMobile ? 12 : 14 }}>
           <div style={{ fontSize: isMobile ? 16 : 17, fontWeight: 700, color: GREEN_DK, marginBottom: 5 }}>참가비에 다 들어있어요</div>
           <div style={{ fontSize: 13, color: MUTED, marginBottom: 16, lineHeight: 1.6, wordBreak: 'keep-all' }}>
             {rgMode
@@ -523,7 +524,7 @@ export default function PetscoutContent() {
               <span style={{ fontFamily: BEBAS, fontSize: 34, color: GREEN }}>155,000원</span>
               <span style={{ fontSize: 12, color: MUTED }}> / 2박3일 · 2인</span>
             </div>
-            <div style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 10, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+            <div style={{ background: '#EDFAF8', border: '1px solid #D6F5F1', borderRadius: 10, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
               {['울산바위 뷰 전용 캠핑존', '8×8m 사이트', '무대·푸드존 인접', '캠핑 사이트 18면'].map((x) => (
                 <div key={x} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13.5, color: '#374151', wordBreak: 'keep-all' }}>
                   <Check size={16} color={GREEN} strokeWidth={2.75} style={{ flexShrink: 0 }} /> {x}
@@ -541,7 +542,7 @@ export default function PetscoutContent() {
                     <span style={{ fontFamily: BEBAS, fontSize: 30, color: GREEN }}>{f.price}</span>
                     <span style={{ fontSize: 12, color: MUTED }}> {f.unit}</span>
                   </div>
-                  <div style={{ background: '#f0fdf4', border: '1px solid #dcfce7', borderRadius: 10, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div style={{ background: '#EDFAF8', border: '1px solid #D6F5F1', borderRadius: 10, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 6 }}>
                     {f.tiers.map((t) => (
                       <div key={t} style={{ fontSize: 12.5, color: '#374151', lineHeight: 1.4, textAlign: f.tiers.length > 1 ? 'left' : 'center' }}>{t}</div>
                     ))}
@@ -576,6 +577,8 @@ export default function PetscoutContent() {
         </p>
       </div>
 
+      </>)}
+
       {/* 이용 안내 */}
       <div style={wrap}>
         <Eyebrow>INFORMATION</Eyebrow>
@@ -597,6 +600,7 @@ export default function PetscoutContent() {
         </div>
       </div>
 
+      {!recap && (<>
       {/* 장비 렌탈 — 텐트 없어도 몸만 오면 OK */}
       <div style={wrap}>
         <Eyebrow>GEAR RENTAL</Eyebrow>
@@ -625,6 +629,8 @@ export default function PetscoutContent() {
           * 대여 품목·요금·수령 및 반납 방법은 업체(네이버 스토어) 안내를 따릅니다. 신청 전 상세 페이지에서 확인해 주세요.
         </p>
       </div>
+
+      </>)}
 
       {/* 근처 사우나·온천 — 잼버리 야외샤워실은 찬물만 나옴 */}
       <div style={wrap}>
@@ -672,10 +678,10 @@ export default function PetscoutContent() {
         <Eyebrow>FAQ</Eyebrow>
         <H>자주 묻는 질문</H>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
-          {faqs.map((f, i) => {
+          {(recap ? faqs.filter((f) => !/,000|당일권|예약|대여|렌탈|사이트 종류/.test(f.q + f.a)) : faqs).map((f, i) => {
             const open = openFaq === i;
             return (
-              <div key={f.q} style={{ ...cardBase, borderColor: open ? '#bbf7d0' : '#e8e8e8', overflow: 'hidden' }}>
+              <div key={f.q} style={{ ...cardBase, borderColor: open ? '#BFF3EC' : '#e8e8e8', overflow: 'hidden' }}>
                 <button onClick={() => setOpenFaq(open ? null : i)}
                   style={{ width: '100%', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, padding: isMobile ? '16px 18px' : '18px 22px', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', fontFamily: MONO }}>
                   <span style={{ fontSize: 14, fontWeight: 700, color: '#111', wordBreak: 'keep-all' }}>{f.q}</span>

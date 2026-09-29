@@ -1,34 +1,26 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { PET_TIPS as TIPS } from '@/lib/petTips';
 
-const TIPS = [
-  { icon: '💧', title: '수분 보충', text: '반려동물에게 신선한 물을 항상 제공하세요. 하루 체중 1kg당 50ml의 수분이 필요합니다.' },
-  { icon: '🚶', title: '규칙적인 산책', text: '매일 같은 시간에 산책하면 반려동물의 심리적 안정에 도움이 됩니다.' },
-  { icon: '🦷', title: '구강 관리', text: '주 2~3회 이상 양치질을 해주세요. 구강 건강이 전신 건강과 직결됩니다.' },
-  { icon: '🐾', title: '발바닥 관리', text: '산책 후 발바닥을 닦아주고, 발톱이 너무 길어지지 않도록 정기적으로 관리하세요.' },
-  { icon: '💊', title: '정기 검진', text: '성견은 연 1회, 7세 이상은 연 2회 건강 검진을 권장합니다.' },
-  { icon: '🎾', title: '놀이 시간', text: '하루 30분 이상 반려동물과 함께 놀아주세요. 인지 능력과 사회성이 향상됩니다.' },
-  { icon: '🛁', title: '목욕 주기', text: '강아지는 2~4주에 한 번 목욕이 적당합니다. 과도한 목욕은 피부를 건조하게 합니다.' },
-  { icon: '🌡️', title: '적정 온도', text: '반려동물이 쉬는 공간의 온도를 18~24°C로 유지해주세요.' },
-  { icon: '🥩', title: '균형 잡힌 식사', text: '반려동물의 나이와 체중에 맞는 사료를 선택하고, 일정한 시간에 급여하세요.' },
-  { icon: '🪮', title: '정기 그루밍', text: '털 엉킴을 방지하고 피부 상태를 확인하기 위해 정기적으로 빗질해 주세요.' },
-  { icon: '🏥', title: '예방접종', text: '연간 예방접종 일정을 지켜 전염병을 예방하세요. 광견병 접종은 의무입니다.' },
-  { icon: '😴', title: '충분한 수면', text: '성견은 12~14시간, 강아지는 16~18시간의 수면이 필요합니다. 조용한 잠자리를 마련해 주세요.' },
-  { icon: '👁️', title: '눈 건강', text: '눈곱이 자주 끼거나 눈물이 많으면 수의사 진료가 필요합니다. 정기적으로 눈을 확인하세요.' },
-  { icon: '🎓', title: '기초 훈련', text: '앉아, 기다려, 이리와 같은 기초 명령어 훈련은 안전과 소통에 필수입니다.' },
-];
+const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
 export default function DailyTip() {
-  const [tip, setTip] = useState(TIPS[0]);
+  const [idx, setIdx] = useState(0);
   const isMobile = useIsMobile();
 
   useEffect(() => {
-    const day = new Date().getDate() % TIPS.length;
-    setTip(TIPS[day]);
+    // 날짜 기반 시드 → 매일 다른 팁 (재방문 유도)
+    const d = new Date();
+    const seed = d.getFullYear() * 1000 + (d.getMonth() * 31 + d.getDate());
+    setIdx(seed % TIPS.length);
   }, []);
+
+  const tip = TIPS[idx];
+  const next = () => setIdx((i) => (i + 1 + Math.floor(Math.random() * (TIPS.length - 1))) % TIPS.length);
 
   return (
     <motion.section
@@ -37,26 +29,42 @@ export default function DailyTip() {
       viewport={{ once: true, margin: '-40px' }}
       transition={{ duration: 0.5 }}
       style={{
-        padding: isMobile ? '20px 20px' : '32px 60px',
+        padding: isMobile ? '20px' : '32px 60px',
         borderBottom: '1px solid #e5e7eb',
-        background: '#f0fdf4',
+        background: '#EDFAF8',
         display: 'flex', alignItems: 'center', gap: 16,
         flexWrap: isMobile ? 'wrap' : 'nowrap',
       }}
     >
       <div style={{
         width: 52, height: 52, borderRadius: '50%', flexShrink: 0,
-        background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center',
+        background: '#D6F5F1', display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 24,
       }}>
         {tip.icon}
       </div>
-      <div>
-        <div style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 11, color: '#16a34a', letterSpacing: '0.06em', marginBottom: 4 }}>
-          TODAY&apos;S PET TIP
+      <div style={{ flex: 1, minWidth: 0 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4 }}>
+          <span style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.06em' }}>TODAY&apos;S PET TIP</span>
+          <span style={{ fontSize: 10, fontWeight: 700, color: '#0D7E76', background: '#D6F5F1', padding: '2px 8px', borderRadius: 9999 }}>{tip.cat}</span>
         </div>
-        <div style={{ fontSize: isMobile ? 13 : 14, color: '#111', fontWeight: 700, marginBottom: 2 }}>{tip.title}</div>
-        <p style={{ fontSize: isMobile ? 13 : 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{tip.text}</p>
+        <div style={{ fontSize: isMobile ? 13.5 : 15, color: '#111', fontWeight: 800, marginBottom: 3 }}>{tip.title}</div>
+        <p style={{ fontSize: isMobile ? 13 : 14, color: '#374151', lineHeight: 1.6, margin: 0, wordBreak: 'keep-all' }}>{tip.text}</p>
+      </div>
+      <div style={{ flexShrink: 0, alignSelf: isMobile ? 'flex-start' : 'center', display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+        <button
+          onClick={next}
+          style={{
+            fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#0D7E76',
+            background: '#fff', border: '1.5px solid #BFF3EC', borderRadius: 9999,
+            padding: '9px 16px', cursor: 'pointer', whiteSpace: 'nowrap',
+          }}
+        >
+          🔄 다른 꿀팁
+        </button>
+        <Link href="/tips" style={{ fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#fff', background: '#12A79D', borderRadius: 9999, padding: '9px 16px', whiteSpace: 'nowrap', textDecoration: 'none' }}>
+          전체 꿀팁 →
+        </Link>
       </div>
     </motion.section>
   );

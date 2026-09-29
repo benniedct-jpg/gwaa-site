@@ -47,7 +47,7 @@ function HandWrittenTitle({
             strokeLinecap="round"
             strokeLinejoin="round"
             variants={draw}
-            className="text-[#16a34a] opacity-60"
+            className="text-[#12A79D] opacity-60"
           />
         </motion.svg>
       </div>

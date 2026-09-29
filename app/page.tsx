@@ -5,6 +5,8 @@ import StatsBar from '@/components/sections/home/StatsBar';
 import ActivityCards from '@/components/sections/home/ActivityCards';
 import BenefitsPreview from '@/components/sections/home/BenefitsPreview';
 import EventsPreview from '@/components/sections/home/EventsPreview';
+import SellerBanner from '@/components/sections/home/SellerBanner';
+import { effectiveStatus, eventDates } from '@/lib/eventStatus';
 import DailyTip from '@/components/sections/home/DailyTip';
 import Lookbook from '@/components/sections/home/Lookbook';
 import MateshipCTA from '@/components/sections/home/MateshipCTA';
@@ -37,6 +39,11 @@ export default async function HomePage() {
     fetchStore<LookbookItem>('lookbook_items'),
   ]);
 
+  // 셀러 모집이 열린(종료 안 된) 행사 중 가장 임박한 행사를 홈 배너에 노출
+  const sellerEvent = (events as unknown as (EventCard & { seller_open?: boolean })[])
+    .filter((e) => e.seller_open && effectiveStatus(e) !== 'ended')
+    .sort((a, b) => (eventDates(a).start?.getTime() ?? Infinity) - (eventDates(b).start?.getTime() ?? Infinity))[0];
+
   return (
     <>
       <HeroSlideshow initialData={heroes} />
@@ -45,6 +52,7 @@ export default async function HomePage() {
       <ActivityCards initialData={activities} />
       <BenefitsPreview />
       <EventsPreview initialData={events} />
+      {sellerEvent && <SellerBanner eventTitle={sellerEvent.title} />}
       <DailyTip />
       <Lookbook initialData={lookbook} />
       <MateshipCTA />

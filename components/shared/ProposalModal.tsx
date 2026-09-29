@@ -126,14 +126,14 @@ export default function ProposalModal({
 
             {done ? (
               <div style={{ padding: '48px 32px 44px', textAlign: 'center' }}>
-                <div style={{ width: 56, height: 56, borderRadius: 9999, background: '#dcfce7', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 18px', fontSize: 26 }}>✓</div>
+                <div style={{ width: 56, height: 56, borderRadius: 9999, background: '#D6F5F1', display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 18px', fontSize: 26 }}>✓</div>
                 <h3 style={{ fontFamily: BEBAS, fontSize: 26, color: '#111', letterSpacing: '0.02em', margin: '0 0 8px' }}>제안이 접수됐어요</h3>
                 <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, margin: '0 0 24px' }}>담당자가 검토 후 남겨주신 연락처로 연락드릴게요. 감사합니다!</p>
-                <button onClick={onClose} style={{ padding: '12px 32px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer' }}>닫기</button>
+                <button onClick={onClose} style={{ padding: '12px 32px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer' }}>닫기</button>
               </div>
             ) : (
               <div style={{ padding: '30px 28px 28px' }}>
-                <p style={{ fontFamily: MONO, fontSize: 11, color: '#16a34a', letterSpacing: '0.1em', fontWeight: 700, margin: '0 0 6px' }}>
+                <p style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.1em', fontWeight: 700, margin: '0 0 6px' }}>
                   {kind === 'travel' ? 'PLACE PROPOSAL' : 'PARTNERSHIP PROPOSAL'}
                 </p>
                 <h3 style={{ fontFamily: BEBAS, fontSize: 27, color: '#111', letterSpacing: '0.02em', margin: '0 0 8px' }}>{c.title}</h3>
@@ -185,7 +185,7 @@ export default function ProposalModal({
                     disabled={submitting}
                     style={{
                       marginTop: 4, padding: '14px', borderRadius: 12,
-                      background: submitting ? '#86efac' : '#16a34a', color: '#fff',
+                      background: submitting ? '#8FEEE3' : '#12A79D', color: '#fff',
                       fontWeight: 700, fontSize: 15, border: 'none',
                       cursor: submitting ? 'default' : 'pointer', letterSpacing: '0.02em',
                     }}

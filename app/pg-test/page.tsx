@@ -91,7 +91,7 @@ export default function PgTestPage() {
   return (
     <div style={{ background: '#f8fafb', minHeight: '100vh', padding: '0 16px' }}>
       <div style={box}>
-        <div style={{ fontSize: 12, fontWeight: 700, color: '#b45309', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 9999, padding: '4px 12px', display: 'inline-block', marginBottom: 14 }}>PG 심사용 · 테스트 결제</div>
+        <div style={{ fontSize: 12, fontWeight: 700, color: '#C9560F', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 9999, padding: '4px 12px', display: 'inline-block', marginBottom: 14 }}>PG 심사용 · 테스트 결제</div>
         <h1 style={{ fontSize: 22, fontWeight: 800, color: '#111', margin: '0 0 6px' }}>포트원 결제 연동 테스트</h1>
         <p style={{ fontSize: 13.5, color: '#6b7280', lineHeight: 1.7, margin: '0 0 20px' }}>
           이 페이지는 <b>PG 심사 전용</b> 테스트 결제 페이지입니다. 실제 예약·결제 흐름(계좌이체)과 무관하며, 테스트 결제는 결제대행사에서 자동 환불됩니다.
@@ -109,14 +109,14 @@ export default function PgTestPage() {
         <div style={{ display: 'flex', gap: 8, marginBottom: 16 }}>
           {(['CARD', 'EASY_PAY'] as const).map((m) => (
             <button key={m} type="button" onClick={() => setPayMethod(m)}
-              style={{ flex: 1, padding: '10px', borderRadius: 8, border: `1.5px solid ${payMethod === m ? '#16a34a' : '#e5e7eb'}`, background: payMethod === m ? '#f0fdf4' : '#fff', color: payMethod === m ? '#166534' : '#374151', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
+              style={{ flex: 1, padding: '10px', borderRadius: 8, border: `1.5px solid ${payMethod === m ? '#12A79D' : '#e5e7eb'}`, background: payMethod === m ? '#EDFAF8' : '#fff', color: payMethod === m ? '#0A5F59' : '#374151', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>
               {m === 'CARD' ? '카드 (한국결제네트웍스)' : '간편결제 (카카오페이)'}
             </button>
           ))}
         </div>
 
         <button type="button" onClick={pay} disabled={busy || !sdkReady}
-          style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: busy || !sdkReady ? '#d1d5db' : '#16a34a', color: '#fff', fontSize: 15, fontWeight: 800, cursor: busy || !sdkReady ? 'not-allowed' : 'pointer' }}>
+          style={{ width: '100%', padding: '14px', borderRadius: 10, border: 'none', background: busy || !sdkReady ? '#d1d5db' : '#12A79D', color: '#fff', fontSize: 15, fontWeight: 800, cursor: busy || !sdkReady ? 'not-allowed' : 'pointer' }}>
           {busy ? '결제창 호출 중…' : !sdkReady ? 'SDK 로딩 중…' : '테스트 결제하기 (1,000원)'}
         </button>
 

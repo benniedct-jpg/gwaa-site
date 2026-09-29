@@ -1,12 +1,12 @@
 import { TagColor } from '@/types';
 
 const styles: Record<TagColor, { bg: string; color: string; border?: string }> = {
-  green:    { bg: '#dcfce7', color: '#166534', border: '1px solid rgba(22,163,74,0.15)' },
+  green:    { bg: '#D6F5F1', color: '#0A5F59', border: '1px solid rgba(18,167,157,0.15)' },
   blue:     { bg: '#dbeafe', color: '#1e40af', border: '1px solid rgba(37,99,235,0.15)' },
   amber:    { bg: '#fef9c3', color: '#854d0e', border: '1px solid rgba(217,119,6,0.15)' },
   gray:     { bg: '#f3f4f6', color: '#6b7280', border: '1px solid #e5e7eb' },
   dark:     { bg: 'rgba(255,255,255,0.12)', color: 'rgba(255,255,255,0.75)', border: '1px solid rgba(255,255,255,0.15)' },
-  live:     { bg: '#16a34a', color: '#fff' },
+  live:     { bg: '#12A79D', color: '#fff' },
   soon:     { bg: '#2563eb', color: '#fff' },
   upcoming: { bg: '#f97316', color: '#fff' },
   ended:    { bg: '#9ca3af', color: '#fff' },

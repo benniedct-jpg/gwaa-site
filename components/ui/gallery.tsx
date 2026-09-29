@@ -137,7 +137,7 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
         fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", letterSpacing: '0.02em', lineHeight: 0.95,
         color: '#111', marginBottom: 0, position: 'relative',
       }}>
-        GWAA <span style={{ color: '#16a34a' }}>갤러리</span>
+        GWAA <span style={{ color: '#12A79D' }}>갤러리</span>
       </h3>
 
       {/* Fan of photos */}
@@ -189,9 +189,9 @@ export function PhotoGallery({ animationDelay = 0.5 }: { animationDelay?: number
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             padding: '10px 24px', borderRadius: 9999,
-            background: '#16a34a', color: '#fff',
+            background: '#12A79D', color: '#fff',
             fontSize: 13, fontWeight: 700, letterSpacing: '0.04em',
-            boxShadow: '0 2px 12px rgba(22,163,74,0.3)',
+            boxShadow: '0 2px 12px rgba(18,167,157,0.3)',
             fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",
           }}
         >

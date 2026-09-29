@@ -27,7 +27,7 @@ const VIDEOS: { src: string; cap: string }[] = [
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
-const GREEN = '#16a34a';
+const GREEN = '#12A79D';
 const MUTED = '#6b7280';
 
 export default function RecapGosung() {
@@ -68,7 +68,7 @@ export default function RecapGosung() {
 
         {/* 영상 후기 — 1개씩 개별 강조 */}
         {VIDEOS.map((v, i) => (
-          <div key={v.src} style={{ marginBottom: isMobile ? 22 : 32, background: 'linear-gradient(135deg,#0f3d24,#14532d)', borderRadius: 20, padding: isMobile ? '20px 16px 24px' : '30px 30px 34px' }}>
+          <div key={v.src} style={{ marginBottom: isMobile ? 22 : 32, background: 'linear-gradient(135deg,#0f3d24,#08514C)', borderRadius: 20, padding: isMobile ? '20px 16px 24px' : '30px 30px 34px' }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 10, justifyContent: 'center' }}>
               <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 22 : 26, color: '#eab543', lineHeight: 1 }}>{String(i + 1).padStart(2, '0')}</span>
               <span style={{ fontFamily: MONO, fontSize: 11, color: '#eab543', letterSpacing: '0.12em', fontWeight: 700 }}>REEL</span>

@@ -29,8 +29,8 @@ const CATEGORIES = [
 const REGIONS = ['전체','춘천','원주','강릉','속초','양양','고성','평창','홍천','인제','삼척','정선','영월'];
 
 const REGION_COLOR: Record<string, string> = {
-  춘천: '#3b82f6', 원주: '#f59e0b', 강릉: '#06b6d4', 속초: '#10b981',
-  양양: '#ec4899', 고성: '#22c55e', 평창: '#64748b', 홍천: '#84cc16',
+  춘천: '#3b82f6', 원주: '#F5A524', 강릉: '#06b6d4', 속초: '#12B0A3',
+  양양: '#ec4899', 고성: '#2CC7BC', 평창: '#64748b', 홍천: '#84cc16',
   인제: '#8b5cf6', 삼척: '#3b82f6', 정선: '#eab308', 영월: '#f97316',
 };
 
@@ -71,7 +71,7 @@ const COURSES = [
     duration: '당일', theme: '힐링', distance: '약 60km',
     tags: ['해변', '공원', '반려견 놀이터', '서핑 마을'],
     cover: 'https://images.unsplash.com/photo-1560807707-8cc77767d783?w=800&q=80',
-    color: '#10b981',
+    color: '#12B0A3',
     days: [
       {
         label: '코스',
@@ -141,7 +141,7 @@ const COURSES = [
     duration: '2박3일', theme: '드라이브', distance: '약 200km',
     tags: ['해변', '트레킹', '호텔', '레일바이크', '해수욕'],
     cover: 'https://images.unsplash.com/photo-1543466835-00a7907e9de1?w=800&q=80',
-    color: '#22c55e',
+    color: '#2CC7BC',
     days: [
       {
         label: 'DAY 1 · 고성',
@@ -176,8 +176,8 @@ function PetBadge({ petInfo }: { petInfo: string }) {
   const has = (k: string) => petInfo.toLowerCase().includes(k);
   return (
     <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
-      {(has('소형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#dcfce7', color: '#16a34a', fontWeight: 700 }}>소형</span>}
-      {(has('중형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#fef3c7', color: '#d97706', fontWeight: 700 }}>중형</span>}
+      {(has('소형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#D6F5F1', color: '#12A79D', fontWeight: 700 }}>소형</span>}
+      {(has('중형') || has('전 견종') || has('모든')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#fef3c7', color: '#EF7726', fontWeight: 700 }}>중형</span>}
       {(has('대형') || has('전 견종') || has('모든') || has('체중 제한 없')) && <span style={{ fontFamily: MONO, fontSize: 11, padding: '2px 6px', borderRadius: 9999, background: '#fee2e2', color: '#dc2626', fontWeight: 700 }}>대형</span>}
     </div>
   );
@@ -253,7 +253,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                 borderRight: isLast ? 'none' : '1px solid #e5e7eb',
                 borderBottom: isTop ? '1px solid #e5e7eb' : 'none',
               }}>
-                <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(32px,8vw,44px)' : 'clamp(40px,4.5vw,56px)', color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 8 }}>{n}</div>
+                <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(32px,8vw,44px)' : 'clamp(40px,4.5vw,56px)', color: '#12A79D', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 8 }}>{n}</div>
                 <div style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', letterSpacing: '0.02em' }}>{label}</div>
               </div>
             );
@@ -367,8 +367,8 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
               onClick={() => setProposalOpen(true)}
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 6, flexShrink: 0,
-                fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#16a34a',
-                background: '#f0fdf4', border: '1.5px solid #bbf7d0',
+                fontFamily: MONO, fontSize: 12.5, fontWeight: 700, color: '#12A79D',
+                background: '#EDFAF8', border: '1.5px solid #BFF3EC',
                 padding: '9px 16px', borderRadius: 9999, cursor: 'pointer', letterSpacing: '0.02em',
                 whiteSpace: 'nowrap',
               }}
@@ -410,9 +410,9 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                   style={{
                     padding: '6px 12px', borderRadius: 9999, fontSize: 12, fontWeight: 700,
                     cursor: 'pointer', border: '1.5px solid', flexShrink: 0,
-                    background: region === r ? (REGION_COLOR[r] || '#16a34a') : 'transparent',
+                    background: region === r ? (REGION_COLOR[r] || '#12A79D') : 'transparent',
                     color: region === r ? '#fff' : '#6b7280',
-                    borderColor: region === r ? (REGION_COLOR[r] || '#16a34a') : '#d1d5db',
+                    borderColor: region === r ? (REGION_COLOR[r] || '#12A79D') : '#d1d5db',
                     transition: 'all 0.18s', whiteSpace: 'nowrap',
                   }}
                 >
@@ -469,7 +469,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
             {(region !== '전체' || category !== '전체' || partnerOnly || search) && (
               <button
                 onClick={() => { setRegion('전체'); setCategory('전체'); setPartnerOnly(false); setSearch(''); }}
-                style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.02em' }}
+                style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline', letterSpacing: '0.02em' }}
               >
                 필터 초기화
               </button>
@@ -514,7 +514,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                         : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
                     }}>
                       <div style={{ position: 'absolute', top: 10, left: 10, display: 'flex', gap: 5 }}>
-                        <span style={{ fontFamily: MONO, fontSize: 11, background: REGION_COLOR[place.region] || '#16a34a', color: '#fff', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.04em' }}>{place.region}</span>
+                        <span style={{ fontFamily: MONO, fontSize: 11, background: REGION_COLOR[place.region] || '#12A79D', color: '#fff', padding: '3px 7px', borderRadius: 9999, fontWeight: 700, letterSpacing: '0.04em' }}>{place.region}</span>
                         <span style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(0,0,0,0.5)', color: '#fff', padding: '3px 7px', borderRadius: 9999, letterSpacing: '0.02em', backdropFilter: 'blur(4px)' }}>{place.typeLabel || place.type}</span>
                       </div>
                       {place.isPartner && (
@@ -535,7 +535,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                       <h3 style={{ fontSize: 15, fontWeight: 800, color: '#111', lineHeight: 1.2, marginBottom: 4 }}>
                         {place.icon} {place.name}
                       </h3>
-                      <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>{place.feature}</p>
+                      <p style={{ fontSize: 12, color: '#12A79D', fontWeight: 700, marginBottom: 8, lineHeight: 1.4 }}>{place.feature}</p>
 
                       {/* Pet conditions */}
                       <div style={{ marginBottom: 8 }}>
@@ -586,7 +586,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                             display: 'inline-flex', alignItems: 'center', gap: 5,
                             fontFamily: MONO, fontSize: 12, color: '#fff',
                             fontWeight: 700, letterSpacing: '0.06em', textDecoration: 'none',
-                            background: '#16a34a', padding: '6px 12px', borderRadius: 8,
+                            background: '#12A79D', padding: '6px 12px', borderRadius: 8,
                           }}
                         >
                           🗺️ 지도 보기

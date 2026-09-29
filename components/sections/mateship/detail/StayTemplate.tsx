@@ -27,7 +27,7 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
         <h1 style={{ fontFamily: BEBAS, fontSize: 'clamp(36px,6vw,64px)', color: '#fff', lineHeight: 1.1, marginBottom: 8, letterSpacing: '0.02em' }}>
           {name}
         </h1>
-        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(24px,4vw,40px)', color: '#16a34a', letterSpacing: '0.04em', marginBottom: 20 }}>
+        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(24px,4vw,40px)', color: '#12A79D', letterSpacing: '0.04em', marginBottom: 20 }}>
           {detail.tagline}
         </p>
         <p style={{ fontSize: 15, color: '#4b5563', lineHeight: 1.6, maxWidth: 480, margin: '0 auto 16px' }}>
@@ -41,7 +41,7 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
         <div style={{ marginTop: 32 }}>
           <a href="#price" style={{
             display: 'inline-block', padding: '13px 32px', borderRadius: 9999,
-            background: '#16a34a', color: '#fff', fontWeight: 700,
+            background: '#12A79D', color: '#fff', fontWeight: 700,
             fontSize: 14, textDecoration: 'none', letterSpacing: '0.04em',
           }}>
             요금 확인하기 ↓
@@ -69,8 +69,8 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
             <div style={{ fontSize: 32, color: '#374151' }}>→</div>
             {detail.memberPrice && (
               <div>
-                <p style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', marginBottom: 8 }}>메이트쉽가</p>
-                <p style={{ fontFamily: BEBAS, fontSize: 52, color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em' }}>
+                <p style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', marginBottom: 8 }}>메이트쉽가</p>
+                <p style={{ fontFamily: BEBAS, fontSize: 52, color: '#12A79D', lineHeight: 1, letterSpacing: '0.02em' }}>
                   {detail.memberPrice}
                 </p>
               </div>
@@ -78,7 +78,7 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
           </div>
           {detail.discountRate && (
             <p style={{ marginTop: 16, fontSize: 13, color: '#6b7280' }}>
-              <span style={{ color: '#16a34a', fontWeight: 700 }}>{detail.discountRate}</span> — 이 가격은 메이트쉽 회원만 이용할 수 있습니다.
+              <span style={{ color: '#12A79D', fontWeight: 700 }}>{detail.discountRate}</span> — 이 가격은 메이트쉽 회원만 이용할 수 있습니다.
             </p>
           )}
         </section>
@@ -108,13 +108,13 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
                     {row.badge && (
                       <span style={{
                         display: 'inline-block', padding: '2px 8px', borderRadius: 4,
-                        background: '#dcfce7', color: '#16a34a',
+                        background: '#D6F5F1', color: '#12A79D',
                         fontSize: 12, fontWeight: 700, marginBottom: 4,
                       }}>
                         {row.badge}
                       </span>
                     )}
-                    <p style={{ fontFamily: BEBAS, fontSize: 22, color: '#16a34a', letterSpacing: '0.04em' }}>
+                    <p style={{ fontFamily: BEBAS, fontSize: 22, color: '#12A79D', letterSpacing: '0.04em' }}>
                       {row.memberPrice}
                     </p>
                   </div>
@@ -127,9 +127,9 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
 
       {/* 반려견 안내 */}
       {detail.petInfo && (
-        <section style={{ padding: '72px 60px', background: '#f0fdf4', borderBottom: '1px solid #e5e7eb' }}>
+        <section style={{ padding: '72px 60px', background: '#EDFAF8', borderBottom: '1px solid #e5e7eb' }}>
           <div style={{ maxWidth: 760, margin: '0 auto' }}>
-            <p style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.06em', marginBottom: 8 }}>PET GUIDE</p>
+            <p style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.06em', marginBottom: 8 }}>PET GUIDE</p>
             <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(28px,4vw,44px)', color: '#111', marginBottom: 8, letterSpacing: '0.02em' }}>
               🐾 반려동물 객실 안내
             </h2>
@@ -140,7 +140,7 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8 }}>
                   {detail.petInfo.amenities.map((item, i) => (
                     <li key={i} style={{ fontSize: 13, color: '#374151', display: 'flex', gap: 8 }}>
-                      <span style={{ color: '#16a34a' }}>✓</span> {item}
+                      <span style={{ color: '#12A79D' }}>✓</span> {item}
                     </li>
                   ))}
                 </ul>
@@ -242,9 +242,9 @@ export default function StayTemplate({ partner }: { partner: MateshipPartner }) 
             rel="noopener noreferrer"
             style={{
               display: 'inline-block', padding: '15px 40px', borderRadius: 9999,
-              background: '#16a34a', color: '#fff', fontWeight: 700,
+              background: '#12A79D', color: '#fff', fontWeight: 700,
               fontSize: 15, textDecoration: 'none', letterSpacing: '0.04em',
-              boxShadow: '0 4px 20px rgba(34,197,94,0.35)',
+              boxShadow: '0 4px 20px rgba(44,199,188,0.35)',
             }}
           >
             {detail.cta.label}

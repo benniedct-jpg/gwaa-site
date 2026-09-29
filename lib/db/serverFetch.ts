@@ -44,6 +44,8 @@ const MAP: Record<string, string> = {
   is_main:     'isMain',
   cta_text:    'ctaText',
   map_url:     'mapUrl',
+  start_date:  'startDate',
+  end_date:    'endDate',
 };
 
 function fromDb(obj: Record<string, unknown>): Record<string, unknown> {

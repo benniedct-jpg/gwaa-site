@@ -7,8 +7,8 @@ import { ButtonVariant, ButtonSize } from '@/types';
 
 const variantStyles: Record<ButtonVariant, React.CSSProperties> = {
   primary: {
-    background: '#16a34a', color: '#fff',
-    boxShadow: '0 2px 12px rgba(22,163,74,0.25)',
+    background: '#12A79D', color: '#fff',
+    boxShadow: '0 2px 12px rgba(18,167,157,0.25)',
   },
   outline: {
     background: 'transparent', color: '#111',
@@ -55,9 +55,9 @@ function GalleryBtn({ children, onClick, className }: { children: React.ReactNod
       className={className}
       style={{
         display: 'inline-flex', alignItems: 'center', padding: '12px 28px',
-        borderRadius: 9999, background: '#16a34a', color: '#fff',
+        borderRadius: 9999, background: '#12A79D', color: '#fff',
         fontSize: 13, fontWeight: 700, letterSpacing: '0.04em', cursor: 'pointer',
-        border: 'none', boxShadow: '0 2px 12px rgba(22,163,74,0.3)',
+        border: 'none', boxShadow: '0 2px 12px rgba(18,167,157,0.3)',
         fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",
       }}
     >

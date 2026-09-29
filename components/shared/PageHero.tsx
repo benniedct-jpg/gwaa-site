@@ -17,11 +17,11 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
   return (
     <section
       style={{
-        minHeight: 400,
+        minHeight: 300,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'flex-end',
-        padding: 'max(60px, 10vw) max(20px, 5vw) 48px',
+        padding: 'max(40px, 6vw) max(20px, 5vw) 36px',
         position: 'relative',
         overflow: 'hidden',
         background: '#f8fafb',
@@ -45,7 +45,7 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
           position: 'absolute', top: '10%', right: '15%',
           width: 400, height: 400,
           borderRadius: '50%',
-          background: '#16a34a',
+          background: '#12A79D',
           filter: 'blur(80px)',
           pointerEvents: 'none',
         }}
@@ -57,7 +57,7 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
           position: 'absolute', bottom: '20%', left: '10%',
           width: 300, height: 300,
           borderRadius: '50%',
-          background: '#2563eb',
+          background: '#EF7726',
           filter: 'blur(80px)',
           pointerEvents: 'none',
         }}
@@ -93,7 +93,7 @@ export default function PageHero({ eyebrow, title, titleAccent, desc, children }
               initial={{ opacity: 0, y: 40 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: words.length * 0.06 + 0.05, duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
-              style={{ color: '#16a34a', display: 'inline-block' }}
+              style={{ color: '#12A79D', display: 'inline-block' }}
             >
               {titleAccent}
             </motion.span>

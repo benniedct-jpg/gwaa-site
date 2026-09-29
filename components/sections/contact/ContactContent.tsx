@@ -30,7 +30,7 @@ const CHANNELS = [
     desc: '평일 09:00 ~ 18:00',
     href: 'tel:033-813-0333',
     external: false,
-    accent: '#16a34a',
+    accent: '#12A79D',
     textColor: '#fff',
   },
   {
@@ -157,7 +157,7 @@ export default function ContactContent() {
                   rel={ch.external ? 'noopener noreferrer' : undefined}
                   variants={fadeUp}
                   custom={i * 0.06}
-                  whileHover={{ x: 4, boxShadow: '0 8px 28px rgba(0,0,0,0.09)', borderColor: '#16a34a' }}
+                  whileHover={{ x: 4, boxShadow: '0 8px 28px rgba(0,0,0,0.09)', borderColor: '#12A79D' }}
                   whileTap={{ scale: 0.985 }}
                   style={{
                     background: '#fafafa', border: '1.5px solid #ececec', borderRadius: 14,
@@ -205,7 +205,7 @@ export default function ContactContent() {
               }}
             >
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#4ade80', letterSpacing: '0.06em', marginBottom: 5 }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, color: '#4FE0D3', letterSpacing: '0.06em', marginBottom: 5 }}>
                   FASTEST RESPONSE
                 </div>
                 <div style={{ fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 20 : 22, color: '#fff', letterSpacing: '0.02em' }}>
@@ -251,8 +251,8 @@ export default function ContactContent() {
                   transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
                   style={{
                     textAlign: 'center', padding: '52px 24px',
-                    background: '#f0fdf4', borderRadius: 14,
-                    border: '1.5px solid rgba(22,163,74,0.2)',
+                    background: '#EDFAF8', borderRadius: 14,
+                    border: '1.5px solid rgba(18,167,157,0.2)',
                   }}
                 >
                   <motion.div
@@ -261,7 +261,7 @@ export default function ContactContent() {
                     transition={{ delay: 0.1, type: 'spring', stiffness: 300, damping: 20 }}
                     style={{
                       width: 56, height: 56, borderRadius: '50%',
-                      background: '#16a34a',
+                      background: '#12A79D',
                       display: 'flex', alignItems: 'center', justifyContent: 'center',
                       margin: '0 auto 16px', fontSize: 24,
                     }}
@@ -346,15 +346,15 @@ export default function ContactContent() {
                   <motion.button
                     type="submit"
                     disabled={submitting}
-                    whileHover={!submitting ? { scale: 1.02, boxShadow: '0 6px 24px rgba(22,163,74,0.4)' } : undefined}
+                    whileHover={!submitting ? { scale: 1.02, boxShadow: '0 6px 24px rgba(18,167,157,0.4)' } : undefined}
                     whileTap={!submitting ? { scale: 0.97 } : undefined}
                     style={{
                       width: '100%', padding: '14px 20px', borderRadius: 12,
-                      background: submitting ? '#9ca3af' : '#16a34a',
+                      background: submitting ? '#9ca3af' : '#12A79D',
                       color: '#fff', fontSize: 14, fontWeight: 700,
                       border: 'none', cursor: submitting ? 'not-allowed' : 'pointer',
                       letterSpacing: '0.04em', fontFamily: SYS,
-                      boxShadow: submitting ? 'none' : '0 2px 14px rgba(22,163,74,0.3)',
+                      boxShadow: submitting ? 'none' : '0 2px 14px rgba(18,167,157,0.3)',
                       transition: 'background 0.2s, box-shadow 0.2s',
                       display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     }}
@@ -412,7 +412,7 @@ export default function ContactContent() {
                 { label: '업무시간', value: '평일 09:00 ~ 18:00' },
               ].map(({ label, value }) => (
                 <div key={label}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#16a34a', marginBottom: 6, fontWeight: 700 }}>
+                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#12A79D', marginBottom: 6, fontWeight: 700 }}>
                     {label}
                   </div>
                   <div style={{ fontSize: isMobile ? 12 : 13, fontWeight: 600, color: '#111', lineHeight: 1.6, wordBreak: 'keep-all' }}>
@@ -429,8 +429,8 @@ export default function ContactContent() {
                 href="/mateship"
                 style={{
                   display: 'inline-flex', padding: '10px 20px', borderRadius: 9999,
-                  background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700,
-                  textDecoration: 'none', boxShadow: '0 2px 10px rgba(22,163,74,0.25)',
+                  background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700,
+                  textDecoration: 'none', boxShadow: '0 2px 10px rgba(18,167,157,0.25)',
                 }}
               >
                 메이트쉽 가입하기 →

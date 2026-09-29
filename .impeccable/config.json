@@ -1,0 +1,89 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "clipped-overflow-container",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/모션컬러방향_글로벌_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:02:47.320Z",
+        "reason": "claude: motion-demo stages intentionally clip decorative animation layers (gradient mesh, marquee) and a contained replay control — no tooltips/menus/popovers need to escape; clipping is required for the effect"
+      },
+      {
+        "rule": "marquee",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/모션컬러방향_글로벌_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:06:50.561Z",
+        "reason": "user confirmed: explicitly requested a motion-graphics-rich, colorful site; marquee is a demonstrated motion option in a motion catalog and stops under prefers-reduced-motion"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/컬러방향_밝은신나는_모바일_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:27:48.317Z",
+        "reason": "claude: phone-UI mockup — event cards inside scrolling screen sections is standard mobile layout, not decorative card-in-card; outer .phone is a device frame, not a card"
+      },
+      {
+        "rule": "tight-leading",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/모션컬러방향_글로벌_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:27:48.343Z",
+        "reason": "claude: tight leading only on single-line display headline/button/numeral elements; body copy is line-height 1.7 — correct display typography"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/디자인_프렌들리일러스트_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:54:55.644Z",
+        "reason": "claude: phone-UI mockup — event cards inside a scrolling screen is standard mobile layout; outer .phone is a device frame, not a card"
+      },
+      {
+        "rule": "cream-palette",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/디자인_프렌들리일러스트_2026-09.html"
+        ],
+        "createdAt": "2026-09-27T15:54:55.671Z",
+        "reason": "user confirmed: chose the friendly-illustration mood (warm tone); the warm oat canvas is intrinsic to that direction, deliberately paired with the green+peach illustration palette"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/디자인_로고매치_틸오렌지_2026-09.html"
+        ],
+        "createdAt": "2026-09-28T03:08:30.553Z",
+        "reason": "claude: phone-UI mockup — event cards inside a scrolling screen is standard mobile layout; outer .phone is a device frame, not a card"
+      },
+      {
+        "rule": "nested-cards",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/마스코트_스타일가이드_2026-09.html"
+        ],
+        "createdAt": "2026-09-28T04:43:53.967Z",
+        "reason": "claude: design-system style-guide layout — section panels containing item cards (ratios, DNA, poses) is a conventional docs pattern that aids scanning, not decorative card-in-card"
+      },
+      {
+        "rule": "cramped-padding",
+        "value": "*",
+        "files": [
+          "/Users/to./Documents/전체자료 정리함/01-프로젝트/진행중/GWAA사이트/docs/마스코트_스타일가이드_2026-09.html"
+        ],
+        "createdAt": "2026-09-28T09:10:07.288Z",
+        "reason": "claude: dense reference-doc cards; flagged items already bumped to 14/16px padding, remaining is a subjective margin call on a delivered style-guide"
+      }
+    ]
+  }
+}

@@ -6,8 +6,8 @@ import { Map as MapIcon, Loader2, CheckCircle2, Clock } from 'lucide-react';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
-const GREEN = '#16a34a';
-const GREEN_DK = '#15803d';
+const GREEN = '#12A79D';
+const GREEN_DK = '#0D7E76';
 const BORDER = '#e5e7eb';
 const MUTED = '#6b7280';
 
@@ -83,8 +83,10 @@ const ZONES: Record<string, Zone> = {
   RG: { label: '낭만기버존', desc: '초대 전용 · 낭만기버 웰니스존 · 8×8m', tier: 'near', sites: seqD('RG', 18), poly: '' },
 };
 // 협회 자체 사용 등으로 온라인 예약을 막을 구역(마감 처리). 여기 키만 넣으면 지도·목록에서 '마감'으로 표시되고 선택 불가.
-const BLOCKED_ZONE_KEYS: string[] = ['A'];
-const BLOCKED_SITES = new Set(BLOCKED_ZONE_KEYS.flatMap((k) => ZONES[k].sites));
+const BLOCKED_ZONE_KEYS: string[] = ['A', 'D', 'E'];
+// 협회 자체 사용 등으로 개별 마감한 사이트(구역 전체가 아닌 특정 자리)
+const BLOCKED_SITE_IDS: string[] = ['C2', 'C8', 'F4-1', 'F4-2', 'F4-3', 'F4-11', 'F4-12', 'F4-14'];
+const BLOCKED_SITES = new Set([...BLOCKED_ZONE_KEYS.flatMap((k) => ZONES[k].sites), ...BLOCKED_SITE_IDS]);
 // 낭만기버존 숨김 링크 코드 — 공유용. 필요 시 이 값만 바꾸면 됨. 접속: /events/3?rg=<이 코드>
 const RG_CODE = 'nangman-2026';
 
@@ -112,7 +114,7 @@ const AROMA_PRICE = 10000; // 아로마 DIY — 신청 인원당 1만원(낭만�
 type ClassType = { emoji: string; name: string; host: string; desc: string; grad: string; img?: string; slots: string[] };
 const CLS_IMG = '/images/events/jamboree-2026/classes';
 const CLASS_TYPES: ClassType[] = [
-  { emoji: '🐶', name: '퍼피요가', host: '고성 소울얼라인먼트', desc: '반려견과 함께 호흡·교감. 비반려인도 참여 가능', grad: 'linear-gradient(135deg,#16a34a,#4ade80)', img: `${CLS_IMG}/puppy.webp`, slots: ['9/5(토) 15:30', '9/6(일) 09:00'] },
+  { emoji: '🐶', name: '퍼피요가', host: '고성 소울얼라인먼트', desc: '반려견과 함께 호흡·교감. 비반려인도 참여 가능', grad: 'linear-gradient(135deg,#12A79D,#4FE0D3)', img: `${CLS_IMG}/puppy.webp`, slots: ['9/5(토) 15:30', '9/6(일) 09:00'] },
   { emoji: '🤸', name: '아크로요가', host: 'TJ & 징조', desc: '요가·균형 운동 결합. 혼자 와도 파트너 매칭', grad: 'linear-gradient(135deg,#0284c7,#38bdf8)', img: `${CLS_IMG}/acro.webp`, slots: ['9/5(토) 10:30', '9/5(토) 18:30'] },
   { emoji: '🌿', name: '애니멀플로우', host: '최민호', desc: '동물 움직임 맨몸 운동. 코어·유연성', grad: 'linear-gradient(135deg,#65a30d,#a3e635)', img: `${CLS_IMG}/animalflow.webp`, slots: ['9/5(토) 17:00', '9/6(일) 10:30'] },
   { emoji: '🎵', name: '핸드팬 사운드힐링', host: '하택후', desc: '핸드팬 울림 속 깊은 힐링', grad: 'linear-gradient(135deg,#7c3aed,#a78bfa)', img: `${CLS_IMG}/handpan.webp`, slots: ['9/4(금) 19:00', '9/5(토) 09:00'] },
@@ -422,8 +424,8 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
   // ── 스타일 헬퍼 ──
   const card = (selected: boolean): React.CSSProperties => ({
     border: `2px solid ${selected ? GREEN : BORDER}`, borderRadius: 14, padding: '22px 18px',
-    cursor: 'pointer', background: selected ? '#f0fdf4' : '#fff', textAlign: 'center',
-    transition: 'all .15s', boxShadow: selected ? `0 0 0 3px rgba(22,163,74,.12)` : 'none',
+    cursor: 'pointer', background: selected ? '#EDFAF8' : '#fff', textAlign: 'center',
+    transition: 'all .15s', boxShadow: selected ? `0 0 0 3px rgba(18,167,157,.12)` : 'none',
   });
   const nextBtn = (disabled: boolean): React.CSSProperties => ({
     display: 'block', width: '100%', maxWidth: 340, margin: '28px auto 0',
@@ -453,7 +455,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
     <div id="booking-anchor" style={{ background: '#fff', border: `1px solid ${BORDER}`, borderRadius: 18, overflow: 'hidden', scrollMarginTop: 80 }}>
       {/* 헤더 */}
       <div style={{ background: GREEN_DK, padding: isMobile ? '28px 20px 22px' : '36px 40px 28px', textAlign: 'center' }}>
-        <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.18em', color: '#bbf7d0', fontWeight: 700, marginBottom: 8 }}>PETSCOUT 2026 · {rgMode ? 'INVITE ONLY' : 'BOOKING'}</div>
+        <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.18em', color: '#BFF3EC', fontWeight: 700, marginBottom: 8 }}>PETSCOUT 2026 · {rgMode ? 'INVITE ONLY' : 'BOOKING'}</div>
         <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 26 : 34, color: '#fff', letterSpacing: '0.02em', lineHeight: 1.1, marginBottom: 8 }}>{rgMode ? '낭만기버존 예약' : '캠핑 사이트 예약'}</h2>
         <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 13, fontFamily: MONO }}>{rgMode ? '초대 전용 · 낭만기버 웰니스존 · 8×8m · 2박 3일 (9/4~9/6)' : '2026. 9. 4(금) — 9. 6(일) · 강원도 고성 세계잼버리 수련장'}</p>
       </div>
@@ -497,7 +499,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   {DATE_OPTIONS[type].map((o) => {
                     const sel = dateLabel === o.sub;
                     return (
-                      <div key={o.sub} onClick={() => { setDates(o.dates); setDateLabel(o.sub); }} style={{ border: `2px solid ${sel ? GREEN : BORDER}`, borderRadius: 10, background: sel ? '#f0fdf4' : '#fff', cursor: 'pointer', padding: '13px 20px', minWidth: 150, boxShadow: sel ? `0 0 0 3px rgba(22,163,74,.12)` : 'none' }}>
+                      <div key={o.sub} onClick={() => { setDates(o.dates); setDateLabel(o.sub); }} style={{ border: `2px solid ${sel ? GREEN : BORDER}`, borderRadius: 10, background: sel ? '#EDFAF8' : '#fff', cursor: 'pointer', padding: '13px 20px', minWidth: 150, boxShadow: sel ? `0 0 0 3px rgba(18,167,157,.12)` : 'none' }}>
                         <strong style={{ display: 'block', fontSize: 15, marginBottom: 2 }}>{o.label}</strong>
                         <span style={{ fontSize: 12, color: MUTED }}>{o.sub}</span>
                       </div>
@@ -534,9 +536,9 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                         return (
                           <g key={key} onClick={() => { if (!pan.current.moved && !full) selectZone(key); pan.current.moved = false; }} style={{ cursor: full ? 'not-allowed' : 'pointer' }}>
                             <polygon points={z.poly}
-                              fill={sel ? 'rgba(22,163,74,0.5)' : full ? 'rgba(200,50,50,0.2)' : 'rgba(22,163,74,0.15)'}
+                              fill={sel ? 'rgba(18,167,157,0.5)' : full ? 'rgba(200,50,50,0.2)' : 'rgba(18,167,157,0.15)'}
                               stroke={sel ? GREEN : full ? '#c83232' : GREEN} strokeWidth={sel ? 2.5 : 1.5} />
-                            <text x={cx} y={cy + 4} textAnchor="middle" style={{ fill: '#14532d', fontSize: 11, fontWeight: 700, pointerEvents: 'none', fontFamily: MONO }}>{key}</text>
+                            <text x={cx} y={cy + 4} textAnchor="middle" style={{ fill: '#08514C', fontSize: 11, fontWeight: 700, pointerEvents: 'none', fontFamily: MONO }}>{key}</text>
                           </g>
                         );
                       })}
@@ -568,8 +570,8 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   </div>
                 </div>
                 <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap', marginTop: 12 }}>
-                  <Legend color="rgba(22,163,74,0.4)" border={GREEN} label="예약 가능" />
-                  <Legend color="rgba(22,163,74,0.6)" border={GREEN} label="선택 중" />
+                  <Legend color="rgba(18,167,157,0.4)" border={GREEN} label="예약 가능" />
+                  <Legend color="rgba(18,167,157,0.6)" border={GREEN} label="선택 중" />
                   <Legend color="rgba(200,50,50,0.25)" border="#c83232" label="예약 완료" />
                 </div>
                 <div style={{ marginTop: 12, fontSize: 12, color: '#92400e', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '10px 12px', lineHeight: 1.6, fontWeight: 600 }}>
@@ -578,7 +580,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                 <div style={{ marginTop: 8, fontSize: 12, color: MUTED, background: '#f9fafb', border: `1px solid ${BORDER}`, borderRadius: 8, padding: '10px 12px', lineHeight: 1.6 }}>
                   <strong style={{ color: GREEN_DK }}>FP · 패밀리 프라이빗존</strong>은 통임대 전용 구역으로 온라인 개별 예약 대상이 아닙니다. 이용을 원하시면 협회(033-813-0333)로 문의해 주세요.
                 </div>
-                <div style={{ marginTop: 8, fontSize: 12, color: GREEN_DK, background: '#f0fdf4', border: `1px solid #bbf7d0`, borderRadius: 8, padding: '10px 12px', lineHeight: 1.6, fontWeight: 600 }}>
+                <div style={{ marginTop: 8, fontSize: 12, color: GREEN_DK, background: '#EDFAF8', border: `1px solid #BFF3EC`, borderRadius: 8, padding: '10px 12px', lineHeight: 1.6, fontWeight: 600 }}>
                   👥 <strong>단체·기업 예약(다수 사이트)</strong>은 별도 구역 배정·할인이 가능합니다. 협회(033-813-0333 · ganimal1@naver.com)로 문의해 주세요.
                 </div>
               </div>
@@ -649,7 +651,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                       {site && (
                         <div style={{ marginTop: 14, padding: '12px 14px', background: GREEN_DK, borderRadius: 8, textAlign: 'center' }}>
                           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.65)', marginBottom: 3 }}>{typeLabel} · {headcount}인 · 반려견 {dogCount}마리 · {selZone.label} {siteLabel(site)}</div>
-                          <div style={{ fontSize: 20, fontWeight: 700, color: '#fff' }}>총 <span style={{ color: '#bbf7d0' }}>{total.toLocaleString()}원</span></div>
+                          <div style={{ fontSize: 20, fontWeight: 700, color: '#fff' }}>총 <span style={{ color: '#BFF3EC' }}>{total.toLocaleString()}원</span></div>
                           <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>
                             사이트 {unitPrice().toLocaleString()}원 (2인){addCnt > 0 ? ` + 추가 ${addCnt}인 ${(addCnt * EXTRA_PERSON).toLocaleString()}원` : ''}{extraDogCnt > 0 ? ` + 반려견 ${extraDogCnt}두 ${(extraDogCnt * EXTRA_DOG).toLocaleString()}원` : ''}
                           </div>
@@ -683,7 +685,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
 
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 16 }}>
               {rgMode && (
-                <div style={{ gridColumn: '1 / -1', border: `2px solid ${site ? GREEN : BORDER}`, borderRadius: 12, padding: isMobile ? 14 : 18, background: site ? '#f0fdf4' : '#fff' }}>
+                <div style={{ gridColumn: '1 / -1', border: `2px solid ${site ? GREEN : BORDER}`, borderRadius: 12, padding: isMobile ? 14 : 18, background: site ? '#EDFAF8' : '#fff' }}>
                   <label style={{ display: 'block', fontSize: 14, fontWeight: 800, color: '#111', marginBottom: 4 }}>낭만기버존 자리 선택 *</label>
                   <p style={{ fontSize: 12.5, color: MUTED, margin: '0 0 12px', lineHeight: 1.6 }}>8×8m · 초대 전용 · 원하는 자리를 선택하세요{site ? ` — 선택: ${siteLabel(site)}번` : ''}</p>
                   <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(6,1fr)' : 'repeat(9,1fr)', gap: 6 }}>
@@ -701,9 +703,9 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               <Field label="연락처 *"><input style={inputStyle} value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="010-0000-0000" /></Field>
               <Field label="이메일 * (입장권이 이 주소로 발송됩니다)"><input style={inputStyle} value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="example@naver.com" inputMode="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} /></Field>
               {(() => { const s = suggestEmail(form.email.trim()); return s ? (
-                <div style={{ marginTop: -4, marginBottom: 8, fontSize: 12.5, color: '#b45309' }}>
+                <div style={{ marginTop: -4, marginBottom: 8, fontSize: 12.5, color: '#C9560F' }}>
                   혹시 <strong>{s}</strong> 아닌가요?{' '}
-                  <button type="button" onClick={() => { setForm({ ...form, email: s }); setEmailConfirm(s); }} style={{ color: '#16a34a', fontWeight: 700, textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 12.5 }}>적용</button>
+                  <button type="button" onClick={() => { setForm({ ...form, email: s }); setEmailConfirm(s); }} style={{ color: '#12A79D', fontWeight: 700, textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer', padding: 0, fontSize: 12.5 }}>적용</button>
                 </div>
               ) : null; })()}
               <Field label="이메일 재확인 *"><input style={inputStyle} value={emailConfirm} onChange={(e) => setEmailConfirm(e.target.value)} placeholder="이메일을 한 번 더 입력" inputMode="email" autoCapitalize="none" autoCorrect="off" spellCheck={false} /></Field>
@@ -757,7 +759,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               <div style={{ gridColumn: '1 / -1', border: `2px solid ${BORDER}`, borderRadius: 12, padding: isMobile ? 16 : 20 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', marginBottom: 4 }}>
                   <span style={{ fontSize: 15, fontWeight: 800, color: '#111' }}>웰니스 클래스 추가</span>
-                  <span style={{ fontSize: 11, fontWeight: 700, background: '#fffbeb', color: '#b45309', border: '1px solid #fde68a', padding: '2px 8px', borderRadius: 9999 }}>클래스 1인 {clsPrice.toLocaleString()}원 · 아로마 1인 10,000원</span>
+                  <span style={{ fontSize: 11, fontWeight: 700, background: '#fffbeb', color: '#C9560F', border: '1px solid #fde68a', padding: '2px 8px', borderRadius: 9999 }}>클래스 1인 {clsPrice.toLocaleString()}원 · 아로마 1인 10,000원</span>
                 </div>
                 <p style={{ fontSize: 12.5, color: MUTED, margin: '0 0 14px', lineHeight: 1.6, wordBreak: 'keep-all' }}>원하는 세션과 신청 인원(명)을 선택하세요. 숙박 인원과 무관하게 신청 인원만큼만 결제됩니다.</p>
                 <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: 10 }}>
@@ -775,7 +777,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                           const label = classLabel(c, slot);
                           const q = classQty[label] || 0;
                           return (
-                            <div key={slot} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, border: `1.5px solid ${q ? GREEN : BORDER}`, borderRadius: 8, padding: '5px 8px', background: q ? '#f0fdf4' : '#fff' }}>
+                            <div key={slot} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8, border: `1.5px solid ${q ? GREEN : BORDER}`, borderRadius: 8, padding: '5px 8px', background: q ? '#EDFAF8' : '#fff' }}>
                               <span style={{ fontSize: 12, fontWeight: 700, color: '#374151', fontFamily: MONO }}>{slot}</span>
                               <select value={q} onChange={(e) => setQty(label, parseInt(e.target.value))} style={{ fontSize: 12, padding: '3px 6px', borderRadius: 6, border: `1px solid ${BORDER}`, background: '#fff' }}>
                                 {[0, 1, 2, 3, 4, 5, 6, 7, 8].map((n) => <option key={n} value={n}>{n === 0 ? '인원 선택' : `${n}명`}</option>)}
@@ -791,7 +793,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                 <div style={{ marginTop: 10, border: `1px solid ${BORDER}`, borderRadius: 10, background: '#fff', display: 'flex', alignItems: 'center', gap: 10, padding: 10, flexWrap: 'wrap' }}>
                   <div style={{ width: 44, height: 44, borderRadius: 8, background: 'linear-gradient(135deg,#0ea5e9,#7dd3fc)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 22, flexShrink: 0 }}>🧴</div>
                   <div style={{ minWidth: 0, flex: 1 }}>
-                    <div style={{ fontSize: 13.5, fontWeight: 700, color: '#111' }}>아로마 DIY <span style={{ fontSize: 11, fontWeight: 700, color: '#b45309' }}>· 1인 10,000원</span></div>
+                    <div style={{ fontSize: 13.5, fontWeight: 700, color: '#111' }}>아로마 DIY <span style={{ fontSize: 11, fontWeight: 700, color: '#C9560F' }}>· 1인 10,000원</span></div>
                     <div style={{ fontSize: 11.5, color: MUTED, wordBreak: 'keep-all' }}>펫 아로마 치약·샴푸·롤온 만들기 (택1) · 9/5(토) 상시 10:00~18:00</div>
                   </div>
                   <select value={aromaQty} onChange={(e) => setAromaQty(parseInt(e.target.value))} style={{ fontSize: 12, padding: '5px 8px', borderRadius: 6, border: `1px solid ${BORDER}`, background: '#fff' }}>
@@ -799,7 +801,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   </select>
                 </div>
                 {(Object.keys(classQty).length > 0 || aromaQty > 0) && (
-                  <div style={{ marginTop: 12, background: '#f0fdf4', border: `1px solid #dcfce7`, borderRadius: 8, padding: '10px 14px', fontSize: 12.5, color: GREEN_DK, fontWeight: 700, lineHeight: 1.7 }}>
+                  <div style={{ marginTop: 12, background: '#EDFAF8', border: `1px solid #D6F5F1`, borderRadius: 8, padding: '10px 14px', fontSize: 12.5, color: GREEN_DK, fontWeight: 700, lineHeight: 1.7 }}>
                     {Object.entries(classQty).map(([l, n]) => <div key={l}>· {l} — {n}명 × {clsPrice.toLocaleString()}원</div>)}
                     {aromaQty > 0 && <div>· 🧴 아로마 DIY — {aromaQty}명 × 10,000원</div>}
                     <div style={{ marginTop: 4 }}>추가 합계 +{classCost().toLocaleString()}원</div>
@@ -829,7 +831,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
 
             {/* 웰컴키트 — 결제 직전 가치 강조 */}
             <a href="/images/events/jamboree-2026/welcomekit.webp" target="_blank" rel="noopener noreferrer"
-              style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 20, padding: '12px 14px', border: `1px solid ${GREEN}`, background: '#f0fdf4', borderRadius: 12, textDecoration: 'none', color: 'inherit' }}>
+              style={{ display: 'flex', alignItems: 'center', gap: 14, marginTop: 20, padding: '12px 14px', border: `1px solid ${GREEN}`, background: '#EDFAF8', borderRadius: 12, textDecoration: 'none', color: 'inherit' }}>
               <img src="/images/events/jamboree-2026/welcomekit.webp" alt="예약 전원 증정 웰컴키트" style={{ width: 72, height: 72, objectFit: 'cover', borderRadius: 8, flexShrink: 0, border: `1px solid ${BORDER}` }} />
               <div style={{ minWidth: 0 }}>
                 <div style={{ fontSize: 14.5, fontWeight: 800, color: GREEN_DK, lineHeight: 1.35 }}>예약 전원에게 웰컴키트 증정 🎁</div>
@@ -844,7 +846,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               </div>
             )}
 
-            <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 10, padding: '14px 18px', marginTop: 12, textAlign: 'center', fontSize: 14, color: MUTED }}>
+            <div style={{ background: '#EDFAF8', border: `2px solid ${GREEN}`, borderRadius: 10, padding: '14px 18px', marginTop: 12, textAlign: 'center', fontSize: 14, color: MUTED }}>
               입금 예정 금액 &nbsp; <strong style={{ fontSize: 22, color: GREEN, fontWeight: 700 }}>{total.toLocaleString()}원</strong>
               <div style={{ fontSize: 12, marginTop: 4 }}>{CARD_ENABLED ? '예약 접수 후 다음 화면에서 카드 즉시결제 또는 계좌이체로 확정합니다.' : '예약 접수 후 다음 화면에서 입금 계좌를 안내해 드립니다. (계좌이체 접수)'}</div>
               <div style={{ fontSize: 11.5, marginTop: 6, color: '#6b7280' }}>
@@ -903,8 +905,8 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
               </>
             ) : (
               <>
-                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}>{paid ? <CheckCircle2 size={56} color={GREEN} strokeWidth={1.6} /> : <Clock size={56} color="#f59e0b" strokeWidth={1.6} />}</div>
-                <h3 style={{ fontFamily: BEBAS, fontSize: 28, color: paid ? GREEN_DK : '#b45309', marginBottom: 6 }}>{paid ? '예약이 확정되었습니다' : '예약 대기중'}</h3>
+                <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 18 }}>{paid ? <CheckCircle2 size={56} color={GREEN} strokeWidth={1.6} /> : <Clock size={56} color="#F5A524" strokeWidth={1.6} />}</div>
+                <h3 style={{ fontFamily: BEBAS, fontSize: 28, color: paid ? GREEN_DK : '#C9560F', marginBottom: 6 }}>{paid ? '예약이 확정되었습니다' : '예약 대기중'}</h3>
                 <p style={{ fontSize: 14, color: GREEN, fontWeight: 700, marginBottom: 18 }}>{paid ? '결제가 완료되어 입장권을 보내드렸어요 🐾' : (CARD_ENABLED ? '카드로 즉시 결제하거나, 계좌이체로 확정하세요 🐾' : '아래 계좌로 입금하시면 예약이 확정됩니다 🐾')}</p>
                 <div style={{ background: '#fff', border: `2px solid ${BORDER}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 16px', textAlign: 'left' }}>
                   <DoneRow label="예약자" value={String(d.name)} />
@@ -925,7 +927,7 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   </a>
                 )}
                 {paid ? (
-                <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 20px', textAlign: 'left' }}>
+                <div style={{ background: '#EDFAF8', border: `2px solid ${GREEN}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 20px', textAlign: 'left' }}>
                   <div style={{ fontSize: 15, fontWeight: 800, color: GREEN_DK, marginBottom: 6 }}>✅ 결제가 완료되었습니다</div>
                   <div style={{ fontSize: 13.5, color: '#111', lineHeight: 1.7 }}>입장권(QR)을 이메일<strong>({String(d.email)})</strong>로 보내드렸어요. 위 <strong>내 입장권</strong> 버튼에서도 확인하실 수 있습니다.</div>
                 </div>
@@ -946,9 +948,9 @@ export default function BookingFlow({ eventId }: { eventId: number }) {
                   </>
                 )}
                 {payMsg && <div style={{ maxWidth: 420, margin: '0 auto 12px', fontSize: 13, color: '#dc2626', fontWeight: 600, lineHeight: 1.6 }}>{payMsg}</div>}
-                <div style={{ background: '#f0fdf4', border: `2px solid ${GREEN}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 20px', textAlign: 'left' }}>
+                <div style={{ background: '#EDFAF8', border: `2px solid ${GREEN}`, borderRadius: 12, padding: 22, maxWidth: 420, margin: '0 auto 20px', textAlign: 'left' }}>
                   <div style={{ fontSize: 14, fontWeight: 800, color: GREEN_DK, marginBottom: 6 }}>{CARD_ENABLED ? '🏦 계좌이체로 입금' : '💳 입금 계좌'}</div>
-                  <div style={{ fontSize: 12.5, color: GREEN_DK, background: '#dcfce7', borderRadius: 8, padding: '9px 11px', marginBottom: 12, lineHeight: 1.6, fontWeight: 600 }}>
+                  <div style={{ fontSize: 12.5, color: GREEN_DK, background: '#D6F5F1', borderRadius: 8, padding: '9px 11px', marginBottom: 12, lineHeight: 1.6, fontWeight: 600 }}>
                     가장 확실하고 빠른 방법이에요. <strong>입금이 확인되면 입장권(QR)을 이메일로 바로 보내드려요.</strong>
                   </div>
                   <DoneRow label="은행" value={ACCOUNT.bank} />
@@ -991,7 +993,7 @@ function Legend({ color, border, label }: { color: string; border: string; label
   return <div style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 12, color: MUTED }}><span style={{ width: 12, height: 12, borderRadius: 2, background: color, border: `1.5px solid ${border}` }} />{label}</div>;
 }
 function Summary({ label, value, highlight }: { label: string; value: string; highlight?: boolean }) {
-  return <div><div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', marginBottom: 4 }}>{label}</div><div style={{ fontSize: 16, fontWeight: 700, color: highlight ? '#bbf7d0' : '#fff', fontFamily: BEBAS, letterSpacing: '0.02em' }}>{value}</div></div>;
+  return <div><div style={{ fontSize: 11, color: 'rgba(255,255,255,0.5)', letterSpacing: '0.08em', marginBottom: 4 }}>{label}</div><div style={{ fontSize: 16, fontWeight: 700, color: highlight ? '#BFF3EC' : '#fff', fontFamily: BEBAS, letterSpacing: '0.02em' }}>{value}</div></div>;
 }
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}><label style={{ fontSize: 13, fontWeight: 700, color: '#1f2937' }}>{label}</label>{children}</div>;

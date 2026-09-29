@@ -2,8 +2,28 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbGetAll, dbGet, dbInsert, dbUpsert, dbDelete, TableName } from '@/lib/db/serverDB';
 import { DEFAULTS, DEFAULT_HASHTAGS } from '@/lib/db/defaults';
 import { verifyAdmin } from '@/lib/adminAuth';
+import { revalidatePath } from 'next/cache';
 import fs from 'fs';
 import path from 'path';
+
+// 스토어 변경 시 즉시 갱신할 공개 페이지 (관리자 저장 → 사이트 즉시 반영)
+const REVALIDATE_PATHS: Record<string, string[]> = {
+  event_cards:       ['/', '/events'],
+  archive_events:    ['/events'],
+  hero_images:       ['/'],
+  activity_cards:    ['/'],
+  lookbook_items:    ['/'],
+  gallery_items:     ['/'],
+  mateship_partners: ['/', '/mateship'],
+  travel_places:     ['/travel'],
+  page_hashtags:     ['/'],
+};
+function revalidateStore(store: string) {
+  try {
+    for (const p of REVALIDATE_PATHS[store] ?? []) revalidatePath(p);
+    if (store === 'event_cards') revalidatePath('/events/[id]', 'page');
+  } catch { /* noop */ }
+}
 
 // ── 로컬 파일 저장소 (Supabase 미설정 시 .local-data/ 폴더에 저장) ──
 const LOCAL_DIR = path.join(process.cwd(), '.local-data');
@@ -77,12 +97,20 @@ const MAP: Record<string, string> = {
   isMain:     'is_main',
   ctaText:    'cta_text',
   mapUrl:     'map_url',
+  startDate:  'start_date',
+  endDate:    'end_date',
+  sellerOpen: 'seller_open',
+  surveyOpen: 'survey_open',
 };
+
+// date 컬럼: 빈 문자열은 null로(Postgres date 저장 오류 방지)
+const NULLABLE_DATE = new Set(['start_date', 'end_date']);
 
 function toDb(obj: Record<string, unknown>): Record<string, unknown> {
   const out: Record<string, unknown> = {};
   for (const [k, v] of Object.entries(obj)) {
-    out[MAP[k] ?? k] = v;
+    const col = MAP[k] ?? k;
+    out[col] = NULLABLE_DATE.has(col) && (v === '' || v == null) ? null : v;
   }
   return out;
 }
@@ -182,6 +210,7 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sto
     const body = pickAllowed(store, await req.json() as Record<string, unknown>);
     const row = toDb(body);
     const result = await dbInsert(store, row);
+    revalidateStore(store);
     return NextResponse.json(fromDb(result as Record<string, unknown>));
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
@@ -219,6 +248,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ stor
     const body = await req.json();
     const row = toDb(body);
     const result = await dbUpsert(store, row);
+    revalidateStore(store);
     return NextResponse.json(fromDb(result as Record<string, unknown>));
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });
@@ -245,6 +275,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
   try {
     const id = req.nextUrl.searchParams.get('id')!;
     await dbDelete(store, isNaN(Number(id)) ? id : Number(id));
+    revalidateStore(store);
     return NextResponse.json({ ok: true });
   } catch (e) {
     return NextResponse.json({ error: String(e) }, { status: 500 });

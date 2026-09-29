@@ -10,13 +10,17 @@ import Eyebrow from '@/components/ui/Eyebrow';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { CardSkeleton } from '@/components/ui/Skeleton';
+import { effectiveStatus, pickFlagship, ddayFrom } from '@/lib/eventStatus';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
 
-// 플래그십(올해 가장 큰 행사) = 2026 Camping with Petscout
-const FLAGSHIP_ID = 3;
-const FLAGSHIP_DATE = '2026-09-04';
+// 행사 위치 문자열에서 지역만 추출 ("강릉종합운동장 · 강원 강릉" → "강원 강릉")
+const regionOf = (loc?: string) => {
+  const parts = (loc || '').split('·').map((s) => s.trim()).filter(Boolean);
+  return parts[parts.length - 1] || '';
+};
+const firstSentence = (s?: string) => (s || '').split(/[.\n]/)[0].trim();
 
 export default function EventsPreview({ initialData }: { initialData?: EventCard[] }) {
   const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT, initialData);
@@ -30,12 +34,13 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
     return (b.order || 0) - (a.order || 0);
   });
 
-  const flagship = sorted.find((e) => (e.id ?? e.order) === FLAGSHIP_ID);
-  // 종료(ended) 행사·플래그십 제외 → 나머지 다가오는 행사
-  const others = sorted.filter((e) => (e.id ?? e.order) !== FLAGSHIP_ID && e.status !== 'ended');
+  // 대표행사 자동 선정 = 종료 안 된 행사 중 시작일이 가장 임박/진행중인 것
+  const flagship = pickFlagship(sorted);
+  // 종료(날짜지남/수동)·대표행사 제외 → 나머지 다가오는 행사
+  const others = sorted.filter((e) => e !== flagship && effectiveStatus(e) !== 'ended');
 
-  const ddayNum = Math.ceil((new Date(FLAGSHIP_DATE + 'T00:00:00').getTime() - Date.now()) / 86400000);
-  const ddayLabel = ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
+  const ddayNum = flagship ? ddayFrom(flagship) : null;
+  const ddayLabel = ddayNum == null ? '' : ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
 
   return (
     <section style={{ padding: `${isMobile ? '56px' : '88px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
@@ -79,27 +84,35 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
         </div>
 
         {loading ? (
-          <CardSkeleton aspectRatio={isMobile ? '4/3' : '21/9'} />
+          <CardSkeleton aspectRatio={isMobile ? '4/3' : '16/10'} />
         ) : (
           <>
-            {/* 플래그십 스포트라이트 — 펫스카웃 강조 */}
+            {/* 플래그십 스포트라이트 — 다가오는 대표 행사(자동 선정) */}
             {flagship && (
               <motion.div variants={fadeUp} style={{ marginBottom: others.length ? (isMobile ? 16 : 20) : 0 }}>
                 <Link href={`/events/${flagship.id ?? flagship.order}`} style={{ textDecoration: 'none', display: 'block' }}>
-                  <div style={{
-                    position: 'relative', aspectRatio: isMobile ? '4/3' : '21/9', borderRadius: 18, overflow: 'hidden',
-                    background: flagship.imageData ? `url(${flagship.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
-                  }}>
-                    <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }} />
-                    <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
-                      <span style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: '0.06em', color: '#fff', background: '#16a34a', padding: '5px 12px', borderRadius: 9999 }}>{ddayLabel}</span>
-                      <Badge variant={flagship.status} />
+                  <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 18, overflow: 'hidden', display: isMobile ? 'block' : 'flex', alignItems: 'stretch' }}>
+                    {/* 포스터 — 통째로 노출(크롭 없음) · 데스크톱은 왼쪽 */}
+                    <div style={{ position: 'relative', flex: isMobile ? undefined : '0 0 44%', background: 'linear-gradient(135deg,#EDFAF8,#D6F5F1)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: isMobile ? 0 : 20 }}>
+                      {flagship.imageData
+                        ? <img src={flagship.imageData} alt={flagship.title} style={{ width: isMobile ? '100%' : 'auto', maxWidth: '100%', maxHeight: isMobile ? 460 : 420, objectFit: 'contain', display: 'block', borderRadius: isMobile ? 0 : 10 }} />
+                        : <div style={{ width: '100%', aspectRatio: '16/9', background: 'linear-gradient(135deg,#12A79D,#0D7E76)' }} />}
+                      <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 8, alignItems: 'center' }}>
+                        {ddayLabel && <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: '0.06em', color: '#fff', background: '#EF7726', padding: '5px 13px', borderRadius: 9999, boxShadow: '0 4px 12px rgba(35,34,32,0.22)' }}>{ddayLabel}</span>}
+                        <Badge variant={effectiveStatus(flagship)} />
+                      </div>
                     </div>
-                    <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: isMobile ? '20px' : '32px 36px' }}>
-                      <p style={{ fontFamily: MONO, fontSize: 12, color: '#86efac', letterSpacing: '0.08em', marginBottom: 8 }}>올해 가장 큰 행사 · 2026. 9. 4 — 9. 6 · 강원 고성</p>
-                      <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(28px,8vw,38px)' : 'clamp(40px,5vw,58px)', color: '#fff', letterSpacing: '0.02em', lineHeight: 1.02, margin: 0, wordBreak: 'keep-all' }}>{flagship.title}</h3>
-                      <p style={{ fontSize: isMobile ? 13 : 14.5, color: 'rgba(255,255,255,0.82)', lineHeight: 1.6, maxWidth: 560, marginTop: 10, wordBreak: 'keep-all' }}>세계잼버리 수련장에서 2박 3일, 반려견과 함께하는 캠핑 페스티벌</p>
-                      <span style={{ display: 'inline-block', marginTop: 16, background: '#fff', color: '#16a34a', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999 }}>지금 예약하기 →</span>
+                    {/* 본문 — 데스크톱은 오른쪽에 세로 중앙 */}
+                    <div style={{ flex: isMobile ? undefined : 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '16px 18px 18px' : '32px 40px' }}>
+                      <span style={{ fontFamily: MONO, fontSize: 11, color: '#0D7E76', letterSpacing: '0.1em', fontWeight: 700 }}>UPCOMING EVENT</span>
+                      <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(22px,6vw,28px)' : 'clamp(28px,3vw,40px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1.12, margin: '8px 0 0', wordBreak: 'keep-all' }}>{flagship.title}</h3>
+                      {(firstSentence(flagship.desc) || flagship.benefit) && <p style={{ fontSize: isMobile ? 13.5 : 14.5, color: '#374151', lineHeight: 1.6, maxWidth: 640, marginTop: 10, wordBreak: 'keep-all' }}>{firstSentence(flagship.desc) || flagship.benefit}</p>}
+                      <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+                        {flagship.date && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📅 {flagship.date}</span>}
+                        {flagship.loc && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📍 {regionOf(flagship.loc) || flagship.loc}</span>}
+                        {flagship.benefit && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 700, color: '#C9560F', background: '#FFE7D3', borderRadius: 9999, padding: '7px 13px' }}>🎟 {flagship.benefit}</span>}
+                      </div>
+                      <span style={{ display: 'inline-block', marginTop: 20, background: '#0D7E76', color: '#fff', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999, alignSelf: 'flex-start' }}>{flagship.ctaText?.includes('예약') ? '예약하기 →' : '자세히 보기 →'}</span>
                     </div>
                   </div>
                 </Link>
@@ -124,14 +137,14 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                     <Link href={`/events/${ev.id}`} style={{ textDecoration: 'none', display: 'block', background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}>
                       {/* Image */}
                       <div style={{
-                        aspectRatio: isMobile ? '16/9' : '16/10',
+                        aspectRatio: isMobile ? '4/3' : '16/10',
                         background: ev.imageData
                           ? `url(${ev.imageData}) center/cover no-repeat`
-                          : 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                          : 'linear-gradient(135deg, #12A79D 0%, #0D7E76 100%)',
                         display: 'flex', alignItems: 'flex-start', justifyContent: 'flex-end',
                         padding: 12,
                       }}>
-                        <Badge variant={ev.status} />
+                        <Badge variant={effectiveStatus(ev)} />
                       </div>
                       <div style={{ padding: '16px 18px 20px' }}>
                         <h3 style={{
@@ -148,7 +161,7 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                           📍 {ev.loc}
                         </p>
                         {ev.benefit && (
-                          <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700 }}>
+                          <p style={{ fontSize: 12, color: '#12A79D', fontWeight: 700 }}>
                             ⭐ {ev.benefit}
                           </p>
                         )}
@@ -157,6 +170,16 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                   </motion.div>
                 ))}
               </div>
+            )}
+
+            {/* 다가오는 행사가 하나도 없을 때 (모든 행사 종료) — 빈 화면 방지 */}
+            {!flagship && others.length === 0 && (
+              <motion.div variants={fadeUp} style={{ border: '1.5px dashed #d1d5db', borderRadius: 16, padding: isMobile ? '36px 20px' : '52px 32px', textAlign: 'center', background: '#fff' }}>
+                <div style={{ fontSize: 34, marginBottom: 10 }}>🐾</div>
+                <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 22 : 26, color: '#111', letterSpacing: '0.02em', marginBottom: 8 }}>다음 행사를 준비 중이에요</h3>
+                <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.7, marginBottom: 18 }}>새로운 반려동물 행사가 곧 열립니다.<br />지난 행사들의 생생한 순간도 함께 만나보세요.</p>
+                <Link href="/events" style={{ display: 'inline-block', background: '#12A79D', color: '#fff', fontWeight: 700, fontSize: 14, padding: '11px 24px', borderRadius: 9999, textDecoration: 'none' }}>지난 행사 보기 →</Link>
+              </motion.div>
             )}
           </>
         )}

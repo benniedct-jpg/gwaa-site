@@ -66,7 +66,7 @@ export default function MembershipCardPage() {
     <Center>
       <div style={{ width: '100%', maxWidth: 380 }}>
         {/* 회원증 카드 */}
-        <div style={{ background: 'linear-gradient(150deg,#16a34a,#15803d)', borderRadius: 26, padding: '26px 26px 30px', color: '#fff', boxShadow: '0 24px 60px rgba(22,163,74,0.35)' }}>
+        <div style={{ background: 'linear-gradient(150deg,#12A79D,#0D7E76)', borderRadius: 26, padding: '26px 26px 30px', color: '#fff', boxShadow: '0 24px 60px rgba(18,167,157,0.35)' }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 22 }}>
             <span style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.14em', fontWeight: 700, opacity: 0.9 }}>GWAA 메이트십</span>
             <span style={{ fontFamily: MONO, fontSize: 11, background: 'rgba(255,255,255,0.22)', padding: '4px 10px', borderRadius: 9999, fontWeight: 700 }}>
@@ -86,7 +86,7 @@ export default function MembershipCardPage() {
             />
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginTop: 12 }}>
               <span style={{ fontFamily: MONO, fontSize: 12, color: '#9ca3af' }}>{count}초 후 자동 갱신</span>
-              <button onClick={refreshQr} style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>새로고침 ↻</button>
+              <button onClick={refreshQr} style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', fontWeight: 700, background: 'none', border: 'none', cursor: 'pointer' }}>새로고침 ↻</button>
             </div>
           </div>
 
@@ -123,7 +123,7 @@ export default function MembershipCardPage() {
           </div>
         )}
         {cancelDone && (
-          <p style={{ fontFamily: MONO, fontSize: 12.5, color: '#16a34a', textAlign: 'center', margin: '18px 0 0', lineHeight: 1.6 }}>✓ 정기결제가 해지되었습니다.<br />다음 결제일부터 청구되지 않아요.</p>
+          <p style={{ fontFamily: MONO, fontSize: 12.5, color: '#12A79D', textAlign: 'center', margin: '18px 0 0', lineHeight: 1.6 }}>✓ 정기결제가 해지되었습니다.<br />다음 결제일부터 청구되지 않아요.</p>
         )}
 
         <button onClick={logout} style={{ display: 'block', margin: '20px auto 0', fontFamily: MONO, fontSize: 13, color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>

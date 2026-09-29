@@ -77,7 +77,7 @@ const Tab = ({ children, setPosition, href, isActive }: TabProps) => {
           fontWeight: 700,
           letterSpacing: "0.1em",
           whiteSpace: "nowrap",
-          color: isActive ? "#16a34a" : "#374151",
+          color: isActive ? "#12A79D" : "#374151",
           textDecoration: 'none',
           position: 'relative',
         }}
@@ -91,7 +91,7 @@ const Tab = ({ children, setPosition, href, isActive }: TabProps) => {
             left: 16,
             right: 16,
             height: 2,
-            background: '#16a34a',
+            background: '#12A79D',
             borderRadius: '2px 2px 0 0',
           }} />
         )}
@@ -112,7 +112,7 @@ const Cursor = ({ position }: CursorProps) => {
       style={{
         bottom: 0,
         height: 2,
-        background: '#16a34a',
+        background: '#12A79D',
         borderRadius: '2px 2px 0 0',
         pointerEvents: "none",
         opacity: position.opacity,

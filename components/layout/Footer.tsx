@@ -65,7 +65,7 @@ export default function Footer() {
         {/* Brand */}
         <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-            <div style={{ width: 3, height: 22, borderRadius: 2, background: '#16a34a', flexShrink: 0 }} />
+            <div style={{ width: 3, height: 22, borderRadius: 2, background: '#12A79D', flexShrink: 0 }} />
             <span style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 13, fontWeight: 700, color: '#111', letterSpacing: '0.08em' }}>GWAA</span>
           </div>
           <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.65 }}>
@@ -92,7 +92,7 @@ export default function Footer() {
             </motion.a>
             <motion.a
               href="tel:033-813-0333"
-              whileHover={{ scale: 1.1, borderColor: '#16a34a' }}
+              whileHover={{ scale: 1.1, borderColor: '#12A79D' }}
               style={{
                 width: 36, height: 36, borderRadius: '50%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
@@ -111,7 +111,7 @@ export default function Footer() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 24 }}>
             {NAV_COLS.map((col) => (
               <div key={col.heading}>
-                <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 14, fontWeight: 700 }}>
+                <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 14, fontWeight: 700 }}>
                   {col.heading.toUpperCase()}
                 </h4>
                 <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -127,7 +127,7 @@ export default function Footer() {
         ) : (
           NAV_COLS.map((col) => (
             <div key={col.heading}>
-              <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 16, fontWeight: 700 }}>
+              <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 16, fontWeight: 700 }}>
                 {col.heading.toUpperCase()}
               </h4>
               <nav style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -143,7 +143,7 @@ export default function Footer() {
 
         {/* Newsletter */}
         <div>
-          <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 12, fontWeight: 700 }}>
+          <h4 style={{ fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif", fontSize: 12, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 12, fontWeight: 700 }}>
             NEWSLETTER
           </h4>
           <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, marginBottom: 16 }}>
@@ -156,7 +156,7 @@ export default function Footer() {
                 initial={{ opacity: 0, y: 6 }}
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0 }}
-                style={{ padding: '12px 16px', borderRadius: 10, background: '#f0fdf4', border: '1px solid #bbf7d0', fontSize: 13, color: '#16a34a', fontWeight: 600 }}
+                style={{ padding: '12px 16px', borderRadius: 10, background: '#EDFAF8', border: '1px solid #BFF3EC', fontSize: 13, color: '#12A79D', fontWeight: 600 }}
               >
                 ✓ 구독 완료! 감사합니다 🐾
               </motion.div>
@@ -171,7 +171,7 @@ export default function Footer() {
                   style={{ background: '#fff', border: '1px solid #e5e7eb', color: '#111', borderRadius: 10 }}
                 />
                 <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 11, color: '#6b7280', lineHeight: 1.5 }}>
-                  <input type="checkbox" checked={agreeMkt} onChange={(e) => setAgreeMkt(e.target.checked)} required style={{ marginTop: 2, accentColor: '#16a34a' }} />
+                  <input type="checkbox" checked={agreeMkt} onChange={(e) => setAgreeMkt(e.target.checked)} required style={{ marginTop: 2, accentColor: '#12A79D' }} />
                   <span>[필수] 광고성 정보(행사·교육·혜택 안내) 수신 및 이메일 수집·이용에 동의합니다. 수신거부는 언제든 가능합니다.</span>
                 </label>
                 <motion.button
@@ -180,7 +180,7 @@ export default function Footer() {
                   whileTap={{ scale: 0.97 }}
                   style={{
                     width: '100%', padding: '11px 16px', borderRadius: 10,
-                    background: '#16a34a', color: '#fff',
+                    background: '#12A79D', color: '#fff',
                     fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer',
                     fontFamily: "-apple-system, BlinkMacSystemFont, 'SF Pro Text', 'Helvetica Neue', 'Apple SD Gothic Neo', 'Noto Sans KR', sans-serif",
                     letterSpacing: '0.04em',

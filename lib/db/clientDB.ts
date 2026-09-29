@@ -54,6 +54,7 @@ async function req<T>(method: string, store: string, body?: unknown, qs?: string
     method,
     headers: body ? { 'Content-Type': 'application/json' } : undefined,
     body:    body ? JSON.stringify(body) : undefined,
+    cache:   'no-store', // 관리자 화면은 항상 최신 (저장 직후 목록 즉시 반영)
   });
   if (!res.ok) {
     const msg = await res.text();

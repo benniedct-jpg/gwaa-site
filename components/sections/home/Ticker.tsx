@@ -14,7 +14,7 @@ export default function Ticker() {
   const doubled = [...ITEMS, ...ITEMS];
 
   return (
-    <div style={{ background: '#16a34a', padding: '10px 0', overflow: 'hidden', userSelect: 'none' }}>
+    <div style={{ background: '#12A79D', padding: '10px 0', overflow: 'hidden', userSelect: 'none' }}>
       <div
         style={{
           display: 'flex',
@@ -31,7 +31,7 @@ export default function Ticker() {
             flexShrink: 0,
           }}>
             {item}
-            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: 14 }}>·</span>
+            <span style={{ color: '#FFC49A', fontSize: 14 }}>·</span>
           </span>
         ))}
       </div>

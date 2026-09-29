@@ -25,6 +25,8 @@ export interface EventCard {
   images: string[];
   title: string;
   date: string;
+  startDate?: string | null;
+  endDate?: string | null;
   loc: string;
   desc: string;
   content: string;
@@ -32,6 +34,8 @@ export interface EventCard {
   link: string;
   benefit: string;
   ctaText: string;
+  sellerOpen?: boolean;
+  surveyOpen?: boolean;
 }
 
 export interface LookbookItem {

@@ -25,7 +25,7 @@ export default function BrandTemplate({ partner }: { partner: MateshipPartner })
         <h1 style={{ fontFamily: BEBAS, fontSize: 'clamp(36px,6vw,64px)', color: '#111', lineHeight: 1.1, marginBottom: 8, letterSpacing: '0.02em' }}>
           {name}
         </h1>
-        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(20px,3vw,32px)', color: '#16a34a', letterSpacing: '0.04em', marginBottom: 20 }}>
+        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(20px,3vw,32px)', color: '#12A79D', letterSpacing: '0.04em', marginBottom: 20 }}>
           {detail.tagline}
         </p>
         <p style={{ fontSize: 15, color: '#374151', lineHeight: 1.6, maxWidth: 480, margin: '0 auto' }}>
@@ -42,11 +42,11 @@ export default function BrandTemplate({ partner }: { partner: MateshipPartner })
           </h2>
           <div style={{
             padding: '32px', borderRadius: 16,
-            background: '#f0fdf4', border: '1.5px solid #bbf7d0',
+            background: '#EDFAF8', border: '1.5px solid #BFF3EC',
             display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
           }}>
-            <p style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.04em' }}>MEMBERS ONLY</p>
-            <p style={{ fontFamily: BEBAS, fontSize: 40, color: '#16a34a', letterSpacing: '0.04em' }}>✨ {discount}</p>
+            <p style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.04em' }}>MEMBERS ONLY</p>
+            <p style={{ fontFamily: BEBAS, fontSize: 40, color: '#12A79D', letterSpacing: '0.04em' }}>✨ {discount}</p>
           </div>
         </div>
       </section>
@@ -68,7 +68,7 @@ export default function BrandTemplate({ partner }: { partner: MateshipPartner })
                 }}>
                   <span style={{
                     flexShrink: 0, width: 28, height: 28, borderRadius: '50%',
-                    background: '#16a34a', color: '#fff',
+                    background: '#12A79D', color: '#fff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontFamily: BEBAS, fontSize: 16,
                   }}>
@@ -103,7 +103,7 @@ export default function BrandTemplate({ partner }: { partner: MateshipPartner })
       )}
 
       {/* CTA */}
-      <section style={{ padding: '64px 60px', background: '#f0fdf4', textAlign: 'center' }}>
+      <section style={{ padding: '64px 60px', background: '#EDFAF8', textAlign: 'center' }}>
         <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(24px,3.5vw,36px)', color: '#111', marginBottom: 8, letterSpacing: '0.02em' }}>
           메이트쉽 회원만의 특별한 혜택
         </h2>
@@ -117,9 +117,9 @@ export default function BrandTemplate({ partner }: { partner: MateshipPartner })
             rel="noopener noreferrer"
             style={{
               display: 'inline-block', padding: '15px 40px', borderRadius: 9999,
-              background: '#16a34a', color: '#fff', fontWeight: 700,
+              background: '#12A79D', color: '#fff', fontWeight: 700,
               fontSize: 15, textDecoration: 'none', letterSpacing: '0.04em',
-              boxShadow: '0 4px 20px rgba(22,163,74,0.3)',
+              boxShadow: '0 4px 20px rgba(18,167,157,0.3)',
             }}
           >
             {detail.cta.label}

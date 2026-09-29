@@ -58,9 +58,9 @@ const GRADES = [
 ];
 
 const CURRICULUM_PHASES = [
-  { phase: 'PHASE 01 · 1~4주', color: '#16a34a', title: '긍정 인식과 자신감', desc: '허들·터널과 처음 친해지는 시간이에요. 칭찬과 보상으로 "어질리티는 즐겁다"는 느낌을 자연스럽게 익혀요.' },
+  { phase: 'PHASE 01 · 1~4주', color: '#12A79D', title: '긍정 인식과 자신감', desc: '허들·터널과 처음 친해지는 시간이에요. 칭찬과 보상으로 "어질리티는 즐겁다"는 느낌을 자연스럽게 익혀요.' },
   { phase: 'PHASE 02 · 5~8주', color: '#2563eb', title: '방향 전환과 호흡 맞추기', desc: '각도가 있는 코스로 방향 전환을 경험하고, 보호자의 신호를 따라가는 핸들링 기본기를 익혀요.' },
-  { phase: 'PHASE 03 · 9~12주', color: '#d97706', title: '실전 코스 완주', desc: '초보 수준 어질리티 코스를 안정적으로 완주해요. 자기만의 속도로 자신 있게 마무리합니다.' },
+  { phase: 'PHASE 03 · 9~12주', color: '#EF7726', title: '실전 코스 완주', desc: '초보 수준 어질리티 코스를 안정적으로 완주해요. 자기만의 속도로 자신 있게 마무리합니다.' },
 ];
 
 type FormStep = 1 | 2 | 3;
@@ -145,7 +145,7 @@ export default function EducationContent() {
           <motion.div variants={fadeUp} style={{ textAlign: 'center', marginBottom: 28 }}>
             <Eyebrow text="WHY EDUCATION" />
             <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(28px, 4vw, 44px)', color: '#111', letterSpacing: '0.02em', marginBottom: 10 }}>
-              왜 우리 강아지에게 <span style={{ color: '#16a34a' }}>교육이 필요할까요?</span>
+              왜 우리 강아지에게 <span style={{ color: '#12A79D' }}>교육이 필요할까요?</span>
             </h2>
             <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>
               교육은 강아지를 통제하기 위한 게 아니에요. <strong>일상이 더 편안해지고, 함께가 더 즐거워지는 경험</strong>이에요.
@@ -157,7 +157,7 @@ export default function EducationContent() {
                 key={i}
                 variants={fadeUp}
                 custom={i * 0.08}
-                whileHover={!isMobile ? { y: -4, boxShadow: '0 12px 36px rgba(0,0,0,0.1)', borderColor: '#16a34a' } : undefined}
+                whileHover={!isMobile ? { y: -4, boxShadow: '0 12px 36px rgba(0,0,0,0.1)', borderColor: '#12A79D' } : undefined}
                 style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, padding: isMobile ? '20px 16px' : '28px 22px', textAlign: 'center' }}
               >
                 <div style={{ fontSize: isMobile ? 32 : 42, marginBottom: 10 }}>{c.icon}</div>
@@ -185,12 +185,12 @@ export default function EducationContent() {
             style={{
               whiteSpace: 'nowrap',
               fontFamily: MONO, fontSize: isMobile ? 9 : 10, letterSpacing: '0.08em',
-              fontWeight: 700, color: activeSection === id ? '#16a34a' : '#9ca3af',
+              fontWeight: 700, color: activeSection === id ? '#12A79D' : '#9ca3af',
               padding: isMobile ? '12px 10px' : '14px 20px',
               background: 'none',
               borderTopWidth: 0, borderRightWidth: 0, borderLeftWidth: 0,
               borderBottomWidth: 2, borderBottomStyle: 'solid',
-              borderBottomColor: activeSection === id ? '#16a34a' : 'transparent',
+              borderBottomColor: activeSection === id ? '#12A79D' : 'transparent',
               cursor: 'pointer', transition: 'all 0.2s',
             }}
           >
@@ -201,32 +201,32 @@ export default function EducationContent() {
 
       {/* Agility Hero */}
       <section id="agility" style={{
-        background: 'linear-gradient(135deg,#f0fdf4 0%,#dcfce7 50%,#f0fdf4 100%)',
+        background: 'linear-gradient(135deg,#EDFAF8 0%,#D6F5F1 50%,#EDFAF8 100%)',
         padding: `${py} ${px}`, position: 'relative', overflow: 'hidden',
         borderBottom: '1px solid #e5e7eb',
       }}>
         <div style={{
           position: 'absolute', inset: 0,
-          backgroundImage: 'radial-gradient(circle, rgba(22,163,74,.10) 1px, transparent 1px)',
+          backgroundImage: 'radial-gradient(circle, rgba(18,167,157,.10) 1px, transparent 1px)',
           backgroundSize: '28px 28px', pointerEvents: 'none',
         }} />
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? 32 : 64, alignItems: 'center', position: 'relative' }}>
             <motion.div variants={fadeUp}>
-              <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 12 }}>DOGSPORTS · AGILITY CLUB</div>
+              <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 12 }}>DOGSPORTS · AGILITY CLUB</div>
               <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(36px,5vw,64px)', color: '#111', lineHeight: 0.95, letterSpacing: '0.02em', marginBottom: 16 }}>
-                반려견과 함께<br />달리는 <span style={{ color: '#16a34a' }}>클럽</span>
+                반려견과 함께<br />달리는 <span style={{ color: '#12A79D' }}>클럽</span>
               </h2>
               <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 24 }}>
-                보호자와 반려견이 한 팀이 되어 허들·터널 같은 장애물을 함께 넘는 <strong style={{ color: '#16a34a' }}>독스포츠</strong>예요.{' '}
+                보호자와 반려견이 한 팀이 되어 허들·터널 같은 장애물을 함께 넘는 <strong style={{ color: '#12A79D' }}>독스포츠</strong>예요.{' '}
                 <strong style={{ color: '#111' }}>100% 칭찬 위주 훈련</strong>으로, 처음이어도 부담 없이 시작할 수 있어요.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 24 }}>
                 {['클럽형 월결제', '4단계 등급', '2개월 레벨테스트', '100% 긍정 강화'].map((t) => (
-                  <span key={t} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', padding: '6px 12px', borderRadius: 9999, border: '1px solid rgba(22,163,74,0.3)', color: '#16a34a', background: 'rgba(255,255,255,0.6)' }}>{t}</span>
+                  <span key={t} style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', padding: '6px 12px', borderRadius: 9999, border: '1px solid rgba(18,167,157,0.3)', color: '#12A79D', background: 'rgba(255,255,255,0.6)' }}>{t}</span>
                 ))}
               </div>
-              <button onClick={() => scrollTo('apply')} style={{ padding: '12px 24px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>클럽 가입 신청 →</button>
+              <button onClick={() => scrollTo('apply')} style={{ padding: '12px 24px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>클럽 가입 신청 →</button>
             </motion.div>
 
             {!isMobile && (
@@ -234,13 +234,13 @@ export default function EducationContent() {
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 1, background: '#e5e7eb', borderRadius: 12, overflow: 'hidden', marginBottom: 16 }}>
                   {[{ num: '4', label: 'GRADE LEVELS' }, { num: '2mo', label: 'LEVEL TEST' }, { num: '연 1~2', label: 'COMPETITIONS' }].map(({ num, label }) => (
                     <div key={label} style={{ background: '#fff', padding: '24px 20px', textAlign: 'center' }}>
-                      <div style={{ fontFamily: BEBAS, fontSize: 32, color: '#16a34a', lineHeight: 1, marginBottom: 6 }}>{num}</div>
+                      <div style={{ fontFamily: BEBAS, fontSize: 32, color: '#12A79D', lineHeight: 1, marginBottom: 6 }}>{num}</div>
                       <div style={{ fontSize: 12, color: '#6b7280', fontFamily: MONO, letterSpacing: '0.02em' }}>{label}</div>
                     </div>
                   ))}
                 </div>
                 <div style={{ background: '#fff', border: '1px solid #e5e7eb', borderRadius: 12, padding: 24 }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#16a34a', marginBottom: 12 }}>WHY AGILITY?</div>
+                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#12A79D', marginBottom: 12 }}>WHY AGILITY?</div>
                   <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                     {['💪 체력과 균형감이 좋아져요', '🤝 보호자와 더 가까워져요', '🧠 문제 행동이 줄어들어요', '⭐ 자신감이 자라요'].map((t) => (
                       <div key={t} style={{ fontSize: 13, color: '#374151', fontWeight: 400, lineHeight: 1.6, padding: 10, background: '#f8fafb', borderRadius: 8 }}>{t}</div>
@@ -267,24 +267,24 @@ export default function EducationContent() {
                 key={g.num}
                 variants={fadeUp}
                 custom={i * 0.07}
-                whileHover={!isMobile ? { y: -4, borderColor: '#16a34a' } : undefined}
+                whileHover={!isMobile ? { y: -4, borderColor: '#12A79D' } : undefined}
                 style={{
-                  border: `1.5px solid ${g.featured ? '#16a34a' : '#e5e7eb'}`,
+                  border: `1.5px solid ${g.featured ? '#12A79D' : '#e5e7eb'}`,
                   borderRadius: 12, padding: isMobile ? '18px 14px' : '28px 24px', position: 'relative',
-                  background: g.featured ? '#f0fdf4' : '#fff',
+                  background: g.featured ? '#EDFAF8' : '#fff',
                 }}
               >
                 {g.featured && (
-                  <div style={{ position: 'absolute', top: -1, right: 12, fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', background: '#16a34a', color: '#fff', padding: '4px 8px', borderRadius: '0 0 8px 8px' }}>POPULAR</div>
+                  <div style={{ position: 'absolute', top: -1, right: 12, fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', background: '#12A79D', color: '#fff', padding: '4px 8px', borderRadius: '0 0 8px 8px' }}>POPULAR</div>
                 )}
                 <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.04em', color: '#6b7280', marginBottom: 6 }}>{g.num}</div>
                 <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 18 : 22, color: '#111', marginBottom: 2 }}>{g.name}</div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#16a34a', letterSpacing: '0.04em', marginBottom: 10 }}>{g.en}</div>
+                <div style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.04em', marginBottom: 10 }}>{g.en}</div>
                 <p style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 12 }}>{g.desc}</p>
                 <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
                   {g.items.map((item) => (
                     <li key={item} style={{ fontSize: 12, color: '#374151', paddingLeft: 12, position: 'relative', lineHeight: 1.5, fontWeight: 400 }}>
-                      <span style={{ position: 'absolute', left: 0, color: '#16a34a', fontWeight: 700 }}>·</span>
+                      <span style={{ position: 'absolute', left: 0, color: '#12A79D', fontWeight: 700 }}>·</span>
                       {item}
                     </li>
                   ))}
@@ -323,7 +323,7 @@ export default function EducationContent() {
 
       {/* Instructor */}
       <section id="instructor" style={{ padding: `${py} ${px}`, background: '#f8fafb', position: 'relative', overflow: 'hidden', borderBottom: '1px solid #e5e7eb' }}>
-        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(22,163,74,.05) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
+        <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(18,167,157,.05) 1px, transparent 1px)', backgroundSize: '24px 24px', pointerEvents: 'none' }} />
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <motion.div variants={fadeUp} style={{ marginBottom: 36 }}>
             <Eyebrow text="EXPERT INSTRUCTOR" />
@@ -332,12 +332,12 @@ export default function EducationContent() {
           </motion.div>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '280px 1fr', gap: isMobile ? 20 : 64, alignItems: 'start', position: 'relative' }}>
             <motion.div variants={fadeUp} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 20, padding: isMobile ? '24px 20px' : '32px 28px', textAlign: 'center' }}>
-              <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#f0fdf4', border: '2px solid rgba(22,163,74,0.3)', margin: '0 auto 14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36 }}>🏆</div>
+              <div style={{ width: 80, height: 80, borderRadius: '50%', background: '#EDFAF8', border: '2px solid rgba(18,167,157,0.3)', margin: '0 auto 14px', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 36 }}>🏆</div>
               <div style={{ fontFamily: BEBAS, fontSize: 24, color: '#111', marginBottom: 4 }}>염지혜</div>
               <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 14, fontWeight: 400 }}>WISE DOG SCHOOL 대표 / 헤드코치</div>
               <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                 {['KKC 1급 공인 훈련사', '어질리티 국가대표 (3년 연속)', '세계대회 팀 리더'].map((b) => (
-                  <div key={b} style={{ fontSize: 11, padding: '7px 12px', borderRadius: 9999, background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.3)', color: '#16a34a' }}>{b}</div>
+                  <div key={b} style={{ fontSize: 11, padding: '7px 12px', borderRadius: 9999, background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', color: '#12A79D' }}>{b}</div>
                 ))}
               </div>
             </motion.div>
@@ -348,12 +348,12 @@ export default function EducationContent() {
                 { tag: 'CREDENTIAL 03', title: '세계대회 대한민국 팀 리더', items: ['2024~2026 IFCS 어질리티 세계대회 팀 리더', '2024 WUSV IGP 부리더 역임'] },
               ].map((c) => (
                 <div key={c.tag} style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 12, padding: isMobile ? '18px 16px' : 24 }}>
-                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 6 }}>{c.tag}</div>
+                  <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 6 }}>{c.tag}</div>
                   <div style={{ fontSize: isMobile ? 15 : 17, fontWeight: 700, color: '#111', marginBottom: 10 }}>{c.title}</div>
                   <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 5 }}>
                     {c.items.map((item) => (
                       <li key={item} style={{ fontSize: 13, color: '#374151', fontWeight: 400, lineHeight: 1.5, paddingLeft: 14, position: 'relative' }}>
-                        <span style={{ position: 'absolute', left: 0, color: '#16a34a', fontWeight: 700 }}>·</span>
+                        <span style={{ position: 'absolute', left: 0, color: '#12A79D', fontWeight: 700 }}>·</span>
                         {item}
                       </li>
                     ))}
@@ -384,31 +384,31 @@ export default function EducationContent() {
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
                 {['반별 주간 정기 훈련 (평일·주말반)', '전문 훈련사 1:1 목표 설정', '매 수업 후 진도 기록 관리', '레벨테스트 참가 자격', '클럽 합동 훈련 참여'].map((item) => (
                   <li key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#374151', fontWeight: 400 }}>
-                    <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span>{item}
+                    <span style={{ color: '#12A79D', fontWeight: 700, flexShrink: 0 }}>✓</span>{item}
                   </li>
                 ))}
               </ul>
-              <button onClick={() => scrollTo('apply')} style={{ display: 'block', width: '100%', padding: '11px 18px', borderRadius: 9999, border: '1.5px solid #16a34a', background: 'transparent', color: '#16a34a', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'center' }}>월 결제로 시작하기 →</button>
+              <button onClick={() => scrollTo('apply')} style={{ display: 'block', width: '100%', padding: '11px 18px', borderRadius: 9999, border: '1.5px solid #12A79D', background: 'transparent', color: '#12A79D', fontSize: 12, fontWeight: 700, cursor: 'pointer', textAlign: 'center' }}>월 결제로 시작하기 →</button>
             </motion.div>
             {/* 6 Months */}
-            <motion.div variants={fadeUp} custom={0.08} style={{ background: '#fff', border: '1.5px solid #16a34a', borderRadius: 20, padding: isMobile ? '28px 22px' : '40px 36px', position: 'relative' }}>
-              <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#16a34a', color: '#fff', fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', fontWeight: 700, padding: '5px 16px', borderRadius: 9999 }}>BEST VALUE</div>
+            <motion.div variants={fadeUp} custom={0.08} style={{ background: '#fff', border: '1.5px solid #12A79D', borderRadius: 20, padding: isMobile ? '28px 22px' : '40px 36px', position: 'relative' }}>
+              <div style={{ position: 'absolute', top: -12, left: '50%', transform: 'translateX(-50%)', background: '#12A79D', color: '#fff', fontFamily: MONO, fontSize: 12, letterSpacing: '0.04em', fontWeight: 700, padding: '5px 16px', borderRadius: 9999 }}>BEST VALUE</div>
               <div style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', letterSpacing: '0.04em', marginBottom: 10 }}>6MONTHS · 6개월 일시결제</div>
               <div style={{ fontSize: 13, color: '#9ca3af', textDecoration: 'line-through', marginBottom: 2 }}>비회원 3,000,000원</div>
               <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 48, color: '#111', lineHeight: 1, marginBottom: 2 }}>1,620,000<span style={{ fontSize: 18, color: '#6b7280' }}>원</span></div>
-              <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 20 }}>월 270,000원 수준 <span style={{ background: '#dcfce7', color: '#166534', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 9999, marginLeft: 4 }}>10% 추가 할인</span></div>
+              <div style={{ fontSize: 13, color: '#6b7280', marginBottom: 20 }}>월 270,000원 수준 <span style={{ background: '#D6F5F1', color: '#0A5F59', fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 9999, marginLeft: 4 }}>10% 추가 할인</span></div>
               <hr style={{ border: 'none', borderTop: '1px solid #e5e7eb', margin: '16px 0' }} />
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 24 }}>
                 {['월 결제 혜택 전체 포함', '6개월 장기 등록 할인 10% 추가 적용', '협회 회원가 + 추가 할인 동시 적용', '스타터 키트 우선 제공', '수료 시 협회 공식 수료증 발급'].map((item) => (
                   <li key={item} style={{ display: 'flex', alignItems: 'center', gap: 8, fontSize: 13, color: '#374151', fontWeight: 400 }}>
-                    <span style={{ color: '#16a34a', fontWeight: 700, flexShrink: 0 }}>✓</span>{item}
+                    <span style={{ color: '#12A79D', fontWeight: 700, flexShrink: 0 }}>✓</span>{item}
                   </li>
                 ))}
               </ul>
-              <button onClick={() => scrollTo('apply')} style={{ display: 'block', width: '100%', padding: '11px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', textAlign: 'center' }}>6개월 등록으로 절약하기 →</button>
-              <div style={{ background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.3)', borderRadius: 8, padding: '12px 14px', fontSize: 12, color: '#16a34a', lineHeight: 1.6, marginTop: 14 }}>
+              <button onClick={() => scrollTo('apply')} style={{ display: 'block', width: '100%', padding: '11px 18px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 12, fontWeight: 700, cursor: 'pointer', border: 'none', textAlign: 'center' }}>6개월 등록으로 절약하기 →</button>
+              <div style={{ background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', borderRadius: 8, padding: '12px 14px', fontSize: 12, color: '#12A79D', lineHeight: 1.6, marginTop: 14 }}>
                 💡 메이트쉽 비회원도 신청 가능합니다. 가입 후 즉시 회원가 적용.{' '}
-                <Link href="/mateship" style={{ color: '#16a34a', textDecoration: 'underline' }}>가입하기 →</Link>
+                <Link href="/mateship" style={{ color: '#12A79D', textDecoration: 'underline' }}>가입하기 →</Link>
               </div>
             </motion.div>
           </div>
@@ -428,7 +428,7 @@ export default function EducationContent() {
               { icon: '🏨', title: '제휴 업체 할인', desc: '반려동물 호텔·용품점에서 회원 할인을 받을 수 있어요.' },
               { icon: '📣', title: '협회 활동 우선권', desc: '세미나·특강·시범 행사 등 협회 활동에 먼저 초대돼요.' },
             ].map((b, i) => (
-              <motion.div key={i} variants={fadeUp} custom={i * 0.07} whileHover={!isMobile ? { borderColor: '#16a34a' } : undefined} style={{ border: '1.5px solid #e5e7eb', borderRadius: 12, padding: isMobile ? '18px 16px' : 24 }}>
+              <motion.div key={i} variants={fadeUp} custom={i * 0.07} whileHover={!isMobile ? { borderColor: '#12A79D' } : undefined} style={{ border: '1.5px solid #e5e7eb', borderRadius: 12, padding: isMobile ? '18px 16px' : 24 }}>
                 <div style={{ fontSize: 26, marginBottom: 10 }}>{b.icon}</div>
                 <div style={{ fontSize: 14, fontWeight: 700, color: '#111', marginBottom: 5 }}>{b.title}</div>
                 <div style={{ fontSize: 13, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>{b.desc}</div>
@@ -502,21 +502,21 @@ export default function EducationContent() {
       <section id="license" style={{ padding: `${py} ${px}`, background: '#fff', borderBottom: '1px solid #e5e7eb' }}>
         <motion.div variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <div style={{
-            background: 'linear-gradient(135deg, #f0fdf4 0%, #ecfeff 100%)',
+            background: 'linear-gradient(135deg, #EDFAF8 0%, #ecfeff 100%)',
             border: '1.5px solid #e5e7eb', borderRadius: 20,
             padding: isMobile ? '32px 22px' : '52px 56px',
             display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr',
             gap: isMobile ? 24 : 48, alignItems: 'center',
             position: 'relative', overflow: 'hidden',
           }}>
-            <div style={{ position: 'absolute', top: -60, right: 60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(22,163,74,.10)', filter: 'blur(60px)', pointerEvents: 'none' }} />
+            <div style={{ position: 'absolute', top: -60, right: 60, width: 200, height: 200, borderRadius: '50%', background: 'rgba(18,167,157,.10)', filter: 'blur(60px)', pointerEvents: 'none' }} />
             <div style={{ position: 'relative' }}>
-              <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: '#16a34a', marginBottom: 12 }}>NATIONAL LICENSE</div>
+              <div style={{ fontFamily: MONO, fontSize: 12, letterSpacing: '0.06em', color: '#12A79D', marginBottom: 12 }}>NATIONAL LICENSE</div>
               <h2 style={{ fontFamily: BEBAS, fontSize: 'clamp(30px,4vw,52px)', color: '#111', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 14 }}>
-                반려동물행동지도사<br /><span style={{ color: '#16a34a' }}>국가자격증</span>
+                반려동물행동지도사<br /><span style={{ color: '#12A79D' }}>국가자격증</span>
               </h2>
               <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 22 }}>국가 공인 반려동물행동지도사 자격증 취득을 목표로 체계적인 준비 과정을 제공합니다.</p>
-              <button onClick={() => scrollTo('apply')} style={{ padding: '12px 24px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>자격증 과정 신청 →</button>
+              <button onClick={() => scrollTo('apply')} style={{ padding: '12px 24px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>자격증 과정 신청 →</button>
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
               {[
@@ -526,7 +526,7 @@ export default function EducationContent() {
                 { num: '04', title: '자격증 취득', desc: '시험 접수부터 합격까지 협회가 함께 지원합니다' },
               ].map((s) => (
                 <div key={s.num} style={{ display: 'flex', alignItems: 'flex-start', gap: 12 }}>
-                  <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 11, color: '#16a34a', flexShrink: 0 }}>{s.num}</div>
+                  <div style={{ width: 30, height: 30, borderRadius: '50%', background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 11, color: '#12A79D', flexShrink: 0 }}>{s.num}</div>
                   <div>
                     <div style={{ fontSize: 13, fontWeight: 700, color: '#111', marginBottom: 2 }}>{s.title}</div>
                     <div style={{ fontSize: 13, color: '#374151', lineHeight: 1.5, fontWeight: 400 }}>{s.desc}</div>
@@ -550,12 +550,12 @@ export default function EducationContent() {
               <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 22 }}>
                 {['공공장소 에티켓 — 산책, 카페, 호텔, 교통수단', '사회화 훈련 — 낯선 환경, 사람, 다른 동물과의 적응', '올바른 반려문화 — 보호자 의무와 책임', '보호자 교육 — 반려동물 심리 이해, 스트레스 관리'].map((item) => (
                   <li key={item} style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 13, color: '#374151', fontWeight: 400, lineHeight: 1.55 }}>
-                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#d97706', flexShrink: 0, marginTop: 6, display: 'block' }} />
+                    <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#EF7726', flexShrink: 0, marginTop: 6, display: 'block' }} />
                     {item}
                   </li>
                 ))}
               </ul>
-              <button onClick={() => scrollTo('apply')} style={{ padding: '10px 22px', borderRadius: 9999, background: '#d97706', color: '#fff', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>이 과정 신청하기 →</button>
+              <button onClick={() => scrollTo('apply')} style={{ padding: '10px 22px', borderRadius: 9999, background: '#EF7726', color: '#fff', fontSize: 12, fontWeight: 700, border: 'none', cursor: 'pointer' }}>이 과정 신청하기 →</button>
             </motion.div>
             <motion.div variants={fadeUp} custom={0.1} style={{ order: isMobile ? 2 : 1, borderRadius: 20, overflow: 'hidden', height: isMobile ? 180 : 320, background: 'linear-gradient(135deg,#fef9c3,#fde68a)', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative' }}>
               <div style={{ position: 'absolute', inset: 0, backgroundImage: 'radial-gradient(circle, rgba(255,255,255,0.4) 1px, transparent 1px)', backgroundSize: '20px 20px' }} />
@@ -580,14 +580,14 @@ export default function EducationContent() {
             <div style={{ display: 'flex', alignItems: 'center', marginBottom: 10 }}>
               {[1, 2, 3].map((s, i) => (
                 <div key={s} style={{ display: 'flex', alignItems: 'center', flex: i < 2 ? 1 : 'none' }}>
-                  <div style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 12, fontWeight: 700, flexShrink: 0, background: step >= s ? '#16a34a' : '#e5e7eb', color: step >= s ? '#fff' : '#9ca3af', transition: 'all 0.3s' }}>{s}</div>
-                  {i < 2 && <div style={{ flex: 1, height: 2, background: step > s ? '#16a34a' : '#e5e7eb', transition: 'background 0.3s', margin: '0 4px' }} />}
+                  <div style={{ width: 30, height: 30, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: MONO, fontSize: 12, fontWeight: 700, flexShrink: 0, background: step >= s ? '#12A79D' : '#e5e7eb', color: step >= s ? '#fff' : '#9ca3af', transition: 'all 0.3s' }}>{s}</div>
+                  {i < 2 && <div style={{ flex: 1, height: 2, background: step > s ? '#12A79D' : '#e5e7eb', transition: 'background 0.3s', margin: '0 4px' }} />}
                 </div>
               ))}
             </div>
             <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 20, fontSize: 12, fontFamily: MONO, letterSpacing: '0.02em' }}>
               {['과정 선택', '신청자 정보', '완료'].map((l, i) => (
-                <span key={l} style={{ color: step === i + 1 ? '#16a34a' : '#9ca3af' }}>{l}</span>
+                <span key={l} style={{ color: step === i + 1 ? '#12A79D' : '#9ca3af' }}>{l}</span>
               ))}
             </div>
 
@@ -597,7 +597,7 @@ export default function EducationContent() {
                   <motion.div key="step1" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 18 }}>어떤 교육을 신청하시겠어요?</h3>
                     <div style={{ marginBottom: 14 }}>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>교육 과정 <span style={{ color: '#16a34a' }}>*</span></label>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>교육 과정 <span style={{ color: '#12A79D' }}>*</span></label>
                       <select value={course} onChange={(e) => setCourse(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${errors.course ? '#ef4444' : '#e5e7eb'}`, borderRadius: 10, fontSize: 14, color: '#111', background: '#fff', outline: 'none', boxSizing: 'border-box' }}>
                         <option value="">선택하세요</option>
                         <optgroup label="독스포츠 — 어질리티">
@@ -625,24 +625,24 @@ export default function EducationContent() {
                       <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>문의 사항 (선택)</label>
                       <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="교육 일정, 비용, 반려동물 상태 등 궁금한 점을 적어주세요." style={{ width: '100%', padding: '10px 12px', border: '1.5px solid #e5e7eb', borderRadius: 10, fontSize: 14, color: '#111', resize: 'vertical', minHeight: 72, outline: 'none', boxSizing: 'border-box' }} />
                     </div>
-                    <button onClick={nextStep} style={{ width: '100%', padding: '12px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>다음 단계 →</button>
+                    <button onClick={nextStep} style={{ width: '100%', padding: '12px 18px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>다음 단계 →</button>
                   </motion.div>
                 )}
                 {step === 2 && (
                   <motion.div key="step2" initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: -20 }} transition={{ duration: 0.25 }}>
                     <h3 style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 18 }}>신청자 정보를 입력해 주세요</h3>
                     <div style={{ marginBottom: 14 }}>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>이름 <span style={{ color: '#16a34a' }}>*</span></label>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>이름 <span style={{ color: '#12A79D' }}>*</span></label>
                       <input value={name} onChange={(e) => setName(e.target.value)} type="text" placeholder="홍길동" style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${errors.name ? '#ef4444' : '#e5e7eb'}`, borderRadius: 10, fontSize: 14, color: '#111', outline: 'none', boxSizing: 'border-box' }} />
                       {errors.name && <p style={{ fontSize: 12, color: '#ef4444', marginTop: 4 }}>{errors.name}</p>}
                     </div>
                     <div style={{ marginBottom: 14 }}>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>연락처 <span style={{ color: '#16a34a' }}>*</span></label>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>연락처 <span style={{ color: '#12A79D' }}>*</span></label>
                       <input value={phone} onChange={(e) => setPhone(e.target.value)} type="tel" placeholder="010-0000-0000" style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${errors.phone ? '#ef4444' : '#e5e7eb'}`, borderRadius: 10, fontSize: 14, color: '#111', outline: 'none', boxSizing: 'border-box' }} />
                       {errors.phone && <p style={{ fontSize: 12, color: '#ef4444', marginTop: 4 }}>{errors.phone}</p>}
                     </div>
                     <div style={{ marginBottom: 22 }}>
-                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>거주 지역 <span style={{ color: '#16a34a' }}>*</span></label>
+                      <label style={{ display: 'block', fontSize: 13, fontWeight: 600, color: '#374151', marginBottom: 6 }}>거주 지역 <span style={{ color: '#12A79D' }}>*</span></label>
                       <select value={region} onChange={(e) => setRegion(e.target.value)} style={{ width: '100%', padding: '10px 12px', border: `1.5px solid ${errors.region ? '#ef4444' : '#e5e7eb'}`, borderRadius: 10, fontSize: 14, color: '#111', background: '#fff', outline: 'none', boxSizing: 'border-box' }}>
                         <option value="">선택하세요</option>
                         {['춘천', '원주', '강릉', '동해', '속초', '홍천', '평창', '인제', '양양', '강원도 기타', '강원도 외 지역'].map((r) => (
@@ -653,19 +653,19 @@ export default function EducationContent() {
                     </div>
                     <div style={{ display: 'flex', gap: 10 }}>
                       <button onClick={prevStep} style={{ flex: 1, padding: '12px 16px', borderRadius: 9999, border: '1.5px solid #e5e7eb', background: 'transparent', color: '#6b7280', fontSize: 13, fontWeight: 700, cursor: 'pointer' }}>← 이전</button>
-                      <button onClick={nextStep} style={{ flex: 2, padding: '12px 16px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>신청 완료 →</button>
+                      <button onClick={nextStep} style={{ flex: 2, padding: '12px 16px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, border: 'none', cursor: 'pointer' }}>신청 완료 →</button>
                     </div>
                   </motion.div>
                 )}
                 {step === 3 && (
                   <motion.div key="step3" initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ duration: 0.3 }} style={{ textAlign: 'center', padding: '12px 0 8px' }}>
-                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: 'spring', stiffness: 300 }} style={{ width: 60, height: 60, borderRadius: '50%', background: '#16a34a', color: '#fff', fontSize: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>✓</motion.div>
+                    <motion.div initial={{ scale: 0 }} animate={{ scale: 1 }} transition={{ delay: 0.1, type: 'spring', stiffness: 300 }} style={{ width: 60, height: 60, borderRadius: '50%', background: '#12A79D', color: '#fff', fontSize: 26, display: 'flex', alignItems: 'center', justifyContent: 'center', margin: '0 auto 16px' }}>✓</motion.div>
                     <h3 style={{ fontSize: 17, fontWeight: 700, color: '#111', marginBottom: 8 }}>신청이 접수되었습니다!</h3>
                     <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, marginBottom: 24 }}>카카오채널로 이동하시면 담당자가<br />상세 일정과 비용을 안내해 드립니다.</p>
-                    <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '13px 18px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>카카오채널로 이동하기 →</a>
-                    <div style={{ background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.3)', borderRadius: 8, padding: '12px 14px', fontSize: 12, color: '#16a34a', lineHeight: 1.6, marginTop: 14 }}>
+                    <a href="https://pf.kakao.com/_wipZX" target="_blank" rel="noopener noreferrer" style={{ display: 'block', padding: '13px 18px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none', textAlign: 'center' }}>카카오채널로 이동하기 →</a>
+                    <div style={{ background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', borderRadius: 8, padding: '12px 14px', fontSize: 12, color: '#12A79D', lineHeight: 1.6, marginTop: 14 }}>
                       💡 메이트쉽 회원은 모든 교육 과정 할인 적용.{' '}
-                      <Link href="/mateship" style={{ color: '#16a34a', textDecoration: 'underline' }}>가입하기 →</Link>
+                      <Link href="/mateship" style={{ color: '#12A79D', textDecoration: 'underline' }}>가입하기 →</Link>
                     </div>
                   </motion.div>
                 )}
@@ -684,7 +684,7 @@ export default function EducationContent() {
                 <div style={{ fontSize: 16, fontWeight: 700, color: '#111', marginBottom: 6 }}>{c.title}</div>
                 <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400, marginBottom: 16 }}>{c.desc}</p>
                 <a href={c.href} target={c.primary ? '_blank' : undefined} rel={c.primary ? 'noopener noreferrer' : undefined}
-                  style={{ display: 'inline-flex', padding: '10px 18px', borderRadius: 9999, background: c.primary ? '#16a34a' : 'transparent', color: c.primary ? '#fff' : '#16a34a', fontSize: 12, fontWeight: 700, textDecoration: 'none', border: `1.5px solid #16a34a` }}>
+                  style={{ display: 'inline-flex', padding: '10px 18px', borderRadius: 9999, background: c.primary ? '#12A79D' : 'transparent', color: c.primary ? '#fff' : '#12A79D', fontSize: 12, fontWeight: 700, textDecoration: 'none', border: `1.5px solid #12A79D` }}>
                   {c.label}
                 </a>
               </motion.div>

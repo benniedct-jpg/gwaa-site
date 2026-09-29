@@ -12,6 +12,7 @@ import CountUp from '@/components/shared/CountUp';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { PhotoGallery } from '@/components/ui/gallery';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { effectiveStatus, pickFlagship, ddayFrom } from '@/lib/eventStatus';
 
 const STATUS_LABELS: Record<EventStatus, string> = {
   live: 'LIVE', soon: 'SOON', upcoming: 'UPCOMING', ended: 'ENDED',
@@ -20,6 +21,12 @@ const STATUS_LABELS: Record<EventStatus, string> = {
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 
+const regionOf = (loc?: string) => {
+  const parts = (loc || '').split('·').map((s) => s.trim()).filter(Boolean);
+  return parts[parts.length - 1] || '';
+};
+const firstSentence = (s?: string) => (s || '').split(/[.\n]/)[0].trim();
+
 const GRADIENTS = [
   'linear-gradient(135deg,#e8f5e9,#a5d6a7)',
   'linear-gradient(135deg,#dbeafe,#93c5fd)',
@@ -27,7 +34,7 @@ const GRADIENTS = [
   'linear-gradient(135deg,#fce7f3,#f9a8d4)',
   'linear-gradient(135deg,#ede9fe,#c4b5fd)',
   'linear-gradient(135deg,#fff7ed,#fed7aa)',
-  'linear-gradient(135deg,#f0fdf4,#bbf7d0)',
+  'linear-gradient(135deg,#EDFAF8,#BFF3EC)',
   'linear-gradient(135deg,#ecfeff,#a5f3fc)',
 ];
 
@@ -115,14 +122,12 @@ export default function EventsContent({
 
   const filtered = sortByDate(events);
 
-  // 플래그십(펫스카웃 2026) 스포트라이트
-  const FLAGSHIP_ID = 3;
-  const FLAGSHIP_DATE = '2026-09-04';
-  const flagship = filtered.find((e) => (e.id ?? e.order) === FLAGSHIP_ID);
-  // 다가오는 행사 = 플래그십 제외 + 종료(ended)된 행사 제외(종료 행사는 아래 "지금까지 함께한 날들"로 내려감)
-  const otherUpcoming = filtered.filter((e) => (e.id ?? e.order) !== FLAGSHIP_ID && e.status !== 'ended');
-  const ddayNum = Math.ceil((new Date(FLAGSHIP_DATE + 'T00:00:00').getTime() - Date.now()) / 86400000);
-  const ddayLabel = ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
+  // 대표행사 자동 선정(날짜 기반) — 종료 안 된 행사 중 시작일이 가장 임박/진행중인 것
+  const flagship = pickFlagship(filtered);
+  // 다가오는 행사 = 대표행사 제외 + 종료(날짜지남/수동)된 행사 제외(종료 행사는 아래 "지금까지 함께한 날들"로)
+  const otherUpcoming = filtered.filter((e) => e !== flagship && effectiveStatus(e) !== 'ended');
+  const ddayNum = flagship ? ddayFrom(flagship) : null;
+  const ddayLabel = ddayNum == null ? '' : ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
 
   const subscribe = async () => {
     if (!subEmail.trim()) return;
@@ -143,6 +148,15 @@ export default function EventsContent({
     const m = (s || '').match(/\d{4}/);
     return m ? Number(m[0]) : (fallback ?? new Date().getFullYear());
   };
+  // 정렬키/연도: 정확한 종료일(end_date)·시작일 우선 → date_text 폴백 (date_text가 "2026년"처럼 불완전해도 정확히 정렬)
+  const eventKey8 = (e: EventCard) => {
+    const d = e.endDate || e.startDate;
+    return d ? d.replace(/[^0-9]/g, '').slice(0, 8).padEnd(8, '0') : dateKey8(e.date);
+  };
+  const eventYear = (e: EventCard) => {
+    const d = e.endDate || e.startDate;
+    return d ? Number(d.slice(0, 4)) : yearOf(e.date);
+  };
 
   type PastItem = {
     key: string; href: string; title: string; loc?: string; year: number;
@@ -150,17 +164,17 @@ export default function EventsContent({
   };
 
   const endedEvents: PastItem[] = filtered
-    .filter((e) => e.status === 'ended')
+    .filter((e) => effectiveStatus(e) === 'ended')
     .map((e) => ({
       key: `ev-${e.id ?? e.order}`,
       href: `/events/${e.id ?? e.order}`,
       title: e.title,
       loc: e.loc,
-      year: yearOf(e.date),
+      year: eventYear(e),
       date: e.date,
       thumb: e.imageData || (e.images && e.images[0]) || null,
       feat: false,
-      sortKey: dateKey8(e.date),
+      sortKey: eventKey8(e),
     }));
 
   const archiveItems: PastItem[] = [...archives].map((a) => ({
@@ -222,10 +236,10 @@ export default function EventsContent({
               }}
             >
               <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'center', gap: 2, marginBottom: 8 }}>
-                <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(36px,9vw,52px)' : 'clamp(48px,5.5vw,64px)', color: '#16a34a', lineHeight: 1 }}>
+                <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(36px,9vw,52px)' : 'clamp(48px,5.5vw,64px)', color: '#12A79D', lineHeight: 1 }}>
                   <CountUp value={stat.value} suffix={stat.suffix} />
                 </span>
-                <span style={{ fontFamily: MONO, fontSize: 13, color: '#16a34a', letterSpacing: '0.04em', marginLeft: 2 }}>
+                <span style={{ fontFamily: MONO, fontSize: 13, color: '#12A79D', letterSpacing: '0.04em', marginLeft: 2 }}>
                   {stat.unit}
                 </span>
               </div>
@@ -240,7 +254,7 @@ export default function EventsContent({
 
       {/* Photo Gallery */}
       <div style={{ background: '#fff', padding: isMobile ? '32px 20px 12px' : '48px 60px 16px' }}>
-        <p style={{ fontFamily: MONO, fontSize: 11, color: '#16a34a', letterSpacing: '0.08em', fontWeight: 700, margin: '0 0 6px' }}>OUR MOMENTS</p>
+        <p style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.08em', fontWeight: 700, margin: '0 0 6px' }}>OUR MOMENTS</p>
         <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 24 : 32, color: '#111', letterSpacing: '0.02em', margin: 0 }}>우리가 함께 만든 장면들</h2>
         <p style={{ fontSize: 13, color: '#9ca3af', margin: '6px 0 0' }}>드래그해서 구경하세요.</p>
       </div>
@@ -260,20 +274,28 @@ export default function EventsContent({
           {flagship && (
             <motion.div variants={fadeUp} style={{ marginBottom: otherUpcoming.length ? (isMobile ? 16 : 20) : 0 }}>
               <Link href={`/events/${flagship.id ?? flagship.order}`} style={{ textDecoration: 'none', display: 'block' }}>
-                <div style={{
-                  position: 'relative', aspectRatio: isMobile ? '4/3' : '21/9', borderRadius: 18, overflow: 'hidden',
-                  background: flagship.imageData ? `url(${flagship.imageData}) center/cover no-repeat` : 'linear-gradient(135deg,#e8f5e9,#c8e6c9)',
-                }}>
-                  <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.82) 0%, rgba(0,0,0,0.15) 55%, transparent 100%)' }} />
-                  <div style={{ position: 'absolute', top: 16, left: 16, display: 'flex', gap: 8, alignItems: 'center' }}>
-                    <span style={{ fontFamily: BEBAS, fontSize: 14, letterSpacing: '0.06em', color: '#fff', background: '#16a34a', padding: '5px 12px', borderRadius: 9999 }}>{ddayLabel}</span>
-                    <Badge variant={flagship.status} />
+                <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 18, overflow: 'hidden', display: isMobile ? 'block' : 'flex', alignItems: 'stretch' }}>
+                  {/* 포스터 — 통째로 노출(크롭 없음) · 데스크톱은 왼쪽 */}
+                  <div style={{ position: 'relative', flex: isMobile ? undefined : '0 0 44%', background: 'linear-gradient(135deg,#EDFAF8,#D6F5F1)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: isMobile ? 0 : 20 }}>
+                    {flagship.imageData
+                      ? <img src={flagship.imageData} alt={flagship.title} style={{ width: isMobile ? '100%' : 'auto', maxWidth: '100%', maxHeight: isMobile ? 460 : 420, objectFit: 'contain', display: 'block', borderRadius: isMobile ? 0 : 10 }} />
+                      : <div style={{ width: '100%', aspectRatio: '16/9', background: 'linear-gradient(135deg,#12A79D,#0D7E76)' }} />}
+                    <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 8, alignItems: 'center' }}>
+                      {ddayLabel && <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: '0.06em', color: '#fff', background: '#EF7726', padding: '5px 13px', borderRadius: 9999, boxShadow: '0 4px 12px rgba(35,34,32,0.22)' }}>{ddayLabel}</span>}
+                      <Badge variant={effectiveStatus(flagship)} />
+                    </div>
                   </div>
-                  <div style={{ position: 'absolute', left: 0, right: 0, bottom: 0, padding: isMobile ? '20px' : '32px 36px' }}>
-                    <p style={{ fontFamily: MONO, fontSize: 12, color: '#86efac', letterSpacing: '0.08em', marginBottom: 8 }}>올해 가장 큰 행사 · 2026. 9. 4 — 9. 6 · 강원 고성</p>
-                    <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(28px,8vw,38px)' : 'clamp(40px,5vw,58px)', color: '#fff', letterSpacing: '0.02em', lineHeight: 1.02, margin: 0, wordBreak: 'keep-all' }}>{flagship.title}</h3>
-                    <p style={{ fontSize: isMobile ? 13 : 14.5, color: 'rgba(255,255,255,0.82)', lineHeight: 1.6, maxWidth: 560, marginTop: 10, wordBreak: 'keep-all' }}>세계잼버리 수련장에서 2박 3일, 반려견과 함께하는 캠핑 페스티벌</p>
-                    <span style={{ display: 'inline-block', marginTop: 16, background: '#fff', color: '#16a34a', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999 }}>지금 예약하기 →</span>
+                  {/* 본문 — 데스크톱은 오른쪽 세로 중앙 */}
+                  <div style={{ flex: isMobile ? undefined : 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '16px 18px 18px' : '32px 40px' }}>
+                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#0D7E76', letterSpacing: '0.1em', fontWeight: 700 }}>UPCOMING EVENT</span>
+                    <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(22px,6vw,28px)' : 'clamp(28px,3vw,40px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1.12, margin: '8px 0 0', wordBreak: 'keep-all' }}>{flagship.title}</h3>
+                    {(firstSentence(flagship.desc) || flagship.benefit) && <p style={{ fontSize: isMobile ? 13.5 : 14.5, color: '#374151', lineHeight: 1.6, maxWidth: 640, marginTop: 10, wordBreak: 'keep-all' }}>{firstSentence(flagship.desc) || flagship.benefit}</p>}
+                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+                      {flagship.date && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📅 {flagship.date}</span>}
+                      {flagship.loc && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📍 {regionOf(flagship.loc) || flagship.loc}</span>}
+                      {flagship.benefit && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 700, color: '#C9560F', background: '#FFE7D3', borderRadius: 9999, padding: '7px 13px' }}>🎟 {flagship.benefit}</span>}
+                    </div>
+                    <span style={{ display: 'inline-block', marginTop: 20, background: '#0D7E76', color: '#fff', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999, alignSelf: 'flex-start' }}>{flagship.ctaText?.includes('예약') ? '예약하기 →' : '자세히 보기 →'}</span>
                   </div>
                 </div>
               </Link>
@@ -293,11 +315,11 @@ export default function EventsContent({
                       <CardImage src={ev.imageData} alt={ev.title} mode="fill" />
                     </div>
                     <div style={{ flex: 1, padding: isMobile ? '16px 16px 18px' : '20px 22px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <div><Badge variant={ev.status} /></div>
+                      <div><Badge variant={effectiveStatus(ev)} /></div>
                       <p style={{ fontFamily: MONO, fontSize: 11, color: '#9ca3af', letterSpacing: '0.04em', margin: 0 }}>{ev.loc}{ev.date ? ` · ${ev.date}` : ''}</p>
                       <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 21 : 23, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, margin: 0, wordBreak: 'keep-all' }}>{ev.title}</h3>
                       {ev.desc && <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', wordBreak: 'keep-all' }}>{ev.desc}</p>}
-                      <span style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', fontWeight: 700, marginTop: 'auto', paddingTop: 6 }}>자세히 보기 →</span>
+                      <span style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', fontWeight: 700, marginTop: 'auto', paddingTop: 6 }}>자세히 보기 →</span>
                     </div>
                   </Link>
                 </motion.div>
@@ -308,19 +330,19 @@ export default function EventsContent({
       </section>
 
       {/* ── 참여 CTA 배너 ──────────────────────────────────────────────────── */}
-      <section style={{ background: '#f0fdf4', borderBottom: '1px solid #e5e7eb', padding: isMobile ? '26px 20px' : '30px 60px' }}>
+      <section style={{ background: '#EDFAF8', borderBottom: '1px solid #e5e7eb', padding: isMobile ? '26px 20px' : '30px 60px' }}>
         <div style={{ maxWidth: 1000, margin: '0 auto', display: 'flex', flexDirection: isMobile ? 'column' : 'row', alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between', gap: 16 }}>
           <div>
             <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 22 : 26, color: '#111', letterSpacing: '0.02em' }}>다음 행사, 당신 자리 맡아둘게요</div>
             <div style={{ fontSize: 13, color: '#6b7280', marginTop: 3 }}>새 행사가 열리면 제일 먼저 알려드려요.</div>
           </div>
           {subDone ? (
-            <div style={{ color: '#16a34a', fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap' }}>이제 식구예요! 다음 소식 제일 먼저 갈게요.</div>
+            <div style={{ color: '#12A79D', fontWeight: 700, fontSize: 14, whiteSpace: 'nowrap' }}>이제 식구예요! 다음 소식 제일 먼저 갈게요.</div>
           ) : (
             <div style={{ display: 'flex', gap: 8, width: isMobile ? '100%' : 'auto' }}>
               <input value={subEmail} onChange={(e) => setSubEmail(e.target.value)} placeholder="이메일 주소" type="email"
                 style={{ flex: 1, minWidth: isMobile ? 0 : 240, padding: '11px 16px', border: '1.5px solid #d1d5db', borderRadius: 9999, fontSize: 14, outline: 'none' }} />
-              <button onClick={subscribe} style={{ padding: '11px 22px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>자리 맡기</button>
+              <button onClick={subscribe} style={{ padding: '11px 22px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontWeight: 700, fontSize: 14, border: 'none', cursor: 'pointer', whiteSpace: 'nowrap' }}>자리 맡기</button>
             </div>
           )}
         </div>
@@ -377,8 +399,8 @@ export default function EventsContent({
                   cursor: 'pointer',
                   background: 'transparent',
                   border: 'none',
-                  borderBottom: yearFilter === y ? '2px solid #16a34a' : '2px solid transparent',
-                  color: yearFilter === y ? '#16a34a' : '#9ca3af',
+                  borderBottom: yearFilter === y ? '2px solid #12A79D' : '2px solid transparent',
+                  color: yearFilter === y ? '#12A79D' : '#9ca3af',
                   transition: 'all 0.18s',
                   whiteSpace: 'nowrap',
                   flexShrink: 0,
@@ -441,7 +463,7 @@ export default function EventsContent({
                           </div>
                           {/* 정보 패널 */}
                           <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '22px 22px 26px' : '40px 44px' }}>
-                            <p style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.12em', margin: '0 0 12px', fontWeight: 700 }}>
+                            <p style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.12em', margin: '0 0 12px', fontWeight: 700 }}>
                               {arc.year} · {arc.loc}
                             </p>
                             <h3 style={{
@@ -456,7 +478,7 @@ export default function EventsContent({
                             <span style={{
                               alignSelf: 'flex-start',
                               fontFamily: MONO, fontSize: 13, color: '#fff', fontWeight: 700,
-                              background: '#16a34a', padding: '11px 24px', borderRadius: 9999, letterSpacing: '0.04em',
+                              background: '#12A79D', padding: '11px 24px', borderRadius: 9999, letterSpacing: '0.04em',
                             }}>
                               아카이브 보기 →
                             </span>
@@ -484,10 +506,10 @@ export default function EventsContent({
                           </p>
                           <h3 style={{
                             fontFamily: BEBAS, fontSize: isMobile ? 17 : 20,
-                            color: '#111', letterSpacing: '0.02em', lineHeight: 1.08,
-                            margin: 0,
+                            color: '#111', letterSpacing: '0.02em', lineHeight: 1.18,
+                            margin: 0, wordBreak: 'keep-all',
                             overflow: 'hidden', display: '-webkit-box',
-                            WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                            WebkitLineClamp: 3, WebkitBoxOrient: 'vertical' as const,
                           }}>
                             {arc.title}
                           </h3>

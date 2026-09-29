@@ -36,7 +36,7 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
       variants={fadeUp}
       onMouseMove={onMouseMove}
       onMouseLeave={() => { x.set(0); y.set(0); }}
-      whileHover={!isMobile ? { y: -6, boxShadow: '0 12px 40px rgba(0,0,0,0.12)', borderColor: 'rgba(22,163,74,0.3)' } : undefined}
+      whileHover={!isMobile ? { y: -6, boxShadow: '0 12px 40px rgba(0,0,0,0.12)', borderColor: 'rgba(18,167,157,0.3)' } : undefined}
       style={{
         rotateX: isMobile ? undefined : rotateX,
         rotateY: isMobile ? undefined : rotateY,
@@ -53,7 +53,7 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
         height: isMobile ? 160 : 220,
         background: card.imageData
           ? `url(${card.imageData}) center/cover no-repeat`
-          : 'linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)',
+          : 'linear-gradient(135deg, #EDFAF8 0%, #D6F5F1 100%)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         fontSize: 56,
       }}>
@@ -83,7 +83,7 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",
-            fontSize: 12, fontWeight: 700, color: '#16a34a',
+            fontSize: 12, fontWeight: 700, color: '#12A79D',
             letterSpacing: '0.04em', textDecoration: 'none',
             transition: 'gap 0.2s',
           }}

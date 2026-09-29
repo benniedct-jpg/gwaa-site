@@ -60,7 +60,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
   {
     h: '제7조 (환불)',
     body: (
-      <p>회비·후원금의 환불 및 정기결제 해지에 관한 사항은 협회가 별도로 게시하는 <a href="/refund" style={{ color: '#16a34a', fontWeight: 600 }}>환불 정책</a>에 따릅니다.</p>
+      <p>회비·후원금의 환불 및 정기결제 해지에 관한 사항은 협회가 별도로 게시하는 <a href="/refund" style={{ color: '#12A79D', fontWeight: 600 }}>환불 정책</a>에 따릅니다.</p>
     ),
   },
   {
@@ -78,7 +78,7 @@ const SECTIONS: { h: string; body: React.ReactNode }[] = [
   {
     h: '제10조 (개인정보의 보호)',
     body: (
-      <p>협회는 이용자의 개인정보를 관련 법령 및 <a href="/privacy" style={{ color: '#16a34a', fontWeight: 600 }}>개인정보 처리방침</a>에 따라 보호합니다.</p>
+      <p>협회는 이용자의 개인정보를 관련 법령 및 <a href="/privacy" style={{ color: '#12A79D', fontWeight: 600 }}>개인정보 처리방침</a>에 따라 보호합니다.</p>
     ),
   },
   {

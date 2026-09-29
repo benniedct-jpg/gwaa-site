@@ -27,7 +27,7 @@ const BENEFITS = [
 
 const FAQS = [
   { q: '가입은 어떻게 하나요?', a: '카카오채널이나 아래 신청 폼에 남겨주시면, 담당자가 하루 안에 연락드려요.' },
-  { q: '가입비가 있나요?', a: '가입비·연회비는 카카오채널이나 033-813-0333으로 편하게 물어봐 주세요. 바로 안내드릴게요.' },
+  { q: '가입비가 있나요?', a: '월 1만원 꼴(연 12만원 일시결제)이에요. 온라인 가입 페이지에서 카드로 바로 결제하고 디지털 회원증을 즉시 받으실 수 있어요.' },
   { q: '어디서 혜택을 받을 수 있어요?', a: '춘천·원주·강릉·속초·양양·고성·평창 등 강원 곳곳, 18곳이 넘는 제휴 브랜드에서 받으실 수 있어요.' },
   { q: '우리 애가 대형견인데, 가입에 제한이 있나요?', a: '가입에는 아무 제한이 없어요. 다만 가게마다 입장 기준이 조금씩 달라서, 방문 전에 한 번 확인해 주시면 좋아요.' },
   { q: '혜택은 언제부터 쓸 수 있나요?', a: '가입이 확인되면 폰에서 바로 쓰는 디지털 회원증(QR)을 발급해 드려요. 실물 카드 없이, 제휴처에서 QR만 보여주면 끝이에요.' },
@@ -76,7 +76,7 @@ function SocialProof() {
               borderRight: !isMobile && i < STATS.length - 1 ? '1px solid #e5e7eb' : 'none',
             }}
           >
-            <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(40px,10vw,56px)' : 'clamp(48px,5.5vw,64px)', color: '#16a34a', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 10 }}>
+            <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(40px,10vw,56px)' : 'clamp(48px,5.5vw,64px)', color: '#12A79D', lineHeight: 1, letterSpacing: '0.02em', marginBottom: 10 }}>
               <CountUp value={stat.value} suffix={stat.suffix} />
             </div>
             <div style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', letterSpacing: '0.02em' }}>
@@ -96,11 +96,11 @@ function SavingsCalculator() {
   const px = isMobile ? '20px' : '60px';
 
   return (
-    <section id="calculator" style={{ padding: `${isMobile ? '48px' : '68px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f0fdf4', position: 'relative', overflow: 'hidden' }}>
+    <section id="calculator" style={{ padding: `${isMobile ? '48px' : '68px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#EDFAF8', position: 'relative', overflow: 'hidden' }}>
       <motion.div
         animate={{ scale: [1, 1.12, 1], opacity: [0.05, 0.10, 0.05] }}
         transition={{ duration: 7, repeat: Infinity }}
-        style={{ position: 'absolute', top: '-20%', right: '-10%', width: 360, height: 360, borderRadius: '50%', background: '#16a34a', filter: 'blur(80px)', pointerEvents: 'none' }}
+        style={{ position: 'absolute', top: '-20%', right: '-10%', width: 360, height: 360, borderRadius: '50%', background: '#12A79D', filter: 'blur(80px)', pointerEvents: 'none' }}
       />
       <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }} style={{ position: 'relative' }}>
         <motion.div variants={fadeUp} style={{
@@ -113,8 +113,8 @@ function SavingsCalculator() {
         }}>
           <div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
-              <div style={{ width: 24, height: 2, background: '#16a34a', borderRadius: 1 }} />
-              <span style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.06em' }}>SAVINGS CALCULATOR</span>
+              <div style={{ width: 24, height: 2, background: '#12A79D', borderRadius: 1 }} />
+              <span style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.06em' }}>SAVINGS CALCULATOR</span>
             </div>
             <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 27 : 'clamp(24px, 3.4vw, 36px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1 }}>
               1년이면 이만큼 아껴요
@@ -130,7 +130,7 @@ function SavingsCalculator() {
               style={{ textAlign: isMobile ? 'left' : 'right' }}
             >
               <div style={{ fontFamily: MONO, fontSize: 12, color: '#6b7280', marginBottom: 4 }}>내 예상 절약액</div>
-              <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(32px, 4vw, 48px)', color: '#16a34a', letterSpacing: '0.04em' }}>
+              <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 32 : 'clamp(32px, 4vw, 48px)', color: '#12A79D', letterSpacing: '0.04em' }}>
                 {total.toLocaleString('ko-KR')}원
               </div>
             </motion.div>
@@ -155,7 +155,7 @@ function SavingsCalculator() {
             >
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
                 <span style={{ fontSize: 13, color: '#111', fontWeight: 500 }}>{item.icon} {item.label}</span>
-                <span style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', fontWeight: 700 }}>
+                <span style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', fontWeight: 700 }}>
                   {(item.saving * quantities[i]).toLocaleString('ko-KR')}원
                 </span>
               </div>
@@ -169,11 +169,11 @@ function SavingsCalculator() {
                   q[i] = Number(e.target.value);
                   setQuantities(q);
                 }}
-                style={{ width: '100%', accentColor: '#16a34a' }}
+                style={{ width: '100%', accentColor: '#12A79D' }}
               />
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: '#6b7280', marginTop: 6, fontFamily: MONO }}>
                 <span>0{item.unit}</span>
-                <span style={{ color: '#16a34a', fontWeight: 700 }}>{quantities[i]}{item.unit}</span>
+                <span style={{ color: '#12A79D', fontWeight: 700 }}>{quantities[i]}{item.unit}</span>
                 <span>{item.max}{item.unit}</span>
               </div>
             </motion.div>
@@ -209,7 +209,7 @@ function FAQAccordion() {
                 <span style={{ fontSize: 14, color: '#111', fontWeight: 500, lineHeight: 1.5 }}>{faq.q}</span>
                 <motion.span
                   animate={{ rotate: open === i ? 45 : 0 }}
-                  style={{ fontSize: 20, color: open === i ? '#16a34a' : '#9ca3af', flexShrink: 0, marginLeft: 16 }}
+                  style={{ fontSize: 20, color: open === i ? '#12A79D' : '#9ca3af', flexShrink: 0, marginLeft: 16 }}
                 >
                   +
                 </motion.span>
@@ -235,10 +235,13 @@ function FAQAccordion() {
   );
 }
 
-export default function MateshipContent() {
-  const { data: partners, loading } = useGWAADB<MateshipPartner>(STORES.MATESHIP);
+export default function MateshipContent({ initialData }: { initialData?: MateshipPartner[] }) {
+  const { data: partners, loading } = useGWAADB<MateshipPartner>(STORES.MATESHIP, initialData);
   const isMobile = useIsMobile();
   const [proposalOpen, setProposalOpen] = useState(false);
+  const [cat, setCat] = useState('전체');
+  const cats = ['전체', ...Array.from(new Set(partners.map((p) => p.type).filter(Boolean)))];
+  const shownPartners = cat === '전체' ? partners : partners.filter((p) => p.type === cat);
   const px = isMobile ? '20px' : '60px';
   const py = isMobile ? '48px' : '68px';
 
@@ -260,22 +263,22 @@ export default function MateshipContent() {
           paddingBottom: 'max(12px, env(safe-area-inset-bottom))',
         }}>
           <Link
-            href="#join"
+            href="/membership/join"
             style={{
               display: 'block',
               textAlign: 'center',
               padding: '14px 20px',
               borderRadius: 12,
-              background: '#16a34a',
+              background: '#12A79D',
               color: '#fff',
               fontSize: 14,
               fontWeight: 700,
               letterSpacing: '0.04em',
               textDecoration: 'none',
-              boxShadow: '0 4px 16px rgba(22,163,74,0.35)',
+              boxShadow: '0 4px 16px rgba(18,167,157,0.35)',
             }}
           >
-            지금 식구 되기 →
+멤버십 가입하기 (월 1만원) →
           </Link>
         </div>
       )}
@@ -328,9 +331,16 @@ export default function MateshipContent() {
               함께하는 브랜드
             </h2>
           </motion.div>
+          {!loading && cats.length > 2 && (
+            <motion.div variants={fadeUp} style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 18 }}>
+              {cats.map((c) => (
+                <button key={c} onClick={() => setCat(c)} style={{ fontSize: 13, padding: '8px 15px', borderRadius: 9999, cursor: 'pointer', fontFamily: MONO, border: cat === c ? '1.5px solid #12A79D' : '1.5px solid #e5e7eb', background: cat === c ? '#12A79D' : '#fff', color: cat === c ? '#fff' : '#6b7280', fontWeight: 700 }}>{c}</button>
+              ))}
+            </motion.div>
+          )}
           {!loading && (
             <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(3, 1fr)', gap: isMobile ? 10 : 14 }}>
-              {partners.map((p, i) => (
+              {shownPartners.map((p, i) => (
                 <motion.div
                   key={p.id ?? i}
                   variants={fadeUp}
@@ -342,13 +352,14 @@ export default function MateshipContent() {
                     href={`/mateship/${p.id ?? p.order}`}
                     style={{ display: 'block', textDecoration: 'none', color: 'inherit' }}
                   >
-                    <div style={{ height: 70, background: p.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30 }}>
+                    <div style={{ position: 'relative', height: 70, background: p.gradient, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 30 }}>
                       {p.imageData ? <img src={p.imageData} alt={p.name} style={{ height: 50, objectFit: 'contain' }} /> : p.icon}
+                      <span style={{ position: 'absolute', top: 8, right: 8, fontSize: 9.5, fontWeight: 800, color: '#0D7E76', background: 'rgba(255,255,255,0.92)', padding: '2px 7px', borderRadius: 9999 }}>회원 전용</span>
                     </div>
                     <div style={{ padding: '12px 14px' }}>
                       <h3 style={{ fontSize: 13, fontWeight: 700, color: '#111', marginBottom: 3 }}>{p.name}</h3>
-                      <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 3 }}>{p.region} · {p.type}</p>
-                      <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700 }}>✨ {p.discount}</p>
+                      <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 3 }}>{[p.region, p.type].filter(Boolean).join(' · ')}</p>
+                      <p style={{ fontSize: 12, color: '#12A79D', fontWeight: 700 }}>✨ {p.discount}</p>
                     </div>
                   </Link>
                 </motion.div>
@@ -359,13 +370,13 @@ export default function MateshipContent() {
           {/* 업체 제휴 제안 CTA */}
           <motion.div variants={fadeUp} style={{ marginTop: isMobile ? 24 : 32 }}>
             <div style={{
-              background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 18,
+              background: '#EDFAF8', border: '1.5px solid #BFF3EC', borderRadius: 18,
               padding: isMobile ? '24px 22px' : '30px 36px',
               display: 'flex', flexDirection: isMobile ? 'column' : 'row',
               alignItems: isMobile ? 'flex-start' : 'center', justifyContent: 'space-between', gap: 16,
             }}>
               <div>
-                <div style={{ fontFamily: MONO, fontSize: 11, color: '#16a34a', letterSpacing: '0.1em', fontWeight: 700, marginBottom: 8 }}>FOR BUSINESSES</div>
+                <div style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.1em', fontWeight: 700, marginBottom: 8 }}>FOR BUSINESSES</div>
                 <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 24 : 30, color: '#111', letterSpacing: '0.02em', margin: '0 0 6px' }}>함께할 브랜드, 찾고 있어요</h3>
                 <p style={{ fontSize: 13.5, color: '#374151', lineHeight: 1.6, margin: 0, wordBreak: 'keep-all' }}>
                   반려동물 · 여행 · 캠핑 · 펫푸드 브랜드라면, 4만 반려인과 이어드릴게요. 먼저 손 내밀어 주시면 바로 연락드릴게요.
@@ -375,9 +386,9 @@ export default function MateshipContent() {
                 onClick={() => setProposalOpen(true)}
                 style={{
                   flexShrink: 0, display: 'inline-flex', alignItems: 'center', gap: 8,
-                  padding: '14px 30px', borderRadius: 9999, background: '#16a34a', color: '#fff',
+                  padding: '14px 30px', borderRadius: 9999, background: '#12A79D', color: '#fff',
                   fontSize: 14.5, fontWeight: 700, letterSpacing: '0.02em', border: 'none', cursor: 'pointer',
-                  boxShadow: '0 4px 16px rgba(22,163,74,0.28)', whiteSpace: 'nowrap',
+                  boxShadow: '0 4px 16px rgba(18,167,157,0.28)', whiteSpace: 'nowrap',
                 }}
               >
                 제휴 제안하기 →
@@ -388,19 +399,19 @@ export default function MateshipContent() {
       </section>
 
       {/* 5. Join — 가입까지 24시간 */}
-      <section id="join" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f0fdf4' }}>
+      <section id="join" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#EDFAF8' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
           <motion.div variants={fadeUp} style={{ marginBottom: 12 }}>
             <Eyebrow text="HOW TO JOIN" />
             <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 27 : 'clamp(24px, 3.6vw, 38px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
-              오늘 신청하면, 이번 주말부터 식구예요
+              지금 가입하면, 바로 식구예요
             </h2>
-            <p style={{ fontSize: 14, color: '#374151', marginBottom: 32 }}>신청부터 디지털 회원증 발급까지, 하루면 충분해요.</p>
+            <p style={{ fontSize: 14, color: '#374151', marginBottom: 32 }}>월 1만원 꼴, 온라인 결제 한 번이면 디지털 회원증이 즉시 발급돼요. <span style={{ color: '#9ca3af' }}>(연 12만원 일시결제)</span></p>
           </motion.div>
           <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 20 : 20, marginBottom: 40 }}>
-            {['카카오채널이나 신청 폼에 남기기', '담당자가 확인하고 연락드려요', '가입 안내받고 서류 제출', '디지털 회원증 받고 바로 혜택 시작'].map((step, i) => (
+            {['가입 페이지에서 정보 입력', '연회비 카드 결제', '회원 등록·회원번호 발급', '디지털 회원증 즉시 발급'].map((step, i) => (
               <motion.div key={i} variants={fadeUp} custom={i * 0.06} style={{ textAlign: 'center' }}>
-                <div style={{ width: 48, height: 48, borderRadius: '50%', margin: '0 auto 12px', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BEBAS, fontSize: 20, color: '#fff' }}>
+                <div style={{ width: 48, height: 48, borderRadius: '50%', margin: '0 auto 12px', background: '#12A79D', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BEBAS, fontSize: 20, color: '#fff' }}>
                   {i + 1}
                 </div>
                 <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.6 }}>{step}</p>
@@ -409,18 +420,17 @@ export default function MateshipContent() {
           </div>
           <motion.div variants={fadeUp} style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
             <Link
-              href="https://pf.kakao.com/_wipZX"
-              target="_blank"
+              href="/membership/join"
               style={{
                 display: 'inline-flex', alignItems: 'center', gap: 8,
                 padding: '15px 36px', borderRadius: 9999,
-                background: '#16a34a', color: '#fff',
+                background: '#12A79D', color: '#fff',
                 fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
-                boxShadow: '0 4px 20px rgba(22,163,74,0.35)',
+                boxShadow: '0 4px 20px rgba(18,167,157,0.35)',
                 textDecoration: 'none', whiteSpace: 'nowrap',
               }}
             >
-              카카오채널로 가입하기 →
+              멤버십 가입하기 (월 1만원) →
             </Link>
             <Link
               href="tel:033-813-0333"

@@ -61,16 +61,24 @@ export default function MembershipLoginPage() {
   return (
     <main style={{ minHeight: '100dvh', background: '#f8fafb', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 24, fontFamily: MONO }}>
       <div style={{ width: '100%', maxWidth: 380, background: '#fff', borderRadius: 24, padding: '36px 30px', boxShadow: '0 20px 50px rgba(0,0,0,0.08)' }}>
-        <p style={{ fontSize: 12, color: '#16a34a', letterSpacing: '0.1em', fontWeight: 700, margin: '0 0 6px' }}>GWAA 메이트십</p>
+        <p style={{ fontSize: 12, color: '#12A79D', letterSpacing: '0.1em', fontWeight: 700, margin: '0 0 6px' }}>GWAA 메이트십</p>
         <h1 style={{ fontFamily: BEBAS, fontSize: 30, color: '#111', letterSpacing: '0.02em', margin: '0 0 8px' }}>회원가입</h1>
-        <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, margin: '0 0 18px' }}>카카오로 간편하게 가입하고 디지털 회원증을 받으세요.</p>
+        <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, margin: '0 0 16px' }}>제휴처 할인·행사 할인·디지털 회원증까지, GWAA 멤버십 혜택을 누리세요.</p>
+
+        {/* 신규 가입 (연회비 결제) — 메인 CTA */}
+        <a href="/membership/join" style={{ display: 'block', textAlign: 'center', width: '100%', padding: '15px', borderRadius: 12, background: '#12A79D', color: '#fff', fontWeight: 800, fontSize: 15, textDecoration: 'none', boxSizing: 'border-box' }}>
+          멤버십 가입하기 (월 1만원) →
+        </a>
+        <p style={{ fontSize: 11.5, color: '#9ca3af', textAlign: 'center', lineHeight: 1.6, margin: '8px 0 18px' }}>연 12만원 일시결제 · 결제 즉시 디지털 회원증 발급</p>
+        <div style={{ height: 1, background: '#eef0f2', margin: '0 0 16px' }} />
+        <p style={{ fontSize: 11.5, color: '#9ca3af', margin: '0 0 12px' }}>이미 가입한 회원이신가요? 아래로 회원증을 확인하세요.</p>
 
         {/* 약관·개인정보 동의 (필수) */}
         <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, fontSize: 12, color: '#4b5563', lineHeight: 1.5, margin: '0 0 16px', cursor: 'pointer' }}>
-          <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 2, accentColor: '#16a34a' }} />
+          <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ marginTop: 2, accentColor: '#12A79D' }} />
           <span>
-            <a href="/terms" target="_blank" style={{ color: '#16a34a', fontWeight: 600 }}>이용약관</a> 및{' '}
-            <a href="/privacy" target="_blank" style={{ color: '#16a34a', fontWeight: 600 }}>개인정보 수집·이용</a>에 동의합니다 (필수)
+            <a href="/terms" target="_blank" style={{ color: '#12A79D', fontWeight: 600 }}>이용약관</a> 및{' '}
+            <a href="/privacy" target="_blank" style={{ color: '#12A79D', fontWeight: 600 }}>개인정보 수집·이용</a>에 동의합니다 (필수)
           </span>
         </label>
 
@@ -93,7 +101,7 @@ export default function MembershipLoginPage() {
           <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="전화번호 (가입 시 등록)" inputMode="tel" style={field} />
           <input value={name} onChange={(e) => setName(e.target.value)} placeholder="이름" style={field} onKeyDown={(e) => e.key === 'Enter' && submit()} />
           {err && <p style={{ fontSize: 13, color: '#dc2626', margin: 0 }}>{err}</p>}
-          <button onClick={submit} disabled={busy} style={{ padding: '13px', borderRadius: 12, background: '#fff', color: '#16a34a', fontWeight: 700, fontSize: 14, border: '1.5px solid #16a34a', cursor: busy ? 'default' : 'pointer' }}>
+          <button onClick={submit} disabled={busy} style={{ padding: '13px', borderRadius: 12, background: '#fff', color: '#12A79D', fontWeight: 700, fontSize: 14, border: '1.5px solid #12A79D', cursor: busy ? 'default' : 'pointer' }}>
             {busy ? '확인 중…' : '전화번호로 로그인'}
           </button>
         </div>

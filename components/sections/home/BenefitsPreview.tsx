@@ -7,7 +7,7 @@ import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
 const IC = ({ d, extra }: { d: string | string[]; extra?: React.ReactNode }) => (
-  <svg viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="1.5"
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5"
     strokeLinecap="round" strokeLinejoin="round" width="32" height="32">
     {(Array.isArray(d) ? d : [d]).map((p, i) => <path key={i} d={p} />)}
     {extra}
@@ -88,14 +88,15 @@ export default function BenefitsPreview() {
               key={b.title}
               variants={fadeUp}
               custom={i * 0.06}
-              whileHover={!isMobile ? { y: -4, boxShadow: '0 8px 32px rgba(0,0,0,0.08)' } : undefined}
+              whileHover={!isMobile ? { y: -4, borderColor: '#EF7726', boxShadow: '0 10px 30px rgba(35,34,32,0.10)' } : undefined}
               style={{
-                background: '#f8fafb', border: '1.5px solid #e5e7eb',
-                borderRadius: 14, padding: isMobile ? '18px 20px' : '24px 26px',
+                background: i % 2 === 0 ? '#F1FAF8' : '#FFF6EF',
+                border: '1.5px solid #E7E1D5',
+                borderRadius: 16, padding: isMobile ? '18px 20px' : '24px 26px',
                 transition: 'border-color 0.25s',
               }}
             >
-              <div style={{ marginBottom: 12, lineHeight: 0 }}>{b.icon}</div>
+              <div style={{ marginBottom: 12, lineHeight: 0, color: i % 2 === 0 ? '#12A79D' : '#EF7726' }}>{b.icon}</div>
               <h3 style={{
                 fontFamily: "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 18 : 22,
                 color: '#111', letterSpacing: '0.02em', marginBottom: 6,

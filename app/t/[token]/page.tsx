@@ -38,6 +38,9 @@ export default async function TicketPage({ params }: { params: Promise<{ token: 
     classes: Array.isArray(booking.tshirt_sizes) ? (booking.tshirt_sizes as string[]) : [],
     amount: Number(booking.amount ?? 0),
     checked_in_at: booking.checked_in_at ? String(booking.checked_in_at) : '',
+    order_id: booking.order_id ? String(booking.order_id) : '',
+    phone: String(booking.phone ?? ''),
+    email: String(booking.email ?? ''),
   };
 
   return <TicketClient b={b} qrUrl={qrUrl} />;

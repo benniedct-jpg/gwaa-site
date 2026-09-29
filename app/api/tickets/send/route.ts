@@ -35,5 +35,8 @@ export async function POST(req: NextRequest) {
   if (!result.sent) {
     return NextResponse.json({ ok: false, error: `발송 실패: ${result.reason || '알 수 없음'}` }, { status: 502 });
   }
-  return NextResponse.json({ ok: true, to: booking.email });
+  // 발송 성공 → 발송시각 기록(관리자 발송 여부 표시용)
+  const sentAt = new Date().toISOString();
+  try { await db().from('bookings').update({ ticket_sent_at: sentAt }).eq('id', id); } catch { /* 기록 실패해도 발송은 성공 */ }
+  return NextResponse.json({ ok: true, to: booking.email, ticket_sent_at: sentAt });
 }

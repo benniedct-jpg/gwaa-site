@@ -8,11 +8,21 @@ import Badge from '@/components/ui/Badge';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import BookingFlow from '@/components/sections/events/BookingFlow';
 import PetscoutContent from '@/components/sections/events/PetscoutContent';
+import OlimpetContent from '@/components/sections/events/OlimpetContent';
+import PetscoutReels from '@/components/sections/events/PetscoutReels';
 import RecapGosung from '@/components/sections/events/RecapGosung';
+import RecapOlimpet from '@/components/sections/events/RecapOlimpet';
+import HappyContent from '@/components/sections/events/HappyContent';
 import { Calendar, MapPin } from 'lucide-react';
+import { effectiveStatus } from '@/lib/eventStatus';
 
 // 예약 기능이 열려 있는 행사 id (펫스카웃 2026)
+// 펫스카웃 프로모(라인업·리스·포스터·프로그램) 노출 대상 id
 const BOOKING_EVENT_IDS = [3];
+// 실제 예약·결제 UI(예약버튼·BookingFlow·사이트맵·플로팅바)를 여는 id — 종료로 비활성
+const BOOKING_OPEN_IDS: number[] = [];
+// 프리마켓 셀러 모집 중인 행사 (상세페이지에 셀러 모집 CTA 노출)
+const SELLER_EVENT_IDS = [4];
 
 // 행사별 히어로 배경 이미지 오버라이드 (기본은 갤러리 첫 이미지)
 const HERO_OVERRIDE: Record<number, string> = {
@@ -37,6 +47,7 @@ const HERO_DATE_OVERRIDE: Record<number, string> = {
 // 갤러리 상단에 끼워 넣을 포스터 (행사별)
 const GALLERY_POSTER: Record<number, string> = {
   3: '/images/events/jamboree-2026/poster.webp',
+  4: '/images/events/olimpet-2026/poster.webp',
 };
 
 // 라이브 스테이지 라인업 (펫스카웃 2026)
@@ -67,6 +78,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
     setRgMode(true);
   }, []);
   const hasBooking = BOOKING_EVENT_IDS.includes(event.id as number);
+  const bookingOpen = BOOKING_OPEN_IDS.includes(event.id as number);
 
   // 행사 D-day (SSR/CSR 불일치 방지 위해 마운트 후 계산)
   const [dday, setDday] = useState<number | null>(null);
@@ -78,7 +90,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
   // 하단 고정 '예약하기' 바 — 예약폼(booking-anchor)이 화면에 들어오면 숨김
   const [bookingInView, setBookingInView] = useState(false);
   useEffect(() => {
-    if (!hasBooking || typeof window === 'undefined') return;
+    if (!bookingOpen || typeof window === 'undefined') return;
     const el = document.getElementById('booking-anchor');
     if (!el) return;
     const io = new IntersectionObserver(
@@ -87,14 +99,14 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
     );
     io.observe(el);
     return () => io.disconnect();
-  }, [hasBooking]);
+  }, [bookingOpen]);
 
   // 하단 고정 바가 보일 때 카카오 문의 버튼을 바 위로 올림(겹침 방지)
   useEffect(() => {
-    const show = hasBooking && !bookingInView;
+    const show = bookingOpen && !bookingInView;
     document.documentElement.style.setProperty('--kakao-lift', show ? 'calc(66px + env(safe-area-inset-bottom))' : '0px');
     return () => document.documentElement.style.setProperty('--kakao-lift', '0px');
-  }, [hasBooking, bookingInView]);
+  }, [bookingOpen, bookingInView]);
 
   const allImages: string[] = [];
   if (event.images && event.images.length > 0) {
@@ -178,8 +190,8 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(135deg,#e8f5e9,#c8e6c9)' }} />
         )}
         <div
-          onClick={hasBooking ? () => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) : undefined}
-          style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.82) 100%)', cursor: hasBooking ? 'pointer' : 'default' }}
+          onClick={bookingOpen ? () => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' }) : undefined}
+          style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, transparent 30%, rgba(0,0,0,0.82) 100%)', cursor: bookingOpen ? 'pointer' : 'default' }}
         />
 
         <div style={{ position: 'absolute', top: 20, left: isMobile ? 16 : 40, zIndex: 2 }}>
@@ -190,7 +202,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
 
         <div style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: `32px ${px}`, zIndex: 2 }}>
           <div style={{ marginBottom: 10 }}>
-            <Badge variant={event.status} />
+            <Badge variant={effectiveStatus(event)} />
           </div>
           <h1 style={{ fontFamily: "'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(30px,7vw,42px)' : 'clamp(34px,5vw,60px)', color: '#fff', letterSpacing: '-0.01em', lineHeight: 1.08, marginBottom: 12, wordBreak: 'keep-all' }}>
             {event.title.split(/(\bwith\b)/i).map((part, i) =>
@@ -203,16 +215,16 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             {heroDate && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><Calendar size={15} strokeWidth={1.9} />{heroDate}</span>}
             {event.loc && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}><MapPin size={15} strokeWidth={1.9} />{event.loc}</span>}
           </div>
-          {hasBooking && dday !== null && dday > 0 && (
+          {bookingOpen && dday !== null && dday > 0 && (
             <div style={{ marginTop: 12 }}>
               <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6, background: '#ef4444', color: '#fff', fontSize: 12.5, fontWeight: 800, padding: '6px 14px', borderRadius: 9999 }}>🔥 {rgMode ? `D-${dday} · 낭만기버존 18면 한정` : `예약 마감까지 D-${dday}`}</span>
             </div>
           )}
-          {hasBooking && (
+          {bookingOpen && (
             <div style={{ marginTop: 16, display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap' }}>
               <button
                 onClick={() => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                style={{ padding: '13px 30px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 6px 18px rgba(22,163,74,0.4)' }}
+                style={{ padding: '13px 30px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 15, fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 6px 18px rgba(18,167,157,0.4)' }}
               >
                 예약하기 →
               </button>
@@ -242,8 +254,26 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
               </p>
             </motion.div>
 
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(5,1fr)', gap: isMobile ? 12 : 16, marginTop: isMobile ? 22 : 30 }}>
-              {ARTISTS.map((a, i) => (
+            {/* 헤드라이너 — 이박사 스포트라이트 */}
+            <motion.div initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.55 }} style={{ marginTop: isMobile ? 22 : 30 }}>
+              <div style={{ position: 'relative', aspectRatio: isMobile ? '4 / 3' : '16 / 6', borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(248,113,113,0.35)', boxShadow: '0 0 44px rgba(239,68,68,0.14)' }}>
+                <div aria-hidden style={{ position: 'absolute', inset: 0, background: `url(${ARTISTS[0].img}) center 26%/cover no-repeat` }} />
+                <div aria-hidden style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(0,0,0,0.86) 0%, rgba(0,0,0,0.45) 52%, rgba(0,0,0,0.05) 100%)' }} />
+                <div style={{ position: 'absolute', left: isMobile ? 16 : 30, right: 16, bottom: isMobile ? 16 : 26 }}>
+                  <span style={{ display: 'inline-block', background: '#ef4444', color: '#fff', fontFamily: MONO, fontSize: 10.5, fontWeight: 800, letterSpacing: '0.14em', padding: '4px 11px', borderRadius: 6, marginBottom: 11 }}>★ HEADLINER</span>
+                  <div style={{ fontFamily: "'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(34px,11vw,50px)' : 'clamp(48px,5.2vw,74px)', color: '#fff', lineHeight: 0.98, letterSpacing: '0.01em' }}>{ARTISTS[0].name}</div>
+                  <div style={{ fontFamily: MONO, fontSize: isMobile ? 11 : 13, color: '#fca5a5', letterSpacing: '0.14em', fontWeight: 700, marginTop: 7 }}>{ARTISTS[0].en} · {ARTISTS[0].tag}</div>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* 라이브 밴드 4팀 */}
+            <div style={{ display: 'flex', alignItems: 'center', gap: 10, margin: isMobile ? '22px 0 12px' : '28px 0 14px' }}>
+              <span style={{ fontFamily: MONO, fontSize: 11, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.16em', fontWeight: 700 }}>+ LIVE BANDS</span>
+              <span style={{ flex: 1, height: 1, background: 'rgba(255,255,255,0.1)' }} />
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2,1fr)' : 'repeat(4,1fr)', gap: isMobile ? 12 : 16 }}>
+              {ARTISTS.slice(1).map((a, i) => (
                 <motion.div key={a.name} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true, amount: 0.2 }} transition={{ duration: 0.5, delay: i * 0.06 }}>
                   <div style={{ position: 'relative', aspectRatio: '3 / 4', borderRadius: 14, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.1)' }}>
                     <div aria-hidden style={{ position: 'absolute', inset: 0, background: `url(${a.img}) ${a.pos}/cover no-repeat` }} />
@@ -277,8 +307,8 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             style={{ position: 'relative', zIndex: 2, padding: isMobile ? '0 24px' : '0 72px', maxWidth: 720 }}
           >
             <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-              <span style={{ width: 24, height: 2, background: '#4ade80', borderRadius: 1 }} />
-              <span style={{ fontFamily: MONO, fontSize: 11, color: '#86efac', letterSpacing: '0.14em', fontWeight: 700 }}>PETSCOUT 2026 · 강원 고성</span>
+              <span style={{ width: 24, height: 2, background: '#4FE0D3', borderRadius: 1 }} />
+              <span style={{ fontFamily: MONO, fontSize: 11, color: '#8FEEE3', letterSpacing: '0.14em', fontWeight: 700 }}>PETSCOUT 2026 · 강원 고성</span>
             </div>
             <h2 style={{ fontFamily: "'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(28px,7.5vw,40px)' : 'clamp(38px,4.6vw,56px)', color: '#fff', lineHeight: 1.12, letterSpacing: '-0.01em', marginBottom: 16, wordBreak: 'keep-all', textShadow: '0 2px 16px rgba(0,0,0,0.4)' }}>
               불멍 앞에,<br />깊어가는 강원의 밤.
@@ -290,28 +320,31 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
         </div>
       )}
 
+      {/* 필드 릴스 — 현장 스케치 영상 */}
+      {hasBooking && <PetscoutReels />}
+
       {/* Content */}
       <div style={{ maxWidth: 860, margin: '0 auto', padding: isMobile ? '40px 20px 64px' : '56px 40px 80px' }}>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.1 }}>
 
-          {hasBooking && (
+          {bookingOpen && (
             <>
               <p style={{ fontSize: isMobile ? 19 : 24, fontWeight: 800, color: '#111', lineHeight: 1.4, marginBottom: 12, wordBreak: 'keep-all', letterSpacing: '-0.01em' }}>
-                텐트도 장비도 없이, 몸만 오세요.<br />예약 전원에게 <span style={{ color: '#16a34a' }}>웰컴키트</span>까지 🐾
+                텐트도 장비도 없이, 몸만 오세요.<br />예약 전원에게 <span style={{ color: '#12A79D' }}>웰컴키트</span>까지 🐾
               </p>
               <p style={{ fontSize: isMobile ? 14 : 15.5, color: '#4b5563', lineHeight: 1.7, marginBottom: 18, wordBreak: 'keep-all' }}>
                 참가비 이상의 웰컴키트를 전원에게. 반려견 없이도, 텐트 없이도 즐기는 강원 고성 2박 3일.
               </p>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginBottom: 28 }}>
                 {['🎁 예약 전원 웰컴키트 증정', '🎸 인디밴드·이박사 라이브', '🌿 웰니스 클래스 · 숲속 사우나 무료', '⛺ 텐트 없어도 OK · 몸만 오세요'].map((t) => (
-                  <span key={t} style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', color: '#15803d', fontWeight: 700, fontSize: 13, padding: '8px 14px', borderRadius: 9999, wordBreak: 'keep-all' }}>{t}</span>
+                  <span key={t} style={{ background: '#EDFAF8', border: '1px solid #BFF3EC', color: '#0D7E76', fontWeight: 700, fontSize: 13, padding: '8px 14px', borderRadius: 9999, wordBreak: 'keep-all' }}>{t}</span>
                 ))}
               </div>
             </>
           )}
 
           {event.benefit && (
-            <div style={{ display: 'inline-block', background: '#f0fdf4', border: '1px solid rgba(22,163,74,0.3)', borderRadius: 9999, padding: '6px 16px', fontSize: 12, color: '#16a34a', fontWeight: 700, marginBottom: 24 }}>
+            <div style={{ display: 'inline-block', background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', borderRadius: 9999, padding: '6px 16px', fontSize: 12, color: '#12A79D', fontWeight: 700, marginBottom: 24 }}>
               {event.benefit}
             </div>
           )}
@@ -330,14 +363,35 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             </div>
           )}
 
+          {/* 2026 강릉 올림펫 — 프로그램·캠페인 안내 */}
+          {event.id === 4 && <RecapOlimpet />}
+          {event.id === 4 && <OlimpetContent />}
+          {event.id === 7 && <HappyContent />}
+
+          {/* 프리마켓 셀러 모집 CTA — DB 플래그(sellerOpen) 우선, 없으면 기존 id 목록 */}
+          {(event.sellerOpen ?? SELLER_EVENT_IDS.includes(event.id as number)) && (
+            <div style={{ margin: isMobile ? '4px 0 40px' : '12px 0 48px' }}>
+              <div style={{ background: 'linear-gradient(135deg,#12A79D,#0D7E76)', borderRadius: 16, padding: isMobile ? '22px 20px' : '28px 32px', color: '#fff' }}>
+                <div style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.12em', color: '#BFF3EC', fontWeight: 700, marginBottom: 8 }}>FLEA MARKET · SELLER 모집</div>
+                <h3 style={{ fontSize: isMobile ? 20 : 24, fontWeight: 800, lineHeight: 1.3, marginBottom: 8, wordBreak: 'keep-all' }}>프리마켓 셀러를 모집합니다</h3>
+                <p style={{ fontSize: isMobile ? 13.5 : 15, color: 'rgba(255,255,255,0.9)', lineHeight: 1.7, marginBottom: 18, wordBreak: 'keep-all' }}>
+                  반려동물 문화행사에서 함께할 셀러를 찾아요. 후원물품 제공 시 참가비 무료(또는 2만원) · 온라인 간편 신청 · 협회 심사 후 선정 안내드립니다.
+                </p>
+                <Link href={`/sellers?event=${event.id ?? event.order}`} style={{ display: 'inline-block', background: '#fff', color: '#0D7E76', fontWeight: 800, fontSize: 14.5, padding: '13px 28px', borderRadius: 9999, textDecoration: 'none' }}>
+                  셀러 신청하기 →
+                </Link>
+              </div>
+            </div>
+          )}
+
           {/* 2026 고성 미션트레킹 & 힐링 비치 — 후기(비공개, ?recap=preview 로 미리보기) */}
           {event.id === 2 && <RecapGosung />}
 
           {hasBooking && eventPoster && (
             <div style={{ margin: isMobile ? '4px 0 40px' : '12px 0 56px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 14 }}>
-                <span style={{ width: 20, height: 2, background: '#16a34a', borderRadius: 1 }} />
-                <span style={{ fontFamily: MONO, fontSize: 11, color: '#16a34a', letterSpacing: '0.08em', fontWeight: 700 }}>CAMPING with PETSCOUT</span>
+                <span style={{ width: 20, height: 2, background: '#12A79D', borderRadius: 1 }} />
+                <span style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.08em', fontWeight: 700 }}>CAMPING with PETSCOUT</span>
               </div>
               <div style={{ background: '#f9fafb', border: '1px solid #eceff2', borderRadius: 16, padding: isMobile ? '18px' : '28px', display: 'flex', justifyContent: 'center' }}>
                 <img
@@ -362,8 +416,8 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
                 style={{ position: 'relative', zIndex: 2, padding: isMobile ? '0 24px' : '0 72px', maxWidth: 720 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 16 }}>
-                  <span style={{ width: 24, height: 2, background: '#4ade80', borderRadius: 1 }} />
-                  <span style={{ fontFamily: MONO, fontSize: 11, color: '#86efac', letterSpacing: '0.14em', fontWeight: 700 }}>WELLNESS · 몸도 마음도</span>
+                  <span style={{ width: 24, height: 2, background: '#4FE0D3', borderRadius: 1 }} />
+                  <span style={{ fontFamily: MONO, fontSize: 11, color: '#8FEEE3', letterSpacing: '0.14em', fontWeight: 700 }}>WELLNESS · 몸도 마음도</span>
                 </div>
                 <h2 style={{ fontFamily: "'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif", fontSize: isMobile ? 'clamp(28px,7.5vw,40px)' : 'clamp(38px,4.6vw,56px)', color: '#fff', lineHeight: 1.12, letterSpacing: '-0.01em', marginBottom: 16, wordBreak: 'keep-all', textShadow: '0 2px 16px rgba(0,0,0,0.4)' }}>
                   반려견은 뛰고,<br />나는 숨 고릅니다.
@@ -375,7 +429,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             </div>
           )}
 
-          {hasBooking && <PetscoutContent />}
+          {hasBooking && <PetscoutContent recap={!bookingOpen} />}
 
           {galleryImages.length > 0 && (
             <div style={{ marginBottom: 48 }}>
@@ -477,7 +531,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
                       aria-label={`${i + 1}번째 사진`}
                       style={{
                         width: i === galleryIdx ? 22 : 7, height: 7, borderRadius: 9999, border: 'none', padding: 0, cursor: 'pointer',
-                        background: i === galleryIdx ? '#16a34a' : '#d1d5db', transition: 'all 0.25s',
+                        background: i === galleryIdx ? '#12A79D' : '#d1d5db', transition: 'all 0.25s',
                       }}
                     />
                   ))}
@@ -487,15 +541,15 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
           )}
 
           <div style={{ display: 'flex', gap: 12, alignItems: 'center', flexWrap: 'wrap', paddingTop: 8 }}>
-            {hasBooking ? (
+            {bookingOpen ? (
               <button
                 onClick={() => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                style={{ display: 'inline-flex', padding: isMobile ? '11px 24px' : '13px 30px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
+                style={{ display: 'inline-flex', padding: isMobile ? '11px 24px' : '13px 30px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 14, fontWeight: 700, border: 'none', cursor: 'pointer' }}
               >
                 예약하기 ↓
               </button>
             ) : event.link ? (
-              <Link href={event.link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', padding: isMobile ? '11px 24px' : '13px 30px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
+              <Link href={event.link} target="_blank" rel="noopener noreferrer" style={{ display: 'inline-flex', padding: isMobile ? '11px 24px' : '13px 30px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 14, fontWeight: 700, textDecoration: 'none' }}>
                 {event.ctaText || '신청하기 →'}
               </Link>
             ) : (
@@ -508,11 +562,11 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             </Link>
           </div>
 
-          {hasBooking && (
+          {bookingOpen && (
             <div id="sitemap-anchor" style={{ marginTop: isMobile ? 40 : 56, scrollMarginTop: 80 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <span style={{ width: 20, height: 2, background: '#16a34a', borderRadius: 1 }} />
-                <span style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.1em', fontWeight: 700 }}>SITE MAP</span>
+                <span style={{ width: 20, height: 2, background: '#12A79D', borderRadius: 1 }} />
+                <span style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.1em', fontWeight: 700 }}>SITE MAP</span>
               </div>
               <h2 style={{ fontFamily: BEBAS, fontWeight: 800, fontSize: isMobile ? 27 : 36, color: '#111', letterSpacing: '0.02em', margin: '0 0 6px' }}>어디에 자리 잡을까요?</h2>
               <p style={{ fontSize: 14, color: '#6b7280', lineHeight: 1.6, margin: '0 0 18px', wordBreak: 'keep-all' }}>
@@ -528,7 +582,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
                 {(rgMode
                   ? [{ t: '낭만기버존 (VIP)', d: '울산바위 뷰 · 8×8m · 캠핑 사이트 18면', c: '#db2777' }]
                   : [
-                      { t: '근접 일반존 (A~D)', d: '10×10m · 무대 인접 · 60면', c: '#16a34a' },
+                      { t: '근접 일반존 (A~D)', d: '10×10m · 무대 인접 · 60면', c: '#12A79D' },
                       { t: '원거리 일반존 (E)', d: '10×10m · 2만원 할인 · 40면', c: '#2563eb' },
                       { t: '반려동물 펜스존 (F)', d: '10×10m · 독립 펜스 · 52면', c: '#dc2626' },
                     ]
@@ -548,7 +602,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             </div>
           )}
 
-          {hasBooking && (
+          {bookingOpen && (
             <div style={{ marginTop: isMobile ? 32 : 44 }}>
               <BookingFlow eventId={event.id as number} />
             </div>
@@ -557,7 +611,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
       </div>
 
       {/* 하단 고정 예약 바 (펫스카웃) */}
-      {hasBooking && (
+      {bookingOpen && (
         <AnimatePresence>
           {!bookingInView && (
             <motion.div
@@ -577,7 +631,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
                 </div>
                 <button
                   onClick={() => document.getElementById('booking-anchor')?.scrollIntoView({ behavior: 'smooth', block: 'start' })}
-                  style={{ flexShrink: 0, padding: isMobile ? '12px 22px' : '13px 32px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 14.5, fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(22,163,74,0.35)' }}
+                  style={{ flexShrink: 0, padding: isMobile ? '12px 22px' : '13px 32px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 14.5, fontWeight: 800, border: 'none', cursor: 'pointer', boxShadow: '0 4px 14px rgba(18,167,157,0.35)' }}
                 >
                   예약하기 →
                 </button>

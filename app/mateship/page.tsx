@@ -2,6 +2,10 @@ import Link from 'next/link';
 import PageHero from '@/components/shared/PageHero';
 import SeoTags from '@/components/ui/SeoTags';
 import MateshipContent from '@/components/sections/mateship/MateshipContent';
+import { fetchStore } from '@/lib/db/serverFetch';
+import { MateshipPartner } from '@/types';
+
+export const revalidate = 60;
 
 export const metadata = {
   title: '메이트쉽 | GWAA 강원도반려동물협회',
@@ -18,7 +22,8 @@ export const metadata = {
   twitter: { card: 'summary_large_image' },
 };
 
-export default function MateshipPage() {
+export default async function MateshipPage() {
+  const partners = await fetchStore<MateshipPartner>('mateship_partners');
   return (
     <>
       <PageHero
@@ -29,14 +34,14 @@ export default function MateshipPage() {
       >
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Link
-            href="/mateship#join"
+            href="/membership/join"
             style={{
               display: 'inline-flex', alignItems: 'center', gap: 8,
               padding: '13px 28px', borderRadius: 9999,
-              background: '#16a34a', color: '#fff',
+              background: '#12A79D', color: '#fff',
               fontSize: 14, fontWeight: 700, letterSpacing: '0.04em',
               textDecoration: 'none',
-              boxShadow: '0 4px 20px rgba(22,163,74,0.35)',
+              boxShadow: '0 4px 20px rgba(18,167,157,0.35)',
             }}
           >
             지금 가입하기 →
@@ -57,7 +62,7 @@ export default function MateshipPage() {
           </Link>
         </div>
       </PageHero>
-      <MateshipContent />
+      <MateshipContent initialData={partners} />
       <section style={{ padding: '40px 60px', borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
         <SeoTags page="mateship" />
       </section>

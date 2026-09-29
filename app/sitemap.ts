@@ -8,7 +8,7 @@ export const revalidate = 3600;
 
 // 홈 + 정적 페이지 + 모든 행사 상세(자동 포함: 새 행사 올리면 반영)
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const staticPaths = ['', '/about', '/education', '/events', '/travel', '/mateship', '/contact', '/support', '/membership'];
+  const staticPaths = ['', '/about', '/education', '/events', '/travel', '/mateship', '/tips', '/contact', '/support', '/membership'];
   const now = new Date();
   const base: MetadataRoute.Sitemap = staticPaths.map((p) => ({
     url: `${SITE}${p}`, lastModified: now,

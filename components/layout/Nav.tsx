@@ -54,7 +54,7 @@ export default function Nav() {
           left: 0,
           right: 0,
           height: 3,
-          background: 'linear-gradient(90deg, #15803d 0%, #16a34a 50%, #22c55e 100%)',
+          background: 'linear-gradient(90deg, #0D7E76 0%, #12A79D 50%, #2CC7BC 100%)',
           zIndex: 501,
         }}
       />
@@ -126,10 +126,10 @@ export default function Nav() {
               display: 'inline-flex', alignItems: 'center', gap: 6,
               padding: '7px 16px', borderRadius: 9999,
               fontSize: 12, fontFamily: MONO, fontWeight: 700, letterSpacing: '0.06em',
-              color: '#16a34a', background: '#fff', border: '1.5px solid #16a34a',
+              color: '#12A79D', background: '#fff', border: '1.5px solid #12A79D',
               textDecoration: 'none', transition: 'all 0.15s', whiteSpace: 'nowrap',
             }}
-            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#f0fdf4'; }}
+            onMouseEnter={e => { (e.currentTarget as HTMLElement).style.background = '#EDFAF8'; }}
             onMouseLeave={e => { (e.currentTarget as HTMLElement).style.background = '#fff'; }}
           >
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -150,20 +150,20 @@ export default function Nav() {
               fontWeight: 700,
               letterSpacing: '0.06em',
               color: '#fff',
-              background: '#16a34a',
+              background: '#12A79D',
               textDecoration: 'none',
               transition: 'all 0.15s',
-              boxShadow: '0 2px 12px rgba(22,163,74,0.3)',
+              boxShadow: '0 2px 12px rgba(18,167,157,0.3)',
               whiteSpace: 'nowrap',
             }}
             onMouseEnter={e => {
-              (e.currentTarget as HTMLElement).style.background = '#15803d';
-              (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(22,163,74,0.4)';
+              (e.currentTarget as HTMLElement).style.background = '#0D7E76';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 4px 20px rgba(18,167,157,0.4)';
               (e.currentTarget as HTMLElement).style.transform = 'translateY(-1px)';
             }}
             onMouseLeave={e => {
-              (e.currentTarget as HTMLElement).style.background = '#16a34a';
-              (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(22,163,74,0.3)';
+              (e.currentTarget as HTMLElement).style.background = '#12A79D';
+              (e.currentTarget as HTMLElement).style.boxShadow = '0 2px 12px rgba(18,167,157,0.3)';
               (e.currentTarget as HTMLElement).style.transform = 'translateY(0)';
             }}
           >
@@ -262,19 +262,19 @@ export default function Nav() {
             {/* 드로어 헤더 */}
             <div style={{
               padding: '16px 20px',
-              background: '#f0fdf4',
-              borderBottom: '1px solid #dcfce7',
+              background: '#EDFAF8',
+              borderBottom: '1px solid #D6F5F1',
               display: 'flex',
               alignItems: 'center',
               gap: 8,
             }}>
-              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#16a34a' }} />
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: '#12A79D' }} />
               <span style={{
                 fontFamily: MONO,
                 fontSize: 11,
                 fontWeight: 700,
                 letterSpacing: '0.06em',
-                color: '#15803d',
+                color: '#0D7E76',
               }}>
                 강원도반려동물협회
               </span>
@@ -298,15 +298,15 @@ export default function Nav() {
                       fontSize: 12,
                       fontWeight: 700,
                       letterSpacing: '0.08em',
-                      color: isActive ? '#16a34a' : '#374151',
+                      color: isActive ? '#12A79D' : '#374151',
                       textDecoration: 'none',
-                      background: isActive ? '#f0fdf4' : 'transparent',
-                      borderLeft: isActive ? '3px solid #16a34a' : '3px solid transparent',
+                      background: isActive ? '#EDFAF8' : 'transparent',
+                      borderLeft: isActive ? '3px solid #12A79D' : '3px solid transparent',
                     }}
                   >
                     {item.label}
                     {isActive && (
-                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#16a34a" strokeWidth="2.5" strokeLinecap="round">
+                      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="#12A79D" strokeWidth="2.5" strokeLinecap="round">
                         <polyline points="9 18 15 12 9 6" />
                       </svg>
                     )}
@@ -321,7 +321,7 @@ export default function Nav() {
                     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
                     padding: '13px 20px', borderRadius: 12,
                     fontFamily: MONO, fontSize: 12, fontWeight: 700, letterSpacing: '0.06em',
-                    color: '#16a34a', background: '#fff', border: '1.5px solid #16a34a',
+                    color: '#12A79D', background: '#fff', border: '1.5px solid #12A79D',
                     textDecoration: 'none',
                   }}
                 >
@@ -344,9 +344,9 @@ export default function Nav() {
                     fontWeight: 700,
                     letterSpacing: '0.06em',
                     color: '#fff',
-                    background: '#16a34a',
+                    background: '#12A79D',
                     textDecoration: 'none',
-                    boxShadow: '0 4px 16px rgba(22,163,74,0.3)',
+                    boxShadow: '0 4px 16px rgba(18,167,157,0.3)',
                   }}
                 >
                   <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">

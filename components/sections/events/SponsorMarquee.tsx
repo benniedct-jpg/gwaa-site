@@ -35,9 +35,9 @@ export default function SponsorMarquee() {
     <section style={{ background: '#f8fafb', borderTop: '1px solid #eef1f4', padding: isMobile ? '40px 0 44px' : '58px 0 62px', overflow: 'hidden' }}>
       <div style={{ textAlign: 'center', marginBottom: isMobile ? 22 : 30, padding: '0 20px' }}>
         <div style={{ display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-          <span style={{ width: 18, height: 2, background: '#16a34a', borderRadius: 1 }} />
-          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: '#16a34a', fontWeight: 700 }}>SPONSORS &amp; PARTNERS</span>
-          <span style={{ width: 18, height: 2, background: '#16a34a', borderRadius: 1 }} />
+          <span style={{ width: 18, height: 2, background: '#12A79D', borderRadius: 1 }} />
+          <span style={{ fontFamily: MONO, fontSize: 11, letterSpacing: '0.14em', color: '#12A79D', fontWeight: 700 }}>SPONSORS &amp; PARTNERS</span>
+          <span style={{ width: 18, height: 2, background: '#12A79D', borderRadius: 1 }} />
         </div>
         <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 24 : 32, color: '#111', letterSpacing: '0.02em', margin: 0 }}>함께해주시는 후원사</h2>
       </div>

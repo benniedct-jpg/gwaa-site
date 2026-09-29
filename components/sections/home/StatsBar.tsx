@@ -20,9 +20,9 @@ export default function StatsBar() {
 
   return (
     <section style={{
-      background: '#f9fafb',
-      borderTop: '1px solid #e5e7eb',
-      borderBottom: '1px solid #e5e7eb',
+      background: 'linear-gradient(180deg, #F1FAF8 0%, #FBFEFD 100%)',
+      borderTop: '1px solid #D6F0EC',
+      borderBottom: '1px solid #D6F0EC',
     }}>
       <motion.div
         variants={staggerContainer}
@@ -53,7 +53,7 @@ export default function StatsBar() {
               <div style={{
                 fontFamily: BEBAS,
                 fontSize: isMobile ? 'clamp(36px, 9vw, 52px)' : 'clamp(48px, 5.5vw, 64px)',
-                color: '#16a34a',
+                color: i % 2 === 0 ? '#12A79D' : '#EF7726',
                 letterSpacing: '0.02em',
                 lineHeight: 1,
                 marginBottom: 10,

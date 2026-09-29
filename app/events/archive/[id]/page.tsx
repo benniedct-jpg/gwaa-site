@@ -55,7 +55,7 @@ export default function ArchiveDetailPage() {
     return (
       <div style={{ minHeight: '60vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
         <div style={{ fontFamily: BEBAS, fontSize: 48, color: '#111' }}>행사를 찾을 수 없어요</div>
-        <Link href="/events#archive" style={{ padding: '10px 24px', borderRadius: 9999, background: '#16a34a', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>← 아카이브로</Link>
+        <Link href="/events#archive" style={{ padding: '10px 24px', borderRadius: 9999, background: '#12A79D', color: '#fff', fontSize: 13, fontWeight: 700, textDecoration: 'none' }}>← 아카이브로</Link>
       </div>
     );
   }
@@ -67,7 +67,7 @@ export default function ArchiveDetailPage() {
         <div style={{ padding: isMobile ? '120px 20px 60px' : '160px 60px 80px' }}>
           <Link href="/events#archive" style={{ fontFamily: MONO, fontSize: 10, color: '#999', textDecoration: 'none', letterSpacing: '0.14em' }}>← ARCHIVE</Link>
           <div style={{ marginTop: 40, marginBottom: 16 }}>
-            <span style={{ fontFamily: MONO, fontSize: 10, color: '#4ade80', letterSpacing: '0.18em' }}>{event.year} · {event.loc}</span>
+            <span style={{ fontFamily: MONO, fontSize: 10, color: '#4FE0D3', letterSpacing: '0.18em' }}>{event.year} · {event.loc}</span>
           </div>
           <div style={{ fontFamily: BEBAS, fontSize: isMobile ? 36 : 56, color: '#111', lineHeight: 1.1, marginBottom: 24 }}>{event.title}</div>
           <div style={{ display: 'inline-flex', alignItems: 'center', gap: 10, padding: '14px 24px', background: '#f9fafb', borderRadius: 8, border: '1px solid #f0f0f0' }}>
@@ -115,8 +115,8 @@ export default function ArchiveDetailPage() {
           style={{ position: 'absolute', bottom: 0, left: 0, right: 0, padding: isMobile ? '0 20px 40px' : '0 60px 52px' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 14 }}>
-            <span style={{ width: 20, height: 1, background: '#4ade80' }} />
-            <span style={{ fontFamily: MONO, fontSize: 10, color: '#4ade80', letterSpacing: '0.16em', fontWeight: 700 }}>
+            <span style={{ width: 20, height: 1, background: '#4FE0D3' }} />
+            <span style={{ fontFamily: MONO, fontSize: 10, color: '#4FE0D3', letterSpacing: '0.16em', fontWeight: 700 }}>
               {event.year} · {event.loc}
             </span>
           </div>
@@ -178,8 +178,8 @@ export default function ArchiveDetailPage() {
           style={{ background: '#f9fafb', padding: `48px ${px}`, borderBottom: '1px solid #f0f0f0' }}
         >
           <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-            <span style={{ width: 24, height: 1, background: '#16a34a' }} />
-            <span style={{ fontFamily: MONO, fontSize: 10, color: '#16a34a', letterSpacing: '0.2em', fontWeight: 700 }}>POSTER · DESIGN</span>
+            <span style={{ width: 24, height: 1, background: '#12A79D' }} />
+            <span style={{ fontFamily: MONO, fontSize: 10, color: '#12A79D', letterSpacing: '0.2em', fontWeight: 700 }}>POSTER · DESIGN</span>
           </div>
           <div style={{
             display: 'flex',
@@ -228,8 +228,8 @@ export default function ArchiveDetailPage() {
             {/* OVERVIEW */}
             <div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 28 }}>
-                <span style={{ width: 24, height: 1, background: '#16a34a' }} />
-                <span style={{ fontFamily: BEBAS, fontSize: 22, color: '#16a34a', letterSpacing: '0.16em' }}>OVERVIEW</span>
+                <span style={{ width: 24, height: 1, background: '#12A79D' }} />
+                <span style={{ fontFamily: BEBAS, fontSize: 22, color: '#12A79D', letterSpacing: '0.16em' }}>OVERVIEW</span>
               </div>
               {event.desc && (
                 <p style={{

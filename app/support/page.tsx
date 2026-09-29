@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
-const GREEN = '#16a34a';
+const GREEN = '#12A79D';
 
 const STORE_ID = process.env.NEXT_PUBLIC_PORTONE_STORE_ID;
 const CHANNEL_KEY = process.env.NEXT_PUBLIC_PORTONE_CHANNEL_KEY;
@@ -167,7 +167,7 @@ export default function SupportPage() {
   const input: React.CSSProperties = { width: '100%', padding: '12px 14px', borderRadius: 10, border: '1px solid #e5e7eb', fontSize: 14, fontFamily: MONO, boxSizing: 'border-box' };
   const tab = (active: boolean): React.CSSProperties => ({
     flex: 1, padding: '14px', borderRadius: 12, border: `1.5px solid ${active ? GREEN : '#e5e7eb'}`,
-    background: active ? '#f0fdf4' : '#fff', color: active ? GREEN : '#6b7280', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+    background: active ? '#EDFAF8' : '#fff', color: active ? GREEN : '#6b7280', fontWeight: 700, fontSize: 14, cursor: 'pointer',
   });
 
   // 회비·후원 결제 임시 중단 — 현재는 행사(예약) 단건 결제만 운영
@@ -227,7 +227,7 @@ export default function SupportPage() {
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
             {DONATE_PRESETS.map((a) => (
               <button key={a} onClick={() => setDonateAmount(a)}
-                style={{ padding: '12px', borderRadius: 10, border: `1.5px solid ${donateAmount === a ? GREEN : '#e5e7eb'}`, background: donateAmount === a ? '#f0fdf4' : '#fff', color: '#111', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
+                style={{ padding: '12px', borderRadius: 10, border: `1.5px solid ${donateAmount === a ? GREEN : '#e5e7eb'}`, background: donateAmount === a ? '#EDFAF8' : '#fff', color: '#111', fontWeight: 700, fontSize: 14, cursor: 'pointer' }}>
                 {a.toLocaleString()}원
               </button>
             ))}

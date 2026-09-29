@@ -25,7 +25,7 @@ export default function ServiceTemplate({ partner }: { partner: MateshipPartner 
         <h1 style={{ fontFamily: BEBAS, fontSize: 'clamp(36px,6vw,64px)', color: '#111', lineHeight: 1.1, marginBottom: 8, letterSpacing: '0.02em' }}>
           {name}
         </h1>
-        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(20px,3vw,32px)', color: '#16a34a', letterSpacing: '0.04em', marginBottom: 20 }}>
+        <p style={{ fontFamily: BEBAS, fontSize: 'clamp(20px,3vw,32px)', color: '#12A79D', letterSpacing: '0.04em', marginBottom: 20 }}>
           {detail.tagline}
         </p>
         {region !== '-' && (
@@ -47,12 +47,12 @@ export default function ServiceTemplate({ partner }: { partner: MateshipPartner 
           </h2>
           <div style={{
             padding: '36px', borderRadius: 20,
-            border: '2px solid #bbf7d0', background: '#f0fdf4',
+            border: '2px solid #BFF3EC', background: '#EDFAF8',
             display: 'inline-flex', flexDirection: 'column', alignItems: 'center', gap: 6,
             minWidth: 240,
           }}>
-            <p style={{ fontFamily: MONO, fontSize: 12, color: '#16a34a', letterSpacing: '0.06em' }}>MEMBERS ONLY</p>
-            <p style={{ fontFamily: BEBAS, fontSize: 36, color: '#16a34a', letterSpacing: '0.04em' }}>✨ {discount}</p>
+            <p style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', letterSpacing: '0.06em' }}>MEMBERS ONLY</p>
+            <p style={{ fontFamily: BEBAS, fontSize: 36, color: '#12A79D', letterSpacing: '0.04em' }}>✨ {discount}</p>
           </div>
         </div>
       </section>
@@ -74,7 +74,7 @@ export default function ServiceTemplate({ partner }: { partner: MateshipPartner 
                 }}>
                   <span style={{
                     flexShrink: 0, width: 28, height: 28, borderRadius: '50%',
-                    background: '#16a34a', color: '#fff',
+                    background: '#12A79D', color: '#fff',
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     fontFamily: BEBAS, fontSize: 16,
                   }}>
@@ -127,9 +127,9 @@ export default function ServiceTemplate({ partner }: { partner: MateshipPartner 
             rel="noopener noreferrer"
             style={{
               display: 'inline-block', padding: '15px 40px', borderRadius: 9999,
-              background: '#16a34a', color: '#fff', fontWeight: 700,
+              background: '#12A79D', color: '#fff', fontWeight: 700,
               fontSize: 15, textDecoration: 'none', letterSpacing: '0.04em',
-              boxShadow: '0 4px 20px rgba(34,197,94,0.35)',
+              boxShadow: '0 4px 20px rgba(44,199,188,0.35)',
             }}
           >
             {detail.cta.label}
