@@ -304,7 +304,7 @@ export default function EventsContent({
 
           {/* 서브 카드 2열 (가로형) */}
           {otherUpcoming.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 14 : 20 }}>
+            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (otherUpcoming.length === 1 ? '1fr' : 'repeat(2, 1fr)'), gap: isMobile ? 14 : 20 }}>
               {otherUpcoming.map((ev) => (
                 <motion.div key={ev.id ?? ev.order} variants={fadeUp} whileHover={!isMobile ? { y: -4 } : undefined} transition={{ duration: 0.2 }} style={{ border: '1px solid #e5e7eb', borderRadius: 16, overflow: 'hidden', background: '#fff' }}>
                   <Link href={`/events/${ev.id ?? ev.order}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100%' }}>
