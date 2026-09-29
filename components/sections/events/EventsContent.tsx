@@ -126,8 +126,6 @@ export default function EventsContent({
   const flagship = pickFlagship(filtered);
   // 다가오는 행사 = 대표행사 제외 + 종료(날짜지남/수동)된 행사 제외(종료 행사는 아래 "지금까지 함께한 날들"로)
   const otherUpcoming = filtered.filter((e) => e !== flagship && effectiveStatus(e) !== 'ended');
-  const ddayNum = flagship ? ddayFrom(flagship) : null;
-  const ddayLabel = ddayNum == null ? '' : ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
 
   const subscribe = async () => {
     if (!subEmail.trim()) return;
@@ -200,6 +198,39 @@ export default function EventsContent({
   const filteredArchives =
     yearFilter === 'all' ? sortedPast : sortedPast.filter((p) => p.year === yearFilter);
 
+  // 다가오는 행사 카드 — 플래그십·서브 공통 스타일(포스터 좌 + 정보 우, 전체폭)
+  const chipTeal: React.CSSProperties = { display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' };
+  const renderUpcoming = (ev: EventCard) => {
+    const dNum = ddayFrom(ev);
+    const dLabel = dNum == null ? '' : dNum > 0 ? `D-${dNum}` : dNum === 0 ? 'TODAY' : 'ENDED';
+    return (
+      <Link href={`/events/${ev.id ?? ev.order}`} style={{ textDecoration: 'none', display: 'block' }}>
+        <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 18, overflow: 'hidden', display: isMobile ? 'block' : 'flex', alignItems: 'stretch' }}>
+          <div style={{ position: 'relative', flex: isMobile ? undefined : '0 0 44%', background: 'linear-gradient(135deg,#EDFAF8,#D6F5F1)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: isMobile ? 0 : 20 }}>
+            {ev.imageData
+              ? <img src={ev.imageData} alt={ev.title} style={{ width: isMobile ? '100%' : 'auto', maxWidth: '100%', maxHeight: isMobile ? 460 : 420, objectFit: 'contain', display: 'block', borderRadius: isMobile ? 0 : 10 }} />
+              : <div style={{ width: '100%', aspectRatio: '16/9', background: 'linear-gradient(135deg,#12A79D,#0D7E76)' }} />}
+            <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 8, alignItems: 'center' }}>
+              {effectiveStatus(ev) === 'upcoming' && dLabel && <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: '0.06em', color: '#fff', background: '#EF7726', padding: '5px 13px', borderRadius: 9999, boxShadow: '0 4px 12px rgba(35,34,32,0.22)' }}>{dLabel}</span>}
+              <Badge variant={effectiveStatus(ev)} />
+            </div>
+          </div>
+          <div style={{ flex: isMobile ? undefined : 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '16px 18px 18px' : '32px 40px' }}>
+            <span style={{ fontFamily: MONO, fontSize: 11, color: '#0D7E76', letterSpacing: '0.1em', fontWeight: 700 }}>UPCOMING EVENT</span>
+            <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(22px,6vw,28px)' : 'clamp(28px,3vw,40px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1.12, margin: '8px 0 0', wordBreak: 'keep-all' }}>{ev.title}</h3>
+            {(firstSentence(ev.desc) || ev.benefit) && <p style={{ fontSize: isMobile ? 13.5 : 14.5, color: '#374151', lineHeight: 1.6, maxWidth: 640, marginTop: 10, wordBreak: 'keep-all' }}>{firstSentence(ev.desc) || ev.benefit}</p>}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
+              {ev.date && <span style={chipTeal}>📅 {ev.date}</span>}
+              {ev.loc && <span style={chipTeal}>📍 {regionOf(ev.loc) || ev.loc}</span>}
+              {ev.benefit && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 700, color: '#C9560F', background: '#FFE7D3', borderRadius: 9999, padding: '7px 13px' }}>🎟 {ev.benefit}</span>}
+            </div>
+            <span style={{ display: 'inline-block', marginTop: 20, background: '#0D7E76', color: '#fff', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999, alignSelf: 'flex-start' }}>{ev.ctaText?.includes('예약') ? '예약하기 →' : '자세히 보기 →'}</span>
+          </div>
+        </div>
+      </Link>
+    );
+  };
+
   return (
     <>
       {/* ── Stats Bar ──────────────────────────────────────────────────────── */}
@@ -270,58 +301,19 @@ export default function EventsContent({
             </h2>
           </motion.div>
 
-          {/* 플래그십 스포트라이트 */}
+          {/* 대표 다가오는 행사 — 플래그십 */}
           {flagship && (
             <motion.div variants={fadeUp} style={{ marginBottom: otherUpcoming.length ? (isMobile ? 16 : 20) : 0 }}>
-              <Link href={`/events/${flagship.id ?? flagship.order}`} style={{ textDecoration: 'none', display: 'block' }}>
-                <div style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 18, overflow: 'hidden', display: isMobile ? 'block' : 'flex', alignItems: 'stretch' }}>
-                  {/* 포스터 — 통째로 노출(크롭 없음) · 데스크톱은 왼쪽 */}
-                  <div style={{ position: 'relative', flex: isMobile ? undefined : '0 0 44%', background: 'linear-gradient(135deg,#EDFAF8,#D6F5F1)', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: isMobile ? 0 : 20 }}>
-                    {flagship.imageData
-                      ? <img src={flagship.imageData} alt={flagship.title} style={{ width: isMobile ? '100%' : 'auto', maxWidth: '100%', maxHeight: isMobile ? 460 : 420, objectFit: 'contain', display: 'block', borderRadius: isMobile ? 0 : 10 }} />
-                      : <div style={{ width: '100%', aspectRatio: '16/9', background: 'linear-gradient(135deg,#12A79D,#0D7E76)' }} />}
-                    <div style={{ position: 'absolute', top: 14, left: 14, display: 'flex', gap: 8, alignItems: 'center' }}>
-                      {effectiveStatus(flagship) === 'upcoming' && ddayLabel && <span style={{ fontFamily: BEBAS, fontSize: 15, letterSpacing: '0.06em', color: '#fff', background: '#EF7726', padding: '5px 13px', borderRadius: 9999, boxShadow: '0 4px 12px rgba(35,34,32,0.22)' }}>{ddayLabel}</span>}
-                      <Badge variant={effectiveStatus(flagship)} />
-                    </div>
-                  </div>
-                  {/* 본문 — 데스크톱은 오른쪽 세로 중앙 */}
-                  <div style={{ flex: isMobile ? undefined : 1, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: isMobile ? '16px 18px 18px' : '32px 40px' }}>
-                    <span style={{ fontFamily: MONO, fontSize: 11, color: '#0D7E76', letterSpacing: '0.1em', fontWeight: 700 }}>UPCOMING EVENT</span>
-                    <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 'clamp(22px,6vw,28px)' : 'clamp(28px,3vw,40px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1.12, margin: '8px 0 0', wordBreak: 'keep-all' }}>{flagship.title}</h3>
-                    {(firstSentence(flagship.desc) || flagship.benefit) && <p style={{ fontSize: isMobile ? 13.5 : 14.5, color: '#374151', lineHeight: 1.6, maxWidth: 640, marginTop: 10, wordBreak: 'keep-all' }}>{firstSentence(flagship.desc) || flagship.benefit}</p>}
-                    <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 16 }}>
-                      {flagship.date && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📅 {flagship.date}</span>}
-                      {flagship.loc && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 600, color: '#0D7E76', background: '#E3F4F2', borderRadius: 9999, padding: '7px 13px' }}>📍 {regionOf(flagship.loc) || flagship.loc}</span>}
-                      {flagship.benefit && <span style={{ display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12.5, fontWeight: 700, color: '#C9560F', background: '#FFE7D3', borderRadius: 9999, padding: '7px 13px' }}>🎟 {flagship.benefit}</span>}
-                    </div>
-                    <span style={{ display: 'inline-block', marginTop: 20, background: '#0D7E76', color: '#fff', fontWeight: 700, fontSize: 14, padding: '12px 26px', borderRadius: 9999, alignSelf: 'flex-start' }}>{flagship.ctaText?.includes('예약') ? '예약하기 →' : '자세히 보기 →'}</span>
-                  </div>
-                </div>
-              </Link>
+              {renderUpcoming(flagship)}
             </motion.div>
           )}
 
-          {/* 서브 카드 2열 (가로형) */}
+          {/* 나머지 다가오는 행사 — 플래그십과 동일 스타일로 전체폭 스택 */}
           {otherUpcoming.length > 0 && (
-            <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : (otherUpcoming.length === 1 ? '1fr' : 'repeat(2, 1fr)'), gap: isMobile ? 14 : 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: isMobile ? 16 : 20 }}>
               {otherUpcoming.map((ev) => (
-                <motion.div key={ev.id ?? ev.order} variants={fadeUp} whileHover={!isMobile ? { y: -4 } : undefined} transition={{ duration: 0.2 }} style={{ border: '1px solid #e5e7eb', borderRadius: 16, overflow: 'hidden', background: '#fff' }}>
-                  <Link href={`/events/${ev.id ?? ev.order}`} style={{ textDecoration: 'none', display: 'flex', flexDirection: isMobile ? 'column' : 'row', height: '100%' }}>
-                    <div style={{
-                      flex: isMobile ? 'none' : '0 0 42%', position: 'relative',
-                      aspectRatio: isMobile ? '3/2' : undefined, minHeight: isMobile ? undefined : 220,
-                    }}>
-                      <CardImage src={ev.imageData} alt={ev.title} mode="fill" />
-                    </div>
-                    <div style={{ flex: 1, padding: isMobile ? '16px 16px 18px' : '20px 22px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-                      <div><Badge variant={effectiveStatus(ev)} /></div>
-                      <p style={{ fontFamily: MONO, fontSize: 11, color: '#9ca3af', letterSpacing: '0.04em', margin: 0 }}>{ev.loc}{ev.date ? ` · ${ev.date}` : ''}</p>
-                      <h3 style={{ fontFamily: BEBAS, fontSize: isMobile ? 21 : 23, color: '#111', letterSpacing: '0.02em', lineHeight: 1.1, margin: 0, wordBreak: 'keep-all' }}>{ev.title}</h3>
-                      {ev.desc && <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, margin: 0, display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', wordBreak: 'keep-all' }}>{ev.desc}</p>}
-                      <span style={{ fontFamily: MONO, fontSize: 12, color: '#12A79D', fontWeight: 700, marginTop: 'auto', paddingTop: 6 }}>자세히 보기 →</span>
-                    </div>
-                  </Link>
+                <motion.div key={ev.id ?? ev.order} variants={fadeUp}>
+                  {renderUpcoming(ev)}
                 </motion.div>
               ))}
             </div>
