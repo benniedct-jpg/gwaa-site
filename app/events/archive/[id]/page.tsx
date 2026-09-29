@@ -8,6 +8,7 @@ import { useGWAADBItem } from '@/hooks/useGWAADB';
 import { STORES } from '@/lib/db/gwaaDB';
 import { ArchiveEvent } from '@/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { dedupeImages } from '@/lib/galleryImages';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
@@ -21,11 +22,13 @@ export default function ArchiveDetailPage() {
   const px = isMobile ? '20px' : '60px';
 
   const posterImages: string[] = event?.posters ?? [];
-  const allImages: string[] = event
-    ? event.images && event.images.length > 0
-      ? event.images
-      : [event.imageData, event.imageData2].filter((x): x is string => !!x)
-    : [];
+  const allImages: string[] = dedupeImages(
+    event
+      ? event.images && event.images.length > 0
+        ? event.images
+        : [event.imageData, event.imageData2]
+      : [],
+  );
   const lbImages = [...posterImages, ...allImages];
 
   const closeLightbox = useCallback(() => setLightboxIdx(null), []);
