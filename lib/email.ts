@@ -282,7 +282,7 @@ export function sellerSelectEmailHtml(s: SellerLite, isTest = false) {
       2026 원주시 반려동물 문화행사 <b>&lt;웰니스클럽&gt;</b> 프리마켓 셀러로 <b>선정</b>되셨습니다. 함께해 주셔서 감사합니다!</p>
       <div style="background:#EDFAF8;border:1px solid #BFF3EC;border-radius:10px;padding:14px 16px;margin:16px 0;font-size:14px;color:#0D7E76;line-height:1.9">
         ▪ 일시 : <b>2026. 10. 17.(토) 10:00 ~ 17:00</b><br/>
-        ▪ 장소 : <b>원주천댐 공원 일원 (강원 원주)</b><br/>
+        ▪ 장소 : <b>로아노크광장 일원 (원주시 봉산동 899-2)</b><br/>
         ▪ 부스 위치·집결 시간 등 운영 세부사항은 <b>개별 안내</b>드립니다.
       </div>
       ${isFee ? feeBox : sponsorBox}

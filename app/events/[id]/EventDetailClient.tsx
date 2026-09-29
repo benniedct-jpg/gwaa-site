@@ -27,6 +27,7 @@ const SELLER_EVENT_IDS = [4];
 // 행사별 히어로 배경 이미지 오버라이드 (기본은 갤러리 첫 이미지)
 const HERO_OVERRIDE: Record<number, string> = {
   3: '/images/events/jamboree-2026/hero-1.webp',
+  5: '/images/events/wonju-2026/poster.webp',
 };
 // 행사별 히어로 자동 전환 슬라이드 (2장 이상이면 크로스페이드로 순환)
 const HERO_SLIDES: Record<number, string[]> = {
