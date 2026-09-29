@@ -9,6 +9,7 @@ import { STORES } from '@/lib/db/gwaaDB';
 import { ArchiveEvent } from '@/types';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { dedupeImages } from '@/lib/galleryImages';
+import FlowingGallery from '@/components/ui/FlowingGallery';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
@@ -268,38 +269,36 @@ export default function ArchiveDetailPage() {
         </motion.div>
       )}
 
-      {/* ── [4] Gallery (원본 비율 유지 · 마소너리 · 잘림 없음) ── */}
+      {/* ── [4] Gallery — 흐르는 후기 (중복 제거 · 랜덤 믹싱) ── */}
       {allImages.length >= 1 && (
-        <div style={{ background: '#fff', padding: `0 ${px} 80px` }}>
-          {allImages.length > 1 && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '28px 0 14px' }}>
-              <span style={{ fontFamily: MONO, fontSize: 10, color: '#c4c9d0', letterSpacing: '0.18em' }}>
-                {allImages.length} PHOTOS
-              </span>
-            </div>
-          )}
-          <div style={{ columnCount: isMobile ? 2 : 3, columnGap: 10 }}>
-            {allImages.map((img, i) => (
-              <motion.div
-                key={i}
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true, margin: '-20px' }}
-                transition={{ duration: 0.4 }}
-                whileHover={{ opacity: 0.9 }}
-                onClick={() => setLightboxIdx(posterImages.length + i)}
-                style={{ breakInside: 'avoid', marginBottom: 10, cursor: 'zoom-in', borderRadius: 4, overflow: 'hidden' }}
-              >
+        <>
+          <div style={{ background: '#fff', padding: `0 ${px}` }}>
+            {allImages.length > 1 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, margin: '28px 0 14px' }}>
+                <span style={{ fontFamily: MONO, fontSize: 10, color: '#c4c9d0', letterSpacing: '0.18em' }}>
+                  {allImages.length} PHOTOS
+                </span>
+              </div>
+            )}
+          </div>
+          {allImages.length >= 3 ? (
+            /* 흐르는 후기 갤러리 — 여러 열이 반대 방향으로 무한 스크롤 */
+            <FlowingGallery images={allImages} seed={id || 1} max={72} />
+          ) : (
+            <div style={{ background: '#fff', padding: `0 ${px} 80px`, display: 'flex', gap: 10, flexWrap: 'wrap', justifyContent: 'center' }}>
+              {allImages.map((img, i) => (
                 <img
+                  key={i}
                   src={img}
                   loading="lazy"
                   alt=""
-                  style={{ width: '100%', height: 'auto', display: 'block' }}
+                  onClick={() => setLightboxIdx(posterImages.length + i)}
+                  style={{ maxWidth: '100%', maxHeight: 'min(70vh, 560px)', width: 'auto', borderRadius: 8, cursor: 'zoom-in', display: 'block' }}
                 />
-              </motion.div>
-            ))}
-          </div>
-        </div>
+              ))}
+            </div>
+          )}
+        </>
       )}
 
       {/* ── [6] Back ── */}

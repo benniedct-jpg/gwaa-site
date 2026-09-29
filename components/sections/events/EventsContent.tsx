@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useMemo } from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useGWAADB } from '@/hooks/useGWAADB';
@@ -10,7 +10,7 @@ import Badge from '@/components/ui/Badge';
 import Eyebrow from '@/components/ui/Eyebrow';
 import CountUp from '@/components/shared/CountUp';
 import { staggerContainer, fadeUp } from '@/lib/animations';
-import FlowingGallery from '@/components/ui/FlowingGallery';
+import { PhotoGallery } from '@/components/ui/gallery';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { effectiveStatus, pickFlagship, ddayFrom } from '@/lib/eventStatus';
 
@@ -200,25 +200,6 @@ export default function EventsContent({
   const filteredArchives =
     yearFilter === 'all' ? sortedPast : sortedPast.filter((p) => p.year === yearFilter);
 
-  // 흐르는 갤러리 풀 — 최근 행사 우선으로 사진을 모아 FlowingGallery에서 중복 제거·랜덤 믹싱
-  const galleryPool = useMemo(() => {
-    const byRecent = [...archives].sort((a, b) =>
-      dateKey8(b.date, b.year).localeCompare(dateKey8(a.date, a.year)),
-    );
-    const imgs: string[] = [];
-    for (const a of byRecent) {
-      if (a.images && a.images.length) imgs.push(...a.images);
-      else if (a.imageData) imgs.push(a.imageData);
-    }
-    for (const e of filtered) {
-      if (effectiveStatus(e) !== 'ended') continue;
-      if (e.images && e.images.length) imgs.push(...e.images);
-      else if (e.imageData) imgs.push(e.imageData);
-    }
-    return imgs;
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [archives, filtered]);
-
   return (
     <>
       {/* ── Stats Bar ──────────────────────────────────────────────────────── */}
@@ -271,13 +252,13 @@ export default function EventsContent({
         </div>
       </motion.section>
 
-      {/* Photo Gallery — 흐르는 후기 갤러리 (최근 행사 사진 랜덤 믹싱) */}
-      <div style={{ background: '#fff', padding: isMobile ? '32px 20px 16px' : '48px 60px 20px' }}>
+      {/* Photo Gallery */}
+      <div style={{ background: '#fff', padding: isMobile ? '32px 20px 12px' : '48px 60px 16px' }}>
         <p style={{ fontFamily: MONO, fontSize: 11, color: '#12A79D', letterSpacing: '0.08em', fontWeight: 700, margin: '0 0 6px' }}>OUR MOMENTS</p>
         <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 24 : 32, color: '#111', letterSpacing: '0.02em', margin: 0 }}>우리가 함께 만든 장면들</h2>
-        <p style={{ fontSize: 13, color: '#9ca3af', margin: '6px 0 0' }}>최근 행사의 순간들이 흐릅니다. 사진을 누르면 크게 볼 수 있어요.</p>
+        <p style={{ fontSize: 13, color: '#9ca3af', margin: '6px 0 0' }}>드래그해서 구경하세요.</p>
       </div>
-      <FlowingGallery images={galleryPool} />
+      <PhotoGallery animationDelay={0.3} />
 
       {/* ── Upcoming Events ────────────────────────────────────────────────── */}
       <section id="upcoming" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>

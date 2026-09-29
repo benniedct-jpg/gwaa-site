@@ -43,16 +43,6 @@ const CHANNELS = [
     accent: '#2563eb',
     textColor: '#fff',
   },
-  {
-    icon: '📍',
-    label: 'ADDRESS',
-    value: '강원특별자치도 원주시',
-    desc: '천매봉길 20-9',
-    href: 'https://map.naver.com/v5/search/강원도반려동물협회+원주',
-    external: true,
-    accent: '#f97316',
-    textColor: '#fff',
-  },
 ];
 
 const INQUIRY_TYPES = ['메이트쉽 가입', '교육 프로그램', '행사 문의', '제휴 문의', '기타'];
@@ -406,7 +396,6 @@ export default function ContactContent() {
               marginBottom: 24,
             }}>
               {[
-                { label: '주소',     value: '강원특별자치도 원주시 천매봉길 20-9' },
                 { label: '대표전화', value: '033-813-0333' },
                 { label: '이메일',   value: 'ganimal1@naver.com' },
                 { label: '업무시간', value: '평일 09:00 ~ 18:00' },
