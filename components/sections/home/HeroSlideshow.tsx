@@ -16,7 +16,7 @@ const SLIDES = [
     titleAccent: '제한 없이',
     sub: '2021년부터 4만명과 함께한 강원도 대표 반려동물 협회. 교육, 행사, 메이트쉽 멤버십으로 반려생활을 새롭게.',
     bg1: 'linear-gradient(160deg, #0D7E76 0%, #12A79D 55%, #35BDB4 100%)',
-    bgImg: '/images/events/fest/01.webp',
+    bgImg: '/images/events/gangwon-fest-2023/13.webp',
     actions: [
       { label: '메이트쉽 가입 →', href: '/mateship#join', primary: true },
       { label: '협회 소개', href: '/about', primary: false },
@@ -29,7 +29,7 @@ const SLIDES = [
     titleAccent: '교육',
     sub: '독스포츠(어질리티), 오비디언스 교육, 반려동물행동지도사 국가자격증 취득까지. 전문 트레이너가 함께합니다.',
     bg1: 'linear-gradient(160deg, #0F857D 0%, #14A79D 55%, #2BAFA8 100%)',
-    bgImg: '/images/events/edu/02.webp',
+    bgImg: '/images/events/walk-edu-2025/30.webp',
     actions: [
       { label: '교육 신청하기 →', href: '/education#apply', primary: true },
       { label: '프로그램 보기', href: '/education', primary: false },
@@ -42,7 +42,7 @@ const SLIDES = [
     titleAccent: '절약',
     sub: '호텔, 카페, 캠핑, 사료·용품 할인과 행사 우선 참여권까지. 메이트쉽 회원이 되면 강원도가 달라집니다.',
     bg1: 'linear-gradient(160deg, #C9560F 0%, #EF7726 55%, #FF9A5C 100%)',
-    bgImg: '/images/events/fest/09.webp',
+    bgImg: '/images/events/gangwon-fest-2023/11.webp',
     actions: [
       { label: '혜택 보기 →', href: '/mateship#benefits', primary: true },
       { label: '계산기 해보기', href: '/mateship#calculator', primary: false },
@@ -156,7 +156,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
           style={{
             position: 'absolute', inset: 0,
             background: bgImg
-              ? `linear-gradient(150deg, rgba(6,44,41,0.52) 0%, rgba(6,44,41,0.22) 60%, rgba(6,44,41,0.10) 100%), url(${bgImg}) center/cover no-repeat`
+              ? `linear-gradient(150deg, rgba(6,44,41,0.74) 0%, rgba(6,44,41,0.56) 50%, rgba(6,44,41,0.46) 100%), url(${bgImg}) center/cover no-repeat, ${slide.bg1}`
               : slide.bg1,
           }}
         />
@@ -165,7 +165,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
       {/* Overlays */}
       <div style={{
         position: 'absolute', inset: 0,
-        background: 'linear-gradient(102deg, rgba(6,42,39,0.42) 0%, rgba(6,42,39,0.14) 48%, transparent 82%)',
+        background: 'linear-gradient(102deg, rgba(6,42,39,0.68) 0%, rgba(6,42,39,0.40) 38%, rgba(6,42,39,0.12) 66%, transparent 88%)',
         pointerEvents: 'none',
       }} />
       <div style={{
@@ -265,7 +265,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
                 color: '#fff',
                 letterSpacing: '0.02em',
                 whiteSpace: 'pre-line',
-                textShadow: '0 2px 14px rgba(6,42,39,0.25)',
+                textShadow: '0 2px 24px rgba(6,42,39,0.55), 0 1px 3px rgba(6,42,39,0.5)',
               }}>
                 {slide.title.split('\n').map((line, li) => (
                   <span key={li} style={{ display: 'block' }}>
@@ -298,7 +298,7 @@ export default function HeroSlideshow({ initialData }: { initialData?: HeroImage
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.35, duration: 0.4 }}
-              style={{ fontSize: 15, color: 'rgba(255,255,255,0.94)', lineHeight: 1.6, fontWeight: 400, marginBottom: 28 }}
+              style={{ fontSize: 15, color: 'rgba(255,255,255,0.96)', lineHeight: 1.6, fontWeight: 400, marginBottom: 28, textShadow: '0 1px 12px rgba(6,42,39,0.55)' }}
             >
               {slide.sub}
             </motion.p>
