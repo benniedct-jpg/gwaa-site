@@ -4,6 +4,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import { clientDB } from '@/lib/db/clientDB';
+import WellnessPanel from '@/components/admin/WellnessPanel';
 
 // Store name constants (maps to API table names)
 const STORES = {
@@ -22,7 +23,7 @@ import {
   ArchiveEvent, ActivityCard, LookbookItem, TravelPlace, PageHashtags,
 } from '@/types';
 
-type Tab = 'dashboard' | 'applications' | 'proposals' | 'members' | 'payments' | 'bookings' | 'events' | 'archive' | 'partners' | 'images' | 'content' | 'travel' | 'settings';
+type Tab = 'dashboard' | 'applications' | 'proposals' | 'members' | 'payments' | 'bookings' | 'wellness' | 'events' | 'archive' | 'partners' | 'images' | 'content' | 'travel' | 'settings';
 
 interface Payment { id?: number; payment_id?: string; kind?: string; amount?: number; name?: string; phone?: string; email?: string; status?: string; paid_at?: string; created_at?: string; }
 
@@ -537,7 +538,7 @@ export default function AdminPage() {
   });
 
   const tabs: [Tab, string][] = [
-    ['dashboard', '대시보드'], ['applications', '신청내역'], ['proposals', '제안접수'], ['members', '회원관리'], ['payments', '결제내역'], ['bookings', '예약내역'], ['events', '행사관리'],
+    ['dashboard', '대시보드'], ['applications', '신청내역'], ['proposals', '제안접수'], ['members', '회원관리'], ['payments', '결제내역'], ['bookings', '예약내역'], ['wellness', '웰니스 설문'], ['events', '행사관리'],
     ['archive', '아카이브'], ['partners', '제휴업체'], ['images', '이미지'],
     ['content', '콘텐츠'], ['travel', '여행지'], ['settings', '설정'],
   ];
@@ -792,6 +793,9 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+
+        {/* ── Wellness survey / stamps (원주 2026 3D 행사장) ── */}
+        {tab === 'wellness' && <WellnessPanel onToast={showToast} />}
 
         {/* ── Events ── */}
         {tab === 'events' && (
