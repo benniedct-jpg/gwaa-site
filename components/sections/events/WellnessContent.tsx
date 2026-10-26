@@ -159,7 +159,6 @@ export default function WellnessContent() {
         @keyframes sketchscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
         .sketch-photo { transition: transform 0.25s ease, box-shadow 0.25s ease; }
         .sketch-photo:hover { transform: rotate(0deg) translateY(-4px) scale(1.04) !important; box-shadow: 0 16px 36px rgba(17,24,39,0.26) !important; z-index: 2; position: relative; }
-        @media (prefers-reduced-motion: reduce) { .sketch-mq-track { animation: none; } .sketch-mq { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } }
       `}</style>
 
       {/* 라이트박스 — 사진·영상 공용 */}
