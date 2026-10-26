@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<title>스탬프 투어 QR 안내판 인쇄 · 2026 웰니스클럽</title>
+<script src="https://cdn.jsdelivr.net/npm/qrious@4.0.2/dist/qrious.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:"Apple SD Gothic Neo","Noto Sans KR",system-ui,sans-serif;background:#f4f4f4}
+h1{text-align:center;padding:24px 0 8px;font-size:15px;color:#555;font-weight:400}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;padding:16px;max-width:900px;margin:0 auto}
+
+/* A5 비율 카드 */
+.card{background:#fff;border:2px solid #12302a;border-radius:4px;padding:20px 16px 16px;display:flex;flex-direction:column;align-items:center;gap:10px;aspect-ratio:148/210;justify-content:space-between;position:relative}
+.card.survey{border-color:#e11d48}
+
+.tag{position:absolute;top:-1px;left:50%;transform:translateX(-50%);background:#12302a;color:#e4f2ea;font-size:9px;font-weight:700;letter-spacing:.14em;padding:3px 10px;white-space:nowrap}
+.card.survey .tag{background:#e11d48}
+
+.game-code{font-size:34px;font-weight:900;color:#12302a;letter-spacing:-.02em;line-height:1}
+.card.survey .game-code{color:#e11d48;font-size:24px;margin-top:4px}
+
+.game-name{font-size:13.5px;font-weight:700;color:#12302a;text-align:center;word-break:keep-all;line-height:1.45}
+.card.survey .game-name{color:#e11d48}
+
+canvas{display:block}
+
+.how{font-size:10px;color:#666;text-align:center;line-height:1.6;word-break:keep-all}
+.how b{color:#12302a;font-weight:700}
+.card.survey .how b{color:#e11d48}
+
+.footer{font-size:9px;color:#aaa;letter-spacing:.05em;text-align:center}
+
+@media print{
+  body{background:#fff}
+  h1,.no-print{display:none}
+  .grid{display:block;padding:0;max-width:none;gap:0}
+  .card{page-break-after:always;break-after:page;width:148mm;height:210mm;margin:0 auto;border:1.5px solid #12302a;border-radius:0;padding:24px 20px 20px;aspect-ratio:auto}
+}
+</style>
+</head>
+<body>
+<h1>브라우저에서 인쇄 → A5 용지 선택 후 출력 · 각 카드를 해당 게임 안내판에 부착하세요</h1>
+<div class="no-print" style="text-align:center;padding-bottom:12px">
+  <button onclick="window.print()" style="padding:10px 28px;background:#12302a;color:#e4f2ea;border:none;border-radius:4px;font-size:14px;font-weight:700;cursor:pointer">🖨 인쇄하기</button>
+</div>
+<div class="grid" id="cards"></div>
+
+<script>
+const PANELS=[
+  {id:'g4', code:'D', name:'MINI GAME D\n유혹을 이겨라',  url:'https://gwaa.or.kr/wonju-2026/3d.html#stamp-g4', how:'안내판의 QR을 찍으면<br><b>스탬프 D</b>가 찍혀요'},
+  {id:'g5', code:'C', name:'MINI GAME C\n반려견 야바위',   url:'https://gwaa.or.kr/wonju-2026/3d.html#stamp-g5', how:'안내판의 QR을 찍으면<br><b>스탬프 C</b>가 찍혀요'},
+  {id:'g6', code:'A', name:'MINI GAME A\n똥 던지기 게임', url:'https://gwaa.or.kr/wonju-2026/3d.html#stamp-g6', how:'안내판의 QR을 찍으면<br><b>스탬프 A</b>가 찍혀요'},
+  {id:'g7', code:'B', name:'MINI GAME B\n2m를 맞춰라',    url:'https://gwaa.or.kr/wonju-2026/3d.html#stamp-g7', how:'안내판의 QR을 찍으면<br><b>스탬프 B</b>가 찍혀요'},
+  {id:'g8', code:'E', name:'MINI GAME E\n꼬순내 휘날리며',url:'https://gwaa.or.kr/wonju-2026/3d.html#stamp-g8', how:'안내판의 QR을 찍으면<br><b>스탬프 E</b>가 찍혀요'},
+  {id:'survey', code:'F', name:'만족도 조사\n경품존(26번 부스)', url:'https://gwaa.or.kr/survey', how:'QR을 찍어 만족도 조사를 완료하면<br><b>스탬프 F</b>가 찍혀요', survey:true},
+];
+
+const grid=document.getElementById('cards');
+PANELS.forEach(p=>{
+  const card=document.createElement('div');
+  card.className='card'+(p.survey?' survey':'');
+  card.innerHTML=`
+    <div class="tag">STAMP TOUR · 웰니스클럽 2026</div>
+    <div class="game-code">${p.code}</div>
+    <div class="game-name">${p.name.replace('\n','<br>')}</div>
+    <canvas id="qr-${p.id}" width="180" height="180"></canvas>
+    <div class="how">${p.how}</div>
+    <div class="footer">gwaa.or.kr · 강원도반려동물협회</div>
+  `;
+  grid.appendChild(card);
+  new QRious({element:document.getElementById('qr-'+p.id),value:p.url,size:180,background:'#ffffff',foreground:p.survey?'#e11d48':'#12302a',level:'H'});
+});
+</script>
+</body>
+</html>

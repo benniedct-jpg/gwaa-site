@@ -9,14 +9,37 @@ const GREEN_DK = '#0D7E76';
 
 export type SurveyEvent = { id: number; title: string; date: string };
 
-const PROGRAMS = ['도그쇼', '펫캐스트라 콘서트', '반려동물 운동회', '오프리쉬 놀이터', '셀러·체험부스', '미니게임', '포토존', '아나바다', '펫티켓 후원', '무료 건강검진·동물등록'];
-const SOURCES = ['인스타그램·SNS', '지인 추천', '강릉시·협회 홍보', '현장에서 우연히', '기타'];
-const REGIONS = ['강릉시', '강원(강릉 외)', '수도권(서울·경기·인천)', '충청권', '경상권', '전라·제주', '그 외 지역'];
+const PROGRAMS_BY_EVENT: Record<number, string[]> = {
+  4: ['도그쇼', '펫캐스트라 콘서트', '반려동물 운동회', '오프리쉬 놀이터', '셀러·체험부스', '미니게임', '포토존', '아나바다', '펫티켓 후원', '무료 건강검진·동물등록'],
+  5: ['독피트니스 프로그램', '웰니스 클래스', '오프리쉬 놀이터', '미니게임', '셀러·프리마켓', '체험부스', '포토존', '아나바다', '펫티켓 후원', '무료 건강검진·동물등록'],
+};
+const DEFAULT_PROGRAMS = ['오프리쉬 놀이터', '셀러·체험부스', '미니게임', '포토존', '아나바다', '펫티켓 후원', '무료 건강검진·동물등록'];
+const SOURCES_BY_EVENT: Record<number, string[]> = {
+  4: ['인스타그램·SNS', '지인 추천', '강릉시·협회 홍보', '현장에서 우연히', '기타'],
+  5: ['인스타그램·SNS', '지인 추천', '원주시·협회 홍보', '현장에서 우연히', '기타'],
+};
+const DEFAULT_SOURCES = ['인스타그램·SNS', '지인 추천', '협회 홍보', '현장에서 우연히', '기타'];
+const REGIONS = ['원주시', '강원(원주 외)', '수도권(서울·경기·인천)', '충청권', '경상권', '전라·제주', '그 외 지역'];
 const SUBRATINGS: { key: string; label: string }[] = [
   { key: 'rating_program', label: '프로그램·공연' },
   { key: 'rating_booth', label: '부스·체험' },
   { key: 'rating_facility', label: '편의시설(주차·화장실·동선)' },
   { key: 'rating_safety', label: '안전·질서·운영' },
+];
+const HEALTH_RATINGS: { key: string; label: string }[] = [
+  { key: 'rating_checkup', label: '기초 건강검진' },
+  { key: 'rating_behavior', label: '행동교정 상담' },
+  { key: 'rating_grooming', label: '기초미용' },
+];
+const USP_POINTS = [
+  '오프리쉬 놀이터',
+  '무료 헬스케어(검진·상담·미용)',
+  '스탬프 투어·미니게임',
+  '웰니스 클래스·공연',
+  '여유로운 공간과 동선',
+  '반려견 배려·안전 운영',
+  '셀러·먹거리 구성',
+  '다른 행사를 안 가봐서 비교 어려움',
 ];
 
 function Stars({ value, onChange }: { value: number; onChange: (v: number) => void }) {
@@ -31,6 +54,8 @@ function Stars({ value, onChange }: { value: number; onChange: (v: number) => vo
 }
 
 export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
+  const PROGRAMS = event ? (PROGRAMS_BY_EVENT[event.id] ?? DEFAULT_PROGRAMS) : DEFAULT_PROGRAMS;
+  const SOURCES = event ? (SOURCES_BY_EVENT[event.id] ?? DEFAULT_SOURCES) : DEFAULT_SOURCES;
   const [overall, setOverall] = useState(0);
   const [programs, setPrograms] = useState<string[]>([]);
   const [sub, setSub] = useState<Record<string, number>>({});
@@ -38,6 +63,8 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
   const [source, setSource] = useState('');
   const [region, setRegion] = useState('');
   const [petWith, setPetWith] = useState<boolean | null>(null);
+  const [uspPoints, setUspPoints] = useState<string[]>([]);
+  const [uspText, setUspText] = useState('');
   const [liked, setLiked] = useState('');
   const [improve, setImprove] = useState('');
   const [phone, setPhone] = useState('');
@@ -47,6 +74,7 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
   const [done, setDone] = useState(false);
 
   const toggleProgram = (p: string) => setPrograms((s) => s.includes(p) ? s.filter((x) => x !== p) : [...s, p]);
+  const toggleUsp = (p: string) => setUspPoints((s) => s.includes(p) ? s.filter((x) => x !== p) : [...s, p]);
 
   const submit = async () => {
     if (!overall) { setMsg('전체 만족도를 선택해 주세요.'); return; }
@@ -59,6 +87,9 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
           event_id: event!.id, overall, programs,
           rating_program: sub.rating_program, rating_booth: sub.rating_booth,
           rating_facility: sub.rating_facility, rating_safety: sub.rating_safety,
+          rating_checkup: sub.rating_checkup, rating_behavior: sub.rating_behavior,
+          rating_grooming: sub.rating_grooming,
+          usp_points: uspPoints, usp_text: uspText.trim(),
           revisit, source, region, pet_with: petWith, liked: liked.trim(), improve: improve.trim(),
           phone: phone.trim(), privacy_agreed: agree,
         }),
@@ -92,6 +123,12 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
         <div style={{ fontSize: 20, fontWeight: 800, color: '#111', marginBottom: 10 }}>참여해 주셔서 감사합니다!</div>
         <div style={{ fontSize: 14.5, color: '#4b5563', lineHeight: 1.8 }}>소중한 의견은 다음 행사를 더 좋게 만드는 데<br />큰 힘이 됩니다. 감사합니다.</div>
         {phone.trim() && <div style={{ marginTop: 16, fontSize: 13, color: GREEN_DK, background: '#EDFAF8', border: '1px solid #BFF3EC', borderRadius: 10, padding: '12px 14px' }}>경품 응모가 완료되었어요. 당첨 시 개별 안내드립니다.</div>}
+        {event?.id === 5 && (
+          <a href="https://gwaa.or.kr/wonju-2026/3d.html#stamp-survey"
+            style={{ display: 'block', marginTop: 20, padding: '16px', borderRadius: 12, background: '#12302a', color: '#e4f2ea', fontSize: 15, fontWeight: 800, textDecoration: 'none', fontFamily: MONO }}>
+            🎉 마지막 스탬프 받기 →
+          </a>
+        )}
         <div style={{ fontSize: 12, color: '#9ca3af', marginTop: 18 }}>문의 033-813-0333</div>
       </div></div>
     );
@@ -139,6 +176,23 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
           ))}
         </div>
 
+        <div style={{ fontSize: 13, fontWeight: 700, color: '#6b7280', margin: '16px 0 10px' }}>
+          헬스케어를 이용하셨다면 (해당 항목만)
+        </div>
+        <div style={{ display: 'grid', gap: 12 }}>
+          {HEALTH_RATINGS.map((s) => (
+            <div key={s.key} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
+              <span style={{ fontSize: 13.5, color: '#374151' }}>{s.label}</span>
+              <div style={{ display: 'flex', gap: 4 }}>
+                {[1, 2, 3, 4, 5].map((n) => (
+                  <button key={n} type="button" onClick={() => setSub((p) => ({ ...p, [s.key]: n }))}
+                    style={{ fontSize: 22, lineHeight: 1, background: 'none', border: 'none', cursor: 'pointer', padding: 0, color: n <= (sub[s.key] || 0) ? '#F5A524' : '#d1d5db' }}>★</button>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
         <div style={sectionTop} />
         <div style={q}>4. 내년에도 참여하고 싶으신가요?</div>
         <Stars value={revisit} onChange={setRevisit} />
@@ -168,13 +222,28 @@ export default function SurveyClient({ event }: { event: SurveyEvent | null }) {
         </div>
 
         <div style={sectionTop} />
-        <div style={q}>8. 가장 좋았던 점</div>
+        <div style={q}>8. 다른 반려동물 행사와 비교해, 이 행사가 더 좋았던 점은? (복수 선택)</div>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8 }}>
+          {USP_POINTS.map((p) => {
+            const on = uspPoints.includes(p);
+            return (
+              <button key={p} type="button" onClick={() => toggleUsp(p)}
+                style={{ fontSize: 13, padding: '8px 13px', borderRadius: 9999, cursor: 'pointer', fontFamily: MONO,
+                  border: on ? `1.5px solid ${GREEN}` : '1.5px solid #e5e7eb', background: on ? '#EDFAF8' : '#fff', color: on ? GREEN_DK : '#4b5563', fontWeight: on ? 700 : 400 }}>{p}</button>
+            );
+          })}
+        </div>
+        <textarea value={uspText} onChange={(e) => setUspText(e.target.value)} rows={2}
+          placeholder="구체적으로 어떤 점이 달랐는지 적어주시면 큰 힘이 됩니다 (선택)" style={{ ...inp, resize: 'vertical', marginTop: 10 }} />
+
+        <div style={sectionTop} />
+        <div style={q}>9. 가장 좋았던 점</div>
         <textarea value={liked} onChange={(e) => setLiked(e.target.value)} rows={2} placeholder="기억에 남는 순간이 있다면 적어주세요 (선택)" style={{ ...inp, resize: 'vertical' }} />
-        <div style={{ ...q, marginTop: 14 }}>9. 개선했으면 하는 점</div>
+        <div style={{ ...q, marginTop: 14 }}>10. 개선했으면 하는 점</div>
         <textarea value={improve} onChange={(e) => setImprove(e.target.value)} rows={2} placeholder="다음 행사를 위해 알려주세요 (선택)" style={{ ...inp, resize: 'vertical' }} />
 
         <div style={sectionTop} />
-        <div style={q}>10. 경품 추첨 응모 (선택)</div>
+        <div style={q}>11. 경품 추첨 응모 (선택)</div>
         <div style={{ fontSize: 12, color: '#6b7280', marginBottom: 8, lineHeight: 1.6 }}>연락처를 남기시면 경품 추첨에 응모돼요. 당첨 시에만 개별 연락드립니다.</div>
         <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="연락처 (010-0000-0000)" type="tel" style={inp} />
         {phone.trim() && (

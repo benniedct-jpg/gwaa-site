@@ -48,3 +48,4 @@ next-env.d.ts
 
 # 비공개 원본 파일 (대용량, 배포/커밋 제외)
 _source_files_not_public/
+.agent-backup/

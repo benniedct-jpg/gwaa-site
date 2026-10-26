@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWAA 디자인 방향 B안 · 강원 자연 듀오톤 — 스타일 타일</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Black+Han+Sans&family=Gothic+A1:wght@400;500;700;900&family=Noto+Sans+KR:wght@400;500;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+<style>
+:root{
+  /* 기존 유지 */
+  --green:#16a34a; --green-hover:#15803d; --green-light:#22c55e;
+  /* B안 추가 (보조 토큰만 얹음 — 기존 토큰 유지) */
+  --forest:#1F7A44;      /* 딥 그린: 헤드라인·다크섹션 */
+  --sand:#E8DCC8;        /* 따뜻한 모래: 카드·배경 블록 */
+  --clay:#C9764F;        /* 테라코타: 강조·긴박감 액센트 */
+  --sky:#7CB9C9;         /* 바다 하늘: 정보 배지 */
+  --cream:#FBF8F3;       /* 웜 화이트: 페이지 배경 */
+  --ink:#0E1B14;         /* 딥 잉크: 다크섹션 배경/텍스트 */
+  /* 뉴트럴 */
+  --text:#141a17; --muted:#6b7280; --line:#e7e3da;
+  --font-body:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo',sans-serif;
+  --font-head:'Gothic A1',var(--font-body);
+  --font-display:'Black Han Sans',var(--font-head);
+  --font-num:'Bebas Neue','Gothic A1',sans-serif;
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--cream);color:var(--text);font-family:var(--font-body);line-height:1.7;word-break:keep-all}
+.wrap{max-width:1080px;margin:0 auto;padding:0 24px}
+section{padding:56px 0;border-bottom:1px solid var(--line)}
+h2.sec{font-family:var(--font-head);font-weight:900;font-size:1.5rem;letter-spacing:-.03em;margin:0 0 4px}
+.eyebrow{font-family:var(--font-head);font-weight:700;font-size:.8rem;letter-spacing:.18em;color:#9c4a26;text-transform:uppercase;margin:0 0 14px}
+.lead{color:var(--muted);margin:.2em 0 28px;max-width:60ch}
+code{font-family:'SF Mono',Menlo,monospace;font-size:.82em;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.05em .4em}
+
+/* ===== HERO ===== */
+.hero{background:linear-gradient(165deg,#0E1B14 0%,#0c2016 100%);color:#fff;padding:72px 0 64px;position:relative;overflow:hidden}
+.hero .wrap{position:relative;z-index:2}
+.hero .bars{position:absolute;top:0;bottom:0;right:0;width:150px;display:flex;z-index:1}
+.hero .bars i{flex:1}
+.hero .kicker{font-family:var(--font-body);font-weight:500;letter-spacing:0;font-size:.86rem;color:rgba(255,255,255,.66)}
+.hero h1{font-family:var(--font-display);font-weight:400;font-size:clamp(2.6rem,7vw,4.4rem);line-height:1.02;letter-spacing:-.02em;margin:.25em 0 .35em;text-wrap:balance}
+.hero h1 em{font-style:normal;color:var(--green-light)}
+.hero p{color:rgba(255,255,255,.82);max-width:52ch;margin:0 0 26px}
+.hero .stat-row{display:flex;gap:28px;flex-wrap:wrap;margin-top:8px}
+.stat b{font-family:var(--font-num);font-size:2.4rem;line-height:1;color:#fff;letter-spacing:.02em}
+.stat span{display:block;font-size:.78rem;color:rgba(255,255,255,.78);margin-top:2px}
+
+/* ===== buttons ===== */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-weight:700;font-size:.98rem;padding:14px 24px;border-radius:9999px;border:0;cursor:pointer;text-decoration:none;transition:.18s}
+.btn-primary{background:#15803d;color:#fff}
+.btn-primary:hover{background:#0f5f2c}
+.btn-accent{background:#b0592f;color:#fff}
+.btn-accent:hover{filter:brightness(.94)}
+.btn-ghost{background:transparent;color:var(--forest);border:1.5px solid var(--forest)}
+.btn-ghost:hover{background:var(--forest);color:#fff}
+.btn-onink{background:#fff;color:var(--ink)}
+.btnrow{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+
+/* ===== swatches ===== */
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:14px}
+.sw{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fff}
+.sw .chip{height:88px}
+.sw .meta{padding:10px 12px}
+.sw .name{font-family:var(--font-head);font-weight:700;font-size:.9rem}
+.sw .hex{font-family:'SF Mono',Menlo,monospace;font-size:.76rem;color:var(--muted);text-transform:uppercase}
+.sw .use{font-size:.8rem;color:#5b6169;margin-top:3px}
+.tag{display:inline-block;font-size:.75rem;font-family:var(--font-head);font-weight:700;letter-spacing:.06em;padding:3px 9px;border-radius:9999px;margin-bottom:6px}
+.tag.keep{background:#eafaf0;color:#116a31}
+.tag.new{background:#fbeee6;color:#9c4a26}
+
+/* ===== type specimen ===== */
+.spec{display:grid;gap:18px}
+.spec .row{border:1px solid var(--line);border-radius:14px;background:#fff;padding:20px 22px}
+.spec .lbl{font-size:.8rem;color:#5b6169;font-family:'SF Mono',Menlo,monospace;margin-bottom:8px}
+.d-display{font-family:var(--font-display);font-weight:400;font-size:clamp(2rem,5vw,3rem);line-height:1.05;letter-spacing:-.02em;color:var(--forest)}
+.d-head{font-family:var(--font-head);font-weight:900;font-size:1.5rem;letter-spacing:-.02em}
+.d-body{font-family:var(--font-body);font-size:1rem;color:#333;text-wrap:pretty}
+.d-num{font-family:var(--font-num);font-size:3rem;color:#b0592f;letter-spacing:.02em}
+
+/* ===== components ===== */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.ecard{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 6px 22px rgba(20,26,23,.05)}
+.ecard .ph{height:150px;background:linear-gradient(135deg,var(--forest),var(--green-light));position:relative}
+.ecard .ph .badges{position:absolute;top:12px;left:12px;display:flex;gap:6px}
+.ecard .body{padding:16px 18px 18px}
+.ecard h3{font-family:var(--font-head);font-weight:900;font-size:1.1rem;margin:.1em 0 .5em;letter-spacing:-.02em}
+.ecard .facts{font-size:.84rem;color:var(--muted);line-height:1.6;margin-bottom:14px}
+.ecard .foot{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.badge{font-family:var(--font-head);font-weight:700;font-size:.76rem;letter-spacing:.04em;padding:4px 10px;border-radius:9999px;white-space:nowrap}
+.b-up{background:rgba(255,255,255,.9);color:var(--forest)}
+.b-free{background:var(--sky);color:#06323d}
+.b-dday{background:#a5502c;color:#fff}
+.b-live{background:#fff;color:#9c4a26;border:1px solid #9c4a26}
+.b-soon{background:#a5502c;color:#fff}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.mchip{display:inline-flex;align-items:center;gap:7px;background:var(--sand);color:#42301f;border-radius:9999px;padding:8px 14px;font-family:var(--font-head);font-weight:700;font-size:.9rem}
+
+/* sticky CTA mock */
+.phone{max-width:360px;margin:0 auto;border:1px solid var(--line);border-radius:26px;overflow:hidden;background:#fff;box-shadow:0 12px 40px rgba(20,26,23,.12)}
+.phone .screen{height:320px;background:var(--cream);padding:18px;position:relative}
+.phone .fakeline{height:12px;border-radius:6px;background:#eceae3;margin:10px 0}
+.phone .fakeline.s{width:60%}.phone .fakeline.m{width:85%}
+.phone .poster{height:120px;border-radius:12px;background:linear-gradient(135deg,var(--forest),var(--sky));margin-bottom:14px}
+.ctabar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 16px;display:flex;align-items:center;gap:12px;box-shadow:0 -6px 20px rgba(20,26,23,.06)}
+.ctabar .info{flex:1;line-height:1.25}
+.ctabar .dday{font-family:var(--font-num);font-size:1.6rem;color:#9c4a26;letter-spacing:.02em}
+.ctabar .seat{font-size:.8rem;color:#5b6169}
+.ctabar .seat b{color:#9c4a26}
+.ctabar .go{background:var(--green);color:#fff;font-family:var(--font-head);font-weight:700;padding:12px 20px;border-radius:9999px;font-size:.95rem;white-space:nowrap}
+
+/* before/after */
+.ba{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.ba .col{border:1px solid var(--line);border-radius:16px;padding:20px;background:#fff}
+.ba .col h3{margin:0 0 12px;font-family:var(--font-head);font-weight:900;color:var(--text)}
+.ba .before{background:#fff}
+.ba .after{background:linear-gradient(180deg,#fff, #fdfbf7)}
+.ba .mini{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+.dot{width:26px;height:26px;border-radius:8px;border:1px solid rgba(0,0,0,.06)}
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:8px}
+th,td{border:1px solid var(--line);padding:.55em .7em;text-align:left;vertical-align:top}
+th{background:var(--forest);color:#fff;font-family:var(--font-head);font-weight:700}
+tbody tr:nth-child(even){background:#faf8f3}
+.note{font-size:.82rem;color:var(--muted);margin-top:10px}
+footer{padding:40px 0 80px;color:var(--muted);font-size:.85rem}
+@media(max-width:640px){.ba{grid-template-columns:1fr}}
+@media print{.hero .blob{-webkit-print-color-adjust:exact;print-color-adjust:exact}body{background:#fff}}
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="bars"><i style="background:#1F7A44"></i><i style="background:#C9764F"></i><i style="background:#7CB9C9"></i></div>
+  <div class="wrap">
+    <p class="kicker">GWAA 디자인 시스템 › 방향 B안</p>
+    <h1>강원 자연을 담은<br><em>공신력 있는 요즘</em> 감각</h1>
+    <p>기존 그린을 지우지 않고, 숲·모래·바다·테라코타 보조 토큰만 얹어 NGO 신뢰는 지키면서 온기와 생기를 더하는 방향. 리스크 최저, 점진 적용 가능.</p>
+    <div class="btnrow" style="margin-bottom:34px">
+      <a class="btn btn-primary" href="#">예약하기 →</a>
+      <a class="btn btn-onink" href="#">메이트십 알아보기</a>
+    </div>
+    <div class="stat-row">
+      <div class="stat"><b>40,000+</b><span>함께한 반려인</span></div>
+      <div class="stat"><b>90회+</b><span>진행 행사</span></div>
+      <div class="stat"><b>18개</b><span>시군 활동</span></div>
+      <div class="stat"><b>5년+</b><span>쉬지 않은 해</span></div>
+    </div>
+  </div>
+</header>
+
+<!-- PALETTE -->
+<section><div class="wrap">
+  <p class="eyebrow">01 · Color</p>
+  <h2 class="sec">팔레트 — 기존 그린 유지 + 보조 토큰 추가</h2>
+  <p class="lead">주색(그린)은 그대로. 아래 5개 보조색을 <code>@theme</code>에 추가해 카드·배경·배지·CTA 액센트에만 쓰면, 밋밋함과 "AI 기본 티"가 즉시 빠진다.</p>
+  <div class="sw-grid">
+    <div class="sw"><div class="chip" style="background:#16a34a"></div><div class="meta"><span class="tag keep">유지</span><div class="name">Green</div><div class="hex">#16a34a</div><div class="use">주색 · CTA · 링크</div></div></div>
+    <div class="sw"><div class="chip" style="background:#15803d"></div><div class="meta"><span class="tag keep">유지</span><div class="name">Green Hover</div><div class="hex">#15803d</div><div class="use">호버·강조</div></div></div>
+    <div class="sw"><div class="chip" style="background:#1F7A44"></div><div class="meta"><span class="tag new">추가</span><div class="name">Forest</div><div class="hex">#1F7A44</div><div class="use">헤드라인·다크섹션</div></div></div>
+    <div class="sw"><div class="chip" style="background:#E8DCC8"></div><div class="meta"><span class="tag new">추가</span><div class="name">Sand</div><div class="hex">#E8DCC8</div><div class="use">카드·혜택 블록</div></div></div>
+    <div class="sw"><div class="chip" style="background:#C9764F"></div><div class="meta"><span class="tag new">추가</span><div class="name">Clay</div><div class="hex">#C9764F</div><div class="use">긴박감·강조 액센트</div></div></div>
+    <div class="sw"><div class="chip" style="background:#7CB9C9"></div><div class="meta"><span class="tag new">추가</span><div class="name">Sky</div><div class="hex">#7CB9C9</div><div class="use">정보 배지·해변</div></div></div>
+    <div class="sw"><div class="chip" style="background:#FBF8F3"></div><div class="meta"><span class="tag new">추가</span><div class="name">Cream</div><div class="hex">#FBF8F3</div><div class="use">페이지 배경(웜 화이트)</div></div></div>
+    <div class="sw"><div class="chip" style="background:#0E1B14"></div><div class="meta"><span class="tag new">추가</span><div class="name">Ink</div><div class="hex">#0E1B14</div><div class="use">다크 히어로·푸터</div></div></div>
+  </div>
+</div></section>
+
+<!-- TYPE -->
+<section><div class="wrap">
+  <p class="eyebrow">02 · Typography</p>
+  <h2 class="sec">타이포 — 현행 폰트 그대로, 대비만 강화</h2>
+  <p class="lead">폰트는 추가 없이 기존 4종 유지. 디스플레이는 더 크고 굵게, 숫자는 Bebas로 임팩트. 한글 조판 규칙(keep-all·balance·pretty) 준수.</p>
+  <div class="spec">
+    <div class="row"><div class="lbl">Display · Black Han Sans · 헤드라인</div><div class="d-display">반려동물과 함께 강원도를, 제한 없이</div></div>
+    <div class="row"><div class="lbl">Head · Gothic A1 900 · 섹션 타이틀</div><div class="d-head">우리 매일 뭐 하고 놀지, 여기 다 있어요</div></div>
+    <div class="row"><div class="lbl">Body · Noto Sans KR · 본문 (line-height 1.7)</div><div class="d-body">2021년부터 강원도 반려동물 문화를 이끌어온 사단법인. 교육·행사·메이트십·반려동물 여행까지, 반려생활에 필요한 걸 한곳에서 만나보세요.</div></div>
+    <div class="row"><div class="lbl">Numeral · Bebas Neue · 지표·가격·D-day</div><div class="d-num">40,000+ · D-10 · ₩25,000</div></div>
+  </div>
+</div></section>
+
+<!-- BUTTONS + BADGES -->
+<section><div class="wrap">
+  <p class="eyebrow">03 · Components</p>
+  <h2 class="sec">버튼 · 배지</h2>
+  <p class="lead">긴박감은 Clay, 정보는 Sky, 신뢰·주행동은 Green. 색으로 역할을 나눈다.</p>
+  <div class="btnrow" style="margin-bottom:22px">
+    <button class="btn btn-primary">예약하기 →</button>
+    <button class="btn btn-accent">마감임박 · 지금 신청</button>
+    <button class="btn btn-ghost">프로그램 보기</button>
+  </div>
+  <div class="chips">
+    <span class="badge b-up" style="background:#eafaf0">UPCOMING</span>
+    <span class="badge b-dday">D-10</span>
+    <span class="badge b-free">무료</span>
+    <span class="badge b-soon">잔여 3석</span>
+    <span class="badge b-live">LIVE</span>
+  </div>
+</div></section>
+
+<!-- EVENT CARDS -->
+<section><div class="wrap">
+  <p class="eyebrow">04 · Event Card</p>
+  <h2 class="sec">행사 카드</h2>
+  <div class="cards">
+    <div class="ecard"><div class="ph"><div class="badges"><span class="badge b-up">UPCOMING</span><span class="badge b-dday">D-10</span></div></div>
+      <div class="body"><h3>원주시 반려견 산책교육 — 햅삐 2기</h3><div class="facts">2026.10.4 ~ 10.25 · 매주 일요일<br>강원 원주 · 참가비 무료</div>
+        <div class="foot"><span class="badge b-free">무료</span><button class="btn btn-primary" style="padding:10px 18px;font-size:.9rem">자리 맡기</button></div></div></div>
+    <div class="ecard"><div class="ph" style="background:linear-gradient(135deg,#C9764F,#E8DCC8)"><div class="badges"><span class="badge b-up">UPCOMING</span><span class="badge b-soon">잔여 3석</span></div></div>
+      <div class="body"><h3>Camping with Petscout 2026</h3><div class="facts">2026 · 강원도 고성 · 1박2일<br>웰니스 클래스 · 프리마켓</div>
+        <div class="foot"><span class="badge" style="background:#f3f0e8;color:#7a6a52">₩45,000~</span><button class="btn btn-accent" style="padding:10px 18px;font-size:.9rem">예약하기</button></div></div></div>
+  </div>
+</div></section>
+
+<!-- STICKY CTA (R3) -->
+<section><div class="wrap">
+  <p class="eyebrow">05 · Mobile · 개선안 R3</p>
+  <h2 class="sec">하단 고정 예약바 (D-day · 잔여 · 원탭)</h2>
+  <p class="lead">모든 예약형 페이지 하단에 상시 노출. 스크롤 내내 "지금 아니면 못 함" 신호가 따라온다. 마감 임박 시 Clay로 색 전환.</p>
+  <div class="phone">
+    <div class="screen">
+      <div class="poster"></div>
+      <div class="fakeline m"></div><div class="fakeline s"></div><div class="fakeline"></div><div class="fakeline m"></div><div class="fakeline s"></div>
+      <div class="ctabar">
+        <div class="info"><span class="dday">D-10</span><span class="seat"> · 잔여 <b>3석</b></span></div>
+        <span class="go">예약하기 →</span>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- MEMBERSHIP CHIPS -->
+<section><div class="wrap">
+  <p class="eyebrow">06 · Membership</p>
+  <h2 class="sec">메이트십 혜택 칩 (Sand)</h2>
+  <p class="lead">현재 한 줄로 눌려있는 혜택을, 가입 페이지 상단에 시각 칩으로. 40,000+ 사회적 증거와 함께.</p>
+  <div class="chips">
+    <span class="mchip">🏨 숙박 회원가</span>
+    <span class="mchip">☕ 카페 20~30%</span>
+    <span class="mchip">⛺ 캠핑 30%+</span>
+    <span class="mchip">🎪 행사 우선참여</span>
+    <span class="mchip">🪪 디지털 회원증</span>
+  </div>
+</div></section>
+
+<!-- BEFORE / AFTER -->
+<section><div class="wrap">
+  <p class="eyebrow">07 · Before / After</p>
+  <h2 class="sec">현재(그린 단색) → B안(듀오톤)</h2>
+  <div class="ba">
+    <div class="col before"><h3>현재</h3>
+      <p style="color:#555;font-size:.9rem">그린 + 흰색 + 시스템 파랑/주황. 일관되지만 밋밋하고 폼 페이지가 특히 기본 티.</p>
+      <div class="mini"><span class="dot" style="background:#16a34a"></span><span class="dot" style="background:#22c55e"></span><span class="dot" style="background:#ffffff"></span><span class="dot" style="background:#f3f4f6"></span><span class="dot" style="background:#2563eb"></span><span class="dot" style="background:#d97706"></span></div>
+    </div>
+    <div class="col after"><h3>B안</h3>
+      <p style="color:#555;font-size:.9rem">그린 유지 + Forest·Sand·Clay·Sky·Cream·Ink. 온기·강원 정체성·긴박감 액센트가 생김. 신뢰 85 / 신선 80.</p>
+      <div class="mini"><span class="dot" style="background:#16a34a"></span><span class="dot" style="background:#1F7A44"></span><span class="dot" style="background:#E8DCC8"></span><span class="dot" style="background:#C9764F"></span><span class="dot" style="background:#7CB9C9"></span><span class="dot" style="background:#FBF8F3"></span><span class="dot" style="background:#0E1B14"></span></div>
+    </div>
+  </div>
+</div></section>
+
+<!-- TOKEN SPEC -->
+<section><div class="wrap">
+  <p class="eyebrow">08 · Tokens</p>
+  <h2 class="sec">추가 토큰 명세 (복붙용 · <code>app/globals.css @theme</code>)</h2>
+  <p class="lead note">※ 아래는 <strong>제안 스펙</strong>입니다. 실제 적용은 프로젝트 규칙에 따라 계획 승인 후 반영합니다. 기존 토큰은 삭제하지 않고 아래만 추가.</p>
+  <table>
+    <thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead>
+    <tbody>
+      <tr><td><code>--color-forest</code></td><td>#1F7A44</td><td>헤드라인, 다크섹션 그라디언트, 아웃라인 버튼</td></tr>
+      <tr><td><code>--color-sand</code></td><td>#E8DCC8</td><td>혜택 칩, 카드 배경, 섹션 블록</td></tr>
+      <tr><td><code>--color-clay</code></td><td>#C9764F</td><td>D-day·잔여·마감임박 등 긴박감 액센트, 보조 CTA</td></tr>
+      <tr><td><code>--color-sky</code></td><td>#7CB9C9</td><td>무료·정보 배지, 해변/여행 섹션</td></tr>
+      <tr><td><code>--color-cream</code></td><td>#FBF8F3</td><td>페이지 기본 배경(흰색 대체, 온기)</td></tr>
+      <tr><td><code>--color-ink</code></td><td>#0E1B14</td><td>다크 히어로·푸터 배경, 고대비 텍스트</td></tr>
+    </tbody>
+  </table>
+  <p class="note">접근성: Clay(#C9764F)는 흰 텍스트와 대비 충족(작은 텍스트엔 Forest 권장). Sand 위 텍스트는 #5a4632 이상 사용. 분석 리포트의 "색대비 부족" 이슈도 이 규칙으로 함께 해소.</p>
+</div></section>
+
+<footer><div class="wrap">
+  GWAA 디자인 방향 B안 · 강원 자연 듀오톤 스타일 타일 · 2026-09 · 시안(확정 전) · 폰트: Black Han Sans / Gothic A1 / Noto Sans KR / Bebas Neue (Google Fonts)
+</div></footer>
+
+</body>
+</html>

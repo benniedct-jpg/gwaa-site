@@ -13,7 +13,8 @@ import PetscoutReels from '@/components/sections/events/PetscoutReels';
 import RecapGosung from '@/components/sections/events/RecapGosung';
 import RecapOlimpet from '@/components/sections/events/RecapOlimpet';
 import HappyContent from '@/components/sections/events/HappyContent';
-import { Calendar, MapPin } from 'lucide-react';
+import WellnessContent from '@/components/sections/events/WellnessContent';
+import { Calendar, MapPin, Ticket } from 'lucide-react';
 import { effectiveStatus } from '@/lib/eventStatus';
 
 // 예약 기능이 열려 있는 행사 id (펫스카웃 2026)
@@ -344,29 +345,72 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
             </>
           )}
 
-          {event.benefit && (
-            <div style={{ display: 'inline-block', background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', borderRadius: 9999, padding: '6px 16px', fontSize: 12, color: '#12A79D', fontWeight: 700, marginBottom: 24 }}>
-              {event.benefit}
-            </div>
-          )}
-
-          {event.desc && (
-            <p style={{ fontSize: isMobile ? 15 : 17, color: '#1f2937', lineHeight: 1.85, marginBottom: 32, whiteSpace: 'pre-wrap', letterSpacing: '-0.01em' }}>
-              {event.desc}
-            </p>
-          )}
-
-          {event.content && event.content !== event.desc && (
-            <div style={{ marginBottom: 40, paddingTop: 32, borderTop: '1px solid #f0f0f0' }}>
-              <p style={{ fontSize: isMobile ? 14 : 15, color: '#374151', lineHeight: 1.85, whiteSpace: 'pre-wrap' }}>
-                {event.content}
+          {event.id === 5 ? (
+            /* 웰니스클럽 전용 인트로 — 승인된 새 카피 (2026-10) */
+            <div style={{ marginBottom: 40 }}>
+              {/* 훅 문장 */}
+              <p style={{ fontSize: isMobile ? 18 : 22, fontWeight: 800, color: '#111', lineHeight: 1.4, marginBottom: 24, wordBreak: 'keep-all', letterSpacing: '-0.015em' }}>
+                10월 17일 토요일, 로아노크광장이 통째로 반려견의 하루가 됩니다.
+              </p>
+              {/* 핵심 정보 — 아이콘+라벨 */}
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 24 }}>
+                {[
+                  { Icon: Calendar, label: '2026. 10. 17.(토) 10:00–17:00' },
+                  { Icon: MapPin,   label: '로아노크광장 (원주시 봉산동 899-2)' },
+                  { Icon: Ticket,   label: '입장 무료' },
+                ].map(({ Icon, label }) => (
+                  <div key={label} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <span style={{ flexShrink: 0, width: 32, height: 32, borderRadius: 8, background: '#EDFAF8', border: '1px solid #BFF3EC', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Icon size={16} color="#12A79D" strokeWidth={2.2} aria-hidden />
+                    </span>
+                    <span style={{ fontSize: isMobile ? 14 : 15, color: '#1f2937', fontWeight: 500, wordBreak: 'keep-all' }}>{label}</span>
+                  </div>
+                ))}
+              </div>
+              {/* 프로그램 칩 */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: 7, marginBottom: 24 }}>
+                {['웰니스 클래스', '오프리쉬 놀이터', '미니게임 스탬프 투어', '셀러부스 18팀', '무료 건강검진', '입양부스', '푸드트럭'].map((t) => (
+                  <span key={t} style={{ background: '#EDFAF8', border: '1px solid #BFF3EC', color: '#0D7E76', fontWeight: 700, fontSize: isMobile ? 12.5 : 13, padding: '6px 13px', borderRadius: 9999, wordBreak: 'keep-all' }}>{t}</span>
+                ))}
+              </div>
+              {/* 본문 2문장 */}
+              <p style={{ fontSize: isMobile ? 14.5 : 16, color: '#374151', lineHeight: 1.85, marginBottom: 14, wordBreak: 'keep-all' }}>
+                반려견과 나란히 걷고, 목줄 풀고 마음껏 뛰고, 도장 모아 경품까지 받아 가는 하루.
+              </p>
+              <p style={{ fontSize: isMobile ? 14.5 : 16, color: '#374151', lineHeight: 1.85, marginBottom: 20, wordBreak: 'keep-all' }}>
+                반려동물이 없어도 괜찮아요 — 구경만 와도 충분합니다.
+              </p>
+              {/* 크레딧 */}
+              <p style={{ fontSize: isMobile ? 12.5 : 13, color: '#9ca3af', lineHeight: 1.6 }}>
+                주최 원주시 · 주관 사단법인 강원도반려동물협회
               </p>
             </div>
+          ) : (
+            <>
+              {event.benefit && (
+                <div style={{ display: 'inline-block', background: '#EDFAF8', border: '1px solid rgba(18,167,157,0.3)', borderRadius: 9999, padding: '6px 16px', fontSize: 12, color: '#12A79D', fontWeight: 700, marginBottom: 24 }}>
+                  {event.benefit}
+                </div>
+              )}
+              {event.desc && (
+                <p style={{ fontSize: isMobile ? 15 : 17, color: '#1f2937', lineHeight: 1.85, marginBottom: 32, whiteSpace: 'pre-wrap', letterSpacing: '-0.01em' }}>
+                  {event.desc}
+                </p>
+              )}
+              {event.content && event.content !== event.desc && (
+                <div style={{ marginBottom: 40, paddingTop: 32, borderTop: '1px solid #f0f0f0' }}>
+                  <p style={{ fontSize: isMobile ? 14 : 15, color: '#374151', lineHeight: 1.85, whiteSpace: 'pre-wrap' }}>
+                    {event.content}
+                  </p>
+                </div>
+              )}
+            </>
           )}
 
           {/* 2026 강릉 올림펫 — 프로그램·캠페인 안내 */}
           {event.id === 4 && <RecapOlimpet />}
           {event.id === 4 && <OlimpetContent />}
+          {event.id === 5 && <WellnessContent />}
           {event.id === 7 && <HappyContent />}
 
           {/* 프리마켓 셀러 모집 CTA — DB 플래그(sellerOpen) 우선, 없으면 기존 id 목록 */}
@@ -432,7 +476,7 @@ export default function EventDetailClient({ event }: { event: EventCard }) {
 
           {hasBooking && <PetscoutContent recap={!bookingOpen} />}
 
-          {galleryImages.length > 0 && (
+          {galleryImages.length > 0 && event.id !== 5 && (
             <div style={{ marginBottom: 48 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 16 }}>
                 <h2 style={{ fontFamily: BEBAS, fontWeight: 800, fontSize: 25, color: '#111', letterSpacing: '0.02em' }}>갤러리</h2>

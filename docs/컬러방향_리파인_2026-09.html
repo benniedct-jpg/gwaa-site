@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>GWAA 컬러 방향 재탐색 + 리파인드 컴포넌트</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Gothic+A1:wght@400;500;600;700;800;900&family=Noto+Sans+KR:wght@400;500;600;700&family=Nanum+Myeongjo:wght@700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --canvas:#F0F1EC; --card:#fff; --line:#E1E3DC;
+  --ink:#17181A; --graphite:#3A3B3E; --muted:#5c6168;
+  --font-body:'Noto Sans KR',-apple-system,'Apple SD Gothic Neo',sans-serif;
+  --font-head:'Gothic A1',var(--font-body);
+  --font-serif:'Nanum Myeongjo',serif;
+  --font-num:'Bebas Neue',var(--font-head);
+  --r:12px; /* 리파인드 라운드: 풀 pill보다 절제된 12px */
+}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--canvas);color:var(--ink);font-family:var(--font-body);line-height:1.7;word-break:keep-all;font-size:16px}
+.wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+section{padding:60px 0;border-bottom:1px solid var(--line)}
+h2.sec{font-family:var(--font-head);font-weight:800;font-size:1.5rem;letter-spacing:-.03em;margin:0 0 6px}
+h2.sec .n{font-family:var(--font-num);color:var(--muted);margin-right:12px;font-size:1.3rem;letter-spacing:.04em}
+.lead{color:var(--graphite);margin:.2em 0 30px;max-width:64ch}
+code{font-family:'SF Mono',Menlo,monospace;font-size:.82em;background:#fff;border:1px solid var(--line);border-radius:6px;padding:.06em .42em}
+.small{font-size:.8rem;color:var(--muted)}
+
+/* HERO */
+.hero{background:var(--ink);color:#fff;padding:64px 0 58px;position:relative;overflow:hidden}
+.hero .wrap{position:relative;z-index:2}
+.hero .rail{position:absolute;left:0;right:0;bottom:0;height:5px;display:flex;z-index:1}
+.hero .rail i{flex:1}
+.crumb{font-size:.86rem;color:rgba(255,255,255,.66);margin:0 0 18px}
+.hero h1{font-family:var(--font-head);font-weight:900;font-size:clamp(2.2rem,6vw,3.6rem);line-height:1.05;letter-spacing:-.03em;margin:0 0 18px;text-wrap:balance}
+.hero h1 b{color:#E9C46A} /* 절제된 액센트 예시 */
+.hero p{color:rgba(255,255,255,.82);max-width:56ch;margin:0 0 8px}
+.reco{margin-top:24px;display:inline-flex;gap:10px;align-items:center;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-radius:var(--r);padding:12px 16px;font-size:.9rem;color:#fff}
+.reco b{color:#E9C46A}
+
+/* DIRECTION CARDS */
+.dirs{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.dir{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.dir .canvas{padding:20px 18px 22px}
+.dir h3{font-family:var(--font-head);font-weight:800;font-size:1.15rem;margin:0 0 2px;letter-spacing:-.02em}
+.dir .tagline{font-size:.82rem;color:var(--muted);margin:0 0 14px}
+.dots{display:flex;gap:6px;margin:0 0 16px}
+.dots i{width:26px;height:26px;border-radius:7px;border:1px solid rgba(0,0,0,.06)}
+.dir .demo-btns{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.dir .demo-badges{display:flex;gap:6px;flex-wrap:wrap}
+.dir .why{font-size:.84rem;color:var(--graphite);margin:14px 0 0;line-height:1.6}
+.score{font-size:.76rem;color:var(--muted);margin-top:10px}
+.score b{color:var(--ink)}
+
+/* generic refined button */
+.btn{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-head);font-weight:600;font-size:.94rem;letter-spacing:-.01em;padding:12px 20px;border-radius:var(--r);border:1px solid transparent;cursor:pointer;text-decoration:none;transition:.16s ease;line-height:1}
+.btn .arw{transition:transform .16s ease}
+.btn:hover .arw{transform:translateX(3px)}
+.btn-sm{padding:9px 15px;font-size:.85rem}
+.btn-primary{background:var(--ink);color:#fff}
+.btn-primary:hover{background:#000}
+.btn-accent{background:#B0592F;color:#fff}
+.btn-accent:hover{background:#9c4d27}
+.btn-outline{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-outline:hover{border-color:var(--ink)}
+.btn-ghost{background:transparent;color:var(--ink);padding-left:6px;padding-right:6px}
+.btn-ghost:hover{color:#000}
+.btn[disabled]{opacity:.4;pointer-events:none}
+.btn-full{width:100%;justify-content:center}
+
+/* refined badges */
+.bdg{display:inline-flex;align-items:center;gap:6px;font-family:var(--font-head);font-weight:600;font-size:.78rem;letter-spacing:.01em;padding:7px 12px;border-radius:8px;line-height:1;white-space:nowrap}
+.bdg .dot{width:7px;height:7px;border-radius:50%}
+.bdg-soft{background:#F1EDE4;color:var(--graphite)}
+.bdg-tint{background:#F4E7DF;color:#9C4A26}
+.bdg-info{background:#E7EBEE;color:#345061}
+.bdg-outline{background:transparent;border:1px solid var(--line);color:var(--graphite)}
+.bdg-solid{background:#a5502c;color:#fff}                 /* 긴박감에만 채도 */
+.bdg-num{font-family:var(--font-num);font-size:1rem;letter-spacing:.03em;color:#9C4A26;display:inline-flex;align-items:baseline;gap:5px}
+.bdg-num small{font-family:var(--font-head);font-size:.72rem;color:var(--muted);letter-spacing:0}
+
+/* component gallery grid */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:22px}
+.panel{border:1px solid var(--line);border-radius:16px;background:#fff;padding:22px}
+.panel h3{font-family:var(--font-head);font-weight:800;font-size:1.05rem;margin:0 0 4px}
+.panel .plabel{font-size:.8rem;color:var(--muted);margin:0 0 16px}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}
+.rule{border:0;border-top:1px solid var(--line);margin:16px 0}
+.spec-note{font-size:.82rem;color:var(--graphite);line-height:1.65}
+.spec-note code{font-size:.8em}
+
+/* example composition */
+.ex{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;align-items:start}
+.ecard{border:1px solid var(--line);border-radius:16px;overflow:hidden;background:#fff}
+.ecard .ph{height:150px;background:#1f2a24;position:relative}
+.ecard .ph .tb{position:absolute;top:12px;left:12px;display:flex;gap:6px}
+.ecard .bd{padding:16px 18px 18px}
+.ecard h3{font-family:var(--font-head);font-weight:800;font-size:1.1rem;margin:.1em 0 .5em;letter-spacing:-.02em}
+.ecard .facts{font-size:.85rem;color:var(--muted);margin-bottom:14px;line-height:1.6}
+.ecard .ft{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.phone{border:1px solid var(--line);border-radius:22px;overflow:hidden;background:#fff}
+.phone .scr{height:300px;background:var(--canvas);padding:16px;position:relative}
+.phone .pl{height:12px;border-radius:6px;background:#ece7dc;margin:9px 0}
+.phone .pl.s{width:55%}.phone .pl.m{width:82%}
+.phone .poster{height:110px;border-radius:12px;background:#20302a;margin-bottom:14px}
+.cbar{position:absolute;left:0;right:0;bottom:0;background:#fff;border-top:1px solid var(--line);padding:12px 14px;display:flex;align-items:center;gap:12px}
+.cbar .info{flex:1;line-height:1.2}
+.cbar .dd{font-family:var(--font-num);font-size:1.5rem;color:#9C4A26}
+.cbar .seat{font-size:.76rem;color:var(--muted)}.cbar .seat b{color:#9C4A26}
+
+table{border-collapse:collapse;width:100%;font-size:.9rem;margin-top:6px}
+th,td{border:1px solid var(--line);padding:.55em .7em;text-align:left;vertical-align:top}
+th{background:var(--ink);color:#fff;font-family:var(--font-head);font-weight:700}
+tbody tr:nth-child(even){background:#f3f4f1}
+footer{padding:40px 0 80px;color:var(--muted);font-size:.85rem}
+@media(max-width:860px){.dirs{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.ex{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="rail"><i style="background:#B0592F"></i><i style="background:#E9C46A"></i><i style="background:#3B4A63"></i><i style="background:#7C8471"></i></div>
+  <div class="wrap">
+    <p class="crumb">GWAA 디자인 시스템 › 컬러 방향 재탐색</p>
+    <h1>메인 컬러가<br><b>그린일 필요는 없습니다.</b></h1>
+    <p>세련됨은 색을 많이 쓰는 게 아니라 <strong style="color:#fff">채도를 아끼는</strong> 데서 나옵니다. 뉴트럴 베이스 + 단일 액센트, 채도는 '긴박감'에만. 그린은 로고·성공표시 정도로 남기고, UI 메인은 아래 3안에서 고릅니다.</p>
+    <span class="reco">추천 · <b>A안 (Ink & Paper)</b> — 가장 세련·오래가고, 액센트만 바꾸면 온도 조절 가능</span>
+  </div>
+</header>
+
+<!-- DIRECTIONS -->
+<section><div class="wrap">
+  <h2 class="sec"><span class="n">01</span>컬러 방향 3안</h2>
+  <p class="lead">각 안의 버튼·배지는 아래 리파인드 시스템을 그대로 얹은 실제 렌더입니다. 색만 다릅니다.</p>
+  <div class="dirs">
+
+    <!-- A -->
+    <div class="dir">
+      <div class="canvas" style="background:#F0F1EC">
+        <h3>A · Ink &amp; Paper</h3>
+        <p class="tagline">에디토리얼 뉴트럴 · 쿨 페이퍼 · 추천</p>
+        <div class="dots"><i style="background:#17181A"></i><i style="background:#3A3B3E"></i><i style="background:#ECE6DA"></i><i style="background:#F0F1EC"></i><i style="background:#B0592F"></i></div>
+        <div class="demo-btns">
+          <a class="btn btn-primary btn-sm">예약하기 <span class="arw">→</span></a>
+          <a class="btn btn-outline btn-sm">프로그램</a>
+        </div>
+        <div class="demo-badges">
+          <span class="bdg bdg-tint"><span class="dot" style="background:#B0592F"></span>UPCOMING</span>
+          <span class="bdg bdg-solid">잔여 3석</span>
+        </div>
+        <p class="why">먹색 + 쿨 페이퍼(#F0F1EC · 팔레트 유래) + 단일 액센트(테라코타). 미술관·매거진 톤. 액센트만 바꾸면 따뜻하게(테라코타)·차갑게(슬레이트)·산뜻하게(라임) 조절.</p>
+        <p class="score">공신력 <b>90</b> · 신선 <b>85</b> · 범용성 <b>최고</b></p>
+      </div>
+    </div>
+
+    <!-- B -->
+    <div class="dir">
+      <div class="canvas" style="background:#F2E9DD">
+        <h3>B · Terracotta</h3>
+        <p class="tagline">강원 흙·노을 · 따뜻함</p>
+        <div class="dots"><i style="background:#B85C3C"></i><i style="background:#8F4327"></i><i style="background:#7C8471"></i><i style="background:#F2E9DD"></i><i style="background:#241a14"></i></div>
+        <div class="demo-btns">
+          <a class="btn btn-sm" style="background:#8F4327;color:#fff">예약하기 <span class="arw">→</span></a>
+          <a class="btn btn-outline btn-sm" style="color:#241a14">프로그램</a>
+        </div>
+        <div class="demo-badges">
+          <span class="bdg" style="background:#EFE3DA;color:#8F4327"><span class="dot" style="background:#B85C3C"></span>UPCOMING</span>
+          <span class="bdg" style="background:#5f6b57;color:#fff">잔여 3석</span>
+        </div>
+        <p class="why">테라코타를 메인으로. 반려·자연의 온기, 흔한 펫 블루/그린과 확실히 다름. 세이지(올리브 그레이)로 균형. 브랜드 개성 최고.</p>
+        <p class="score">공신력 <b>78</b> · 신선 <b>90</b> · 개성 <b>최고</b></p>
+      </div>
+    </div>
+
+    <!-- C -->
+    <div class="dir">
+      <div class="canvas" style="background:#EFF1F5">
+        <h3>C · Dusk Slate</h3>
+        <p class="tagline">차분한 신뢰 · 모던</p>
+        <div class="dots"><i style="background:#3B4A63"></i><i style="background:#2A3547"></i><i style="background:#E3E7ED"></i><i style="background:#EFF1F5"></i><i style="background:#C98A3C"></i></div>
+        <div class="demo-btns">
+          <a class="btn btn-sm" style="background:#3B4A63;color:#fff">예약하기 <span class="arw">→</span></a>
+          <a class="btn btn-outline btn-sm" style="color:#1c2430;border-color:#d3d8e0">프로그램</a>
+        </div>
+        <div class="demo-badges">
+          <span class="bdg bdg-info"><span class="dot" style="background:#3B4A63"></span>UPCOMING</span>
+          <span class="bdg" style="background:#9a5a17;color:#fff">잔여 3석</span>
+        </div>
+        <p class="why">차분한 슬레이트 인디고 + 웜 앰버 액센트. NGO 신뢰감·안정감이 가장 큼. 펫테크스럽지만 채도를 죽여 유치하지 않게.</p>
+        <p class="score">공신력 <b>92</b> · 신선 <b>72</b> · 안정 <b>최고</b></p>
+      </div>
+    </div>
+  </div>
+  <p class="small" style="margin-top:16px">※ 로고(gwaa 그린)는 그대로 둬도 됩니다 — 위 3안 모두 뉴트럴 베이스라 초록 로고와 충돌하지 않고, 그린은 '완료/성공' 상태색으로 재배치하면 자연스럽습니다.</p>
+</div></section>
+
+<!-- REFINED BUTTONS -->
+<section><div class="wrap">
+  <h2 class="sec"><span class="n">02</span>세련된 버튼 시스템</h2>
+  <p class="lead">핵심 3가지 — ①풀 pill 대신 <strong>절제된 12px 라운드</strong> ②채도 낮춘 <strong>먹색 주버튼</strong>(액센트는 아껴서) ③화살표 <strong>마이크로 인터랙션</strong>. 굵기 600·자간 -0.01em로 또렷하되 과하지 않게.</p>
+  <div class="grid">
+    <div class="panel">
+      <h3>위계</h3><p class="plabel">한 화면에 주버튼은 하나. 나머지는 조용하게.</p>
+      <div class="row">
+        <a class="btn btn-primary">예약하기 <span class="arw">→</span></a>
+        <a class="btn btn-accent">지금 신청</a>
+        <a class="btn btn-outline">자세히</a>
+        <a class="btn btn-ghost">프로그램 보기 <span class="arw">→</span></a>
+      </div>
+      <p class="spec-note"><strong>Primary</strong> 먹색(<code>#17181A</code>) · <strong>Accent</strong> 테라코타(긴박·결제) · <strong>Outline</strong> 보조 · <strong>Ghost</strong> 텍스트+화살표.</p>
+    </div>
+    <div class="panel">
+      <h3>크기 · 상태 · 폭</h3><p class="plabel">터치 타깃 44px 이상 유지.</p>
+      <div class="row">
+        <a class="btn btn-primary btn-sm">Small</a>
+        <a class="btn btn-primary">Medium</a>
+        <a class="btn btn-primary" disabled>Disabled</a>
+      </div>
+      <div class="row"><a class="btn btn-accent btn-full">모바일 풀폭 · 예약하기 →</a></div>
+      <p class="spec-note">라운드 <code>12px</code> · 패딩 <code>12·20</code> · 아이콘 호버 시 <code>translateX 3px</code>. 풀 pill이 필요하면 라운드만 <code>9999px</code>로 토큰 교체.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- REFINED BADGES -->
+<section><div class="wrap">
+  <h2 class="sec"><span class="n">03</span>세련된 배지 시스템</h2>
+  <p class="lead">원칙: <strong>정보는 소프트 톤·닷·타이포로, 채도는 '진짜 긴박함'에만.</strong> 알록달록 solid 배지를 남발하지 않는 게 세련됨의 핵심.</p>
+  <div class="grid">
+    <div class="panel">
+      <h3>정보 배지 (저채도)</h3><p class="plabel">상태·분류는 눈에 안 튀게.</p>
+      <div class="row">
+        <span class="bdg bdg-soft"><span class="dot" style="background:#9aa0a6"></span>모집중</span>
+        <span class="bdg bdg-tint"><span class="dot" style="background:#B0592F"></span>UPCOMING</span>
+        <span class="bdg bdg-info"><span class="dot" style="background:#345061"></span>교육</span>
+        <span class="bdg bdg-outline">무료</span>
+      </div>
+      <p class="spec-note">배경은 <strong>틴트 10~14%</strong>, 텍스트는 <strong>짙은 동색</strong>. 앞의 <strong>컬러 닷</strong>이 색 역할을 대신해 배경 채도를 낮출 수 있음.</p>
+    </div>
+    <div class="panel">
+      <h3>긴박감 · 수치 (액센트)</h3><p class="plabel">여기서만 채도를 쓴다.</p>
+      <div class="row">
+        <span class="bdg bdg-solid">마감임박 · 잔여 3석</span>
+        <span class="bdg-num">D-10 <small>원주 산책교육</small></span>
+        <span class="bdg-num" style="color:#345061">4/30 <small>정원</small></span>
+      </div>
+      <p class="spec-note">D-day·잔여·정원은 <strong>Bebas 숫자</strong>로 임팩트. solid 채도 배지는 화면당 1개 원칙 — 그래야 '진짜 급한 것'이 눈에 들어옴.</p>
+    </div>
+  </div>
+</div></section>
+
+<!-- COMPOSITION -->
+<section><div class="wrap">
+  <h2 class="sec"><span class="n">04</span>적용 예 (A안 · Ink &amp; Paper)</h2>
+  <p class="lead">위 시스템을 실제 행사 카드 + 모바일 하단 고정바에 얹은 모습.</p>
+  <div class="ex">
+    <div class="ecard">
+      <div class="ph"><div class="tb"><span class="bdg bdg-tint" style="background:rgba(255,255,255,.92)"><span class="dot" style="background:#B0592F"></span>UPCOMING</span><span class="bdg bdg-solid">잔여 3석</span></div></div>
+      <div class="bd">
+        <h3>원주시 반려견 산책교육 — 햅삐 2기</h3>
+        <p class="facts">2026.10.4 ~ 10.25 · 매주 일요일<br>강원 원주 · 참가비 무료</p>
+        <div class="ft">
+          <span class="bdg-num">D-10 <small>모집중</small></span>
+          <a class="btn btn-primary btn-sm">자리 맡기 <span class="arw">→</span></a>
+        </div>
+      </div>
+    </div>
+    <div class="phone">
+      <div class="scr">
+        <div class="poster"></div>
+        <div class="pl m"></div><div class="pl s"></div><div class="pl"></div><div class="pl m"></div>
+        <div class="cbar">
+          <div class="info"><span class="dd">D-10</span> <span class="seat">· 잔여 <b>3석</b></span></div>
+          <a class="btn btn-accent btn-sm">예약하기 <span class="arw">→</span></a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div></section>
+
+<!-- TOKENS -->
+<section><div class="wrap">
+  <h2 class="sec"><span class="n">05</span>추천안(A) 토큰 · 복붙용</h2>
+  <p class="lead small">※ 제안 스펙입니다. 실제 <code>globals.css @theme</code> 반영은 계획 승인 후. 기존 그린 토큰은 <code>--color-success</code>로 재배치 권장.</p>
+  <table>
+    <thead><tr><th>토큰</th><th>값</th><th>용도</th></tr></thead>
+    <tbody>
+      <tr><td><code>--color-ink</code></td><td>#17181A</td><td>주버튼·헤드라인·다크섹션</td></tr>
+      <tr><td><code>--color-graphite</code></td><td>#3A3B3E</td><td>본문 강조·보조 텍스트</td></tr>
+      <tr><td><code>--color-canvas</code></td><td>#F0F1EC</td><td>페이지 배경 · A안 쿨 페이퍼(방향별 교체: B 흙빛샌드 #F2E9DD · C 쿨페이퍼 #EFF1F5)</td></tr>
+      <tr><td><code>--color-sand</code></td><td>#ECE6DA</td><td>카드·구획 배경</td></tr>
+      <tr><td><code>--color-accent</code></td><td>#B0592F</td><td>긴박·결제 CTA·수치(교체 가능: 슬레이트 #3B4A63 / 앰버 #B7791F)</td></tr>
+      <tr><td><code>--color-success</code></td><td>#16a34a</td><td>기존 그린 → 완료/성공 상태색으로 재배치</td></tr>
+      <tr><td><code>--radius</code></td><td>12px</td><td>버튼·배지·카드 공통(pill 필요 시 9999px)</td></tr>
+    </tbody>
+  </table>
+  <p class="spec-note" style="margin-top:12px">대비: 액센트 텍스트는 소형에서 <code>#9C4A26</code> 사용(4.5:1↑). 틴트 배지 배경은 10~14%로 유지. 이 규칙이 분석 리포트의 '색대비 부족' 이슈도 함께 해소.</p>
+</div></section>
+
+<footer><div class="wrap">
+  GWAA 컬러 방향 재탐색 + 리파인드 컴포넌트 · 2026-09 · 시안(확정 전) · 폰트: Gothic A1 / Noto Sans KR / Bebas Neue / Nanum Myeongjo (Google Fonts)
+</div></footer>
+
+</body>
+</html>
