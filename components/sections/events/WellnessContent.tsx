@@ -171,7 +171,7 @@ export default function WellnessContent() {
           style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out', padding: 16 }}
         >
           {/\.(mp4|webm|mov)$/i.test(zoom) ? (
-            <video src={zoom} controls autoPlay playsInline onClick={(e) => e.stopPropagation()} style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12, display: 'block' }} />
+            <video src={zoom} autoPlay loop playsInline style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12, display: 'block' }} />
           ) : (
             /* eslint-disable-next-line @next/next/no-img-element */
             <img src={zoom} alt="웰니스클럽 현장 확대" style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12 }} />
