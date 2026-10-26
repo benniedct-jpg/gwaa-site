@@ -91,12 +91,12 @@ export default function WellnessContent() {
           핸드팬 연주부터 오프리쉬 놀이터, 빈백에 앉아 즐긴 공연까지 — 사진으로 남긴 그날의 장면들.
         </p>
         <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 14 }}>사진이 천천히 흐릅니다 · 누르면 크게 볼 수 있어요</p>
-        {[RECAP_PHOTOS.slice(0, 6), RECAP_PHOTOS.slice(6)].map((row, ri) => (
-          <div key={ri} className="sketch-mq" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: isMobile ? 10 : 16, boxSizing: 'border-box', paddingBlock: 14, overflow: 'hidden' }}>
-            <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 14 : 22, width: 'max-content', alignItems: 'center', animationDuration: (isMobile ? 44 : 58) + (ri ? 10 : 0) + 's', animationDirection: ri ? 'reverse' : 'normal' }}>
-              {[...row, ...row, ...row].map((photo, i) => {
-                const tilt = [-2.4, 1.6, -1.1, 2.2, -1.7, 1.2][i % 6];
-                const lift = [0, 10, -8, 6, -10, 4][i % 6];
+        {Array.from({ length: 4 }, (_, ri) => RECAP_PHOTOS.map((_, i) => RECAP_PHOTOS[(i + ri * 3) % RECAP_PHOTOS.length])).map((row, ri) => (
+          <div key={ri} className="sketch-mq" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: isMobile ? 10 : 16, boxSizing: 'border-box', paddingBlock: 8, overflow: 'hidden' }}>
+            <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 12 : 18, width: 'max-content', alignItems: 'center', animationDuration: (isMobile ? [40, 52, 46, 58] : [54, 68, 60, 74])[ri] + 's', animationDirection: ri % 2 ? 'reverse' : 'normal' }}>
+              {[...row, ...row].map((photo, i) => {
+                const tilt = [-2.2, 1.5, -1, 2, -1.6, 1.1][(i + ri) % 6];
+                const lift = [0, 7, -5, 4, -7, 3][(i + ri * 2) % 6];
                 return (
                   // eslint-disable-next-line @next/next/no-img-element
                   <img
@@ -105,7 +105,7 @@ export default function WellnessContent() {
                     alt={`웰니스클럽 현장 사진 ${(RECAP_PHOTOS.indexOf(photo) % RECAP_PHOTOS.length) + 1}`}
                     onClick={() => setZoom(photo)}
                     className="sketch-photo"
-                    style={{ height: isMobile ? 170 : 230, width: 'auto', flex: '0 0 auto', display: 'block', cursor: 'zoom-in', background: '#fff', padding: isMobile ? 5 : 7, paddingBottom: isMobile ? 16 : 22, borderRadius: 4, boxShadow: '0 10px 24px rgba(17,24,39,0.16)', transform: `rotate(${tilt}deg) translateY(${lift}px)` }}
+                    style={{ height: isMobile ? 115 : 160, width: 'auto', flex: '0 0 auto', display: 'block', cursor: 'zoom-in', background: '#fff', padding: isMobile ? 4 : 5, paddingBottom: isMobile ? 11 : 15, borderRadius: 4, boxShadow: '0 8px 20px rgba(17,24,39,0.15)', transform: `rotate(${tilt}deg) translateY(${lift}px)` }}
                   />
                 );
               })}
