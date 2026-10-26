@@ -1,5 +1,6 @@
 'use client';
 
+import Link from 'next/link';
 import { useEffect, useState } from 'react';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
@@ -178,9 +179,9 @@ export default function SupportPage() {
         <h1 style={{ fontSize: 24, fontWeight: 800, color: '#111', marginBottom: 10 }}>회비·후원 준비 중입니다</h1>
         <p style={{ fontSize: 15, color: '#4b5563', lineHeight: 1.7 }}>
           멤버십 회비·후원 결제는 현재 준비 중입니다. 오픈되면 안내드릴게요.<br /><br />
-          행사 참가 신청·결제는 <a href="/events" style={{ color: GREEN, fontWeight: 700 }}>행사 페이지</a>에서 진행하실 수 있습니다.
+          행사 참가 신청·결제는 <Link href="/events" style={{ color: GREEN, fontWeight: 700 }}>행사 페이지</Link>에서 진행하실 수 있습니다.
         </p>
-        <a href="/events" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>행사 보러가기 →</a>
+        <Link href="/events" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>행사 보러가기 →</Link>
       </main>
     );
   }
@@ -199,9 +200,9 @@ export default function SupportPage() {
             : '강원도 반려동물 문화를 함께 만들어 주셔서 감사합니다.'}
         </p>
         {kind === 'membership' ? (
-          <a href="/membership" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>디지털 회원증 받기 →</a>
+          <Link href="/membership" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>디지털 회원증 받기 →</Link>
         ) : (
-          <a href="/" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>홈으로</a>
+          <Link href="/" style={{ display: 'inline-block', marginTop: 28, padding: '12px 24px', borderRadius: 10, background: GREEN, color: '#fff', fontWeight: 700, fontSize: 14, textDecoration: 'none' }}>홈으로</Link>
         )}
       </main>
     );

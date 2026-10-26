@@ -29,6 +29,16 @@ export default function JoinClient() {
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState('');
 
+  const finalize = async (p: { name: string; phone: string; email: string; region: string; paymentId: string }) => {
+    setBusy(true); setMsg('가입 처리 중…');
+    try {
+      const r = await fetch('/api/membership/join', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
+      const j = await r.json();
+      if (!r.ok || !j.ok) { setMsg(j.error || '가입 처리에 실패했어요. (문의 033-813-0333)'); setBusy(false); return; }
+      window.location.href = '/membership/card';
+    } catch { setMsg('처리 중 오류가 발생했어요.'); setBusy(false); }
+  };
+
   useEffect(() => {
     if (!CARD_ENABLED) return;
     if (!document.getElementById('portone-sdk')) {
@@ -51,15 +61,6 @@ export default function JoinClient() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const finalize = async (p: { name: string; phone: string; email: string; region: string; paymentId: string }) => {
-    setBusy(true); setMsg('가입 처리 중…');
-    try {
-      const r = await fetch('/api/membership/join', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(p) });
-      const j = await r.json();
-      if (!r.ok || !j.ok) { setMsg(j.error || '가입 처리에 실패했어요. (문의 033-813-0333)'); setBusy(false); return; }
-      window.location.href = '/membership/card';
-    } catch { setMsg('처리 중 오류가 발생했어요.'); setBusy(false); }
-  };
 
   const pay = async () => {
     if (!name.trim() || !phone.trim()) { setMsg('이름과 연락처를 입력해 주세요.'); return; }

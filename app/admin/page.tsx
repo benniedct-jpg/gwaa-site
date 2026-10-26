@@ -217,7 +217,6 @@ export default function AdminPage() {
   const [arcDragSrcIdx, setArcDragSrcIdx] = useState<number | null>(null); // 시각 효과용
   const [arcDragOverIdx, setArcDragOverIdx] = useState<number | null>(null);
 
-  useEffect(() => { loadAll(); }, []);
 
   const showToast = (msg: string, err?: boolean) => {
     setToast({ msg, err });
@@ -334,6 +333,8 @@ export default function AdminPage() {
       setGalleryItems(await clientDB.getAll<GalleryItem>(STORES.GALLERY));
     } catch (err) { console.error('로딩 오류:', err); showToast(`로딩 실패: ${err instanceof Error ? err.message : String(err)}`, true); }
   };
+
+  useEffect(() => { loadAll(); }, []);
 
 
   const sendRecovery = async (mode: 'test' | 'group-a' | 'all' | 'rebook-test' | 'rebook', count: number) => {

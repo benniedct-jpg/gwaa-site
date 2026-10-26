@@ -54,7 +54,7 @@ export function useGWAADB<T>(store: StoreName, initialData?: T[]) {
   }, []);
 
   const put = useCallback(async (item: T) => {
-    const method = (item as any).id ? 'PUT' : 'POST';
+    const method = (item as { id?: unknown }).id ? 'PUT' : 'POST';
     await fetch(url(store), { method, headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(item) });
     await load();
   }, [store, load]);

@@ -400,8 +400,8 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
               display: 'flex', gap: 6, flexWrap: isMobile ? 'nowrap' : 'wrap',
               overflowX: isMobile ? 'auto' : 'visible',
               paddingBottom: isMobile ? 4 : 0,
-              WebkitOverflowScrolling: 'touch' as any,
-              msOverflowStyle: 'none' as any,
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
             }}>
               {REGIONS.map((r) => (
                 <button
@@ -426,8 +426,8 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
               display: 'flex', gap: 6, flexWrap: isMobile ? 'nowrap' : 'wrap', alignItems: 'center',
               overflowX: isMobile ? 'auto' : 'visible',
               paddingBottom: isMobile ? 4 : 0,
-              WebkitOverflowScrolling: 'touch' as any,
-              msOverflowStyle: 'none' as any,
+              WebkitOverflowScrolling: 'touch',
+              msOverflowStyle: 'none',
             }}>
               {CATEGORIES.map(({ key, icon }) => (
                 <button
@@ -570,7 +570,7 @@ export default function TravelContent({ initialData }: { initialData?: TravelPla
                       {/* Description */}
                       <p style={{
                         fontSize: 12, color: '#6b7280', lineHeight: 1.65, marginBottom: 12,
-                        overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as any,
+                        overflow: 'hidden', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical',
                       }}>
                         {place.desc}
                       </p>

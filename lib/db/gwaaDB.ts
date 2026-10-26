@@ -48,7 +48,7 @@ async function getAll<T>(storeName: StoreName): Promise<T[]> {
   const db = await open();
   return new Promise((res, rej) => {
     const req = db.transaction(storeName, 'readonly').objectStore(storeName).getAll();
-    req.onsuccess = () => res((req.result as T[]).sort((a: any, b: any) => (a.order || 0) - (b.order || 0)));
+    req.onsuccess = () => res((req.result as (T & { order?: number })[]).sort((a, b) => (a.order || 0) - (b.order || 0)));
     req.onerror = () => rej(req.error);
   });
 }
@@ -98,7 +98,7 @@ async function initDefaults(): Promise<void> {
     for (const [storeName, items] of Object.entries(DEFAULTS)) {
       const existing = await getAll(storeName as StoreName);
       if (existing.length === 0) {
-        for (const item of items as any[]) await add(storeName as StoreName, item);
+        for (const item of items as unknown[]) await add(storeName as StoreName, item);
       }
     }
     for (let i = 1; i <= 3; i++) {
