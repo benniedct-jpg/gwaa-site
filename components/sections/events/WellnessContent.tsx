@@ -83,64 +83,82 @@ export default function WellnessContent() {
         />
       </div>
 
-      {/* 현장 스케치 — 사진 */}
+      {/* 현장 스케치 — 사진 스와이프 */}
       <div style={section}>
         <div style={eyebrowRow}><span style={eyebrowBar('#f59e0b')} /><span style={eyebrowTxt('#f59e0b')}>PHOTO SKETCH</span></div>
         <h2 style={h2}>현장 스케치</h2>
-        <p style={{ ...body, marginBottom: 16 }}>
+        <p style={{ ...body, marginBottom: 6 }}>
           핸드팬 연주부터 오프리쉬 놀이터, 빈백에 앉아 즐긴 공연까지 — 사진으로 남긴 그날의 장면들.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: isMobile ? 8 : 12 }}>
-          {RECAP_PHOTOS.map((src, i) => (
+        <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 14 }}>옆으로 넘겨보세요 · 누르면 크게 볼 수 있어요</p>
+        <div className="sketch-strip" style={{ display: 'flex', gap: isMobile ? 8 : 12, overflowX: 'auto', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', paddingBottom: 6 }}>
+          {RECAP_PHOTOS.map((photo, i) => (
             // eslint-disable-next-line @next/next/no-img-element
             <img
-              key={src}
-              src={src}
+              key={photo}
+              src={photo}
               alt={`웰니스클럽 현장 사진 ${i + 1}`}
               loading="lazy"
-              onClick={() => setZoom(src)}
-              style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover', borderRadius: 12, display: 'block', cursor: 'zoom-in', background: '#f3f4f6' }}
+              onClick={() => setZoom(photo)}
+              style={{ height: isMobile ? 240 : 340, width: 'auto', flex: '0 0 auto', scrollSnapAlign: 'start', borderRadius: 12, display: 'block', cursor: 'zoom-in', background: '#f3f4f6' }}
             />
           ))}
         </div>
-        {zoom && (
-          <div
-            onClick={() => setZoom(null)}
-            role="button"
-            aria-label="사진 닫기"
-            style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out', padding: 16 }}
-          >
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={zoom} alt="웰니스클럽 현장 사진 확대" style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12 }} />
-          </div>
-        )}
       </div>
 
-      {/* 현장 스케치 — 영상 */}
+      {/* 현장 스케치 — 영상 스와이프 (자동재생 루프) */}
       <div style={section}>
         <div style={eyebrowRow}><span style={eyebrowBar('#e11d48')} /><span style={eyebrowTxt('#e11d48')}>VIDEO SKETCH</span></div>
         <h2 style={h2}>영상으로 다시 보는 웰니스클럽</h2>
-        <p style={{ ...body, marginBottom: 16 }}>
-          짧게 담은 현장 영상 {RECAP_CLIP_COUNT}편. 썸네일을 누르면 재생됩니다.
+        <p style={{ ...body, marginBottom: 6 }}>
+          짧게 담은 현장 영상 {RECAP_CLIP_COUNT}편이 무음으로 흐릅니다.
         </p>
-        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 8 : 12 }}>
+        <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 14 }}>옆으로 넘겨보세요 · 영상을 누르면 소리와 함께 크게 재생돼요</p>
+        <div className="sketch-strip" style={{ display: 'flex', gap: isMobile ? 8 : 12, overflowX: 'auto', scrollSnapType: 'x mandatory', WebkitOverflowScrolling: 'touch', paddingBottom: 6 }}>
           {Array.from({ length: RECAP_CLIP_COUNT }, (_, i) => {
             const n = String(i + 1).padStart(2, '0');
+            const vsrc = `${RECAP_VIDEO_BASE}/clip-${n}.mp4`;
             return (
-              <video
+              <button
                 key={n}
-                src={`${RECAP_VIDEO_BASE}/clip-${n}.mp4`}
-                poster={`/images/events/wonju-2026/recap/clip-${n}-poster.webp`}
-                controls
-                preload="none"
-                playsInline
-                style={{ width: '100%', aspectRatio: '9/16', objectFit: 'cover', borderRadius: 12, display: 'block', background: '#0a0a0a' }}
-                aria-label={`웰니스클럽 현장 영상 ${i + 1}`}
-              />
+                type="button"
+                onClick={() => setZoom(vsrc)}
+                aria-label={`웰니스클럽 현장 영상 ${i + 1} 크게 보기`}
+                style={{ padding: 0, border: 'none', background: '#0a0a0a', cursor: 'pointer', height: isMobile ? 240 : 340, aspectRatio: '9/16', flex: '0 0 auto', scrollSnapAlign: 'start', borderRadius: 12, overflow: 'hidden', position: 'relative', lineHeight: 0 }}
+              >
+                <video
+                  src={vsrc}
+                  poster={`/images/events/wonju-2026/recap/clip-${n}-poster.webp`}
+                  autoPlay muted loop playsInline preload="metadata"
+                  style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
+                />
+                <span style={{ position: 'absolute', right: 8, bottom: 8, width: 26, height: 26, borderRadius: '50%', background: 'rgba(0,0,0,0.5)', display: 'flex', alignItems: 'center', justifyContent: 'center' }} aria-hidden>
+                  <span style={{ width: 0, height: 0, borderLeft: '8px solid #fff', borderTop: '5px solid transparent', borderBottom: '5px solid transparent', marginLeft: 2 }} />
+                </span>
+              </button>
             );
           })}
         </div>
       </div>
+
+      <style>{`.sketch-strip { scrollbar-width: thin; } .sketch-strip::-webkit-scrollbar { height: 6px; } .sketch-strip::-webkit-scrollbar-thumb { background: #d1d5db; border-radius: 3px; }`}</style>
+
+      {/* 라이트박스 — 사진·영상 공용 */}
+      {zoom && (
+        <div
+          onClick={() => setZoom(null)}
+          role="button"
+          aria-label="닫기"
+          style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.92)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out', padding: 16 }}
+        >
+          {/\.(mp4|webm|mov)$/i.test(zoom) ? (
+            <video src={zoom} controls autoPlay playsInline onClick={(e) => e.stopPropagation()} style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12, display: 'block' }} />
+          ) : (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={zoom} alt="웰니스클럽 현장 확대" style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12 }} />
+          )}
+        </div>
+      )}
 
       {/* 인트로 */}
       <div style={section}>
