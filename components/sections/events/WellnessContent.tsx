@@ -3,6 +3,9 @@
 import { useState } from 'react';
 import { useIsMobile } from '@/hooks/useIsMobile';
 
+const RECAP_PHOTOS = Array.from({ length: 11 }, (_, i) => `/images/events/wonju-2026/recap/photo-${String(i + 1).padStart(2, '0')}.webp`);
+const RECAP_CLIP_COUNT = 14;
+const RECAP_VIDEO_BASE = 'https://hanvzguytjjmrwbhfoei.supabase.co/storage/v1/object/public/gwaa-videos/events/wonju-2026/recap';
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const TEAL = '#12A79D';
 
@@ -43,6 +46,7 @@ function Poster({ src, alt, max, accent }: { src: string; alt: string; max: numb
 
 export default function WellnessContent() {
   const isMobile = useIsMobile();
+  const [zoom, setZoom] = useState<string | null>(null);
 
   const wrap: React.CSSProperties = { marginTop: 8 };
   const section: React.CSSProperties = { marginBottom: isMobile ? 44 : 60 };
@@ -77,6 +81,65 @@ export default function WellnessContent() {
           style={{ width: '100%', borderRadius: 16, display: 'block', background: '#0a0a0a' }}
           aria-label="웰니스클럽 행사장 드론 영상"
         />
+      </div>
+
+      {/* 현장 스케치 — 사진 */}
+      <div style={section}>
+        <div style={eyebrowRow}><span style={eyebrowBar('#f59e0b')} /><span style={eyebrowTxt('#f59e0b')}>PHOTO SKETCH</span></div>
+        <h2 style={h2}>현장 스케치</h2>
+        <p style={{ ...body, marginBottom: 16 }}>
+          핸드팬 연주부터 오프리쉬 놀이터, 빈백에 앉아 즐긴 공연까지 — 사진으로 남긴 그날의 장면들.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(3, 1fr)', gap: isMobile ? 8 : 12 }}>
+          {RECAP_PHOTOS.map((src, i) => (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              key={src}
+              src={src}
+              alt={`웰니스클럽 현장 사진 ${i + 1}`}
+              loading="lazy"
+              onClick={() => setZoom(src)}
+              style={{ width: '100%', aspectRatio: '3/4', objectFit: 'cover', borderRadius: 12, display: 'block', cursor: 'zoom-in', background: '#f3f4f6' }}
+            />
+          ))}
+        </div>
+        {zoom && (
+          <div
+            onClick={() => setZoom(null)}
+            role="button"
+            aria-label="사진 닫기"
+            style={{ position: 'fixed', inset: 0, zIndex: 1000, background: 'rgba(0,0,0,0.88)', display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'zoom-out', padding: 16 }}
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={zoom} alt="웰니스클럽 현장 사진 확대" style={{ maxWidth: '100%', maxHeight: '92vh', borderRadius: 12 }} />
+          </div>
+        )}
+      </div>
+
+      {/* 현장 스케치 — 영상 */}
+      <div style={section}>
+        <div style={eyebrowRow}><span style={eyebrowBar('#e11d48')} /><span style={eyebrowTxt('#e11d48')}>VIDEO SKETCH</span></div>
+        <h2 style={h2}>영상으로 다시 보는 웰니스클럽</h2>
+        <p style={{ ...body, marginBottom: 16 }}>
+          짧게 담은 현장 영상 {RECAP_CLIP_COUNT}편. 썸네일을 누르면 재생됩니다.
+        </p>
+        <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr 1fr' : 'repeat(4, 1fr)', gap: isMobile ? 8 : 12 }}>
+          {Array.from({ length: RECAP_CLIP_COUNT }, (_, i) => {
+            const n = String(i + 1).padStart(2, '0');
+            return (
+              <video
+                key={n}
+                src={`${RECAP_VIDEO_BASE}/clip-${n}.mp4`}
+                poster={`/images/events/wonju-2026/recap/clip-${n}-poster.webp`}
+                controls
+                preload="none"
+                playsInline
+                style={{ width: '100%', aspectRatio: '9/16', objectFit: 'cover', borderRadius: 12, display: 'block', background: '#0a0a0a' }}
+                aria-label={`웰니스클럽 현장 영상 ${i + 1}`}
+              />
+            );
+          })}
+        </div>
       </div>
 
       {/* 인트로 */}
