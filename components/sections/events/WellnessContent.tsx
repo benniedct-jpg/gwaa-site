@@ -66,7 +66,7 @@ export default function WellnessContent() {
       {/* 리캡 — 드론 영상 */}
       <div style={section}>
         <div style={eyebrowRow}><span style={eyebrowBar(TEAL)} /><span style={eyebrowTxt(TEAL)}>RECAP</span></div>
-        <h2 style={h2}>2,712명과 함께한 하루, 고마웠습니다</h2>
+        <h2 style={h2}>함께해 주신 모든 분들, 고마웠습니다</h2>
         <p style={{ ...body, marginBottom: 16 }}>
           2026년 10월 17일, 원주천 로아노크광장. 하늘에서 담은 그날의 기록입니다.
           만족도 조사에 참여해 주신 모든 분들께 감사드립니다 — 내년에 더 좋은 모습으로 돌아올게요.
