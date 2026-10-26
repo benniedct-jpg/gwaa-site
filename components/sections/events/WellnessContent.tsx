@@ -91,20 +91,27 @@ export default function WellnessContent() {
           핸드팬 연주부터 오프리쉬 놀이터, 빈백에 앉아 즐긴 공연까지 — 사진으로 남긴 그날의 장면들.
         </p>
         <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 14 }}>사진이 천천히 흐릅니다 · 누르면 크게 볼 수 있어요</p>
-        <div className="sketch-mq" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: isMobile ? 10 : 16, boxSizing: 'border-box' }}>
-          <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 8 : 12, width: 'max-content', animationDuration: (isMobile ? 48 : 64) + 's' }}>
-            {[...RECAP_PHOTOS, ...RECAP_PHOTOS].map((photo, i) => (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                key={photo + i}
-                src={photo}
-                alt={`웰니스클럽 현장 사진 ${(i % RECAP_PHOTOS.length) + 1}`}
-                onClick={() => setZoom(photo)}
-                style={{ height: isMobile ? 220 : 320, width: 'auto', flex: '0 0 auto', borderRadius: 12, display: 'block', cursor: 'zoom-in', background: '#f3f4f6' }}
-              />
-            ))}
+        {[RECAP_PHOTOS.slice(0, 6), RECAP_PHOTOS.slice(6)].map((row, ri) => (
+          <div key={ri} className="sketch-mq" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: isMobile ? 10 : 16, boxSizing: 'border-box', paddingBlock: 14, overflow: 'hidden' }}>
+            <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 14 : 22, width: 'max-content', alignItems: 'center', animationDuration: (isMobile ? 44 : 58) + (ri ? 10 : 0) + 's', animationDirection: ri ? 'reverse' : 'normal' }}>
+              {[...row, ...row, ...row].map((photo, i) => {
+                const tilt = [-2.4, 1.6, -1.1, 2.2, -1.7, 1.2][i % 6];
+                const lift = [0, 10, -8, 6, -10, 4][i % 6];
+                return (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    key={photo + i}
+                    src={photo}
+                    alt={`웰니스클럽 현장 사진 ${(RECAP_PHOTOS.indexOf(photo) % RECAP_PHOTOS.length) + 1}`}
+                    onClick={() => setZoom(photo)}
+                    className="sketch-photo"
+                    style={{ height: isMobile ? 170 : 230, width: 'auto', flex: '0 0 auto', display: 'block', cursor: 'zoom-in', background: '#fff', padding: isMobile ? 5 : 7, paddingBottom: isMobile ? 16 : 22, borderRadius: 4, boxShadow: '0 10px 24px rgba(17,24,39,0.16)', transform: `rotate(${tilt}deg) translateY(${lift}px)` }}
+                  />
+                );
+              })}
+            </div>
           </div>
-        </div>
+        ))}
       </div>
 
       {/* 현장 스케치 — 영상 스와이프 (자동재생 루프) */}
@@ -116,7 +123,7 @@ export default function WellnessContent() {
         </p>
         <p style={{ fontSize: 12, color: '#9ca3af', marginBottom: 14 }}>영상을 누르면 소리와 함께 크게 재생돼요</p>
         <div className="sketch-mq" style={{ width: '100vw', marginLeft: 'calc(50% - 50vw)', paddingInline: isMobile ? 10 : 16, boxSizing: 'border-box' }}>
-          <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 10 : 14, width: 'max-content', animationDuration: (isMobile ? 56 : 72) + 's', animationDirection: 'reverse' }}>
+          <div className="sketch-mq-track" style={{ display: 'flex', gap: isMobile ? 12 : 18, width: 'max-content', alignItems: 'center', paddingBlock: 18, animationDuration: (isMobile ? 56 : 72) + 's', animationDirection: 'reverse' }}>
           {Array.from({ length: RECAP_CLIP_COUNT * 2 }, (_, idx) => {
             const i = idx % RECAP_CLIP_COUNT;
             const n = String(i + 1).padStart(2, '0');
@@ -127,7 +134,7 @@ export default function WellnessContent() {
                 type="button"
                 onClick={() => setZoom(vsrc)}
                 aria-label={`웰니스클럽 현장 영상 ${i + 1} 크게 보기`}
-                style={{ padding: 0, border: 'none', background: '#0a0a0a', cursor: 'pointer', height: isMobile ? 220 : 320, aspectRatio: '9/16', flex: '0 0 auto', borderRadius: 12, overflow: 'hidden', position: 'relative', lineHeight: 0 }}
+                style={{ padding: 0, border: 'none', background: '#0a0a0a', cursor: 'pointer', height: (isMobile ? [200, 250, 225] : [280, 350, 315])[i % 3], aspectRatio: '9/16', flex: '0 0 auto', borderRadius: [18, 12, 24][i % 3], overflow: 'hidden', position: 'relative', lineHeight: 0, transform: `translateY(${[0, 14, -12][i % 3]}px)`, boxShadow: '0 12px 28px rgba(17,24,39,0.22)' }}
               >
                 <video
                   src={vsrc}
@@ -150,6 +157,8 @@ export default function WellnessContent() {
         .sketch-mq-track { animation-name: sketchscroll; animation-timing-function: linear; animation-iteration-count: infinite; will-change: transform; }
         .sketch-mq:hover .sketch-mq-track, .sketch-mq:focus-within .sketch-mq-track { animation-play-state: paused; }
         @keyframes sketchscroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+        .sketch-photo { transition: transform 0.25s ease, box-shadow 0.25s ease; }
+        .sketch-photo:hover { transform: rotate(0deg) translateY(-4px) scale(1.04) !important; box-shadow: 0 16px 36px rgba(17,24,39,0.26) !important; z-index: 2; position: relative; }
         @media (prefers-reduced-motion: reduce) { .sketch-mq-track { animation: none; } .sketch-mq { overflow-x: auto; -webkit-mask-image: none; mask-image: none; } }
       `}</style>
 

@@ -83,6 +83,15 @@
         ],
         "createdAt": "2026-09-28T09:10:07.288Z",
         "reason": "claude: dense reference-doc cards; flagged items already bumped to 14/16px padding, remaining is a subjective margin call on a delivered style-guide"
+      },
+      {
+        "rule": "side-tab",
+        "value": "*",
+        "files": [
+          "components/sections/events/WellnessContent.tsx"
+        ],
+        "createdAt": "2026-10-26T16:57:34.074Z",
+        "reason": "CSS 삼각형 재생 아이콘(width/height 0 + transparent 상하 border)이 side-tab으로 오탐 — 카드 액센트 보더 아님, RecapOlimpet.tsx L172와 동일한 확립 패턴"
       }
     ]
   }
