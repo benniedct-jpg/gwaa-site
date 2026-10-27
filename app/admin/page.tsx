@@ -36,6 +36,13 @@ type SurveyStats = {
   programCounts: Record<string, number>; sourceCounts: Record<string, number>; regionCounts: Record<string, number>; petWith: number;
 };
 
+type SellerDirEntry = {
+  id: number; brand_name: string; rep_name?: string; phone?: string; email?: string;
+  category?: string; items?: string; sns?: string; biz_no?: string; memo?: string;
+  event_history: { event_id: number; status: string; join_type?: string; applied_at?: string }[];
+  event_count: number; last_status?: string; last_applied_at?: string;
+};
+
 type Seller = {
   id: number; event_id: number; brand_name: string; rep_name: string; phone: string; email?: string;
   category?: string; items?: string; needs_power?: boolean; needs_table?: boolean; vehicle?: string;
@@ -186,6 +193,9 @@ export default function AdminPage() {
   const [sellers, setSellers] = useState<Seller[]>([]);
   const [sellerFilter, setSellerFilter] = useState('all');
   const [sellerEvt, setSellerEvt] = useState<number | 'all'>('all');
+  const [sellerView, setSellerView] = useState<'apps' | 'dir'>('apps');
+  const [sellerDir, setSellerDir] = useState<SellerDirEntry[]>([]);
+  const [bkArchiveTools, setBkArchiveTools] = useState(false);
   const [survey, setSurvey] = useState<{ responses: SurveyRow[]; stats: SurveyStats | null }>({ responses: [], stats: null });
   const [noShowOnly, setNoShowOnly] = useState(false);
   const [events, setEvents] = useState<EventCard[]>([]);
@@ -403,6 +413,36 @@ export default function AdminPage() {
 
   const fetchSellers = async (): Promise<Seller[]> =>
     fetch('/api/admin/sellers').then((r) => (r.ok ? r.json() : { sellers: [] })).then((j) => j.sellers || []).catch(() => []);
+
+  const fetchSellerDir = async (): Promise<SellerDirEntry[]> =>
+    fetch('/api/admin/seller-directory').then((r) => (r.ok ? r.json() : { directory: [] })).then((j) => j.directory || []).catch(() => []);
+
+  const rebuildSellerDir = async () => {
+    const r = await fetch('/api/admin/seller-directory', { method: 'POST' });
+    const j = await r.json().catch(() => ({}));
+    if (r.ok) { setSellerDir(await fetchSellerDir()); showToast(`디렉토리 갱신 완료 — 셀러 ${j.total}명`); }
+    else showToast(j.error || '디렉토리 갱신 실패', true);
+  };
+
+  const saveDirMemo = async (id: number, memo: string) => {
+    const r = await fetch('/api/admin/seller-directory', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, memo }) });
+    if (r.ok) showToast('메모 저장됨'); else showToast('메모 저장 실패', true);
+  };
+
+  const exportSellerDirCSV = () => {
+    const evName = (id: number) => events.find((e) => e.id === id)?.title || `행사 #${id}`;
+    const header = ['브랜드', '대표자', '연락처', '이메일', '카테고리', '판매품목', 'SNS', '사업자번호', '참가횟수', '참가이력', '최근상태', '메모'];
+    const rows = sellerDir.map((d) => [
+      d.brand_name, d.rep_name || '', d.phone || '', d.email || '', d.category || '', d.items || '', d.sns || '', d.biz_no || '',
+      String(d.event_count), (d.event_history || []).map((h) => `${evName(h.event_id)}:${h.status}`).join(' / '),
+      d.last_status || '', d.memo || '',
+    ]);
+    const csv = '\uFEFF' + [header, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([csv], { type: 'text/csv;charset=utf-8' }));
+    a.download = `셀러_디렉토리_${new Date().toISOString().slice(0, 10)}.csv`;
+    a.click();
+  };
 
   const updateSeller = async (id: number, patch: { status?: string; admin_note?: string; fee_paid?: boolean }) => {
     const r = await fetch('/api/admin/sellers', { method: 'PATCH', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ id, ...patch }) });
@@ -964,7 +1004,11 @@ export default function AdminPage() {
         {tab === 'bookings' && (
           <div>
             <SectionHeader title="예약 내역" sub="펫스카웃 2026 캠핑 사이트 예약 접수 목록" />
-            {(() => {
+            <div style={{ background: '#f8fafc', border: '1.5px solid #e2e8f0', borderRadius: 12, padding: '12px 16px', marginBottom: 14, display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: 10 }}>
+              <div style={{ fontSize: 13, color: '#475569' }}><b>📦 보관됨</b> — 펫스카웃 2026은 종료된 행사예요. 예약 데이터는 조회·CSV용으로 보관됩니다.</div>
+              <button onClick={() => setBkArchiveTools((v) => !v)} style={{ fontSize: 12, padding: '7px 14px', borderRadius: 8, border: '1px solid #cbd5e1', background: '#fff', color: '#475569', cursor: 'pointer', fontWeight: 700 }}>{bkArchiveTools ? '운영 도구 접기' : '운영 도구 보기'}</button>
+            </div>
+            {bkArchiveTools && (() => {
               const validEmail = (e: unknown) => /^[^\s@]+@[^\s@]+\.[a-z]{2,}$/i.test(String(e ?? ''));
               const real = bookings.filter((b) => b.status === 'pending' && Number(b.amount) > 0 && validEmail(b.email) && String(b.email).toLowerCase() !== 'bennie.dct@gmail.com' && !/홍보용|광고용/.test(String(b.name ?? '')));
               const daysOld = (b: Booking) => (Date.now() - new Date(String(b.created_at)).getTime()) / 86400000;
@@ -1121,14 +1165,87 @@ export default function AdminPage() {
           return (
             <div>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 12, marginBottom: 16 }}>
-                <SectionHeader title="프리마켓 셀러" sub="행사별 신청 셀러 심사·관리 · 승인/보류/반려" />
+                <SectionHeader title="프리마켓 셀러" sub={sellerView === 'apps' ? '행사별 신청 셀러 심사·관리 · 승인/보류/반려' : '중복 신청을 병합한 셀러 마스터 — 재섭외·연락처 관리용'} />
                 <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-                  <button onClick={async () => setSellers(await fetchSellers())} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer', color: '#374151' }}>새로고침</button>
-                  <button onClick={() => sendSellerNotify('test')} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #12A79D', background: '#fff', color: '#0D7E76', cursor: 'pointer', fontWeight: 700 }}>선정메일 테스트</button>
-                  <button onClick={() => sendSellerNotify('all', sellerEvt)} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: 'none', background: '#0D7E76', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>선정메일 발송</button>
-                  <button onClick={() => exportSellersCSV(byEvent)} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', color: '#374151', cursor: 'pointer', fontWeight: 700 }}>CSV</button>
+                  {sellerView === 'apps' ? (
+                    <>
+                      <button onClick={async () => setSellers(await fetchSellers())} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', cursor: 'pointer', color: '#374151' }}>새로고침</button>
+                      <button onClick={() => sendSellerNotify('test')} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #12A79D', background: '#fff', color: '#0D7E76', cursor: 'pointer', fontWeight: 700 }}>선정메일 테스트</button>
+                      <button onClick={() => sendSellerNotify('all', sellerEvt)} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: 'none', background: '#0D7E76', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>선정메일 발송</button>
+                      <button onClick={() => exportSellersCSV(byEvent)} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #d1d5db', background: '#fff', color: '#374151', cursor: 'pointer', fontWeight: 700 }}>CSV</button>
+                    </>
+                  ) : (
+                    <>
+                      <button onClick={rebuildSellerDir} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: '1px solid #12A79D', background: '#fff', color: '#0D7E76', cursor: 'pointer', fontWeight: 700 }}>신청내역에서 갱신</button>
+                      <button onClick={exportSellerDirCSV} style={{ fontSize: 12, padding: '8px 14px', borderRadius: 8, border: 'none', background: '#12A79D', color: '#fff', cursor: 'pointer', fontWeight: 700 }}>CSV 내보내기</button>
+                    </>
+                  )}
                 </div>
               </div>
+              {/* 서브탭: 신청내역 | 디렉토리 */}
+              <div style={{ display: 'flex', gap: 6, marginBottom: 14 }}>
+                {([['apps', '행사별 신청'], ['dir', `셀러 디렉토리${sellerDir.length ? ` (${sellerDir.length})` : ''}`]] as ['apps' | 'dir', string][]).map(([k, l]) => (
+                  <button key={k} onClick={async () => { setSellerView(k); if (k === 'dir' && !sellerDir.length) setSellerDir(await fetchSellerDir()); }}
+                    style={{ fontSize: 12.5, padding: '8px 18px', borderRadius: 8, cursor: 'pointer', border: sellerView === k ? '1.5px solid #111' : '1.5px solid #e5e7eb', background: sellerView === k ? '#111' : '#fff', color: sellerView === k ? '#fff' : '#6b7280', fontWeight: 700 }}>{l}</button>
+                ))}
+              </div>
+              {sellerView === 'dir' ? (() => {
+                const repeat = sellerDir.filter((d) => d.event_count > 1);
+                const stTxt: Record<string, string> = { pending: '대기', approved: '승인', waitlist: '보류', rejected: '반려' };
+                const stColor: Record<string, [string, string]> = { approved: ['#EDFAF8', '#0A5F59'], pending: ['#f3f4f6', '#374151'], waitlist: ['#fef3c7', '#92400e'], rejected: ['#fee2e2', '#991b1b'] };
+                return (
+                  <div>
+                    <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', marginBottom: 14 }}>
+                      <span style={{ fontSize: 12, fontWeight: 700, padding: '5px 12px', borderRadius: 9999, background: '#EDFAF8', color: '#0A5F59' }}>전체 {sellerDir.length}팀</span>
+                      <span style={{ fontSize: 12, fontWeight: 700, padding: '5px 12px', borderRadius: 9999, background: '#f5f3ff', color: '#6d28d9' }}>2회 이상 참가 {repeat.length}팀</span>
+                      <span style={{ fontSize: 11, color: '#9ca3af', alignSelf: 'center' }}>전화번호 기준 중복 병합 · 원본 신청내역은 그대로 보존</span>
+                    </div>
+                    {sellerDir.length === 0 ? (
+                      <p style={{ fontSize: 13, color: '#9ca3af', padding: '40px 0', textAlign: 'center' }}>디렉토리가 비어 있어요. ‘신청내역에서 갱신’을 눌러주세요.</p>
+                    ) : (
+                      <div style={{ overflowX: 'auto' }}>
+                        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
+                          <thead>
+                            <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
+                              {['브랜드', '대표자', '연락처', '카테고리', '참가 이력', '메모'].map((h) => (
+                                <th key={h} style={{ padding: '10px 12px', borderBottom: '1.5px solid #e5e7eb', fontSize: 11.5, color: '#6b7280', whiteSpace: 'nowrap' }}>{h}</th>
+                              ))}
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {sellerDir.map((d) => (
+                              <tr key={d.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                                <td style={{ padding: '10px 12px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{d.brand_name}{d.event_count > 1 && <span style={{ marginLeft: 6, fontSize: 10.5, fontWeight: 800, color: '#6d28d9' }}>×{d.event_count}</span>}</td>
+                                <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#374151' }}>{d.rep_name || '—'}</td>
+                                <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#374151' }}>{d.phone || '—'}</td>
+                                <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#6b7280' }}>{d.category || '—'}</td>
+                                <td style={{ padding: '10px 12px' }}>
+                                  <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
+                                    {(d.event_history || []).map((h, i) => {
+                                      const [bg, c] = stColor[h.status] || stColor.pending;
+                                      return <span key={i} style={{ fontSize: 10.5, fontWeight: 700, padding: '3px 8px', borderRadius: 9999, background: bg, color: c, whiteSpace: 'nowrap' }}>{(events.find((e) => e.id === h.event_id)?.title || `행사 #${h.event_id}`).replace(/^20\d\d /, '').slice(0, 14)} · {stTxt[h.status] || h.status}</span>;
+                                    })}
+                                  </div>
+                                </td>
+                                <td style={{ padding: '10px 12px', minWidth: 160 }}>
+                                  <input
+                                    defaultValue={d.memo || ''}
+                                    placeholder="메모"
+                                    onBlur={(e) => { if (e.target.value !== (d.memo || '')) saveDirMemo(d.id, e.target.value); }}
+                                    style={{ width: '100%', padding: '6px 8px', border: '1px solid #e5e7eb', borderRadius: 6, fontSize: 12, color: '#111', background: '#fafafa', boxSizing: 'border-box' }}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </div>
+                    )}
+                  </div>
+                );
+              })() : null}
+              {sellerView === 'dir' ? null : (
+              <>
               {/* 행사 필터 */}
               {evtIds.length > 1 && (
                 <div style={{ display: 'flex', gap: 6, flexWrap: 'wrap', marginBottom: 10 }}>
@@ -1149,6 +1266,8 @@ export default function AdminPage() {
                 <p style={{ fontSize: 13, color: '#9ca3af', padding: '40px 0', textAlign: 'center' }}>접수된 셀러 신청이 없습니다.</p>
               ) : (
                 <SellerTable sellers={list} onUpdate={updateSeller} eventName={sellerEvt === 'all' ? evName : undefined} />
+              )}
+              </>
               )}
             </div>
           );
