@@ -45,10 +45,19 @@ export async function POST(req: NextRequest) {
   if (logoB64.startsWith('data:image/') && logoB64.length < 4.2 * 1024 * 1024) {
     try {
       const m = logoB64.match(/^data:(image\/[a-z+]+);base64,(.+)$/);
-      if (m) {
-        const ext = ({ 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/gif': 'gif' } as Record<string, string>)[m[1]] || 'png';
-        const path = `sellers/logo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+      // SVG는 스크립트 삽입(XSS) 위험이 있어 허용하지 않음 — 래스터 포맷만
+      const allowed: Record<string, string> = { 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/gif': 'gif' };
+      const ext = m ? allowed[m[1]] : undefined;
+      if (m && ext) {
         const buf = Buffer.from(m[2], 'base64');
+        // 매직넘버 검증 — 선언된 MIME과 실제 바이트가 일치해야 업로드
+        const sigOk =
+          (m[1] === 'image/png' && buf.subarray(0, 8).equals(Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]))) ||
+          (m[1] === 'image/jpeg' && buf[0] === 0xff && buf[1] === 0xd8 && buf[2] === 0xff) ||
+          (m[1] === 'image/webp' && buf.subarray(0, 4).toString('ascii') === 'RIFF' && buf.subarray(8, 12).toString('ascii') === 'WEBP') ||
+          (m[1] === 'image/gif' && ['GIF87a', 'GIF89a'].includes(buf.subarray(0, 6).toString('ascii')));
+        if (!sigOk) throw new Error('invalid image bytes');
+        const path = `sellers/logo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
         const up = await db().storage.from('gwaa-images').upload(path, buf, { contentType: m[1], upsert: false });
         if (!up.error) {
           const pub = db().storage.from('gwaa-images').getPublicUrl(path);
