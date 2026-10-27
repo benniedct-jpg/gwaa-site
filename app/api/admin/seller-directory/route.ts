@@ -53,6 +53,8 @@ export async function POST(req: NextRequest) {
       items: s.items ?? m.items ?? null,
       sns: s.sns ?? m.sns ?? null,
       biz_no: s.biz_no ?? m.biz_no ?? null,
+      logo_url: s.logo_url ?? m.logo_url ?? null,
+      strengths: s.strengths ?? m.strengths ?? null,
       last_status: s.status ?? null,
       last_applied_at: s.created_at ?? null,
     });

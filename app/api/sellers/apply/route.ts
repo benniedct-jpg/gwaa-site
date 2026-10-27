@@ -39,6 +39,25 @@ export async function POST(req: NextRequest) {
     .eq('event_id', event_id).eq('phone', phone).neq('status', 'rejected').maybeSingle();
   if (same.data) return NextResponse.json({ ok: true, already: true });
 
+  // 로고 업로드 (선택 · base64 → 스토리지)
+  let logo_url = '';
+  const logoB64 = typeof b.logo_base64 === 'string' ? b.logo_base64 : '';
+  if (logoB64.startsWith('data:image/') && logoB64.length < 4.2 * 1024 * 1024) {
+    try {
+      const m = logoB64.match(/^data:(image\/[a-z+]+);base64,(.+)$/);
+      if (m) {
+        const ext = ({ 'image/png': 'png', 'image/jpeg': 'jpg', 'image/webp': 'webp', 'image/svg+xml': 'svg', 'image/gif': 'gif' } as Record<string, string>)[m[1]] || 'png';
+        const path = `sellers/logo-${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
+        const buf = Buffer.from(m[2], 'base64');
+        const up = await db().storage.from('gwaa-images').upload(path, buf, { contentType: m[1], upsert: false });
+        if (!up.error) {
+          const pub = db().storage.from('gwaa-images').getPublicUrl(path);
+          logo_url = pub.data.publicUrl;
+        }
+      }
+    } catch { /* 로고 실패해도 신청은 진행 */ }
+  }
+
   const rec = {
     event_id,
     brand_name,
@@ -52,6 +71,8 @@ export async function POST(req: NextRequest) {
     vehicle: String(b.vehicle ?? '').trim(),
     sns: String(b.sns ?? '').trim(),
     biz_no: String(b.biz_no ?? '').trim(),
+    strengths: String(b.strengths ?? '').trim(),
+    logo_url,
     join_type,
     sponsor_items,
     privacy_agreed: true,

@@ -39,6 +39,7 @@ type SurveyStats = {
 type SellerDirEntry = {
   id: number; brand_name: string; rep_name?: string; phone?: string; email?: string;
   category?: string; items?: string; sns?: string; biz_no?: string; memo?: string;
+  logo_url?: string; strengths?: string;
   event_history: { event_id: number; status: string; join_type?: string; applied_at?: string }[];
   event_count: number; last_status?: string; last_applied_at?: string;
 };
@@ -48,6 +49,8 @@ type Seller = {
   category?: string; items?: string; needs_power?: boolean; needs_table?: boolean; vehicle?: string;
   sns?: string; biz_no?: string; status: string; admin_note?: string; created_at?: string;
   join_type?: string; sponsor_items?: string; fee_paid?: boolean; notified_at?: string;
+  logo_url?: string;
+  strengths?: string;
 };
 
 interface Payment { id?: number; payment_id?: string; kind?: string; amount?: number; name?: string; phone?: string; email?: string; status?: string; paid_at?: string; created_at?: string; }
@@ -431,9 +434,9 @@ export default function AdminPage() {
 
   const exportSellerDirCSV = () => {
     const evName = (id: number) => events.find((e) => e.id === id)?.title || `행사 #${id}`;
-    const header = ['브랜드', '대표자', '연락처', '이메일', '카테고리', '판매품목', 'SNS', '사업자번호', '참가횟수', '참가이력', '최근상태', '메모'];
+    const header = ['브랜드', '대표자', '연락처', '이메일', '카테고리', '판매품목', '강점특장점', '로고URL', '인스타SNS', '사업자번호', '참가횟수', '참가이력', '최근상태', '메모'];
     const rows = sellerDir.map((d) => [
-      d.brand_name, d.rep_name || '', d.phone || '', d.email || '', d.category || '', d.items || '', d.sns || '', d.biz_no || '',
+      d.brand_name, d.rep_name || '', d.phone || '', d.email || '', d.category || '', d.items || '', d.strengths || '', d.logo_url || '', d.sns || '', d.biz_no || '',
       String(d.event_count), (d.event_history || []).map((h) => `${evName(h.event_id)}:${h.status}`).join(' / '),
       d.last_status || '', d.memo || '',
     ]);
@@ -751,12 +754,12 @@ export default function AdminPage() {
     const src = rowsIn ?? sellers;
     const stTxt = (s: string) => ({ pending: '대기', approved: '승인', waitlist: '보류', rejected: '반려' }[s] || s);
     const evName = (id?: number) => events.find((e) => e.id === id)?.title || `행사 #${id}`;
-    const header = ['행사', '신청일시', '상태', '참가방식', '후원물품', '참가비입금', '브랜드', '대표자', '연락처', '이메일', '카테고리', '판매품목', '전기', '테이블', '차량', 'SNS', '사업자번호', '메모'];
+    const header = ['행사', '신청일시', '상태', '참가방식', '후원물품', '참가비입금', '브랜드', '대표자', '연락처', '이메일', '카테고리', '판매품목', '강점특장점', '로고URL', '전기', '테이블', '차량', 'SNS', '사업자번호', '메모'];
     const rows = src.map((s) => [
       evName(s.event_id), s.created_at ? new Date(s.created_at).toLocaleString('ko-KR') : '', stTxt(s.status),
       s.join_type === 'fee' ? '참가비 2만원' : '후원물품', s.sponsor_items || '', s.join_type === 'fee' ? (s.fee_paid ? '입금완료' : '미입금') : '해당없음',
       s.brand_name || '', s.rep_name || '', s.phone || '',
-      s.email || '', s.category || '', s.items || '', s.needs_power ? 'O' : '', s.needs_table ? 'O' : '', s.vehicle || '', s.sns || '', s.biz_no || '', s.admin_note || '',
+      s.email || '', s.category || '', s.items || '', s.strengths || '', s.logo_url || '', s.needs_power ? 'O' : '', s.needs_table ? 'O' : '', s.vehicle || '', s.sns || '', s.biz_no || '', s.admin_note || '',
     ]);
     const csv = [header, ...rows].map((r) => r.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(',')).join('\n');
     const blob = new Blob(['﻿' + csv], { type: 'text/csv;charset=utf-8;' });
@@ -1207,7 +1210,7 @@ export default function AdminPage() {
                         <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12.5 }}>
                           <thead>
                             <tr style={{ background: '#f9fafb', textAlign: 'left' }}>
-                              {['브랜드', '대표자', '연락처', '카테고리', '참가 이력', '메모'].map((h) => (
+                              {['브랜드', '대표자', '연락처', '카테고리', '강점·특장점', '참가 이력', '메모'].map((h) => (
                                 <th key={h} style={{ padding: '10px 12px', borderBottom: '1.5px solid #e5e7eb', fontSize: 11.5, color: '#6b7280', whiteSpace: 'nowrap' }}>{h}</th>
                               ))}
                             </tr>
@@ -1215,10 +1218,18 @@ export default function AdminPage() {
                           <tbody>
                             {sellerDir.map((d) => (
                               <tr key={d.id} style={{ borderBottom: '1px solid #f3f4f6' }}>
-                                <td style={{ padding: '10px 12px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>{d.brand_name}{d.event_count > 1 && <span style={{ marginLeft: 6, fontSize: 10.5, fontWeight: 800, color: '#6d28d9' }}>×{d.event_count}</span>}</td>
+                                <td style={{ padding: '10px 12px', fontWeight: 700, color: '#111', whiteSpace: 'nowrap' }}>
+                                  <span style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
+                                    {d.logo_url && /* eslint-disable-next-line @next/next/no-img-element */ (
+                                      <img src={d.logo_url} alt="" style={{ width: 22, height: 22, objectFit: 'contain', borderRadius: 5, border: '1px solid #e5e7eb', background: '#fff' }} />
+                                    )}
+                                    {d.brand_name}{d.event_count > 1 && <span style={{ fontSize: 10.5, fontWeight: 800, color: '#6d28d9' }}>×{d.event_count}</span>}
+                                  </span>
+                                </td>
                                 <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#374151' }}>{d.rep_name || '—'}</td>
                                 <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#374151' }}>{d.phone || '—'}</td>
                                 <td style={{ padding: '10px 12px', whiteSpace: 'nowrap', color: '#6b7280' }}>{d.category || '—'}</td>
+                                <td style={{ padding: '10px 12px', minWidth: 140, maxWidth: 220, fontSize: 11.5, color: '#0A5F59', lineHeight: 1.5 }}>{d.strengths || '—'}</td>
                                 <td style={{ padding: '10px 12px' }}>
                                   <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap' }}>
                                     {(d.event_history || []).map((h, i) => {
@@ -2076,6 +2087,9 @@ function SellerTable({ sellers, onUpdate, eventName }: { sellers: Seller[]; onUp
               <div style={{ minWidth: 0 }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 4, flexWrap: 'wrap' }}>
                   {eventName && <span style={{ fontSize: 10, fontWeight: 700, padding: '2px 8px', borderRadius: 9999, color: '#374151', background: '#f3f4f6', border: '1px solid #e5e7eb' }}>{eventName(s.event_id)}</span>}
+                  {s.logo_url && /* eslint-disable-next-line @next/next/no-img-element */ (
+                    <img src={s.logo_url} alt="로고" style={{ width: 28, height: 28, objectFit: 'contain', borderRadius: 6, border: '1px solid #e5e7eb', background: '#fff' }} />
+                  )}
                   <span style={{ fontSize: 15, fontWeight: 800, color: '#111' }}>{s.brand_name}</span>
                   <span style={{ fontSize: 11, padding: '3px 9px', borderRadius: 9999, fontWeight: 700, background: st.bg, color: st.color }}>{st.label}</span>
                   {s.join_type === 'fee'
@@ -2092,6 +2106,11 @@ function SellerTable({ sellers, onUpdate, eventName }: { sellers: Seller[]; onUp
             </div>
 
             {s.items && <div style={{ fontSize: 12.5, color: '#374151', marginTop: 8, lineHeight: 1.6, whiteSpace: 'pre-wrap' }}>{s.items}</div>}
+            {s.strengths && (
+              <div style={{ fontSize: 12.5, color: '#0A5F59', marginTop: 8, lineHeight: 1.6, whiteSpace: 'pre-wrap', background: '#EDFAF8', border: '1px solid #BFF3EC', borderRadius: 8, padding: '8px 10px' }}>
+                💪 강점·특장점 (MC·소개용): {s.strengths}
+              </div>
+            )}
             {s.join_type !== 'fee' && s.sponsor_items && (
               <div style={{ fontSize: 12.5, color: '#1e40af', marginTop: 8, lineHeight: 1.6, whiteSpace: 'pre-wrap', background: '#eff6ff', border: '1px solid #dbeafe', borderRadius: 8, padding: '8px 10px' }}>
                 🎁 후원물품: {s.sponsor_items}

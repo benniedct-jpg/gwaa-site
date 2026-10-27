@@ -25,6 +25,9 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
   const [table, setTable] = useState(false);
   const [vehicle, setVehicle] = useState('');
   const [sns, setSns] = useState('');
+  const [strengths, setStrengths] = useState('');
+  const [logoData, setLogoData] = useState('');   // base64 data URL
+  const [logoName, setLogoName] = useState('');
   const [bizNo, setBizNo] = useState('');
   const [agree, setAgree] = useState(false);
   const [busy, setBusy] = useState(false);
@@ -40,6 +43,15 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
     if (q && events.some((e) => e.id === q)) { setEventId(q); setLocked(true); }
   }, [events]);
 
+  const pickLogo = (f: File | null) => {
+    if (!f) { setLogoData(''); setLogoName(''); return; }
+    if (!/^image\//.test(f.type)) { setMsg('로고는 이미지 파일만 올릴 수 있어요.'); return; }
+    if (f.size > 3 * 1024 * 1024) { setMsg('로고 파일은 3MB 이하로 올려주세요.'); return; }
+    const reader = new FileReader();
+    reader.onload = () => { setLogoData(String(reader.result || '')); setLogoName(f.name); setMsg(''); };
+    reader.readAsDataURL(f);
+  };
+
   const submit = async () => {
     if (!brand.trim() || !rep.trim() || !phone.trim()) { setMsg('브랜드명·대표자·연락처를 입력해 주세요.'); return; }
     if (joinType === 'sponsor' && !sponsorItems.trim()) { setMsg('후원물품 제공을 선택하셨어요. 제공하실 물품·수량을 적어주세요.'); return; }
@@ -54,6 +66,7 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
           join_type: joinType, sponsor_items: sponsorItems.trim(),
           needs_power: power, needs_table: table, vehicle: vehicle.trim(),
           sns: sns.trim(), biz_no: bizNo.trim(), privacy_agreed: agree,
+          strengths: strengths.trim(), logo_base64: logoData || undefined,
         }),
       });
       const j = await r.json();
@@ -175,9 +188,31 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
           <div><div style={lab}>차량 진입 (차종/번호)</div><input value={vehicle} onChange={(e) => setVehicle(e.target.value)} placeholder="현장 진입 차량이 있으면 적어주세요 (선택)" style={inp} /></div>
         </div>
 
-        <div style={sectionTitle}>SNS · 사업자 (선택)</div>
+        <div style={sectionTitle}>브랜드 소개 (선택)</div>
         <div style={{ display: 'grid', gap: 10 }}>
-          <div><div style={lab}>SNS / 스마트스토어</div><input value={sns} onChange={(e) => setSns(e.target.value)} placeholder="인스타그램 @ 또는 링크" style={inp} /></div>
+          <div>
+            <div style={lab}>인스타그램 / SNS</div>
+            <input value={sns} onChange={(e) => setSns(e.target.value)} placeholder="@계정 또는 링크 — 행사장 지도·홈페이지에 연결돼요" style={inp} />
+          </div>
+          <div>
+            <div style={lab}>브랜드 로고</div>
+            <input type="file" accept="image/*" onChange={(e) => pickLogo(e.target.files?.[0] ?? null)} style={{ ...inp, padding: '10px 12px' }} />
+            {logoData && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={logoData} alt="로고 미리보기" style={{ width: 48, height: 48, objectFit: 'contain', borderRadius: 8, border: '1px solid #e5e7eb', background: '#fff' }} />
+                <span style={{ fontSize: 12, color: '#6b7280' }}>{logoName}</span>
+                <button type="button" onClick={() => pickLogo(null)} style={{ fontSize: 11.5, color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>삭제</button>
+              </div>
+            )}
+            <div style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 6 }}>행사장 지도·3D맵·홈페이지 부스 소개에 사용돼요 (3MB 이하)</div>
+          </div>
+          <div>
+            <div style={lab}>우리 브랜드의 강점·특장점</div>
+            <textarea value={strengths} onChange={(e) => setStrengths(e.target.value)} rows={3}
+              placeholder="예: 전 제품 수제·무방부제 / 알러지 맞춤 간식 전문 — 부스 소개와 현장 MC 멘트에 활용돼요"
+              style={{ ...inp, resize: 'vertical', lineHeight: 1.6 }} />
+          </div>
           <div><div style={lab}>사업자등록번호</div><input value={bizNo} onChange={(e) => setBizNo(e.target.value)} placeholder="000-00-00000 (선택)" style={inp} /></div>
         </div>
 
