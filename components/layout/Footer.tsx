@@ -22,6 +22,7 @@ const NAV_COLS = [
       { label: '행사 일정',   href: '/events' },
       { label: '교육 프로그램', href: '/education' },
       { label: '반려동물 여행', href: '/travel' },
+      { label: '응급 가이드 · 야간 동물병원', href: '/emergency' },
       { label: '메이트쉽 멤버십', href: '/mateship' },
       { label: '회비·후원',     href: '/support' },
     ],
