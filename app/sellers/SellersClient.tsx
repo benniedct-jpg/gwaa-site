@@ -45,7 +45,9 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
 
   const pickLogo = (f: File | null) => {
     if (!f) { setLogoData(''); setLogoName(''); return; }
-    if (!/^image\//.test(f.type)) { setMsg('로고는 이미지 파일만 올릴 수 있어요.'); return; }
+    if (!['image/png', 'image/jpeg', 'image/webp', 'image/gif'].includes(f.type)) {
+      setMsg('로고는 PNG·JPG·WebP 이미지로 올려주세요. (SVG·기타 형식은 받을 수 없어요)'); return;
+    }
     if (f.size > 3 * 1024 * 1024) { setMsg('로고 파일은 3MB 이하로 올려주세요.'); return; }
     const reader = new FileReader();
     reader.onload = () => { setLogoData(String(reader.result || '')); setLogoName(f.name); setMsg(''); };
@@ -188,15 +190,20 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
           <div><div style={lab}>차량 진입 (차종/번호)</div><input value={vehicle} onChange={(e) => setVehicle(e.target.value)} placeholder="현장 진입 차량이 있으면 적어주세요 (선택)" style={inp} /></div>
         </div>
 
-        <div style={sectionTitle}>브랜드 소개 (선택)</div>
-        <div style={{ display: 'grid', gap: 10 }}>
+        <div style={sectionTitle}>브랜드 소개 (선택이지만 강력 추천!)</div>
+        <div style={{ background: '#EDFAF8', border: '1px solid #BFF3EC', borderRadius: 10, padding: '10px 14px', marginBottom: 10, fontSize: 12.5, color: '#0A5F59', lineHeight: 1.65 }}>
+          아래 정보는 <b>행사장 지도·홈페이지 부스 소개·현장 MC 멘트</b>에 그대로 쓰여요.
+          꼼꼼히 적어주실수록 방문객에게 부스가 더 돋보입니다.
+        </div>
+        <div style={{ display: 'grid', gap: 12 }}>
           <div>
             <div style={lab}>인스타그램 / SNS</div>
-            <input value={sns} onChange={(e) => setSns(e.target.value)} placeholder="@계정 또는 링크 — 행사장 지도·홈페이지에 연결돼요" style={inp} />
+            <input value={sns} onChange={(e) => setSns(e.target.value)} placeholder="예: @gwaa_market 또는 스마트스토어 링크" style={inp} />
+            <div style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 5 }}>행사장 지도와 홈페이지 부스 소개에서 바로 연결돼요</div>
           </div>
           <div>
             <div style={lab}>브랜드 로고</div>
-            <input type="file" accept="image/*" onChange={(e) => pickLogo(e.target.files?.[0] ?? null)} style={{ ...inp, padding: '10px 12px' }} />
+            <input type="file" accept="image/png,image/jpeg,image/webp" onChange={(e) => pickLogo(e.target.files?.[0] ?? null)} style={{ ...inp, padding: '10px 12px' }} />
             {logoData && (
               <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginTop: 8 }}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -205,20 +212,27 @@ export default function SellersClient({ events }: { events: OpenEvent[] }) {
                 <button type="button" onClick={() => pickLogo(null)} style={{ fontSize: 11.5, color: '#9ca3af', background: 'none', border: 'none', cursor: 'pointer', textDecoration: 'underline' }}>삭제</button>
               </div>
             )}
-            <div style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 6 }}>행사장 지도·3D맵·홈페이지 부스 소개에 사용돼요 (3MB 이하)</div>
+            <div style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 5, lineHeight: 1.6 }}>
+              PNG·JPG · 3MB 이하 · <b>배경 투명 PNG + 정방형</b>이면 가장 예쁘게 실려요<br />
+              행사장 지도·3D맵·홈페이지 부스 소개에 노출됩니다
+            </div>
           </div>
           <div>
-            <div style={lab}>우리 브랜드의 강점·특장점</div>
-            <textarea value={strengths} onChange={(e) => setStrengths(e.target.value)} rows={3}
-              placeholder="예: 전 제품 수제·무방부제 / 알러지 맞춤 간식 전문 — 부스 소개와 현장 MC 멘트에 활용돼요"
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+              <div style={lab}>우리 브랜드의 강점·특장점</div>
+              <span style={{ fontSize: 11, color: strengths.length > 100 ? '#dc2626' : '#9ca3af' }}>{strengths.length}/120</span>
+            </div>
+            <textarea value={strengths} onChange={(e) => setStrengths(e.target.value.slice(0, 120))} rows={3} maxLength={120}
+              placeholder={'예: 전 제품 국내산 수제·무방부제 간식 / 알러지 맞춤 상담 가능\n한두 문장이 좋아요 — 현장에서 MC가 이 문구로 부스를 소개해요'}
               style={{ ...inp, resize: 'vertical', lineHeight: 1.6 }} />
+            <div style={{ fontSize: 11.5, color: '#9ca3af', marginTop: 5 }}>부스 소개 문구와 현장 MC 멘트에 그대로 활용돼요</div>
           </div>
           <div><div style={lab}>사업자등록번호</div><input value={bizNo} onChange={(e) => setBizNo(e.target.value)} placeholder="000-00-00000 (선택)" style={inp} /></div>
         </div>
 
         <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 12.5, color: '#374151', cursor: 'pointer', marginTop: 20, lineHeight: 1.6, background: '#f9fafb', border: '1px solid #eee', borderRadius: 10, padding: '12px 14px' }}>
           <input type="checkbox" checked={agree} onChange={(e) => setAgree(e.target.checked)} style={{ width: 18, height: 18, marginTop: 1, flexShrink: 0 }} />
-          <span><b>[필수]</b> 개인정보 수집·이용 동의 — 셀러 선정·행사 운영·연락을 위해 브랜드명·대표자명·연락처·이메일을 수집하며, 행사 종료 후 관련 법령에 따라 보관 후 파기합니다.</span>
+          <span><b>[필수]</b> 개인정보 수집·이용 동의 — 셀러 선정·행사 운영·연락을 위해 브랜드명·대표자명·연락처·이메일을 수집하며, 행사 종료 후 관련 법령에 따라 보관 후 파기합니다. 제출하신 브랜드 로고·SNS·소개 문구는 행사장 지도, 홈페이지, 현장 안내 등 행사 홍보에 활용될 수 있습니다.</span>
         </label>
 
         <button disabled={busy} onClick={submit}
