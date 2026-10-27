@@ -419,6 +419,14 @@ export default function EmergencyPage() {
           </div>
         </section>
 
+        {/* 전체 병원 찾기 */}
+        <section style={{ marginTop: 36 }}>
+          <a href="/vets" style={{ display: 'block', background: '#EDFAF8', border: `1.5px solid ${TEAL}`, borderRadius: 14, padding: '18px 20px', textDecoration: 'none' }}>
+            <div style={{ fontSize: 15, fontWeight: 800, color: TEAL_DK, marginBottom: 4 }}>🏥 응급이 아니라면 — 강원 동물병원 찾기</div>
+            <div style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, wordBreak: 'keep-all' }}>18개 시군 동물병원 162곳을 동네별로 모았어요. 지도·후기·전화번호 바로가기 →</div>
+          </a>
+        </section>
+
         {/* 면책 */}
         <p style={{ fontSize: 12, color: '#9ca3af', lineHeight: 1.7, marginTop: 28, wordBreak: 'keep-all' }}>
           ※ 본 가이드는 응급 상황의 초기 대처를 돕기 위한 참고 정보로, 수의사의 진료를 대체하지 않습니다.

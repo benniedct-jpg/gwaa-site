@@ -41,6 +41,7 @@ export const NAV_MENU = [
   { label: 'TRAVEL', href: '/travel', children: [
     { label: '반려동물 동반 지도', href: '/travel#map' },
     { label: '전체 장소 보기',   href: '/travel#places' },
+    { label: '🏥 동물병원 찾기 (시군별 162곳)', href: '/vets' },
     { label: '🆘 응급 가이드 · 야간 동물병원', href: '/emergency' },
   ]},
   { label: 'SUPPORT', href: '/support', children: [
