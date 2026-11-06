@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>멍춘선 1939 — 행사장 3D 미리보기</title>
+<meta name="description" content="2026.11.14(토) 가평뮤직빌리지 음악역 1939 행사장을 3D로 미리 걸어보세요.">
+<meta name="theme-color" content="#2a1a08">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=IBM+Plex+Mono:wght@500&family=IBM+Plex+Sans+KR:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#2a1a08;
+  --paper:#f4ead2;
+  --paper-2:#e8d8b8;
+  --amber:#c8762a;
+  --blue:#2a5a8c;
+  --muted:#6a5240;
+  --line:rgba(42,26,8,.18);
+  --f-display:"Do Hyeon","IBM Plex Sans KR",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans KR",system-ui,-apple-system,"Apple SD Gothic Neo",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+  color-scheme:light;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{height:100%;overscroll-behavior:none;background:#2a1a08;font-family:var(--f-body);font-size:14px;overflow:hidden}
+#app{position:relative;width:100%;height:100%;overflow:hidden}
+#c{display:block;width:100%;height:100%;touch-action:none;outline:none}
+#labels{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+[hidden]{display:none!important}
+button,select{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.panel{background:var(--paper);border:1px solid var(--ink)}
+
+/* ── 레이블 ── */
+.lbl{
+  position:absolute;left:0;top:0;
+  pointer-events:auto;cursor:pointer;
+  display:inline-flex;align-items:center;gap:5px;
+  font:500 12.5px/1 var(--f-body);
+  color:var(--ink);background:var(--paper);
+  border:1px solid var(--ink);
+  padding:4px 8px 4px 6px;
+  white-space:nowrap;
+  transform-origin:0 100%;
+  transition:background .15s,color .15s;
+}
+.lbl i{width:8px;height:8px;flex:none;border:1px solid var(--ink);border-radius:50%}
+.lbl:hover,.lbl.on{background:var(--ink);color:var(--paper)}
+.lbl:hover i,.lbl.on i{border-color:var(--paper)}
+.lbl::after{content:"";position:absolute;left:50%;top:100%;width:1px;height:28px;background:var(--ink);transform:translateX(-50%)}
+.lbl.on::after{background:var(--amber);width:2px}
+.lbl.prize{background:#9b6208;color:#fff;border-color:#ffd040}
+.lbl.prize i{background:#ffd040;border-color:#ffd040}
+.lbl.prize:hover,.lbl.prize.on{background:#c8762a}
+@keyframes prizeGlow{0%,100%{border-color:#ffd040}50%{border-color:#fff8b0}}
+.lbl.prize{animation:prizeGlow 2s ease-in-out infinite}
+body.walk .lbl::after{display:none}
+
+/* ── 상단 헤더 ── */
+#hd{
+  position:absolute;top:0;left:0;right:0;
+  display:flex;justify-content:space-between;align-items:flex-start;gap:12px;
+  padding:max(10px,env(safe-area-inset-top)) 14px 10px;
+  pointer-events:none;z-index:10;
+}
+#hd>*{pointer-events:auto}
+.brand{padding:8px 12px 9px;display:grid;gap:3px}
+.brand b{font:400 22px/1 var(--f-display);letter-spacing:.05em;color:var(--ink)}
+.brand span{font:500 10.5px/1.3 var(--f-mono);color:var(--muted);letter-spacing:.04em}
+.ctrls{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end;align-items:flex-start}
+.seg{display:flex}
+.seg button,.btn{background:var(--paper);border:1px solid var(--ink);padding:7px 12px;font-size:13px;font-weight:500;border-radius:0;-webkit-appearance:none}
+.seg button+button{border-left:0}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.badge{font:600 12px/1 var(--f-mono);color:var(--amber);background:rgba(200,118,42,.12);border:1px solid rgba(200,118,42,.35);padding:5px 11px;letter-spacing:.06em;align-self:center}
+
+/* ── 우측 info 카드 ── */
+#card{
+  position:absolute;right:12px;top:80px;
+  width:290px;max-height:calc(100% - 200px);
+  overflow:auto;z-index:10;
+}
+#card .strip{height:7px;border-bottom:1px solid var(--ink)}
+#card .in{padding:12px 14px 15px;display:grid;gap:9px}
+#card .meta{font:500 10.5px/1 var(--f-mono);letter-spacing:.05em;color:var(--muted);display:flex;justify-content:space-between}
+#card h2{font:400 24px/1.1 var(--f-display);margin:0;text-wrap:balance}
+#card p{margin:0;font-size:13.5px;line-height:1.65;white-space:pre-line}
+#card .prize-banner{margin-top:4px;padding:8px 10px;background:rgba(200,118,42,.15);border:1px solid rgba(255,208,64,.5);font-size:13.5px;color:#7a4a00;line-height:1.5}
+#card .x{position:absolute;right:8px;top:12px;background:none;border:0;font-size:18px;line-height:1;padding:4px 6px;color:var(--muted)}
+#card .x:hover{color:var(--ink)}
+
+/* ── 하단 칩 ── */
+#quick{
+  position:absolute;left:12px;right:12px;
+  bottom:max(16px,env(safe-area-inset-bottom));
+  display:flex;gap:7px;overflow-x:auto;padding:3px 0;
+  pointer-events:none;scrollbar-width:none;align-items:center;z-index:10;
+}
+#quick::-webkit-scrollbar{display:none}
+#quick>*{pointer-events:auto}
+.chip{
+  display:inline-flex;align-items:center;gap:6px;
+  background:var(--paper);border:1px solid var(--ink);
+  padding:7px 12px;font-size:13px;font-weight:500;
+  white-space:nowrap;flex:none;cursor:pointer;
+}
+.chip i{width:8px;height:8px;border:1px solid var(--ink);flex:none}
+.chip:hover,.chip.on{background:var(--ink);color:var(--paper)}
+.chip.prize-chip{background:#9b6208;color:#fff;border-color:#ffd040}
+.chip.prize-chip:hover{background:#c8762a}
+body.walk #quick{display:none}
+
+/* ── 힌트 ── */
+#hint{
+  position:absolute;right:14px;bottom:max(72px,calc(env(safe-area-inset-bottom)+56px));
+  font:500 10.5px/1.6 var(--f-mono);color:rgba(244,234,210,.5);
+  text-align:right;pointer-events:none;z-index:9;
+  transition:opacity .4s;
+}
+#hint.gone,body.walk #hint{opacity:0}
+
+/* ── 걷기 모드 UI ── */
+#walkhint{
+  position:absolute;left:50%;bottom:max(26px,env(safe-area-inset-bottom));transform:translateX(-50%);
+  display:none;padding:8px 14px;text-align:center;
+  font:500 11px/1.5 var(--f-mono);letter-spacing:.02em;
+  color:var(--paper);background:rgba(42,26,8,.72);border:1px solid rgba(244,234,210,.25);
+  white-space:nowrap;pointer-events:none;z-index:11;
+}
+body.walk:not(.touch) #walkhint{display:block}
+#joy{
+  position:absolute;left:max(22px,env(safe-area-inset-left));
+  bottom:max(34px,calc(env(safe-area-inset-bottom)+18px));
+  width:124px;height:124px;border-radius:50%;
+  background:rgba(244,234,210,.14);border:2px solid rgba(244,234,210,.42);
+  display:none;touch-action:none;z-index:12;
+}
+body.walk.touch #joy{display:block}
+#joyknob{
+  position:absolute;left:50%;top:50%;width:54px;height:54px;
+  transform:translate(-50%,-50%);border-radius:50%;
+  background:rgba(244,234,210,.9);border:2px solid var(--ink);pointer-events:none;
+}
+
+/* ── 로딩 ── */
+#load{
+  position:absolute;inset:0;display:grid;place-items:center;
+  color:var(--paper);font:400 20px var(--f-display);letter-spacing:.1em;
+  background:#2a1a08;transition:opacity .6s;z-index:20;
+}
+#load.done{opacity:0;pointer-events:none}
+
+/* ── 자동투어 뱃지 ── */
+#autobadge{
+  position:absolute;left:50%;top:80px;transform:translateX(-50%);
+  display:none;padding:7px 14px;
+  font:500 11.5px var(--f-mono);letter-spacing:.04em;
+  background:var(--ink);color:var(--paper);border:1px solid var(--ink);white-space:nowrap;z-index:11;
+}
+body.auto #autobadge{display:block}
+
+@media(max-width:680px){
+  .brand b{font-size:18px}
+  .brand span{display:none}
+  #card{left:12px;right:12px;top:auto;bottom:68px;width:auto;max-height:40%}
+  body.walk #card{bottom:12px}
+  body.walk.touch #card{left:160px;bottom:24px;max-height:34%}
+  .seg button,.btn{padding:6px 10px;font-size:12px}
+}
+</style>
+</head>
+<body>
+<div id="app">
+  <canvas id="c" tabindex="0" aria-label="멍춘선 1939 행사장 3D 지도"></canvas>
+  <div id="labels" aria-hidden="true"></div>
+
+  <div id="hd">
+    <div class="brand panel">
+      <b>멍춘선 1939 행사장</b>
+      <span>가평군 × GWAA · 가평뮤직빌리지 음악역 1939</span>
+    </div>
+    <div class="ctrls">
+      <div class="seg" role="group" aria-label="보기 방식">
+        <button id="mSky" aria-pressed="true">하늘에서</button>
+        <button id="mMap" aria-pressed="false">지도로</button>
+        <button id="mWalk" aria-pressed="false">걸어서</button>
+      </div>
+      <button class="btn" id="btnAuto">자동 투어</button>
+      <div class="badge panel">11.14 SAT</div>
+    </div>
+  </div>
+
+  <article id="card" class="panel" hidden aria-live="polite">
+    <div class="strip" id="cardStrip"></div>
+    <button class="x" id="cardX" aria-label="닫기">×</button>
+    <div class="in">
+      <div class="meta"><span id="cardMeta">장소 안내</span></div>
+      <h2 id="cardName">—</h2>
+      <p id="cardDesc"></p>
+      <div class="prize-banner" id="cardPrize" hidden></div>
+    </div>
+  </article>
+
+  <div id="quick" aria-label="바로 가기">
+    <span style="font:500 10.5px var(--f-mono);letter-spacing:.06em;color:rgba(244,234,210,.55);white-space:nowrap;padding-right:2px;pointer-events:none">바로 가기</span>
+  </div>
+
+  <div id="hint">끌어서 회전 · 휠/두 손가락으로 확대</div>
+  <div id="walkhint">W A S D · 방향키로 이동 &nbsp;·&nbsp; 드래그로 시점 &nbsp;·&nbsp; 장소에 다가가면 안내가 떠요</div>
+  <div id="joy"><div id="joyknob"></div></div>
+  <div id="autobadge">자동 투어 중 · 화면을 누르면 멈춰요</div>
+  <div id="load">멍춘선 1939</div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script>
+(function(){
+'use strict';
+const V3 = THREE.Vector3;
+const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const clamp=(v,a,b)=>Math.max(a,Math.min(b,v));
+
+/* ═══════════════════════════════════════════
+   SPOTS — 배치도 1:1
+═══════════════════════════════════════════ */
+const SPOTS = [
+  { id:'stage', label:'🎪 무대', icon:'🎪', color:'#2a5a8c', prize:true,
+    pos:new V3(0,0,-8.2), labelY:3.4,
+    name:'무대 (옛 가평역 플랫폼)',
+    desc:'🎸 어쿠스틱 라이브 열차  13:30–14:30\n🐾 댕댕자랑  14:30–15:00\n❓ 댕댕 OX 퀴즈  15:00–16:30\n🎤 7080 라이브  15:30–16:30\n🎉 폐회식  16:30–17:00',
+    prizeDesc:'🎁 댕댕자랑 & 댕댕 OX 퀴즈 참여자에게 선물 증정!' },
+  { id:'dj', label:'🎧 DJ 부스', icon:'🎧', color:'#9b6208', prize:true,
+    pos:new V3(-5.6,0,-4.2), labelY:2.6,
+    name:'DJ 부스',
+    desc:'☕ 신청곡  11:30–12:30\n🎯 빙고게임  12:30–13:30',
+    prizeDesc:'🎁 신청곡 & 빙고게임 참여자에게 선물 증정!' },
+  { id:'beanbag', label:'🛋️ 빈백 쉼터', icon:'🛋️', color:'#4a8c40',
+    pos:new V3(-3,0,1.6),
+    name:'빈백 쉼터',
+    desc:'빈백에 기대어 음악과 함께 쉬어가세요.\n반려견과 느긋한 한때를 보내는 공간입니다.' },
+  { id:'food', label:'🍔 푸드트럭', icon:'🍔', color:'#d04830',
+    pos:new V3(4.2,0,-1),
+    name:'푸드트럭',
+    desc:'다양한 먹거리를 즐겨보세요.\n반려동물 간식도 준비되어 있습니다.' },
+  { id:'booth', label:'🧪 체험부스 A–F', icon:'🧪', color:'#2a1a08',
+    pos:new V3(0.4,0,9.8), labelY:2.6,
+    name:'체험부스 A–F',
+    desc:'A · 달고나 만들기\nB · 반려견 치약 만들기\nC · 반려견 샴푸 만들기\nD · 반려견 케이크 만들기\nE · 기초 건강검진\nF · 입양 상담\n\n무료 · 상시 운영' },
+  { id:'station', label:'🎸 M 스테이션', icon:'🎸', color:'#2a1a08',
+    pos:new V3(20,0,1), labelY:4.6,
+    name:'M 스테이션 (음악역 1939)',
+    desc:'가평뮤직빌리지 음악역 1939.\n옛 가평역사를 리모델링한 공연·전시 공간입니다.' },
+  { id:'entrance', label:'🎟️ 입장부스', icon:'🎟️', color:'#7a4fb0',
+    pos:new V3(10,0,6),
+    name:'입장부스 · 승차권 발급',
+    desc:'행사 입장 & 승차권 배부  11:00–11:30\n\n입장 무료 · 반려동물 없이도 누구나 환영' },
+  { id:'book', label:'📚 책방 코너', icon:'📚', color:'#2a1a08',
+    pos:new V3(9,0,14),
+    name:'책방 코너',
+    desc:'책을 무료로 빌려 읽고,\n소장하고 싶은 책은 중고가로 구매하세요.' },
+  { id:'seller', label:'🛍️ 셀러부스', icon:'🛍️', color:'#2a1a08',
+    pos:new V3(15.5,0,14),
+    name:'셀러부스',
+    desc:'반려동물 용품 & 소품\n로컬 셀러들이 참여합니다.' },
+];
+
+/* ═══════════════════════════════════════════
+   RENDERER
+═══════════════════════════════════════════ */
+const canvas = document.getElementById('c');
+let renderer;
+try {
+  renderer = new THREE.WebGLRenderer({canvas, antialias:true});
+} catch(e) {
+  document.getElementById('load').innerHTML = '<div style="text-align:center;padding:20px;font:400 15px/1.6 var(--f-body);max-width:400px">3D를 열 수 없어요. 최신 크롬 또는 사파리에서 열어 주세요.</div>';
+  throw e;
+}
+const isMobile = matchMedia('(pointer:coarse)').matches || innerWidth <= 760;
+if(isMobile) document.body.classList.add('touch');
+renderer.setPixelRatio(Math.min(devicePixelRatio||1, isMobile?1.5:2));
+renderer.shadowMap.enabled = true;
+renderer.shadowMap.type = isMobile ? THREE.PCFShadowMap : THREE.PCFSoftShadowMap;
+renderer.setClearColor(0x2a1a08);
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 1.12;
+
+/* ── SCENE ── */
+const scene = new THREE.Scene();
+scene.fog = new THREE.Fog(0xe7f0d4, 80, 240);  // 포근한 연무
+
+/* ── CAMERA ── */
+const camera = new THREE.PerspectiveCamera(45, innerWidth/innerHeight, 0.3, 600);
+camera.position.set(14, 46, 64);
+
+const controls = new THREE.OrbitControls(camera, canvas);
+controls.target.set(9, 0, 2);
+controls.enableDamping = true;
+controls.dampingFactor = 0.08;
+controls.maxPolarAngle = 1.45;
+controls.minDistance = 6;
+controls.maxDistance = 130;
+controls.update();
+
+function onResize() {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+}
+window.addEventListener('resize', onResize);
+onResize();
+
+/* ── VIEWS ── */
+const VIEWS = {
+  sky: { pos:[14,46,64], target:[9,0,2] },
+  map: { pos:[9,90,3],   target:[9,0,2] },
+};
+let flyAnim = null;
+function flyTo(view, onDone) {
+  if(reduceMotion){ camera.position.set(...view.pos); controls.target.set(...view.target); controls.update(); if(onDone) onDone(); return; }
+  const start = { px:camera.position.x, py:camera.position.y, pz:camera.position.z,
+                  tx:controls.target.x, ty:controls.target.y, tz:controls.target.z };
+  const end = { px:view.pos[0], py:view.pos[1], pz:view.pos[2],
+                tx:view.target[0], ty:view.target[1], tz:view.target[2] };
+  const dur = 900, t0 = performance.now();
+  if(flyAnim) cancelAnimationFrame(flyAnim);
+  function step() {
+    const t = Math.min((performance.now()-t0)/dur, 1);
+    const e = t<.5 ? 2*t*t : -1+(4-2*t)*t;
+    camera.position.set(start.px+(end.px-start.px)*e, start.py+(end.py-start.py)*e, start.pz+(end.pz-start.pz)*e);
+    controls.target.set(start.tx+(end.tx-start.tx)*e, start.ty+(end.ty-start.ty)*e, start.tz+(end.tz-start.tz)*e);
+    controls.update();
+    if(t<1) flyAnim = requestAnimationFrame(step);
+    else { flyAnim = null; if(onDone) onDone(); }
+  }
+  step();
+}
+function flyToSpot(spot, onDone) {
+  const p = spot.pos;
+  flyTo({ pos:[p.x+8, 13, p.z+13], target:[p.x, 0, p.z] }, onDone);
+}
+
+/* ── SKY ── */
+const skyMat = new THREE.ShaderMaterial({
+  uniforms:{ top:{value:new THREE.Color('#9fcdec')}, mid:{value:new THREE.Color('#dcecf2')}, bot:{value:new THREE.Color('#f7e9c6')} },
+  vertexShader:'varying vec3 vP;void main(){vP=normalize(position);gl_Position=projectionMatrix*modelViewMatrix*vec4(position,1.);}',
+  fragmentShader:'uniform vec3 top;uniform vec3 mid;uniform vec3 bot;varying vec3 vP;void main(){float h=clamp(vP.y*1.3+.12,0.,1.);vec3 c=h<.5?mix(bot,mid,pow(h*2.,.8)):mix(mid,top,pow((h-.5)*2.,1.1));gl_FragColor=vec4(c,1.);}',
+  side:THREE.BackSide,depthWrite:false,fog:false
+});
+scene.add(new THREE.Mesh(new THREE.SphereGeometry(440,24,12), skyMat));
+
+/* ── LIGHTS — 포근한 황금빛 ── */
+scene.add(new THREE.HemisphereLight(0xfff3dc, 0x7fae5e, 0.82));
+const sun = new THREE.DirectionalLight(0xfff0cc, 1.18);
+sun.castShadow = true;
+sun.shadow.mapSize.set(isMobile?1024:2048, isMobile?1024:2048);
+Object.assign(sun.shadow.camera, {left:-48, right:48, top:48, bottom:-48, near:0.5, far:130});
+sun.shadow.bias = -0.0012;
+sun.shadow.radius = 3;
+sun.position.set(16, 22, 15);
+scene.add(sun, sun.target);
+const fill = new THREE.DirectionalLight(0xd6e6f0, 0.32);
+fill.position.set(-10, 12, -6);
+scene.add(fill);
+
+/* ── HELPERS ── */
+const Box=(w,h,d)=>new THREE.BoxGeometry(w,h,d);
+const Cyl=(a,b,h,s)=>new THREE.CylinderGeometry(a,b,h,s||8);
+const Sph=(r,a,b)=>new THREE.SphereGeometry(r,a||8,b||6);
+const MC = {};
+function mat(c, o){ const k=c+(o?JSON.stringify(o):''); return MC[k]||(MC[k]=new THREE.MeshPhongMaterial(Object.assign({color:c,flatShading:true,shininess:6,specular:0x111111},o||{}))); }
+function add(geo, m, x, y, z, opt){ opt=opt||{}; const me=new THREE.Mesh(geo,m); me.position.set(x,y,z); me.castShadow=opt.cast!==false; me.receiveShadow=opt.recv!==false; (opt.p||scene).add(me); return me; }
+function spriteText(txt, bg, fg, w){
+  const cv=document.createElement('canvas'); w=w||64; cv.width=w; cv.height=64; const g=cv.getContext('2d');
+  g.fillStyle=bg; g.strokeStyle='#2a1a08'; g.lineWidth=3;
+  if(w===64){ g.beginPath(); g.arc(32,32,28,0,Math.PI*2); g.fill(); g.stroke(); }
+  else { g.fillRect(2,2,w-4,60); g.strokeRect(2,2,w-4,60); }
+  g.fillStyle=fg; g.font=`bold ${w<=64?30:28}px "IBM Plex Sans KR",sans-serif`; g.textAlign='center'; g.textBaseline='middle'; g.fillText(txt,w/2,34);
+  const t=new THREE.CanvasTexture(cv); const s=new THREE.Sprite(new THREE.SpriteMaterial({map:t,depthTest:false}));
+  s.scale.set(0.7*(w/64),0.7,1); return s;
+}
+
+/* ═══════════════════════════════════════════
+   GROUND — 배치도 지면 전체 (길·잔디섬·광장)
+═══════════════════════════════════════════ */
+const Ccream='#e6d4a6', Cplaza='#d9c596', Cborder='#b89a66';
+const flatMat=(c)=>mat(c,{shininess:1});
+
+{ // 잔디 베이스
+  const g=new THREE.Mesh(new THREE.PlaneGeometry(160,160), flatMat('#82b45c'));
+  g.rotation.x=-Math.PI/2; g.position.y=-0.05; g.receiveShadow=true; scene.add(g);
+}
+
+// 월드좌표(x,z) → Shape 좌표 (z축 반전)
+function worldPoly(pts){ const s=new THREE.Shape(); pts.forEach(([x,z],i)=> i?s.lineTo(x,-z):s.moveTo(x,-z)); return s; }
+function blobShape(cx,cz,rx,rz,wob,seed){
+  const s=new THREE.Shape(); const N=30;
+  for(let i=0;i<=N;i++){ const a=i/N*Math.PI*2;
+    const r=1+Math.sin(a*3+seed)*wob+Math.cos(a*2+seed*1.7)*wob*0.5;
+    const x=cx+Math.cos(a)*rx*r, z=cz+Math.sin(a)*rz*r; i?s.lineTo(x,-z):s.moveTo(x,-z); }
+  return s;
+}
+function flat(shape,color,y){ const m=new THREE.Mesh(new THREE.ShapeGeometry(shape,20),flatMat(color)); m.rotation.x=-Math.PI/2; m.position.y=y; m.receiveShadow=true; scene.add(m); return m; }
+
+// 어두운 잔디 섬 (나무 군락 아래)
+flat(blobShape(-15,3,9,10,0.1,1),  '#5e9640', 0.004);
+flat(blobShape(29,-2,8,9,0.12,2),  '#5e9640', 0.004);
+flat(blobShape(25,11,7,6,0.12,3),  '#5e9640', 0.004);
+flat(blobShape(1,-15,11,4,0.1,4),  '#5e9640', 0.004);
+flat(blobShape(3,19.5,25,3,0.05,5),'#5e9640', 0.004); // 하단 생울타리 띠
+
+// 원형 광장 외곽 링 길
+{ const r=new THREE.Mesh(new THREE.RingGeometry(9.5,11.2,64), flatMat(Ccream)); r.rotation.x=-Math.PI/2; r.position.y=0.010; r.receiveShadow=true; scene.add(r); }
+// 상단 로터리
+flat(blobShape(1.5,-12.5,1.9,1.9,0.05,6), Ccream, 0.010);
+
+// 크림 굽잇길 (디스크 체인)
+function creamPath(points,rad){
+  for(let i=0;i<points.length-1;i++){ const a=points[i],b=points[i+1];
+    const d=Math.hypot(b[0]-a[0],b[1]-a[1]); const n=Math.max(1,Math.ceil(d/(rad*0.8)));
+    for(let k=0;k<=n;k++){ const t=k/n;
+      const g=new THREE.Mesh(new THREE.CircleGeometry(rad,16),flatMat(Ccream));
+      g.rotation.x=-Math.PI/2; g.position.set(a[0]+(b[0]-a[0])*t,0.010,a[1]+(b[1]-a[1])*t); g.receiveShadow=true; scene.add(g);
+    }
+  }
+}
+creamPath([[1.5,-11],[0.5,-9.8]],1.4);                                        // 로터리→광장
+creamPath([[-6,-12],[-10,-9],[-13,-4],[-14,3],[-13,9],[-10,14],[-8,17]],1.9); // 좌측 굽잇길
+creamPath([[7,4],[9,7],[10,9.5],[9.2,13]],2.3);                               // 광장→입장→책방
+creamPath([[10,9.5],[13,12],[15.5,13.8],[19,13],[23,10]],2.3);                // 책방→셀러→우상
+creamPath([[8,1],[13,0.5],[18,0]],2.6);                                       // 광장→M스테이션
+creamPath([[9,17],[15,17.5],[22,16]],2.0);                                    // 하단 길
+creamPath([[28.5,-1],[32,1],[36,4],[38,9]],2.2);                              // M스테이션 동측 → 주차장
+
+// M 스테이션 플랫폼 (크림, 우상단 노치)
+flat(worldPoly([[11,-7.5],[27,-7.5],[27,-4.5],[29.5,-4.5],[29.5,2.5],[11,2.5]]), Ccream, 0.011);
+
+// 동측 잔디섬 + 좌측 로터리 (실제 지도 대조)
+flat(blobShape(39,4,9,12,0.1,11), '#5e9640', 0.004);
+[[-13,-3,2.0],[-11,11,1.8]].forEach(([x,z,r])=>{
+  flat(blobShape(x,z,r,r,0.04,x+z), Ccream, 0.010);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(r*0.72,0.1,6,32),mat('#cbb98a',{shininess:0}));
+  ring.rotation.x=-Math.PI/2; ring.position.set(x,0.014,z); scene.add(ring);
+});
+
+// 동측 주차장 (실제 지도의 P)
+{
+  const pg=new THREE.Mesh(new THREE.PlaneGeometry(9,6.5), flatMat('#c9c6bc'));
+  pg.rotation.x=-Math.PI/2; pg.position.set(37,0.013,9); pg.receiveShadow=true; scene.add(pg);
+  for(let i=-1;i<=1;i++) add(Box(0.08,0.02,6),mat('#f0ebdf'),37+i*2.6,0.02,9,{cast:false,recv:false});
+  ['#d85a4a','#4a7fb0','#e0b050','#5aa06a','#b8b8b8'].forEach((cc,i)=>{
+    const cx=37+((i%3)-1)*2.6, cz=9+(i<3?-1.3:1.3);
+    add(Box(1.6,0.45,0.9),mat(cc,{shininess:20}),cx,0.28,cz,{});
+    add(Box(1.0,0.32,0.82),mat(cc,{shininess:20}),cx,0.64,cz,{cast:false});
+  });
+  const s=spriteText('P','#2a5a8c','#fff',120); s.position.set(37,2.8,9); s.scale.set(1.3,0.86,1); scene.add(s);
+}
+
+// 원형 광장
+{ const g=new THREE.Mesh(new THREE.CircleGeometry(9.2,64), flatMat(Cplaza)); g.rotation.x=-Math.PI/2; g.position.y=0.018; g.receiveShadow=true; scene.add(g);
+  const ring=new THREE.Mesh(new THREE.TorusGeometry(9.2,0.3,8,64), mat(Cborder,{shininess:8})); ring.rotation.x=-Math.PI/2; ring.position.y=0.06; scene.add(ring);
+  ['#e3d2a4','#d4bf92','#c8b082'].forEach((c,i)=>{ const rr=new THREE.Mesh(new THREE.TorusGeometry(2.4+i*2.3,0.14,6,48), mat(c,{shininess:0})); rr.rotation.x=-Math.PI/2; rr.position.y=0.024; scene.add(rr); });
+}
+
+// 활동 구역 블롭
+flat(blobShape(-3,1.5,2.6,2.3,0.12,7), '#9ac46a', 0.030);   // 빈백 쉼터(초록, 광장 내)
+flat(blobShape(4.3,-1,2.5,2.3,0.12,8), '#efc08a', 0.030);   // 푸드트럭(피치, 광장 내)
+flat(blobShape(9,13.5,4.4,3.2,0.14,9), '#f1dc9a', 0.016);   // 책방(노랑)
+flat(blobShape(15.5,13.8,4.2,3.0,0.18,10),'#cba87c',0.016); // 셀러(갈색 콩팥)
+
+/* ═══════════════════════════════════════════
+   M 스테이션 건물 (음악역 1939) — 우측
+═══════════════════════════════════════════ */
+{
+  const BX=20, BZ=-3;
+  const G=new THREE.Group(); G.position.set(BX,0,BZ); scene.add(G);
+  add(Box(17,4.0,6.5), mat('#e4e4da',{shininess:12,specular:0x888888}), 0,2.0,0, {p:G});
+  add(Box(17.2,1.1,6.6), mat('#8B3A3A',{shininess:4}), 0,0.55,0, {p:G});
+  add(Box(18.4,0.32,7.8), mat('#c8c8c0',{shininess:10,specular:0x666666}), 0,4.15,0, {p:G,cast:false});
+  add(Box(18.5,0.13,0.32), mat('#b0b0a8'), 0,4.4,0, {p:G,cast:false});
+  // 유리 밴드
+  add(Box(13,1.2,0.1), mat('#1a3050',{shininess:90,specular:0x446688,opacity:0.88,transparent:true}), 0,2.4,3.28, {p:G,cast:false});
+  // 중앙 출입문
+  add(Box(2.2,2.6,0.12), mat('#0a1828',{shininess:60,specular:0x224466}), 0,1.3,3.3, {p:G,cast:false});
+  // 기둥
+  [-7,7].forEach(x=> add(Box(0.55,4.1,6.6), mat('#cfcfc7',{shininess:8}), x,2.05,0, {p:G}) );
+  // 창
+  [-5.3,-2.6,2.6,5.3].forEach(x=> add(Box(1.7,0.95,0.08), mat('#204060',{shininess:80,specular:0x336699,opacity:0.75,transparent:true}), x,2.4,3.28, {p:G,cast:false}) );
+  // 간판: 음악역 1939 (전면)
+  const s1=spriteText('음악역  1939','#8B3A3A','#f4ead2',280); s1.position.set(BX,5.1,BZ+3.4); s1.scale.set(5.4,1.15,1); scene.add(s1);
+  // 지붕 M 스테이션
+  const s2=spriteText('M 스테이션','#2a1a08','#f4ead2',260); s2.position.set(BX,4.95,BZ-0.5); s2.scale.set(4.4,0.95,1); scene.add(s2);
+}
+
+/* ═══════════════════════════════════════════
+   무대 — 원형 광장 북쪽 (z≈-8)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(0,0,-8.2); scene.add(G);
+  add(Box(9,0.7,4.8), mat('#2e2e2e',{shininess:4}), 0,0.35,0, {p:G});
+  add(Box(9.2,0.1,5.0), mat('#1a1a1a',{shininess:0}), 0,0.72,0, {p:G,cast:false});
+  const tm = mat('#9a9e9f',{shininess:30,specular:0x444444});
+  [-3.8,3.8].forEach(px=>{
+    add(Box(0.09,5.0,0.09),tm,px,2.9,-2.0,{p:G});
+    add(Box(0.09,5.0,0.09),tm,px+0.18,2.9,-2.0,{p:G});
+  });
+  add(Box(8.0,0.14,0.14),tm,0,5.3,-2.0,{p:G});
+  // LED 스크린 (앞면 +z, 관객 쪽)
+  add(Box(6.8,2.9,0.16), mat('#111820',{shininess:0}), 0,3.5,-1.86, {p:G,cast:false,recv:false});
+  add(Box(6.8,0.12,0.18), mat('#c8762a',{shininess:4}), 0,2.0,-1.84, {p:G,cast:false});
+  // 스피커
+  [-3.3,3.3].forEach(x=>{
+    add(Box(0.75,1.4,0.6),mat('#1c1c1c',{shininess:2}),x,1.4,-1.8,{p:G});
+    add(Box(0.55,0.5,0.45),mat('#1c1c1c'),x,0.6,-1.8,{p:G});
+  });
+  // 삼각기 줄 (앞)
+  const pc=['#ff6b6b','#ffd93d','#6bcb77','#4d96ff','#ff6bff'];
+  add(Box(9,0.04,0.04),mat('#888888'),0,5.0,2.3,{p:G,cast:false});
+  for(let i=0;i<9;i++){
+    const f=add(Cyl(0,0.22,0.46,3),mat(pc[i%5],{shininess:4}),(i-4)*1.0,4.75,2.3,{p:G,cast:false});
+    f.rotation.y=Math.PI/3*i;
+  }
+  const s=spriteText('무대','#2a5a8c','#fff',150); s.position.set(0,6.1,0); s.scale.set(2.5,0.92,1); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   DJ 부스 — 광장 북서 (z≈-4)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(-5.6,0,-4.2); G.rotation.y=0.5; scene.add(G);
+  add(Box(2.6,0.1,1.6),mat('#b8a070'),0,0.05,0,{p:G,cast:false});
+  // 콘솔 데스크
+  add(Box(2.2,0.9,0.7),mat('#3a2f28',{shininess:10}),0,0.55,0.1,{p:G});
+  add(Box(2.3,0.1,0.8),mat('#5a4a3a',{shininess:14}),0,1.02,0.1,{p:G,cast:false});
+  // 턴테이블 2개
+  [-0.55,0.55].forEach(x=>{
+    add(Cyl(0.26,0.26,0.07,16),mat('#1a1a1a',{shininess:30}),x,1.09,0.1,{p:G,cast:false});
+    add(Cyl(0.09,0.09,0.08,12),mat('#c8762a',{shininess:20}),x,1.13,0.1,{p:G,cast:false});
+  });
+  // 캐노피 기둥 + 지붕
+  [[-1.1,-0.6],[1.1,-0.6],[-1.1,0.7],[1.1,0.7]].forEach(([px,pz])=>add(Cyl(0.05,0.05,2.3,6),mat('#7a6040'),px,1.15,pz,{p:G}));
+  const c=add(Cyl(0,1.9,1.0,4),mat('#5a9e6a',{shininess:4}),0,2.9,0.05,{p:G}); c.rotation.y=Math.PI/4;
+  const s=spriteText('🎧DJ','#9b6208','#fff',150); s.position.set(0,3.9,0); s.scale.set(2.3,0.9,1); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   빈백 쉼터 — 광장 중앙 좌 (z≈1.6)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(-3,0,1.6); scene.add(G);
+  // 잔디 매트
+  const mt=new THREE.Mesh(new THREE.CircleGeometry(2.6,32),mat('#8fc468',{shininess:0}));
+  mt.rotation.x=-Math.PI/2; mt.position.y=0.02; mt.receiveShadow=true; G.add(mt);
+  // 빈백 (납작한 구)
+  function bean(x,z,col){
+    const b=add(Sph(0.8,10,8),mat(col,{shininess:8}),x,0.42,z,{p:G});
+    b.scale.set(1,0.55,1);
+  }
+  bean(-0.7,0.3,'#f0dca8'); bean(0.8,-0.2,'#9cc46a'); bean(0.3,1.0,'#e8b878');
+  // 파라솔
+  add(Cyl(0.05,0.05,2.6,6),mat('#9a8458'),1.6,1.3,-0.9,{p:G});
+  const u=add(Cyl(0,1.5,0.8,8),mat('#e8e0c8',{shininess:4}),1.6,2.7,-0.9,{p:G,cast:false});
+  const s=spriteText('🛋️','#f4ead2','#2a1a08'); s.position.set(0,2.3,0); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   푸드트럭 — 광장 중앙 우 (z≈-1)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(4.2,0,-1); G.rotation.y=-0.5; scene.add(G);
+  add(Box(2.4,1.15,1.2),mat('#d04830',{shininess:16,specular:0x441111}),-0.25,0.75,0,{p:G});
+  add(Box(0.95,1.0,1.18),mat('#e06050',{shininess:10}),1.25,0.65,0,{p:G});
+  add(Box(1.3,0.5,0.06),mat('#2c2f33',{shininess:40}),-0.25,1.02,0.62,{p:G});
+  add(Box(1.45,0.06,0.36),mat('#f4efe4'),-0.25,0.76,0.82,{p:G,cast:false});
+  add(Box(1.7,0.07,0.5),mat('#b03020',{shininess:4}),-0.25,1.34,-0.66,{p:G,cast:false});
+  [[-0.85,0.5],[1.05,0.5],[-0.85,-0.5],[1.05,-0.5]].forEach(([ax,az])=>{
+    const w=add(Cyl(0.22,0.22,0.16,12),mat('#1a1a1a',{shininess:8}),ax,0.24,az,{p:G}); w.rotation.x=Math.PI/2;
+  });
+  const s=spriteText('🍔','#f4ead2','#2a1a08'); s.position.set(0,2.3,0); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   체험부스 A–F — 광장 좌·하단 호
+═══════════════════════════════════════════ */
+{
+  const booths = [
+    [-8.2,0,2.6,'A','#f0b43c'],
+    [-5.0,0,7.6,'B','#f0956e'],
+    [-2.3,0,8.8,'C','#7ecaa0'],
+    [ 0.4,0,9.1,'D','#7ab0f0'],
+    [ 3.1,0,8.7,'E','#d090d0'],
+    [ 5.6,0,7.5,'F','#f0a0b0'],
+  ];
+  booths.forEach(([bx,by,bz,letter,col])=>{
+    const G=new THREE.Group(); G.position.set(bx,by,bz); scene.add(G);
+    G.lookAt(0,0,0); // 광장 중심을 향하게
+    add(Box(2.6,0.08,2.6),mat('#c7b184'),0,0.04,0,{p:G,cast:false});
+    [[-1.0,-1.0],[-1.0,1.0],[1.0,-1.0],[1.0,1.0]].forEach(([px,pz])=>add(Cyl(0.05,0.05,2.4,6),mat('#8c7a60'),px,1.2,pz,{p:G}));
+    const c=add(Cyl(0,1.6,1.3,4),mat(col,{shininess:4}),0,2.75,0,{p:G}); c.rotation.y=Math.PI/4;
+    add(Box(2.4,1.0,0.07),mat(col,{opacity:0.72,transparent:true}),0,1.0,-1.3,{p:G,cast:false});
+    const s=spriteText(letter,col,'#2a1a08'); s.position.set(0,3.85,0); G.add(s);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   입장부스 (z≈6)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(10,0,6); scene.add(G);
+  add(Box(3.0,0.08,2.0),mat('#c7b184'),0,0.04,0,{p:G,cast:false});
+  [[-1.2,-0.8],[1.2,-0.8],[-1.2,0.8],[1.2,0.8]].forEach(([px,pz])=>add(Cyl(0.055,0.055,2.5,6),mat('#7a6040'),px,1.25,pz,{p:G}));
+  const c=add(Cyl(0,2.0,1.0,4),mat('#8a5fb0',{shininess:4}),0,2.9,0,{p:G}); c.rotation.y=Math.PI/4;
+  // 접수 데스크
+  add(Box(2.4,0.08,0.7),mat('#e0c890'),0,0.72,0.6,{p:G});
+  add(Box(2.4,0.6,0.08),mat('#b89868'),0,0.4,0.95,{p:G});
+  // 티켓 박스
+  add(Box(0.5,0.3,0.4),mat('#f0dca0'),0.7,0.9,0.5,{p:G});
+  const s=spriteText('🎟️입장','#8a5fb0','#fff',200); s.position.set(0,3.9,0); s.scale.set(3.0,0.9,1); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   책방 코너 (z≈14)
+═══════════════════════════════════════════ */
+{
+  const G=new THREE.Group(); G.position.set(9,0,14); scene.add(G);
+  // 체크 돗자리
+  const mt=new THREE.Mesh(new THREE.PlaneGeometry(3.2,2.6,8,6),mat('#e8d088',{shininess:0}));
+  mt.rotation.x=-Math.PI/2; mt.position.y=0.03; mt.receiveShadow=true; G.add(mt);
+  for(let i=0;i<8;i++)for(let j=0;j<6;j++){ if((i+j)%2) continue;
+    const q=new THREE.Mesh(Box(0.38,0.01,0.4),mat('#d8b85a')); q.position.set(-1.4+i*0.4,0.04,-1.1+j*0.42); q.receiveShadow=true; G.add(q);
+  }
+  // 펼친 책
+  add(Box(0.9,0.06,0.7),mat('#f4efe0'),0,0.12,0,{p:G});
+  const p1=add(Box(0.44,0.04,0.66),mat('#fdfaf0'),-0.23,0.17,0,{p:G,cast:false}); p1.rotation.z=0.12;
+  const p2=add(Box(0.44,0.04,0.66),mat('#fdfaf0'),0.23,0.17,0,{p:G,cast:false}); p2.rotation.z=-0.12;
+  // 작은 책장
+  add(Box(1.6,1.2,0.4),mat('#a9703f',{shininess:8}),0,0.6,-1.4,{p:G});
+  [0.35,0.75].forEach(y=>add(Box(1.5,0.05,0.36),mat('#8a5a2a'),0,y,-1.4,{p:G,cast:false}));
+  ['#d08040','#c05040','#4060a0','#4a8c40','#d8b030'].forEach((bc,i)=>add(Box(0.14,0.5,0.3),mat(bc),-0.6+i*0.3,0.62,-1.4,{p:G}));
+  const s=spriteText('📚책방','#8a5a2a','#fff',200); s.position.set(0,2.2,0); s.scale.set(3.0,0.9,1); G.add(s);
+}
+
+/* ═══════════════════════════════════════════
+   셀러부스 (z≈14, 우측)
+═══════════════════════════════════════════ */
+{
+  const cols=['#ff9f43','#ee5a24','#ffd32a','#7ab0f0'];
+  [[14,0,13.2],[16.2,0,13.6],[15.3,0,15.6]].forEach(([x,y,z],i)=>{
+    const G=new THREE.Group(); G.position.set(x,y,z); scene.add(G);
+    add(Box(3.2,0.08,2.8),mat('#c0a870'),0,0.04,0,{p:G,cast:false});
+    [[-1.3,-1.2],[-1.3,1.2],[1.3,-1.2],[1.3,1.2]].forEach(([px,pz])=>add(Cyl(0.055,0.055,2.5,6),mat('#7a6040'),px,1.25,pz,{p:G}));
+    const c=add(Cyl(0,2.0,1.3,4),mat(cols[i],{shininess:4}),0,2.85,0,{p:G}); c.rotation.y=Math.PI/4;
+    // 진열대
+    add(Box(2.4,0.08,0.6),mat('#e0c890'),0,0.72,0.8,{p:G});
+    [0.3,0.7,-0.2].forEach((bx,k)=>add(Box(0.3,0.3,0.3),mat(['#f0dca0','#e88','#9cd'][k]),-0.6+bx,0.9,0.8,{p:G}));
+    const s=spriteText('🛍️','#f4ead2','#2a1a08'); s.position.set(0,3.9,0); G.add(s);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   둥근 나무 · 들꽃 · 먼 언덕 (지브리풍)
+═══════════════════════════════════════════ */
+// 먼 롤링 힐 (깊이감)
+[[-42,-32,22,'#8bbb60'],[42,-36,26,'#83b45a'],[0,-50,32,'#93c56a'],[-58,22,28,'#7fae55'],[60,32,26,'#88ba5e']].forEach(([x,z,r,col])=>{
+  const h=new THREE.Mesh(new THREE.SphereGeometry(r,16,10),mat(col,{shininess:0}));
+  h.position.set(x,-r*0.72,z); h.scale.y=0.5; scene.add(h);
+});
+
+{
+  const positions=[];
+  const clusters=[
+    [-15,2,13,5,8],[-10,-9,5,4,3],[-19,10,6,3,5],[-18,-7,4,3,3],
+    [1,-15,8,10,3],[9,-13,3,3,2],
+    [41,-4,7,3,8],[43,9,6,3,6],[36,15,6,4,4],[20,-13,5,7,2],[39,-13,4,3,3],
+    [3,16.5,3,3,2],[-5,16,3,4,2],
+  ];
+  clusters.forEach(([cx,cz,ct,sx,sz])=>{ for(let i=0;i<ct;i++) positions.push([cx+(Math.random()-0.5)*2*sx, cz+(Math.random()-0.5)*2*sz, 0]); });
+  for(let x=-24;x<=42;x+=2.4) positions.push([x+(Math.random()-0.5), 19.5+(Math.random()-0.5)*1.6, 1]);
+  const keep=positions.filter(([x,z])=>{
+    if(Math.hypot(x,z)<11) return false;
+    if(x>10&&x<30&&z>-8&&z<3) return false;
+    if(x>28&&x<41&&z>-8&&z<13) return false;
+    if(Math.hypot(x-9,z-13.5)<4) return false;
+    if(Math.hypot(x-15.5,z-13.8)<4.2) return false;
+    if(Math.hypot(x-10,z-6)<3) return false;
+    return true;
+  });
+  const n=keep.length;
+  const o=new THREE.Object3D(), c=new THREE.Color();
+  const greens=['#79b254','#8cc062','#6aa247','#9ccb6e','#5e9640','#86bd5a'];
+  // 줄기 + 2단 뭉게 캐노피 (복슬복슬)
+  const trk=new THREE.InstancedMesh(Cyl(0.14,0.2,1.1,6),mat('#8a6a46'),n); trk.castShadow=true; trk.receiveShadow=true;
+  const cMat1=new THREE.MeshPhongMaterial({flatShading:true,shininess:2});
+  const cMat2=new THREE.MeshPhongMaterial({flatShading:true,shininess:2});
+  const c1=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(1.25,1),cMat1,n); c1.castShadow=true; c1.receiveShadow=true;
+  const c2=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.85,1),cMat2,n); c2.castShadow=true;
+  keep.forEach(([x,z,hedge],i)=>{
+    const s=hedge? 0.7+Math.random()*0.3 : 1.0+Math.random()*0.8;
+    const col=greens[(i*3+(hedge?1:0))%greens.length];
+    o.position.set(x,0.55*s,z); o.scale.set(s,s*1.1,s); o.rotation.y=Math.random()*6.28; o.updateMatrix(); trk.setMatrixAt(i,o.matrix);
+    o.position.set(x,1.55*s,z); o.scale.set(s*1.25,s*1.05,s*1.25); o.rotation.y=Math.random()*6.28; o.updateMatrix(); c1.setMatrixAt(i,o.matrix); c1.setColorAt(i,c.set(col));
+    o.position.set(x+(Math.random()-0.5)*0.5,2.5*s,z+(Math.random()-0.5)*0.5); o.scale.set(s*0.85,s*0.9,s*0.85); o.rotation.y=Math.random()*6.28; o.updateMatrix(); c2.setMatrixAt(i,o.matrix); c2.setColorAt(i,c.set(col));
+  });
+  scene.add(trk,c1,c2);
+
+  // 덤불
+  const bn=26;
+  const bush=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.55,1),new THREE.MeshPhongMaterial({flatShading:true,shininess:4}),bn);
+  bush.castShadow=true;
+  const bclu=[[-14,1],[-16,8],[-11,-6],[2,-13],[27,-1],[24,9],[-6,15],[16,17]];
+  for(let i=0;i<bn;i++){ const base=bclu[i%bclu.length]; const x=base[0]+(Math.random()-0.5)*5, z=base[1]+(Math.random()-0.5)*5;
+    const s=0.5+Math.random()*0.5; o.position.set(x,0.32*s,z); o.scale.set(s,s*0.8,s); o.rotation.y=Math.random()*6.28; o.updateMatrix(); bush.setMatrixAt(i,o.matrix); bush.setColorAt(i,c.set(['#7cb24a','#88bd52','#6aa83e'][i%3])); }
+  scene.add(bush);
+
+  // 들꽃
+  const fpos=[]; const fclu=[[-13,6],[-16,-2],[-9,13],[5,-13],[33,3],[30,12],[-3,15],[20,16],[12,-11],[-20,4]];
+  for(let i=0;i<120 && fpos.length<64;i++){ const b=fclu[i%fclu.length]; const x=b[0]+(Math.random()-0.5)*7, z=b[1]+(Math.random()-0.5)*7;
+    if(Math.hypot(x,z)<11) continue;
+    if(x>10&&x<30&&z>-8&&z<3) continue;
+    if(x>28&&x<41&&z>-8&&z<13) continue;
+    fpos.push([x,z]);
+  }
+  const fn=fpos.length;
+  const stem=new THREE.InstancedMesh(Cyl(0.02,0.02,0.42,4),mat('#5a9440'),fn);
+  const petal=new THREE.InstancedMesh(new THREE.IcosahedronGeometry(0.2,0),new THREE.MeshPhongMaterial({flatShading:true,shininess:10}),fn);
+  const fcol=['#ffd9e6','#fff1a8','#ffffff','#ffc9a0','#e6c6ff','#ffb3c8'];
+  fpos.forEach(([x,z],i)=>{
+    o.position.set(x,0.21,z); o.scale.set(1,1,1); o.rotation.set(0,0,0); o.updateMatrix(); stem.setMatrixAt(i,o.matrix);
+    const s=0.75+Math.random()*0.6; o.position.set(x,0.45,z); o.scale.set(s,s*0.7,s); o.rotation.y=Math.random()*6.28; o.updateMatrix(); petal.setMatrixAt(i,o.matrix); petal.setColorAt(i,c.set(fcol[i%fcol.length]));
+  });
+  scene.add(stem,petal);
+}
+
+/* ═══ 뭉게구름 (천천히 흐름) ═══ */
+const clouds=[];
+{
+  const cm=new THREE.MeshPhongMaterial({color:'#fdfdf8',flatShading:true,shininess:0,emissive:'#fff2df',emissiveIntensity:0.3});
+  [[-52,52,-30,1.0],[30,60,-52,0.8],[72,56,10,1.1],[-32,66,42,0.7],[10,58,62,0.9],[-72,54,20,0.85]].forEach(([x,y,z,sp])=>{
+    const g=new THREE.Group(); g.position.set(x,y,z);
+    [[0,0,0,6],[5,-1,1,4.5],[-5,-0.5,-1,5],[2,1.4,2,3.6],[-3,1,2,3.9]].forEach(([dx,dy,dz,r])=>{
+      const m=new THREE.Mesh(new THREE.IcosahedronGeometry(r,1),cm); m.position.set(dx,dy,dz); m.scale.y=0.6; g.add(m);
+    });
+    g.userData.sp=sp*0.5; scene.add(g); clouds.push(g);
+  });
+}
+
+/* ── 가로등 ── */
+[[-10,4,'#ffcc66'],[10,-2,'#99ccff'],[7,11,'#ff9999'],[16,8,'#99ff99']].forEach(([x,z,bc])=>{
+  add(Cyl(0.055,0.075,4.0,6),mat('#4a4a4a'),x,2,z);
+  add(Sph(0.5,8,6),mat(bc,{emissive:bc,emissiveIntensity:0.3,shininess:60}),x,4.4,z,{cast:false});
+});
+
+/* ── 철로 (M 스테이션 뒤) ── */
+for(let i=0;i<20;i++){
+  add(Box(0.12,0.07,0.7),mat('#6a6050'),9+i,0.03,-7.6,{cast:false});
+  add(Box(0.12,0.07,0.7),mat('#6a6050'),9+i,0.03,-8.5,{cast:false});
+}
+for(let i=0;i<11;i++) add(Box(0.6,0.055,1.0),mat('#5c4a30'),10+i*1.6,0.025,-8.05,{cast:false});
+
+/* ═══════════════════════════════════════════
+   멍춘선 마스코트 (헤드폰 강아지) — 3인칭 캐릭터
+═══════════════════════════════════════════ */
+function makeDog(){
+  const G=new THREE.Group();
+  const fur=mat('#c8803a',{shininess:8}), furD=mat('#9a5a28',{shininess:8}), cream=mat('#f0d8b0',{shininess:6});
+  add(Box(1.1,0.85,1.7),fur,0,0.95,0,{p:G});
+  add(Box(0.9,0.42,1.5),cream,0,0.64,0.06,{p:G,cast:false});
+  // 머리
+  const head=new THREE.Group(); head.position.set(0,1.55,0.95); G.add(head);
+  add(Box(0.86,0.78,0.78),fur,0,0,0,{p:head});
+  add(Box(0.44,0.38,0.42),cream,0,-0.12,0.46,{p:head});
+  add(Sph(0.1,8,6),mat('#2a1a08'),0,-0.05,0.68,{p:head,cast:false});
+  [-0.22,0.22].forEach(x=>add(Sph(0.08,8,6),mat('#2a1a08'),x,0.12,0.4,{p:head,cast:false}));
+  [-0.48,0.48].forEach(x=>{ const e=add(Box(0.18,0.42,0.3),furD,x,0.28,-0.04,{p:head}); e.rotation.z=x>0?0.28:-0.28; });
+  // 헤드폰
+  const band=add(new THREE.TorusGeometry(0.52,0.07,6,18,Math.PI),mat('#2a5a8c',{shininess:30}),0,0.3,0,{p:head,cast:false});
+  [-0.52,0.52].forEach(x=>{ const pad=add(Cyl(0.17,0.17,0.14,12),mat('#e0803a',{shininess:20}),x,0.06,0,{p:head}); pad.rotation.z=Math.PI/2; });
+  // 다리
+  const legs=[];
+  [[-0.38,0.55],[0.38,0.55],[-0.38,-0.55],[0.38,-0.55]].forEach(([x,z])=>{
+    const l=add(Box(0.27,0.62,0.3),furD,x,0.31,z,{p:G}); legs.push(l);
+  });
+  // 꼬리
+  const tail=add(Cyl(0.06,0.13,0.62,6),fur,0,1.2,-0.95,{p:G}); tail.rotation.x=-0.8;
+  G.traverse(o=>{ o.castShadow=true; });
+  return {group:G, legs, tail};
+}
+const dog = makeDog();
+dog.group.position.set(10,0,11);
+dog.group.rotation.y = Math.PI; // 광장(북)을 바라봄
+scene.add(dog.group);
+
+/* ═══════════════════════════════════════════
+   HTML LABELS
+═══════════════════════════════════════════ */
+const labelsEl = document.getElementById('labels');
+const lblDivs = {};
+const tmpV = new V3();
+
+SPOTS.forEach(spot=>{
+  const d=document.createElement('button');
+  d.className='lbl'+(spot.prize?' prize':'');
+  d.setAttribute('aria-label', spot.name);
+  d.innerHTML=`<i style="background:${spot.prize?'#ffd040':spot.color};border-color:${spot.prize?'#ffd040':spot.color}"></i>${spot.label}`;
+  d.addEventListener('click',()=>{ if(!walkMode) flyToSpot(spot); openCard(spot); });
+  labelsEl.appendChild(d);
+  lblDivs[spot.id]=d;
+});
+
+function updateLabels(){
+  SPOTS.forEach(spot=>{
+    const d=lblDivs[spot.id];
+    tmpV.copy(spot.pos); tmpV.y=spot.labelY||2.2;
+    const proj=tmpV.clone().project(camera);
+    if(proj.z>1){ d.style.display='none'; return; }
+    const x=(proj.x+1)/2*innerWidth;
+    const y=(-proj.y+1)/2*innerHeight;
+    if(x<-120||x>innerWidth+120||y<-80||y>innerHeight+80){ d.style.display='none'; return; }
+    d.style.display='inline-flex';
+    d.style.left=x+'px';
+    d.style.top=y+'px';
+    d.style.transform=`translate(-50%,-100%) translateY(-8px)`;
+    d.style.zIndex=Math.round((1-proj.z)*100);
+  });
+}
+
+/* ═══════════════════════════════════════════
+   INFO CARD
+═══════════════════════════════════════════ */
+const card=document.getElementById('card');
+const cardStrip=document.getElementById('cardStrip');
+const cardName=document.getElementById('cardName');
+const cardMeta=document.getElementById('cardMeta');
+const cardDesc=document.getElementById('cardDesc');
+const cardPrize=document.getElementById('cardPrize');
+let hintGone=false;
+
+function openCard(spot){
+  cardStrip.style.background=spot.prize?'#c8762a':'var(--ink)';
+  cardMeta.textContent=spot.prize?'🎁 선물 증정 프로그램':'장소 안내';
+  cardName.textContent=spot.name;
+  cardDesc.textContent=spot.desc;
+  if(spot.prize){ cardPrize.textContent=spot.prizeDesc; cardPrize.removeAttribute('hidden'); }
+  else { cardPrize.setAttribute('hidden',''); }
+  card.removeAttribute('hidden');
+  document.querySelectorAll('.lbl').forEach(d=>d.classList.remove('on'));
+  if(lblDivs[spot.id]) lblDivs[spot.id].classList.add('on');
+  if(!hintGone){ document.getElementById('hint').classList.add('gone'); hintGone=true; }
+}
+document.getElementById('cardX').addEventListener('click',()=>{
+  card.setAttribute('hidden','');
+  document.querySelectorAll('.lbl').forEach(d=>d.classList.remove('on'));
+});
+
+/* ── 하단 칩 ── */
+const quickEl=document.getElementById('quick');
+[{id:'stage',prize:true},{id:'dj',prize:true},{id:'booth'},{id:'entrance'},{id:'seller'},{id:'station'}].forEach(({id,prize})=>{
+  const spot=SPOTS.find(s=>s.id===id); if(!spot) return;
+  const btn=document.createElement('button');
+  btn.className='chip'+(prize?' prize-chip':'');
+  btn.innerHTML=`<i style="background:${prize?'#ffd040':'var(--ink)'}"></i>${spot.label}`;
+  btn.addEventListener('click',()=>{ flyToSpot(spot); setTimeout(()=>openCard(spot),600); });
+  quickEl.appendChild(btn);
+});
+
+/* ═══════════════════════════════════════════
+   뷰 전환 (하늘에서 / 지도로 / 걸어서)
+═══════════════════════════════════════════ */
+function press(id){ ['mSky','mMap','mWalk'].forEach(b=>document.getElementById(b).setAttribute('aria-pressed', b===id?'true':'false')); }
+document.getElementById('mSky').addEventListener('click',()=>{ press('mSky'); exitWalk(); flyTo(VIEWS.sky); });
+document.getElementById('mMap').addEventListener('click',()=>{ press('mMap'); exitWalk(); flyTo(VIEWS.map); });
+document.getElementById('mWalk').addEventListener('click',()=>{ press('mWalk'); enterWalk(); });
+
+/* ═══════════════════════════════════════════
+   3인칭 걷기 컨트롤러
+═══════════════════════════════════════════ */
+let walkMode=false;
+let camYaw=0, camPitch=0.6, camDist=13;
+let walkPhase=0, lastProx=null;
+const keys={};
+const joyVec={x:0,y:0};
+
+function enterWalk(){
+  walkMode=true; document.body.classList.add('walk');
+  controls.enabled=false; stopTour();
+  const cp=dog.group.position;
+  camYaw=0; camPitch=0.58; camDist=13;
+  camera.position.set(cp.x, cp.y+9, cp.z+13);
+  card.setAttribute('hidden','');
+  document.querySelectorAll('.lbl').forEach(d=>d.classList.remove('on'));
+  lastProx=null;
+  canvas.focus();
+}
+function exitWalk(){
+  if(!walkMode) return;
+  walkMode=false; document.body.classList.remove('walk');
+  controls.enabled=true;
+  controls.target.set(dog.group.position.x, 0, dog.group.position.z);
+}
+
+function updateWalk(dt){
+  const cp=dog.group.position;
+  // 카메라 기준 이동축
+  const fx=-Math.sin(camYaw), fz=-Math.cos(camYaw);         // 전방(화면 위)
+  const rx= Math.cos(camYaw), rz=-Math.sin(camYaw);         // 우측
+  let inF = (keys['w']||keys['arrowup']?1:0) - (keys['s']||keys['arrowdown']?1:0) + joyVec.y;
+  let inR = (keys['d']||keys['arrowright']?1:0) - (keys['a']||keys['arrowleft']?1:0) + joyVec.x;
+  inF=clamp(inF,-1,1); inR=clamp(inR,-1,1);
+  let mx=fx*inF+rx*inR, mz=fz*inF+rz*inR;
+  const mag=Math.hypot(mx,mz);
+  let moving=false;
+  if(mag>0.08){
+    mx/=mag; mz/=mag; moving=true;
+    const speed=7.2;
+    cp.x=clamp(cp.x+mx*speed*dt, -26, 44);
+    cp.z=clamp(cp.z+mz*speed*dt, -14, 19);
+    // 부드러운 방향 회전
+    const tgt=Math.atan2(mx,mz);
+    let dy=tgt-dog.group.rotation.y;
+    while(dy>Math.PI)dy-=2*Math.PI; while(dy<-Math.PI)dy+=2*Math.PI;
+    dog.group.rotation.y+=dy*Math.min(1,dt*12);
+  }
+  // 걷기 애니메이션
+  if(moving){
+    walkPhase+=dt*11;
+    const sw=Math.sin(walkPhase)*0.5;
+    dog.legs[0].rotation.x= sw; dog.legs[3].rotation.x= sw;
+    dog.legs[1].rotation.x=-sw; dog.legs[2].rotation.x=-sw;
+    dog.group.position.y=Math.abs(Math.sin(walkPhase))*0.06;
+    dog.tail.rotation.z=Math.sin(walkPhase*2)*0.3;
+  } else {
+    dog.legs.forEach(l=>l.rotation.x*=0.8);
+    dog.group.position.y*=0.8;
+  }
+  // 카메라 추적
+  const ox=Math.sin(camYaw)*Math.cos(camPitch)*camDist;
+  const oy=Math.sin(camPitch)*camDist;
+  const oz=Math.cos(camYaw)*Math.cos(camPitch)*camDist;
+  camera.position.lerp(new V3(cp.x+ox, cp.y+oy+0.8, cp.z+oz), 0.14);
+  camera.lookAt(cp.x, cp.y+1.3, cp.z);
+  // 근접 안내
+  let best=null,bd=1e9;
+  SPOTS.forEach(s=>{ const d=Math.hypot(s.pos.x-cp.x, s.pos.z-cp.z); if(d<bd){bd=d;best=s;} });
+  if(best && bd<4.2){ if(lastProx!==best.id){ lastProx=best.id; openCard(best); } }
+  else if(bd>5.5){ lastProx=null; }
+}
+
+/* 키보드 */
+window.addEventListener('keydown',e=>{
+  const k=e.key.toLowerCase();
+  if(['w','a','s','d','arrowup','arrowdown','arrowleft','arrowright'].includes(k)){ keys[k]=true; if(walkMode) e.preventDefault(); }
+});
+window.addEventListener('keyup',e=>{ keys[e.key.toLowerCase()]=false; });
+
+/* 마우스/터치 시점 드래그 (걷기 모드) */
+let dragging=false, lastX=0, lastY=0;
+canvas.addEventListener('pointerdown',e=>{
+  if(isTour){ stopTour(); return; }
+  if(!walkMode) return;
+  dragging=true; lastX=e.clientX; lastY=e.clientY;
+});
+window.addEventListener('pointermove',e=>{
+  if(!dragging||!walkMode) return;
+  camYaw -= (e.clientX-lastX)*0.005;
+  camPitch = clamp(camPitch-(e.clientY-lastY)*0.005, 0.2, 1.25);
+  lastX=e.clientX; lastY=e.clientY;
+});
+window.addEventListener('pointerup',()=>{ dragging=false; });
+canvas.addEventListener('wheel',e=>{ if(!walkMode) return; camDist=clamp(camDist+e.deltaY*0.02,7,26); e.preventDefault(); },{passive:false});
+
+/* 조이스틱 (터치) */
+const joy=document.getElementById('joy'), knob=document.getElementById('joyknob');
+let joyId=null;
+function joyMove(e){
+  const r=joy.getBoundingClientRect();
+  const cx=r.left+r.width/2, cy=r.top+r.height/2;
+  let dx=e.clientX-cx, dy=e.clientY-cy;
+  const R=r.width/2-12, d=Math.hypot(dx,dy);
+  if(d>R){ dx*=R/d; dy*=R/d; }
+  knob.style.transform=`translate(calc(-50% + ${dx}px), calc(-50% + ${dy}px))`;
+  joyVec.x=dx/R; joyVec.y=-dy/R;
+}
+joy.addEventListener('pointerdown',e=>{ joyId=e.pointerId; joy.setPointerCapture(e.pointerId); joyMove(e); e.preventDefault(); });
+joy.addEventListener('pointermove',e=>{ if(e.pointerId===joyId) joyMove(e); });
+function joyEnd(e){ if(joyId===null)return; joyId=null; joyVec.x=0; joyVec.y=0; knob.style.transform='translate(-50%,-50%)'; }
+joy.addEventListener('pointerup',joyEnd);
+joy.addEventListener('pointercancel',joyEnd);
+
+/* ═══════════════════════════════════════════
+   자동 투어
+═══════════════════════════════════════════ */
+const TOUR_IDS=['entrance','booth','dj','beanbag','food','stage','book','seller','station'];
+const TOUR=TOUR_IDS.map(id=>SPOTS.find(s=>s.id===id)).filter(Boolean);
+let tourIdx=0, tourTimer=null, isTour=false;
+function startTour(){
+  exitWalk(); press('mSky');
+  isTour=true; document.body.classList.add('auto');
+  document.getElementById('btnAuto').setAttribute('aria-pressed','true');
+  tourIdx=0; runTour();
+}
+function stopTour(){
+  isTour=false; document.body.classList.remove('auto');
+  document.getElementById('btnAuto').setAttribute('aria-pressed','false');
+  if(tourTimer){ clearTimeout(tourTimer); tourTimer=null; }
+}
+function runTour(){
+  if(!isTour||tourIdx>=TOUR.length){ stopTour(); return; }
+  const spot=TOUR[tourIdx++];
+  openCard(spot);
+  flyToSpot(spot, ()=>{ if(isTour) tourTimer=setTimeout(runTour,2800); });
+}
+document.getElementById('btnAuto').addEventListener('click',function(){
+  if(isTour) stopTour(); else startTour();
+});
+
+/* ═══════════════════════════════════════════
+   클릭으로 스팟 선택 (orbit 모드)
+═══════════════════════════════════════════ */
+const raycaster=new THREE.Raycaster();
+const mouse=new THREE.Vector2();
+const spotMeshMap=new Map();
+SPOTS.forEach(spot=>{
+  const m=new THREE.Mesh(Cyl(2,2,0.5,12),new THREE.MeshBasicMaterial({visible:false}));
+  m.position.copy(spot.pos); m.position.y=0.25; scene.add(m);
+  spotMeshMap.set(m.uuid, spot);
+});
+canvas.addEventListener('click',function(e){
+  if(isTour||walkMode) return;
+  const rect=canvas.getBoundingClientRect();
+  mouse.x=((e.clientX-rect.left)/rect.width)*2-1;
+  mouse.y=-((e.clientY-rect.top)/rect.height)*2+1;
+  raycaster.setFromCamera(mouse,camera);
+  const meshes=[...spotMeshMap.keys()].map(id=>scene.getObjectByProperty('uuid',id)).filter(Boolean);
+  const hits=raycaster.intersectObjects(meshes);
+  if(hits.length){ const spot=spotMeshMap.get(hits[0].object.uuid); if(spot){ flyToSpot(spot); setTimeout(()=>openCard(spot),300); } }
+});
+
+/* ═══════════════════════════════════════════
+   RENDER LOOP
+═══════════════════════════════════════════ */
+let lastT=performance.now();
+function animate(){
+  requestAnimationFrame(animate);
+  const now=performance.now(); const dt=Math.min((now-lastT)/1000,0.05); lastT=now;
+  if(walkMode) updateWalk(dt); else controls.update();
+  for(let i=0;i<clouds.length;i++){ clouds[i].position.x+=clouds[i].userData.sp*dt; if(clouds[i].position.x>96) clouds[i].position.x=-96; }
+  renderer.render(scene,camera);
+  updateLabels();
+}
+animate();
+
+setTimeout(()=>{
+  document.getElementById('load').classList.add('done');
+  flyTo(VIEWS.sky);
+}, 400);
+
+})();
+</script>
+</body>
+</html>
