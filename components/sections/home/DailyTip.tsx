@@ -66,19 +66,6 @@ export default function DailyTip() {
           전체 꿀팁 →
         </Link>
       </div>
-      <button
-        type="button"
-        onClick={() => setTip((cur) => TIPS[(TIPS.indexOf(cur) + 1) % TIPS.length])}
-        style={{
-          marginLeft: isMobile ? 0 : 'auto', flexShrink: 0,
-          width: isMobile ? '100%' : 'auto',
-          padding: '10px 18px', borderRadius: 999,
-          border: '1.5px solid #bbf7d0', background: '#fff', color: '#15803d',
-          fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
-        }}
-      >
-        다른 팁 보기 →
-      </button>
     </motion.section>
   );
 }
