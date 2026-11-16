@@ -58,6 +58,19 @@ export default function DailyTip() {
         <div style={{ fontSize: isMobile ? 13 : 14, color: '#111', fontWeight: 700, marginBottom: 2 }}>{tip.title}</div>
         <p style={{ fontSize: isMobile ? 13 : 14, color: '#374151', lineHeight: 1.6, margin: 0 }}>{tip.text}</p>
       </div>
+      <button
+        type="button"
+        onClick={() => setTip((cur) => TIPS[(TIPS.indexOf(cur) + 1) % TIPS.length])}
+        style={{
+          marginLeft: isMobile ? 0 : 'auto', flexShrink: 0,
+          width: isMobile ? '100%' : 'auto',
+          padding: '10px 18px', borderRadius: 999,
+          border: '1.5px solid #bbf7d0', background: '#fff', color: '#15803d',
+          fontSize: 13, fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit',
+        }}
+      >
+        다른 팁 보기 →
+      </button>
     </motion.section>
   );
 }

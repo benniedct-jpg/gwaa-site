@@ -1,16 +1,14 @@
 import crypto from 'crypto';
+import { adminSecret } from '@/lib/security/secrets';
 
-// 관리자 세션 서명 비밀키 (서버 전용). 회원증 토큰과 동일한 비밀 소스 재활용.
-const SECRET =
-  process.env.ADMIN_SECRET ||
-  process.env.MEMBERSHIP_SECRET ||
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  'gwaa-dev-admin-secret';
+// 관리자 세션 서명 비밀키 (서버 전용). 운영에서 환경변수가 없으면 null → 발급·검증 모두 거부.
 
 const now = () => Math.floor(Date.now() / 1000);
 
 /** HMAC 서명된 관리자 세션 토큰 발급 (기본 8시간) */
 export function signAdmin(ttlSec = 60 * 60 * 8): string {
+  const SECRET = adminSecret();
+  if (!SECRET) throw new Error('ADMIN_SECRET 환경변수가 설정되지 않았습니다.');
   const payload = { t: 'a', e: now() + ttlSec };
   const p = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', SECRET).update(p).digest('base64url');
@@ -19,6 +17,8 @@ export function signAdmin(ttlSec = 60 * 60 * 8): string {
 
 /** 관리자 세션 토큰 검증 — 서명 위조·만료 시 false. 고정값 위조 불가. */
 export function verifyAdmin(token: string | undefined | null): boolean {
+  const SECRET = adminSecret();
+  if (!SECRET) return false;
   const parts = (token || '').split('.');
   if (parts.length !== 2) return false;
   const [p, sig] = parts;

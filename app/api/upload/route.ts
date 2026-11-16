@@ -34,7 +34,11 @@ export async function POST(req: NextRequest) {
     fileSizeLimit: 15 * 1024 * 1024,
   });
 
-  const ext = file.name.split('.').pop()?.toLowerCase() ?? 'jpg';
+  // 확장자는 파일명이 아니라 검증된 MIME 타입에서 결정 (이미지 외 파일·위장 확장자 차단)
+  const EXT: Record<string, string> = { 'image/jpeg': 'jpg', 'image/png': 'png', 'image/webp': 'webp', 'image/gif': 'gif' };
+  const ext = EXT[file.type];
+  if (!ext) return NextResponse.json({ error: '이미지 파일(jpg·png·webp·gif)만 업로드할 수 있습니다.' }, { status: 400 });
+  if (file.size > 15 * 1024 * 1024) return NextResponse.json({ error: '파일이 너무 큽니다. (최대 15MB)' }, { status: 400 });
   const path = `${Date.now()}-${Math.random().toString(36).slice(2, 8)}.${ext}`;
   const bytes = await file.arrayBuffer();
 

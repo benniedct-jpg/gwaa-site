@@ -8,6 +8,7 @@ import { LookbookItem } from '@/types';
 import Eyebrow from '@/components/ui/Eyebrow';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
+import { safeLink } from '@/lib/utils';
 
 const BG_GRADIENTS = [
   'linear-gradient(135deg,#e8f5e9 0%,#a5d6a7 100%)',
@@ -69,7 +70,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {main && (
               <motion.a
-                href={main.link}
+                href={safeLink(main.link)}
                 variants={fadeUp}
                 style={{
                   height: 200,
@@ -92,7 +93,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
               {rest.slice(0, 4).map((item, i) => (
                 <motion.a
                   key={item.id ?? i}
-                  href={item.link}
+                  href={safeLink(item.link)}
                   variants={fadeUp}
                   custom={i * 0.04}
                   style={{
@@ -127,7 +128,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
           }}>
             {main && (
               <motion.a
-                href={main.link}
+                href={safeLink(main.link)}
                 variants={fadeUp}
                 whileHover={{ scale: 1.015 }}
                 style={{
@@ -150,7 +151,7 @@ export default function Lookbook({ initialData }: { initialData?: LookbookItem[]
             {rest.slice(0, 4).map((item, i) => (
               <motion.a
                 key={item.id ?? i}
-                href={item.link}
+                href={safeLink(item.link)}
                 variants={fadeUp}
                 custom={i * 0.04}
                 whileHover={{ scale: 1.02 }}

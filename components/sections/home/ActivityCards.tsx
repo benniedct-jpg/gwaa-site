@@ -11,6 +11,7 @@ import Badge from '@/components/ui/Badge';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import { CardSkeleton } from '@/components/ui/Skeleton';
+import { safeLink } from '@/lib/utils';
 
 const TAG_COLORS: Record<string, 'green' | 'blue' | 'amber'> = {
   green: 'green', blue: 'blue', amber: 'amber',
@@ -79,7 +80,7 @@ function TiltCard({ card, isMobile }: { card: ActivityCard; isMobile: boolean })
           {card.desc}
         </p>
         <Link
-          href={card.link}
+          href={safeLink(card.link)}
           style={{
             display: 'inline-flex', alignItems: 'center', gap: 6,
             fontFamily: "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif",

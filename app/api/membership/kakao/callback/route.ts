@@ -17,6 +17,11 @@ export async function GET(req: NextRequest) {
   const code = req.nextUrl.searchParams.get('code');
   if (!code) return back('kakao');
 
+  // state 대조 (CSRF 방지)
+  const state = req.nextUrl.searchParams.get('state');
+  const expected = req.cookies.get('gwaa_kakao_state')?.value;
+  if (!state || !expected || state !== expected) return back('kakao');
+
   const restKey = process.env.KAKAO_CLIENT_ID || process.env.KAKAO_REST_KEY;
   const secret = process.env.KAKAO_CLIENT_SECRET || '';
   if (!restKey) return back('config');
