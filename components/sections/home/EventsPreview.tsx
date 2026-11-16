@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { useGWAADB } from '@/hooks/useGWAADB';
@@ -17,10 +18,13 @@ const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-ser
 // 플래그십(올해 가장 큰 행사) = 2026 Camping with Petscout
 const FLAGSHIP_ID = 3;
 const FLAGSHIP_DATE = '2026-09-04';
+const FLAGSHIP_END = '2026-09-06'; // 이 날이 지나면 '예약하기' 스포트라이트를 내리고 지난 행사로 돌린다
+const KAKAO_CHANNEL = 'https://pf.kakao.com/_wipZX';
 
 export default function EventsPreview({ initialData }: { initialData?: EventCard[] }) {
   const { data: events, loading } = useGWAADB<EventCard>(STORES.EVENT, initialData);
   const isMobile = useIsMobile();
+  const [now] = useState(() => Date.now()); // 렌더 중 시각 고정
   const px = isMobile ? '20px' : '60px';
 
   const sorted = [...events].sort((a, b) => {
@@ -30,11 +34,17 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
     return (b.order || 0) - (a.order || 0);
   });
 
-  const flagship = sorted.find((e) => (e.id ?? e.order) === FLAGSHIP_ID);
+  const flagshipCard = sorted.find((e) => (e.id ?? e.order) === FLAGSHIP_ID);
+  // 플래그십은 행사 기간이 끝나기 전(그리고 종료 처리 전)까지만 '지금 예약하기'로 노출
+  const flagshipOver = now > new Date(FLAGSHIP_END + 'T23:59:59+09:00').getTime();
+  const flagship = flagshipCard && flagshipCard.status !== 'ended' && !flagshipOver ? flagshipCard : undefined;
   // 종료(ended) 행사·플래그십 제외 → 나머지 다가오는 행사
   const others = sorted.filter((e) => (e.id ?? e.order) !== FLAGSHIP_ID && e.status !== 'ended');
+  // 예정 행사가 하나도 없을 때 보여줄 최근 지난 행사 (빈 섹션 대신)
+  const hasUpcoming = !!flagship || others.length > 0;
+  const past = sorted.filter((e) => e.status === 'ended' || ((e.id ?? e.order) === FLAGSHIP_ID && !flagship));
 
-  const ddayNum = Math.ceil((new Date(FLAGSHIP_DATE + 'T00:00:00').getTime() - Date.now()) / 86400000);
+  const ddayNum = Math.ceil((new Date(FLAGSHIP_DATE + 'T00:00:00').getTime() - now) / 86400000);
   const ddayLabel = ddayNum > 0 ? `D-${ddayNum}` : ddayNum === 0 ? 'TODAY' : 'ENDED';
 
   return (
@@ -60,10 +70,12 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
               color: '#111', letterSpacing: '0.02em', lineHeight: 1,
               marginBottom: 4,
             }}>
-              다가오는 행사
+              {loading || hasUpcoming ? '다가오는 행사' : '다음 행사 준비 중'}
             </h2>
             <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, fontWeight: 400 }}>
-              강원도 곳곳에서 펼쳐지는 반려동물 행사를 만나보세요.
+              {loading || hasUpcoming
+                ? '강원도 곳곳에서 펼쳐지는 반려동물 행사를 만나보세요.'
+                : '새 행사가 열리면 가장 먼저 알려드릴게요. 그동안 지난 행사를 둘러보세요.'}
             </p>
           </motion.div>
           <Link
@@ -104,6 +116,61 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                   </div>
                 </Link>
               </motion.div>
+            )}
+
+            {/* 예정 행사가 없을 때 — 알림 신청 + 최근 지난 행사 */}
+            {!hasUpcoming && (
+              <>
+                <motion.div variants={fadeUp} style={{
+                  display: 'flex', flexDirection: isMobile ? 'column' : 'row',
+                  alignItems: isMobile ? 'stretch' : 'center', justifyContent: 'space-between', gap: 16,
+                  background: '#fff', border: '1.5px solid #bbf7d0', borderRadius: 14,
+                  padding: isMobile ? '20px' : '22px 28px', marginBottom: past.length ? (isMobile ? 16 : 20) : 0,
+                }}>
+                  <div>
+                    <p style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 4, wordBreak: 'keep-all' }}>다음 행사 소식, 놓치지 마세요</p>
+                    <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, wordBreak: 'keep-all' }}>카카오톡 채널을 추가하면 예약 오픈 소식을 가장 먼저 받아볼 수 있어요.</p>
+                  </div>
+                  <a href={KAKAO_CHANNEL} target="_blank" rel="noopener noreferrer" style={{
+                    flexShrink: 0, textAlign: 'center', textDecoration: 'none',
+                    background: '#16a34a', color: '#fff', fontWeight: 700, fontSize: 14,
+                    padding: '13px 24px', borderRadius: 9999, whiteSpace: 'nowrap',
+                  }}>
+                    카카오 채널로 알림 받기 →
+                  </a>
+                </motion.div>
+                {past.length > 0 && (
+                  <div style={{
+                    display: 'grid',
+                    gridTemplateColumns: isMobile ? '1fr' : `repeat(${Math.min(past.length, 3)}, 1fr)`,
+                    gap: isMobile ? 14 : 20,
+                  }}>
+                    {past.slice(0, 3).map((ev, i) => (
+                      <motion.div key={ev.id ?? i} variants={fadeUp} custom={i * 0.06} style={{ borderRadius: 14, overflow: 'hidden' }}>
+                        <Link href={`/events/${ev.id ?? ev.order}`} style={{ textDecoration: 'none', display: 'block', background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 14, overflow: 'hidden' }}>
+                          <div style={{
+                            aspectRatio: isMobile ? '16/9' : '16/10',
+                            background: ev.imageData
+                              ? `url(${ev.imageData}) center/cover no-repeat`
+                              : 'linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%)',
+                          }} />
+                          <div style={{ padding: '16px 18px 20px' }}>
+                            <p style={{ fontSize: 11, color: '#6b7280', fontFamily: MONO, letterSpacing: '0.06em', marginBottom: 6 }}>지난 행사</p>
+                            <h3 style={{ fontFamily: BEBAS, fontSize: 18, letterSpacing: '0.02em', color: '#111', marginBottom: 8, lineHeight: 1.1 }}>{ev.title}</h3>
+                            <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 10, fontFamily: MONO }}>📅 {ev.date} · 📍 {ev.loc}</p>
+                            <p style={{ fontSize: 12, color: '#16a34a', fontWeight: 700 }}>현장 보러 가기 →</p>
+                          </div>
+                        </Link>
+                      </motion.div>
+                    ))}
+                  </div>
+                )}
+                <motion.div variants={fadeUp} style={{ marginTop: 20, textAlign: 'center' }}>
+                  <Link href="/events#archive" style={{ fontFamily: MONO, fontSize: 13, color: '#4b5563', textDecoration: 'underline', textUnderlineOffset: 3 }}>
+                    지난 행사 전체 보기
+                  </Link>
+                </motion.div>
+              </>
             )}
 
             {/* 나머지 다가오는 행사 (종료행사 제외) */}
