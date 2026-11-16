@@ -126,7 +126,7 @@ function PriceValue() {
         </motion.div>
 
         <motion.div variants={fadeUp} style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 18, padding: isMobile ? '22px 20px' : '28px 30px' }}>
-          <p style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 4, wordBreak: 'keep-all' }}>이 중 하나만 써도 한 달 회비가 돌아와요</p>
+          <h3 style={{ fontFamily: BEBAS, fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 4, wordBreak: 'keep-all' }}>이 중 하나만 써도 한 달 회비가 돌아와요</h3>
           <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 16 }}>1회 이용 기준 예상 절약액</p>
           <ul style={{ listStyle: 'none', display: 'grid', gap: 10 }}>
             {payback.map((c) => (

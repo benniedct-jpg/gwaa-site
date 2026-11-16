@@ -6,6 +6,8 @@ import { track } from '@vercel/analytics';
 import { Input } from '@/components/ui/Input';
 
 const GREEN = '#16a34a';
+// 카드 제목 글꼴 — 사이트 공통 제목 글꼴(Gothic A1)과 동일
+const HEAD = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
 const REGIONS = ['춘천', '원주', '강릉', '속초·양양·고성', '동해·삼척', '평창·정선·영월', '그 외 강원', '강원 외 지역'];
 
 // 메이트쉽 가입 신청 폼 — 관리자 '신청내역'(applications)에 접수된다.
@@ -59,7 +61,7 @@ export default function JoinForm() {
     return (
       <div role="status" style={{ background: '#fff', border: '1.5px solid #bbf7d0', borderRadius: 18, padding: '36px 28px', textAlign: 'center' }}>
         <div style={{ fontSize: 40, marginBottom: 12 }} aria-hidden="true">🐾</div>
-        <h3 style={{ fontSize: 20, fontWeight: 800, color: '#111', marginBottom: 8 }}>신청이 접수됐어요</h3>
+        <h3 style={{ fontFamily: HEAD, fontSize: 22, color: '#111', letterSpacing: '0.02em', marginBottom: 8 }}>신청이 접수됐어요</h3>
         <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.7, wordBreak: 'keep-all' }}>
           담당자가 확인하고 남겨주신 번호로 연락드릴게요.
           <br />급하시면 카카오채널이나 033-813-0333으로 문의해 주세요.
@@ -72,7 +74,7 @@ export default function JoinForm() {
 
   return (
     <form onSubmit={submit} noValidate style={{ background: '#fff', border: '1.5px solid #e5e7eb', borderRadius: 18, padding: '28px 24px', boxShadow: '0 4px 16px rgba(0,0,0,0.05)' }}>
-      <h3 style={{ fontSize: 18, fontWeight: 800, color: '#111', marginBottom: 4 }}>30초 가입 신청</h3>
+      <h3 style={{ fontFamily: HEAD, fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 4 }}>30초 가입 신청</h3>
       <p style={{ fontSize: 13, color: '#6b7280', lineHeight: 1.6, marginBottom: 20 }}>이름과 연락처만 남기면 담당자가 연락드려요. 결제는 안내받은 뒤에 진행돼요.</p>
 
       <div style={{ marginBottom: 14 }}>

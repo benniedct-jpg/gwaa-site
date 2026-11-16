@@ -128,7 +128,7 @@ export default function EventsPreview({ initialData }: { initialData?: EventCard
                   padding: isMobile ? '20px' : '22px 28px', marginBottom: past.length ? (isMobile ? 16 : 20) : 0,
                 }}>
                   <div>
-                    <p style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 4, wordBreak: 'keep-all' }}>다음 행사 소식, 놓치지 마세요</p>
+                    <h3 style={{ fontFamily: BEBAS, fontSize: 20, color: '#111', letterSpacing: '0.02em', marginBottom: 4, wordBreak: 'keep-all' }}>다음 행사 소식, 놓치지 마세요</h3>
                     <p style={{ fontSize: 13, color: '#4b5563', lineHeight: 1.6, wordBreak: 'keep-all' }}>카카오톡 채널을 추가하면 예약 오픈 소식을 가장 먼저 받아볼 수 있어요.</p>
                   </div>
                   <a href={KAKAO_CHANNEL} target="_blank" rel="noopener noreferrer" style={{
