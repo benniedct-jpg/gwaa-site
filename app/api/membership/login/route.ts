@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { dbGetAll } from '@/lib/db/serverDB';
 import { signSession } from '@/lib/membership/token';
 import { normPhone } from '@/lib/membership/register';
+import { clientIp, lockedMinutes, recordFail, clearFails } from '@/lib/security/rateLimit';
 
 // 회원 로그인 — 전화번호 + 이름이 모두 일치해야 세션 발급.
 // (전화번호만으로 로그인되면 번호를 아는 누구나 남의 회원증·정기결제 해지에 접근할 수 있음)
@@ -16,6 +17,13 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: '이름과 전화번호를 모두 입력해주세요.' }, { status: 400 });
   }
 
+  // 같은 IP에서 1시간 내 10회 실패하면 30분 잠금 (이름·전화번호 무작위 대입 방지)
+  const ip = clientIp(req.headers);
+  const mins = await lockedMinutes('member', ip);
+  if (mins > 0) {
+    return NextResponse.json({ error: `로그인 시도가 많아 잠시 제한되었어요. 약 ${mins}분 후 다시 시도해주세요.` }, { status: 429 });
+  }
+
   let members: Record<string, unknown>[] = [];
   try {
     members = (await dbGetAll('members')) as Record<string, unknown>[];
@@ -24,8 +32,10 @@ export async function POST(req: NextRequest) {
   }
   const member = members.find((m) => normPhone(m.phone as string) === phone);
   if (!member || String(member.name ?? '').trim() !== name) {
+    await recordFail('member', ip, 10, 30 * 60 * 1000);
     return NextResponse.json({ error: FAIL }, { status: 401 });
   }
+  await clearFails('member', ip);
   if (member.status !== 'active') {
     return NextResponse.json({ error: '아직 활성 회원이 아니에요. 회비 납부·승인 여부를 협회로 확인해주세요.' }, { status: 403 });
   }
