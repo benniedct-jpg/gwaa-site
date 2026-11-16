@@ -1,8 +1,8 @@
 'use client';
 
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Link from 'next/link';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useInView } from 'framer-motion';
 import { useGWAADB } from '@/hooks/useGWAADB';
 import { STORES } from '@/lib/db/gwaaDB';
 import { MateshipPartner } from '@/types';
@@ -11,6 +11,8 @@ import CountUp from '@/components/shared/CountUp';
 import { staggerContainer, fadeUp } from '@/lib/animations';
 import { useIsMobile } from '@/hooks/useIsMobile';
 import ProposalModal from '@/components/shared/ProposalModal';
+import JoinForm from '@/components/sections/mateship/JoinForm';
+import { MONTHLY_FEE, YEARLY_FEE } from '@/lib/membership/plan';
 
 const MONO = "system-ui,-apple-system,'Apple SD Gothic Neo','Noto Sans KR',sans-serif";
 const BEBAS = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
@@ -26,8 +28,8 @@ const BENEFITS = [
 ];
 
 const FAQS = [
-  { q: '가입은 어떻게 하나요?', a: '카카오채널이나 아래 신청 폼에 남겨주시면, 담당자가 하루 안에 연락드려요.' },
-  { q: '가입비가 있나요?', a: '가입비·연회비는 카카오채널이나 033-813-0333으로 편하게 물어봐 주세요. 바로 안내드릴게요.' },
+  { q: '가입은 어떻게 하나요?', a: '가입 신청 폼이나 카카오채널에 남겨주시면, 담당자가 확인하고 연락드려요.' },
+  { q: '회비는 얼마인가요?', a: `회비는 월 ${MONTHLY_FEE.toLocaleString('ko-KR')}원이에요. 납부 방법은 가입 신청 후 담당자가 안내드려요.` },
   { q: '어디서 혜택을 받을 수 있어요?', a: '춘천·원주·강릉·속초·양양·고성·평창 등 강원 곳곳, 18곳이 넘는 제휴 브랜드에서 받으실 수 있어요.' },
   { q: '우리 애가 대형견인데, 가입에 제한이 있나요?', a: '가입에는 아무 제한이 없어요. 다만 가게마다 입장 기준이 조금씩 달라서, 방문 전에 한 번 확인해 주시면 좋아요.' },
   { q: '혜택은 언제부터 쓸 수 있나요?', a: '가입이 확인되면 폰에서 바로 쓰는 디지털 회원증(QR)을 발급해 드려요. 실물 카드 없이, 제휴처에서 QR만 보여주면 끝이에요.' },
@@ -89,9 +91,64 @@ function SocialProof() {
   );
 }
 
+// 가격 대비 가치 — "월 1만 원, 이것 하나만 써도 본전"
+function PriceValue() {
+  const isMobile = useIsMobile();
+  const px = isMobile ? '20px' : '60px';
+  // 한 번 이용으로 한 달 회비 이상을 아끼는 항목만 (계산기와 같은 기준값 사용)
+  const payback = CALC_ITEMS.filter((c) => c.saving >= MONTHLY_FEE).sort((a, b) => b.saving - a.saving);
+
+  return (
+    <section id="price" style={{ padding: `${isMobile ? '48px' : '68px'} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#fff' }}>
+      <motion.div
+        variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}
+        style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'minmax(260px, 0.9fr) 1.4fr', gap: isMobile ? 24 : 40, alignItems: 'center' }}
+      >
+        <motion.div variants={fadeUp}>
+          <Eyebrow text="MEMBERSHIP FEE" />
+          <p style={{ fontSize: 14, color: '#374151', marginBottom: 6 }}>메이트쉽 회비</p>
+          <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, marginBottom: 10 }}>
+            <span style={{ fontSize: 15, color: '#6b7280', fontWeight: 700 }}>월</span>
+            <span style={{ fontFamily: BEBAS, fontSize: isMobile ? 56 : 72, color: '#16a34a', letterSpacing: '0.02em', lineHeight: 1 }}>
+              {MONTHLY_FEE.toLocaleString('ko-KR')}
+            </span>
+            <span style={{ fontSize: 18, color: '#111', fontWeight: 800 }}>원</span>
+          </div>
+          <p style={{ fontSize: 14, color: '#374151', lineHeight: 1.7, wordBreak: 'keep-all', marginBottom: 20 }}>
+            하루 약 {Math.round(MONTHLY_FEE / 30 / 10) * 10}원. 한 달에 한 번만 혜택을 써도 회비가 돌아오게 만들었어요.
+          </p>
+          <Link href="#join" style={{
+            display: 'inline-block', padding: '13px 28px', borderRadius: 9999, background: '#16a34a', color: '#fff',
+            fontSize: 14, fontWeight: 700, textDecoration: 'none',
+          }}>
+            가입 신청하기 →
+          </Link>
+        </motion.div>
+
+        <motion.div variants={fadeUp} style={{ background: '#f0fdf4', border: '1.5px solid #bbf7d0', borderRadius: 18, padding: isMobile ? '22px 20px' : '28px 30px' }}>
+          <p style={{ fontSize: 16, fontWeight: 800, color: '#111', marginBottom: 4, wordBreak: 'keep-all' }}>이 중 하나만 써도 한 달 회비가 돌아와요</p>
+          <p style={{ fontSize: 12, color: '#6b7280', marginBottom: 16 }}>1회 이용 기준 예상 절약액</p>
+          <ul style={{ listStyle: 'none', display: 'grid', gap: 10 }}>
+            {payback.map((c) => (
+              <li key={c.label} style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, background: '#fff', borderRadius: 12, padding: '12px 16px' }}>
+                <span style={{ fontSize: 14, color: '#111', fontWeight: 600 }}>{c.icon} {c.label} 1{c.unit}</span>
+                <span style={{ fontSize: 14, color: '#16a34a', fontWeight: 800, whiteSpace: 'nowrap' }}>약 {c.saving.toLocaleString('ko-KR')}원</span>
+              </li>
+            ))}
+          </ul>
+          <p style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.6, marginTop: 14, wordBreak: 'keep-all' }}>
+            평균 할인 기준 추정치예요. 실제 할인은 제휴처·시기에 따라 달라질 수 있어요.
+          </p>
+        </motion.div>
+      </motion.div>
+    </section>
+  );
+}
+
 function SavingsCalculator() {
   const [quantities, setQuantities] = useState(CALC_ITEMS.map(() => 2));
   const total = CALC_ITEMS.reduce((sum, item, i) => sum + item.saving * quantities[i], 0);
+  const net = total - YEARLY_FEE; // 연 회비를 뺀 순이득
   const isMobile = useIsMobile();
   const px = isMobile ? '20px' : '60px';
 
@@ -137,6 +194,23 @@ function SavingsCalculator() {
           </AnimatePresence>
         </motion.div>
 
+        {/* 회비 대비 순이득 — 절약액만 보여주지 않고 회비를 뺀 결과를 같이 보여준다 */}
+        <motion.div variants={fadeUp} aria-live="polite" style={{
+          display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between',
+          alignItems: isMobile ? 'flex-start' : 'center', gap: 8,
+          background: '#fff', border: `1.5px solid ${net >= 0 ? '#bbf7d0' : '#e5e7eb'}`, borderRadius: 14,
+          padding: '16px 20px', marginBottom: isMobile ? 12 : 16,
+        }}>
+          <span style={{ fontSize: 13, color: '#6b7280' }}>
+            연 회비 {YEARLY_FEE.toLocaleString('ko-KR')}원 (월 {MONTHLY_FEE.toLocaleString('ko-KR')}원 × 12)
+          </span>
+          <span style={{ fontSize: 15, fontWeight: 800, color: net >= 0 ? '#15803d' : '#374151', wordBreak: 'keep-all' }}>
+            {net >= 0
+              ? `회비를 빼고도 ${net.toLocaleString('ko-KR')}원 이득`
+              : `지금 선택으로는 회비보다 ${Math.abs(net).toLocaleString('ko-KR')}원 적어요`}
+          </span>
+        </motion.div>
+
         <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : 'repeat(2, 1fr)', gap: isMobile ? 10 : 14 }}>
           {CALC_ITEMS.map((item, i) => (
             <motion.div
@@ -179,6 +253,9 @@ function SavingsCalculator() {
             </motion.div>
           ))}
         </div>
+        <p style={{ fontSize: 12, color: '#6b7280', lineHeight: 1.6, marginTop: 14, wordBreak: 'keep-all' }}>
+          ※ 예상 절약액은 평균 할인 기준 추정치이며, 실제 할인은 제휴처·시기·이용 조건에 따라 달라질 수 있어요.
+        </p>
       </motion.div>
     </section>
   );
@@ -239,13 +316,16 @@ export default function MateshipContent() {
   const { data: partners, loading } = useGWAADB<MateshipPartner>(STORES.MATESHIP);
   const isMobile = useIsMobile();
   const [proposalOpen, setProposalOpen] = useState(false);
+  // 가입 폼이 화면에 보이는 동안에는 하단 고정 버튼이 입력칸을 가리지 않도록 숨긴다
+  const joinRef = useRef<HTMLElement>(null);
+  const joinInView = useInView(joinRef, { margin: '0px 0px -15% 0px' });
   const px = isMobile ? '20px' : '60px';
   const py = isMobile ? '48px' : '68px';
 
   return (
     <>
       {/* 모바일 스티키 CTA */}
-      {isMobile && (
+      {isMobile && !joinInView && (
         <div style={{
           position: 'fixed',
           bottom: 0,
@@ -282,6 +362,9 @@ export default function MateshipContent() {
 
       {/* 1. Social Proof — 숫자로 신뢰 */}
       <SocialProof />
+
+      {/* 1-2. Price — 얼마인지, 언제 본전인지 먼저 */}
+      <PriceValue />
 
       {/* 2. Benefits — 혜택 먼저 이해 */}
       <section id="benefits" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f8fafb' }}>
@@ -388,54 +471,62 @@ export default function MateshipContent() {
       </section>
 
       {/* 5. Join — 가입까지 24시간 */}
-      <section id="join" style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f0fdf4' }}>
+      <section id="join" ref={joinRef} style={{ padding: `${py} ${px}`, borderBottom: '1px solid #e5e7eb', background: '#f0fdf4' }}>
         <motion.div variants={staggerContainer} initial="hidden" whileInView="visible" viewport={{ once: true, margin: '-40px' }}>
           <motion.div variants={fadeUp} style={{ marginBottom: 12 }}>
             <Eyebrow text="HOW TO JOIN" />
             <h2 style={{ fontFamily: BEBAS, fontSize: isMobile ? 27 : 'clamp(24px, 3.6vw, 38px)', color: '#111', letterSpacing: '0.02em', lineHeight: 1, marginBottom: 8 }}>
-              오늘 신청하면, 이번 주말부터 식구예요
+              지금 신청하고 식구 되기
             </h2>
-            <p style={{ fontSize: 14, color: '#374151', marginBottom: 32 }}>신청부터 디지털 회원증 발급까지, 하루면 충분해요.</p>
+            <p style={{ fontSize: 14, color: '#374151', marginBottom: 32 }}>이름과 연락처만 남기면 담당자가 가입을 도와드려요.</p>
           </motion.div>
-          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? 'repeat(2, 1fr)' : 'repeat(4, 1fr)', gap: isMobile ? 20 : 20, marginBottom: 40 }}>
-            {['카카오채널이나 신청 폼에 남기기', '담당자가 확인하고 연락드려요', '가입 안내받고 서류 제출', '디지털 회원증 받고 바로 혜택 시작'].map((step, i) => (
-              <motion.div key={i} variants={fadeUp} custom={i * 0.06} style={{ textAlign: 'center' }}>
-                <div style={{ width: 48, height: 48, borderRadius: '50%', margin: '0 auto 12px', background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BEBAS, fontSize: 20, color: '#fff' }}>
-                  {i + 1}
-                </div>
-                <p style={{ fontSize: 12, color: '#374151', lineHeight: 1.6 }}>{step}</p>
+          <div style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr minmax(320px, 420px)', gap: isMobile ? 28 : 48, alignItems: 'start' }}>
+            <div>
+              <motion.div variants={fadeUp} style={{ background: '#fff', border: '1.5px solid #bbf7d0', borderRadius: 14, padding: '18px 20px', marginBottom: 24, display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+                <span style={{ fontSize: 14, color: '#374151', fontWeight: 600 }}>메이트쉽 회비</span>
+                <span style={{ fontSize: 18, color: '#111', fontWeight: 800 }}>월 {MONTHLY_FEE.toLocaleString('ko-KR')}원</span>
               </motion.div>
-            ))}
+              <ol style={{ listStyle: 'none', display: 'grid', gap: 14, marginBottom: 28 }}>
+                {['가입 신청 폼이나 카카오채널에 남기기', '담당자가 확인하고 연락드려요', '가입 안내받고 회비 납부', '디지털 회원증 받고 바로 혜택 시작'].map((step, i) => (
+                  <motion.li key={i} variants={fadeUp} custom={i * 0.06} style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+                    <span style={{ width: 36, height: 36, borderRadius: '50%', flexShrink: 0, background: '#16a34a', display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: BEBAS, fontSize: 17, color: '#fff' }}>
+                      {i + 1}
+                    </span>
+                    <span style={{ fontSize: 14, color: '#374151', lineHeight: 1.6, wordBreak: 'keep-all' }}>{step}</span>
+                  </motion.li>
+                ))}
+              </ol>
+              <motion.div variants={fadeUp} style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
+                <Link
+                  href="https://pf.kakao.com/_wipZX"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    padding: '13px 24px', borderRadius: 9999,
+                    background: '#fff', color: '#15803d', border: '1.5px solid #bbf7d0',
+                    fontSize: 14, fontWeight: 700, textDecoration: 'none', whiteSpace: 'nowrap',
+                  }}
+                >
+                  카카오채널로 문의하기 →
+                </Link>
+                <Link
+                  href="tel:033-813-0333"
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 8,
+                    padding: '13px 24px', borderRadius: 9999,
+                    background: '#fff', color: '#374151', border: '1.5px solid #d1d5db',
+                    fontSize: 14, fontWeight: 600, textDecoration: 'none', whiteSpace: 'nowrap',
+                  }}
+                >
+                  📞 033-813-0333
+                </Link>
+              </motion.div>
+            </div>
+            <motion.div variants={fadeUp}>
+              <JoinForm />
+            </motion.div>
           </div>
-          <motion.div variants={fadeUp} style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' }}>
-            <Link
-              href="https://pf.kakao.com/_wipZX"
-              target="_blank"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '15px 36px', borderRadius: 9999,
-                background: '#16a34a', color: '#fff',
-                fontSize: 15, fontWeight: 700, letterSpacing: '0.04em',
-                boxShadow: '0 4px 20px rgba(22,163,74,0.35)',
-                textDecoration: 'none', whiteSpace: 'nowrap',
-              }}
-            >
-              카카오채널로 가입하기 →
-            </Link>
-            <Link
-              href="tel:033-813-0333"
-              style={{
-                display: 'inline-flex', alignItems: 'center', gap: 8,
-                padding: '15px 36px', borderRadius: 9999,
-                background: '#fff', color: '#374151',
-                border: '1.5px solid #d1d5db',
-                fontSize: 15, fontWeight: 600, letterSpacing: '0.04em',
-                textDecoration: 'none', whiteSpace: 'nowrap',
-              }}
-            >
-              📞 033-813-0333
-            </Link>
-          </motion.div>
         </motion.div>
       </section>
 

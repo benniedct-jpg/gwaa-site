@@ -25,7 +25,7 @@ export default function MateshipPage() {
         eyebrow="GWAA MATESHIP"
         title="강원 반려생활, 혼자 말고"
         titleAccent="우리랑 같이"
-        desc="4만 반려인이 먼저 식구가 됐어요. 숙박·카페·캠핑·사료까지 회원가로, 1년이면 40만원이 가벼워져요."
+        desc="월 1만 원으로 숙박·카페·캠핑·사료까지 회원가로. 한 달에 한 번만 써도 회비가 돌아와요."
       >
         <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', alignItems: 'center' }}>
           <Link
