@@ -9,6 +9,10 @@ export async function POST(req: NextRequest) {
   // 시크릿키 미설정 = 테스트 모드: 토스 승인 단계를 건너뛰고 입장권만 발급(시연용).
   // 실제 운영 전 반드시 TOSS_SECRET_KEY를 설정해 실제 승인이 이뤄지도록 해야 함.
   const testMode = !secretKey;
+  // 운영에서 시크릿키가 없으면 '승인 없이 결제완료 처리'가 되어 누구나 무료 입장권을 발급받을 수 있으므로 차단.
+  if (testMode && process.env.NODE_ENV === 'production') {
+    return NextResponse.json({ error: '이 결제 경로는 현재 사용하지 않습니다.' }, { status: 503 });
+  }
 
   const { paymentKey, orderId, amount } = await req.json() as { paymentKey?: string; orderId?: string; amount?: number | string };
   if (!paymentKey || !orderId || amount == null) {

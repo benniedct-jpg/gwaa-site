@@ -1,18 +1,18 @@
 import crypto from 'crypto';
+import { membershipSecret } from '@/lib/security/secrets';
 
-// 회원증 토큰 서명 비밀키 (서버 전용, 외부 노출 안 됨)
-const SECRET =
-  process.env.MEMBERSHIP_SECRET ||
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  'gwaa-dev-membership-secret';
-
+// 회원증 토큰 서명 비밀키 (서버 전용). 운영에서 환경변수가 없으면 발급·검증 모두 거부.
 function sign(payload: object): string {
+  const SECRET = membershipSecret();
+  if (!SECRET) throw new Error('MEMBERSHIP_SECRET 환경변수가 설정되지 않았습니다.');
   const p = Buffer.from(JSON.stringify(payload)).toString('base64url');
   const sig = crypto.createHmac('sha256', SECRET).update(p).digest('base64url');
   return `${p}.${sig}`;
 }
 
 function verify(token: string): Record<string, unknown> | null {
+  const SECRET = membershipSecret();
+  if (!SECRET) return null;
   const parts = (token || '').split('.');
   if (parts.length !== 2) return null;
   const [p, sig] = parts;

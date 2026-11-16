@@ -1,11 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { adminSecret } from '@/lib/security/secrets';
+
 const COOKIE = 'gwaa_admin_auth';
-const SECRET =
-  process.env.ADMIN_SECRET ||
-  process.env.MEMBERSHIP_SECRET ||
-  process.env.SUPABASE_SERVICE_ROLE_KEY ||
-  'gwaa-dev-admin-secret';
 
 // Edge 런타임용 HMAC 검증 (lib/adminAuth.ts의 node 버전과 동일한 서명·페이로드)
 function bytesToB64url(bytes: Uint8Array): string {
@@ -14,6 +11,8 @@ function bytesToB64url(bytes: Uint8Array): string {
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 async function verifyAdminEdge(token?: string): Promise<boolean> {
+  const SECRET = adminSecret();
+  if (!SECRET) return false; // 운영에서 비밀키 미설정 → 관리자 접근 전면 차단
   const parts = (token || '').split('.');
   if (parts.length !== 2) return false;
   const [p, sig] = parts;

@@ -24,6 +24,7 @@ const NAV_COLS = [
       { label: '반려동물 여행', href: '/travel' },
       { label: '동물병원 찾기', href: '/vets' },
       { label: '응급 가이드 · 야간 동물병원', href: '/emergency' },
+      { label: '여행 유형 테스트', href: '/play' },
       { label: '메이트쉽 멤버십', href: '/mateship' },
       { label: '회비·후원',     href: '/support' },
     ],

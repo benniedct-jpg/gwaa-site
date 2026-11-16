@@ -13,5 +13,16 @@ export async function GET(req: NextRequest) {
   url.searchParams.set('redirect_uri', redirectUri);
   url.searchParams.set('response_type', 'code');
   url.searchParams.set('scope', 'phone_number');
-  return NextResponse.redirect(url.toString());
+  // CSRF 방지용 state — 콜백에서 쿠키와 대조 (남의 카카오 인가코드로 로그인시키는 공격 차단)
+  const state = crypto.randomUUID();
+  url.searchParams.set('state', state);
+  const res = NextResponse.redirect(url.toString());
+  res.cookies.set('gwaa_kakao_state', state, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    path: '/api/membership/kakao',
+    maxAge: 600,
+  });
+  return res;
 }

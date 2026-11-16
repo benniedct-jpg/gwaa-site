@@ -53,3 +53,24 @@ export const NAV_MENU = [
     { label: '카카오 채널', href: 'https://pf.kakao.com/_wipZX' },
   ]},
 ];
+
+/**
+ * 관리자 입력 링크 정리 — 개발 주소(localhost)가 섞여 저장된 링크는 사이트 내부 경로로 바꾸고,
+ * http(s)·내부 경로가 아닌 값(javascript: 등)은 '/' 로 대체한다.
+ */
+export function safeLink(link: string | null | undefined, fallback = '/'): string {
+  const raw = (link || '').trim();
+  if (!raw) return fallback;
+  if (raw.startsWith('/') && !raw.startsWith('//')) return raw;
+  if (raw.startsWith('#')) return raw;
+  try {
+    const u = new URL(raw);
+    if (u.protocol !== 'http:' && u.protocol !== 'https:') return fallback;
+    if (['localhost', '127.0.0.1', '0.0.0.0', 'gwaa-site.vercel.app'].includes(u.hostname)) {
+      return `${u.pathname}${u.search}${u.hash}` || fallback;
+    }
+    return u.toString();
+  } catch {
+    return fallback;
+  }
+}

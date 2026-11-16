@@ -4,7 +4,7 @@ const SITE = 'https://gwaa.or.kr';
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/api/'] },
+    rules: { userAgent: '*', allow: '/', disallow: ['/admin', '/api/', '/pg-test', '/t/', '/m/', '/membership/card'] },
     sitemap: `${SITE}/sitemap.xml`,
     host: SITE,
   };

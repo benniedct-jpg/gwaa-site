@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import HeroSlideshow from '@/components/sections/home/HeroSlideshow';
 import Ticker from '@/components/sections/home/Ticker';
 import StatsBar from '@/components/sections/home/StatsBar';
+import PlayBanner from '@/components/sections/home/PlayBanner';
 import ActivityCards from '@/components/sections/home/ActivityCards';
 import BenefitsPreview from '@/components/sections/home/BenefitsPreview';
 import EventsPreview from '@/components/sections/home/EventsPreview';
@@ -49,6 +50,7 @@ export default async function HomePage() {
       <HeroSlideshow initialData={heroes} />
       <Ticker />
       <StatsBar />
+      <PlayBanner />
       <ActivityCards initialData={activities} />
       <BenefitsPreview />
       <EventsPreview initialData={events} />

@@ -163,7 +163,8 @@ export async function GET(req: NextRequest, { params }: { params: Promise<{ stor
       { headers: { 'Cache-Control': CACHE } },
     );
   } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
+    console.error('[api/data]', e);
+    return NextResponse.json({ error: '처리 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }
 
@@ -186,6 +187,22 @@ function pickAllowed(store: string, body: Record<string, unknown>): Record<strin
   return out;
 }
 
+// 공개 폼 입력 검증 — 문자열만 허용, 길이 제한, 이메일 형식 확인 (스팸·대용량 입력·비정상 데이터 차단)
+const MAX_LEN: Record<string, number> = { message: 2000, link: 500 };
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+function validatePublic(store: string, body: Record<string, unknown>): string | null {
+  for (const [k, v] of Object.entries(body)) {
+    if (v == null) continue;
+    if (typeof v !== 'string') return '입력 형식이 올바르지 않습니다.';
+    if (v.length > (MAX_LEN[k] ?? 200)) return '입력 내용이 너무 깁니다.';
+  }
+  const email = typeof body.email === 'string' ? body.email.trim() : '';
+  if (store === 'subscribers' && !email) return '이메일을 입력해 주세요.';
+  if (email && !EMAIL_RE.test(email)) return '이메일 형식이 올바르지 않습니다.';
+  if (Object.values(body).every((v) => v == null || String(v).trim() === '')) return '내용을 입력해 주세요.';
+  return null;
+}
+
 export async function POST(req: NextRequest, { params }: { params: Promise<{ store: string }> }) {
   const { store } = await params;
   if (!ok(store)) return NextResponse.json({ error: 'invalid store' }, { status: 400 });
@@ -197,6 +214,10 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sto
 
   if (!isSupabaseConfigured()) {
     const body = pickAllowed(store, await req.json() as Record<string, unknown>);
+    if (isPublicSubmit) {
+      const invalid = validatePublic(store, body);
+      if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
+    }
     const defaults = getDefaultData(store).map((d, i) => ({ id: i + 1, ...d })) as Record<string, unknown>[];
     const current = readLocal<Record<string, unknown>>(store) ?? defaults;
     const newId = Math.max(0, ...current.map(d => Number(d.id) || 0)) + 1;
@@ -208,12 +229,17 @@ export async function POST(req: NextRequest, { params }: { params: Promise<{ sto
 
   try {
     const body = pickAllowed(store, await req.json() as Record<string, unknown>);
+    if (isPublicSubmit) {
+      const invalid = validatePublic(store, body);
+      if (invalid) return NextResponse.json({ error: invalid }, { status: 400 });
+    }
     const row = toDb(body);
     const result = await dbInsert(store, row);
     revalidateStore(store);
     return NextResponse.json(fromDb(result as Record<string, unknown>));
   } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
+    console.error('[api/data]', e);
+    return NextResponse.json({ error: '처리 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }
 
@@ -251,7 +277,8 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ stor
     revalidateStore(store);
     return NextResponse.json(fromDb(result as Record<string, unknown>));
   } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
+    console.error('[api/data]', e);
+    return NextResponse.json({ error: '처리 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }
 
@@ -278,6 +305,7 @@ export async function DELETE(req: NextRequest, { params }: { params: Promise<{ s
     revalidateStore(store);
     return NextResponse.json({ ok: true });
   } catch (e) {
-    return NextResponse.json({ error: String(e) }, { status: 500 });
+    console.error('[api/data]', e);
+    return NextResponse.json({ error: '처리 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }

@@ -20,6 +20,20 @@ function pick(body: Record<string, unknown>) {
   return out;
 }
 
+// 요금 하한 검증 — 금액은 브라우저가 계산해 보내므로 조작(예: 100원 결제)될 수 있다.
+// 예약 위젯(BookingFlow)의 요금표 중 '가장 싼 조합'보다 낮은 금액은 서버에서 거부한다.
+// ※ BookingFlow.tsx 의 요금 상수가 바뀌면 여기도 함께 수정.
+const DAY_PRICE = 20000;        // 당일권 1인
+const MIN_CAMP_BASE = 135000;   // 2박3일 최저 존(넓은 일반존) · 기본 2인
+const MIN_EXTRA_PERSON = 30000; // 기본 2인 초과 1인당 최저(낭만기버존)
+const MAX_HEADCOUNT = 30;
+const MAX_AMOUNT = 5_000_000;
+
+function minAmount(bookingType: unknown, headcount: number): number {
+  if (bookingType === 'day') return DAY_PRICE * headcount;
+  return MIN_CAMP_BASE + Math.max(0, headcount - 2) * MIN_EXTRA_PERSON;
+}
+
 // ── GET: 관리자=전체 / 공개=잔여석(site+dates만) ──
 export async function GET(req: NextRequest) {
   if (!supaConfigured()) return NextResponse.json([], { status: 200 });
@@ -52,9 +66,20 @@ export async function POST(req: NextRequest) {
   if (!body.name || !body.phone || !body.email) {
     return NextResponse.json({ error: '필수 정보가 누락되었습니다.' }, { status: 400 });
   }
+  const headcount = Number(body.headcount);
+  const amount = Number(body.amount);
+  if (!Number.isInteger(headcount) || headcount < 1 || headcount > MAX_HEADCOUNT) {
+    return NextResponse.json({ error: '인원 수가 올바르지 않습니다.' }, { status: 400 });
+  }
+  if (!Number.isInteger(amount) || amount > MAX_AMOUNT || amount < minAmount(body.booking_type, headcount)) {
+    return NextResponse.json({ error: '결제 금액이 올바르지 않습니다. 새로고침 후 다시 시도해 주세요.' }, { status: 400 });
+  }
+  body.headcount = headcount;
+  body.amount = amount;
+
   const eventId = Number(body.event_id) || 0;
-  const site = (body.site as string) || '';
-  const dates = (body.booking_dates as string[]) || [];
+  const site = typeof body.site === 'string' ? body.site : '';
+  const dates = Array.isArray(body.booking_dates) ? (body.booking_dates as unknown[]).filter((d): d is string => typeof d === 'string') : [];
   const needsSite = body.booking_type !== 'day' && !!site;
 
   // 협회 자체 사용 등으로 마감한 A·D·E 구역 + 개별 마감 사이트(C8·F4 일부) — 온라인 예약 차단(방어)
