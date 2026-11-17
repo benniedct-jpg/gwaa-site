@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { track } from '@vercel/analytics';
 import { QUESTIONS, TYPES, getType, resolveType, type Letter, type TravelType } from '@/lib/play/travelTypes';
 
-const GREEN = '#12A79D';
+const GREEN = 'var(--color-teal)';
 const DISPLAY = "'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif";
 const SITE = 'https://gwaa.or.kr';
 

@@ -152,11 +152,11 @@ a[style]:hover, a[class]:hover { opacity: 1; }
   padding: 40px 32px; text-align: center;
   box-shadow: 0 8px 32px rgba(0,0,0,0.06);
 }
-.play-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #12A79D; margin-bottom: 14px; }
-.play-title { font-family: 'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif; font-size: clamp(28px, 7vw, 38px); font-weight: 400; line-height: 1.2; color: #111; letter-spacing: -0.01em; margin-bottom: 16px; word-break: keep-all; }
+.play-eyebrow { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--color-teal); margin-bottom: 14px; }
+.play-title { font-family: 'Bebas Neue', var(--font-blackhan), 'Apple SD Gothic Neo', sans-serif; font-size: clamp(28px, 7vw, 38px); font-weight: 400; line-height: 1.2; color: var(--color-text); letter-spacing: -0.01em; margin-bottom: 16px; word-break: keep-all; }
 .play-lead { font-size: 15px; line-height: 1.75; color: #4b5563; margin-bottom: 24px; word-break: keep-all; }
 .play-emoji-row { display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; font-size: 26px; margin-bottom: 28px; }
-.play-note { font-size: 12px; line-height: 1.6; color: #6b7280; margin-top: 18px; }
+.play-note { font-size: 12px; line-height: 1.6; color: var(--color-text-muted); margin-top: 18px; }
 .play-btn {
   display: block; width: 100%; padding: 16px 20px; border-radius: 12px;
   font-size: 16px; font-weight: 800; text-align: center; text-decoration: none;
@@ -165,34 +165,34 @@ a[style]:hover, a[class]:hover { opacity: 1; }
 }
 .play-btn:active { transform: scale(0.985); }
 .play-btn + .play-btn { margin-top: 10px; }
-.play-btn-primary { background: #12A79D; color: #fff; }
-.play-btn-primary:hover { background: #0D7E76; }
-.play-btn-outline { background: #fff; color: #0D7E76; border-color: #B5E8E3; }
-.play-btn-outline:hover { border-color: #12A79D; background: #EDFAF8; }
+.play-btn-primary { background: var(--color-teal); color: #fff; }
+.play-btn-primary:hover { background: var(--color-teal-hover); }
+.play-btn-outline { background: #fff; color: var(--color-teal-hover); border-color: #B5E8E3; }
+.play-btn-outline:hover { border-color: var(--color-teal); background: #EDFAF8; }
 .play-progress { height: 6px; background: #e5e7eb; border-radius: 999px; overflow: hidden; margin-bottom: 26px; }
-.play-progress > div { height: 100%; background: #12A79D; border-radius: 999px; transition: width 0.3s ease; }
-.play-step { font-size: 30px; color: #12A79D; letter-spacing: 0.04em; margin-bottom: 8px; }
+.play-progress > div { height: 100%; background: var(--color-teal); border-radius: 999px; transition: width 0.3s ease; }
+.play-step { font-size: 30px; color: var(--color-teal); letter-spacing: 0.04em; margin-bottom: 8px; }
 .play-step span { font-size: 16px; color: #9ca3af; }
-.play-question { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: clamp(19px, 5vw, 23px); font-weight: 400; line-height: 1.45; color: #111; margin-bottom: 26px; word-break: keep-all; }
+.play-question { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: clamp(19px, 5vw, 23px); font-weight: 400; line-height: 1.45; color: var(--color-text); margin-bottom: 26px; word-break: keep-all; }
 .play-options { display: grid; gap: 12px; }
 .play-option {
   width: 100%; padding: 18px 18px; border-radius: 14px; background: #f9fafb;
-  border: 1.5px solid #e5e7eb; font-size: 15px; font-weight: 600; line-height: 1.5; color: #111;
+  border: 1.5px solid #e5e7eb; font-size: 15px; font-weight: 600; line-height: 1.5; color: var(--color-text);
   cursor: pointer; text-align: left; font-family: inherit; word-break: keep-all;
   transition: border-color 0.15s, background 0.15s;
 }
-.play-option:hover, .play-option:focus-visible { border-color: #12A79D; background: #EDFAF8; outline: none; }
-.play-back { margin-top: 18px; background: none; border: none; color: #6b7280; font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; }
+.play-option:hover, .play-option:focus-visible { border-color: var(--color-teal); background: #EDFAF8; outline: none; }
+.play-back { margin-top: 18px; background: none; border: none; color: var(--color-text-muted); font-size: 13px; cursor: pointer; font-family: inherit; text-decoration: underline; text-underline-offset: 3px; }
 .play-result-emoji { font-size: 72px; line-height: 1; margin-bottom: 14px; }
-.play-tagline { font-size: 15px; font-weight: 700; color: #0D7E76; margin-bottom: 18px; }
+.play-tagline { font-size: 15px; font-weight: 700; color: var(--color-teal-hover); margin-bottom: 18px; }
 .play-box { text-align: left; background: #EDFAF8; border: 1px solid #B5E8E3; border-radius: 14px; padding: 18px 20px; margin-bottom: 14px; }
-.play-box-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: #12A79D; margin-bottom: 6px; }
-.play-box-main { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: 16px; font-weight: 400; color: #111; margin-bottom: 10px; word-break: keep-all; }
+.play-box-label { font-size: 11px; font-weight: 700; letter-spacing: 0.06em; color: var(--color-teal); margin-bottom: 6px; }
+.play-box-main { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: 16px; font-weight: 400; color: var(--color-text); margin-bottom: 10px; word-break: keep-all; }
 .play-box ul { list-style: none; display: grid; gap: 6px; }
 .play-box li { font-size: 13px; line-height: 1.6; color: #374151; padding-left: 14px; position: relative; word-break: keep-all; }
-.play-box li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: #12A79D; }
-.play-match { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border: 1px solid #e5e7eb; border-radius: 14px; margin-bottom: 22px; font-size: 13px; color: #6b7280; }
-.play-match strong { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: 14px; font-weight: 400; color: #111; }
+.play-box li::before { content: ''; position: absolute; left: 0; top: 9px; width: 5px; height: 5px; border-radius: 50%; background: var(--color-teal); }
+.play-match { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 20px; border: 1px solid #e5e7eb; border-radius: 14px; margin-bottom: 22px; font-size: 13px; color: var(--color-text-muted); }
+.play-match strong { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: 14px; font-weight: 400; color: var(--color-text); }
 @media (max-width: 480px) {
   .play-wrap { padding: 28px 14px 64px; }
   .play-card { padding: 30px 20px; }
@@ -204,14 +204,14 @@ a[style]:hover, a[class]:hover { opacity: 1; }
 /* ── 홈: PLAY 배너 ── */
 .play-banner {
   display: flex; align-items: center; justify-content: space-between; gap: 24px;
-  padding: 36px 60px; background: #0a0a0a; color: #fff; text-decoration: none;
+  padding: 36px 60px; background: var(--color-bg-dark); color: #fff; text-decoration: none;
   border-bottom: 1px solid #e5e7eb;
 }
-.play-banner-text p:first-child { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: #2CC7BC; margin-bottom: 8px; }
+.play-banner-text p:first-child { font-size: 12px; font-weight: 700; letter-spacing: 0.08em; color: var(--color-teal-light); margin-bottom: 8px; }
 .play-banner-text h2 { font-family: 'Bebas Neue', var(--font-gothic), 'Apple SD Gothic Neo', sans-serif; font-size: clamp(20px, 3vw, 28px); font-weight: 400; letter-spacing: -0.01em; line-height: 1.3; word-break: keep-all; }
 .play-banner-text p:last-child { font-size: 14px; color: rgba(255,255,255,0.7); margin-top: 6px; }
-.play-banner-cta { flex-shrink: 0; padding: 14px 24px; border-radius: 999px; background: #12A79D; color: #fff; font-size: 15px; font-weight: 800; white-space: nowrap; transition: background 0.15s; }
-.play-banner:hover .play-banner-cta { background: #2CC7BC; }
+.play-banner-cta { flex-shrink: 0; padding: 14px 24px; border-radius: 999px; background: var(--color-teal); color: #fff; font-size: 15px; font-weight: 800; white-space: nowrap; transition: background 0.15s; }
+.play-banner:hover .play-banner-cta { background: var(--color-teal-light); }
 .play-banner-emoji { font-size: 34px; letter-spacing: 6px; flex-shrink: 0; }
 @media (max-width: 860px) { .play-banner-emoji { display: none; } }
 @media (max-width: 640px) {
